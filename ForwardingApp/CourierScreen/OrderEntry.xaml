@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             x:Class="ASolute_Mobile.Courier.OrderEntry">
+
+    <ScrollView>
+    <StackLayout Spacing="5" Padding="15,15,15,15">
+        <StackLayout Spacing="5" x:Name="sender" >
+            <StackLayout Orientation="Horizontal" >
+                <Picker x:Name="senderPicker"  HorizontalOptions="StartAndExpand" WidthRequest="160" Title="Sender" />
+                <Image Source="plusIcon.png" WidthRequest="40" HeightRequest="40"  x:Name="plus_icon">
+                    <Image.GestureRecognizers>
+                        <!--<TapGestureRecognizer Tapped="ToNextPage"/>-->
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            
+            <Label x:Name="senderName" Style="{StaticResource readOnlyLabel}" Text="Sender Name"/>
+            <Label x:Name="senderAddr1" Style="{StaticResource readOnlyLabel}" Text="Sender Address"/>
+            <Label x:Name="senderAddr2" Style="{StaticResource readOnlyLabel}" Text="Sender Address"/>
+            <StackLayout Orientation="Horizontal" Spacing="5">
+                <Label x:Name="senderPostCode" Style="{StaticResource readOnlyLabel}" Text="Sender PostCode"/>
+                <Label x:Name="senderCityState" Style="{StaticResource readOnlyLabel}" Text="Sender City"/>
+            </StackLayout>
+            <Label x:Name="senderContactNo" Style="{StaticResource readOnlyLabel}" Text="Sender Contact"/>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <controls:CheckBox DefaultText="Document (2KG)" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" x:Name="document"/>
+                <controls:CheckBox DefaultText="Parcel" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" x:Name="parcel"/>
+                <controls:CheckBox DefaultText="Normal" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" x:Name="normal"/>
+                <controls:CheckBox DefaultText="Express" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" x:Name="express"/>
+
+                <StackLayout Grid.Row="2" Grid.Column="0">
+                    <Label Text="Weight" TextColor="Black"/>
+                    <Entry x:Name="KG" Placeholder="0.00 KG"/>
+                    <Entry x:Name="M3" Placeholder="0.00 M3"/>
+                </StackLayout>
+
+                <StackLayout Grid.Row="2" Grid.Column="1">
+                    <Label Text="Pickup Time" TextColor="Black"/>
+                    <DatePicker x:Name="datePicker"  WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow"/>
+                    <TimePicker x:Name="timePicker"  WidthRequest="130" Format="HH:mm" BackgroundColor="LightYellow"/>
+                </StackLayout>
+            </Grid>
+        </StackLayout>
+
+        <StackLayout Spacing="5" IsVisible="False" x:Name="recipient">
+            <Picker x:Name="recipientPicker"  WidthRequest="130" Title="Recipient" HorizontalOptions="Fill"/>
+
+            <Entry x:Name="recipientName" Style="{StaticResource mandatoryLabel}" Placeholder="Recipient Name" />
+            <Entry x:Name="recAddr1" Style="{StaticResource mandatoryLabel}" Placeholder="Address line 1" />
+            <Entry x:Name="recAddr2" Style="{StaticResource mandatoryLabel}" Placeholder="Address line 2" />
+            <StackLayout Orientation="Horizontal" Spacing="5">
+                <Entry x:Name="recPostCode" Style="{StaticResource mandatoryLabel}" Placeholder="Post Code" />
+                <Entry x:Name="recCityState" Style="{StaticResource readOnlyLabel}" Placeholder="City" />
+            </StackLayout>
+            <Entry x:Name="RecContactNo" Style="{StaticResource mandatoryLabel}" Placeholder="Contact No."/>
+
+            <StackLayout>
+                <Label Text="Remarks"/>
+                <Editor x:Name="remark" WidthRequest="120" HeightRequest="150"/>
+            </StackLayout>
+            
+          
+            <Grid  x:Name="imageGrid" ></Grid>
+
+        </StackLayout>
+
+        <StackLayout x:Name="senderInfo" Spacing="5" IsVisible="False">
+            <Label Text="Sender" TextColor="Black"/>
+        </StackLayout>
+
+        <StackLayout x:Name="RecInfo" Spacing="5" IsVisible="False">
+            <Label Text="Recipient" TextColor="Black"/>
+        </StackLayout>
+
+        <StackLayout x:Name="PackageInfo" Spacing="5" IsVisible="False"></StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label x:Name="Charges" FontAttributes="Bold"/>
+            <Label x:Name="displayCharge" Style="{StaticResource readOnlyLabel}"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" Spacing="0" IsVisible="False" x:Name="term">
+            <controls:CheckBox DefaultText="I have read and accepted the" HorizontalOptions="FillAndExpand" />
+            <Label Text="Trade Term and Condition." TextColor="Blue">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ToTCPage"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" Spacing="15" HorizontalOptions="Center" x:Name="navigationButton">
+                <Image Source="camera.png" WidthRequest="55" HeightRequest="60" VerticalOptions="Center"  x:Name="camera_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TakeImage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="futile.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="End" x:Name="futile_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="BackToPrevious"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="nextPage.png" WidthRequest="80" HeightRequest="80" VerticalOptions="Center" HorizontalOptions="End" x:Name="confirm_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ToNextPage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+        </StackLayout>
+
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

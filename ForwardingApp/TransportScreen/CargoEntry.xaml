@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ASolute_Mobile.CargoEntry">
+    <StackLayout Padding="15,15,15,15">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Text="Equipment No" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+            <Label x:Name="equipmentNo" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightGray" VerticalTextAlignment="Center" />
+            <Label Text="Job No." FontAttributes="Bold" Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+            <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                <Entry x:Name="jobNo" HorizontalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightYellow" WidthRequest="130"/>
+                <Image Source="barCode.png" WidthRequest="40" HeightRequest="40" VerticalOptions="Center"  x:Name="scan_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="JobNoScan"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            <Button x:Name="addToList" Text="Add To list"  Clicked="JobNoAdd" Grid.Row="2" Grid.Column="1"/>
+
+        </Grid>
+
+        <ListView x:Name="cargoList" MinimumHeightRequest="100">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding JobNoValue}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackLayout HorizontalOptions="Center">
+            <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"  HorizontalOptions="Center" x:Name="confirm_icon">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="confirmJobNo"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </StackLayout>
+     
+    </StackLayout>
+</ContentPage>

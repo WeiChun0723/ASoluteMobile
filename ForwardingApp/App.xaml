@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.App">
+	<Application.Resources>
+        
+		<ResourceDictionary>
+            
+            <OnPlatform x:TypeArguments="Color" Android="#FFFFFF" iOS="#000000" WinPhone="#000000" x:Key="EntryTextColor" />
+            <OnPlatform x:TypeArguments="x:Double" Android="40" iOS="40" WinPhone="40" x:Key="EntryHeightRequest" />
+            
+            <Style x:Key="entryStyle" TargetType="Entry">
+                <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
+                <Setter Property="PlaceholderColor" Value="#ffffff" />
+                <Setter Property="HeightRequest" Value="{StaticResource EntryHeightRequest}" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+            </Style>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="FontSize" Value="Large" />
+                <Setter Property="BackgroundColor" Value="#ED1C24" />
+                <Setter Property="TextColor" Value="#FFFFFF" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+            <Style x:Key="recordListStyle" TargetType="ListView">
+                <Setter Property="SeparatorColor" Value="#ECECEC" />
+            </Style>
+            <Style x:Key="jobListFirstLineStyle" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+            <Style x:Key="jobDetailCaptionStyle" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="WidthRequest" Value="100" />
+                <Setter Property="MinimumWidthRequest" Value="100" />
+            </Style>
+            <Style x:Key="jobDetailValueStyle" TargetType="Label">
+                <Setter Property="LineBreakMode" Value="WordWrap" />
+            </Style>
+            <Style x:Key="remarkTextEditorStyle" TargetType="Editor">
+                <Setter Property="HeightRequest" Value="150" />
+                <Setter Property="BackgroundColor" Value="White" />
+            </Style>
+
+            <Style x:Key="readOnlyLabel" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="DarkRed"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+
+            <Style x:Key="mandatoryLabel" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="BackgroundColor" Value="LightYellow" />
+            </Style>
+
+            <Style x:Key="picker" TargetType="Picker">
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                
+            </Style>
+        </ResourceDictionary>
+	</Application.Resources>
+</Application>

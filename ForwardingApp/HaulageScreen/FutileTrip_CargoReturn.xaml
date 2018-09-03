@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms"
+             x:Class="ASolute_Mobile.FutileTrip_CargoReturn"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             BackgroundColor="#e8e5e5">
+
+    <ScrollView>
+    <StackLayout>
+
+        <StackLayout x:Name="ReferenceStack" Spacing="0" IsVisible="False" Padding="10,20,10,10">
+            <Label Text="Reference Number" FontAttributes="Bold"/>
+            <controls:CustomEntry x:Name="ReferenceNo" HorizontalOptions="FillAndExpand" BackgroundColor="LightYellow"/>
+        </StackLayout>
+
+            <StackLayout Spacing="0" Padding="10,10,10,10">
+            <Label Text="Reason" FontAttributes="Bold" />
+                <controls:CustomPicker x:Name="ReasonPicker" HorizontalOptions="FillAndExpand" BackgroundColor="LightYellow" SelectedIndexChanged="reasonSelected"  Image="ic_arrow_drop_down"/>
+        </StackLayout>
+
+            <StackLayout Spacing="0" Padding="10,10,10,10">
+                <Label Text="Remark" FontAttributes="Bold"/>
+                <controls:CustomEditor x:Name="remarkTextEditor" HeightRequest="100" BackgroundColor="White"></controls:CustomEditor>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10,10,10,10" Spacing="15">
+                <Image Source="camera.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"   x:Name="camera_icon" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="takeImage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="confirm.png" WidthRequest="90" HeightRequest="90" VerticalOptions="Center"  x:Name="confirm_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="uploadDetail"/>
+                    </Image.GestureRecognizers>
+                </Image>
+             
+        </StackLayout>
+
+
+            <Label x:Name="successUploaded" IsVisible="False"/>
+            <Grid  x:Name="imageGrid" >
+            </Grid>
+
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

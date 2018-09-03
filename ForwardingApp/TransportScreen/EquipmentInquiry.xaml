@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ASolute_Mobile.EquipmentInquiry">
+    
+        <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            
+            <Label Text="Equipment" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+           
+            <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1" Padding="15,15,15,0">
+                <Entry x:Name="equipmentID" HorizontalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightYellow" TextChanged="convertUpper"/>
+            </StackLayout>
+
+
+
+            <StackLayout Grid.Row="1" Grid.Column="1" Padding="15,0,0,0">
+                <Button x:Name="btnConfirm" Clicked="checkEquipment" Text="Confirm" Grid.Row="1" Grid.Column="1"/>
+            </StackLayout>
+            
+           
+        </Grid>
+
+        <ListView x:Name="euipmentList" ItemsSource="Binding " ></ListView>
+        </StackLayout>
+   
+</ContentPage>

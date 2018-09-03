@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ASolute_Mobile.HaulageScreen.Shunting"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" 
+             BackgroundColor="#e8e5e5">
+
+    <StackLayout Padding="15,15,15,15">
+        <Label x:Name="lblContainerNum" Text="Container Number" FontAttributes="Bold" FontSize="Medium"/>
+        <StackLayout Orientation="Horizontal" Spacing="15" Padding="10,0">
+            <controls:CustomEntry x:Name="contPrefix" HeightRequest="40" HorizontalOptions="FillAndExpand" LineColor="LightYellow" Placeholder="Prefix" TextChanged="ContainerPrefix"/>
+            <controls:CustomEntry x:Name="contNumber" HeightRequest="40" HorizontalOptions="FillAndExpand" Keyboard="Numeric" LineColor="LightYellow" Placeholder="Number" TextChanged="ContainerNumber"/>
+
+            <Image Source="confirm.png" WidthRequest="40" HeightRequest="40"   x:Name="confirm_icon">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Confirm"/>
+                </Image.GestureRecognizers>
+            </Image>
+
+        </StackLayout>
+
+        <StackLayout Spacing="5" Padding="0,15">
+            <Label x:Name="lblHistory" Text="History" FontAttributes="Bold" FontSize="Medium"/>
+            <ListView x:Name="shuntingHistory"  SeparatorColor="Black" BackgroundColor="White"></ListView>
+        </StackLayout>
+        
+    </StackLayout>
+</ContentPage>

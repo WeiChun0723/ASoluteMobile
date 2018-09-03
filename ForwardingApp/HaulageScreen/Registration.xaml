@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ASolute_Mobile.HaulageScreen.Registration"
+             BackgroundColor = "#9A2116"       
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer">
+    
+    <StackLayout Padding = "20, 0, 20, 20" >
+        <StackLayout Padding="0,30">
+
+        </StackLayout>
+        <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
+        <StackLayout Padding = "0, 10"></StackLayout>
+        <Label TextColor="#FFFFFF" FontSize = "20" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" Text="Registration"/>
+        <StackLayout Padding = "0, 30"></StackLayout>
+
+        <StackLayout Orientation="Horizontal" >
+            <controls:CustomEntry Placeholder="Enterprise"  x:Name="enterpriseEntry" Image="organization" Style="{StaticResource entryStyle}"   HorizontalOptions="FillAndExpand" TextChanged="enterTextChange"/>
+          
+        </StackLayout>
+
+        <controls:CustomEntry Placeholder="UserID" x:Name = "userIDEntry" Image="user" Style="{StaticResource entryStyle}" TextChanged="userTextChange"/>
+        <controls:CustomEntry Placeholder="Password" IsPassword="True" x:Name = "passwordEntry" Image="pass" Style="{StaticResource entryStyle}" />
+        <controls:CustomEntry Placeholder="IC"  x:Name = "icEntry" Image="user" Style="{StaticResource entryStyle}" TextChanged="iCTextChange"/>
+
+
+        <Button Style="{StaticResource buttonStyle}" x:Name="RegisterButton" Text = "Register" Clicked="Register_Clicked" />
+
+        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
+
+
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms" 
+             x:Class="ASolute_Mobile.Courier.Registration">
+
+    <ScrollView>
+      <StackLayout Padding="15,15,15,15" >
+            <Grid RowSpacing="5" ColumnSpacing="0" IsVisible="False" x:Name="Business">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Company Name" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="cpyName" Grid.Row="0" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="Business Reg No." FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="buisnessReg" Grid.Row="1" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="GST Reg No." FontAttributes="Bold" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry  x:Name="gstReg" Grid.Row="2" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="Email Adress" FontAttributes="Bold" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="buisEmailAddress" Grid.Row="3" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+            </Grid>
+          
+            <Grid RowSpacing="5" ColumnSpacing="0" IsVisible="False" x:Name="Personal">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Your Name" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="Name" Grid.Row="0" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="IC No." FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="icNo" Grid.Row="1" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="Email Adress" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="personalEmailAddress" Grid.Row="2" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+            </Grid>
+          
+            <Grid RowSpacing="5" ColumnSpacing="0" IsVisible="False" x:Name="AddrInfo">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Billing Address" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="businessAddr" Grid.Row="0" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="Post Code" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="businessPC" Grid.Row="1" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" x:Name="lblCity"/>
+                <Entry BackgroundColor="Gray" x:Name="city" Grid.Row="2" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+
+                <Label Text="Mobile No" FontAttributes="Bold" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry BackgroundColor="LightYellow" x:Name="buisMobileNo" Grid.Row="3" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center"/>
+                
+                <Label Text="Contact Person" FontAttributes="Bold" Grid.Row="4" Grid.Column="0" VerticalOptions="Center" IsVisible="False" x:Name="lblContact"/>
+                <Entry BackgroundColor="LightYellow" x:Name="contactPerson" Grid.Row="4" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center" IsVisible="False"/>
+
+                <Label Text="Office Tel No" FontAttributes="Bold" Grid.Row="5" Grid.Column="0" VerticalOptions="Center" IsVisible="False" x:Name="lblOffice" />
+                <Entry BackgroundColor="LightYellow" x:Name="officeTel" Grid.Row="5" Grid.Column="1" HorizontalOptions="Fill" HorizontalTextAlignment="Center" IsVisible="False"/>
+              
+            </Grid>
+                                         
+            <StackLayout Orientation="Horizontal" Spacing="0" IsVisible="False" x:Name="term">
+                <controls:CheckBox DefaultText="I have read and accepted the" HorizontalOptions="FillAndExpand" />
+                <Label Text="Trade Term and Condition." TextColor="Blue">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ToTCPage"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+                   
+             <StackLayout Orientation="Horizontal" Spacing="15" HorizontalOptions="Center">
+                <Image Source="futile.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="End" x:Name="futile_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="BackToPrevious"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="nextPage.png" WidthRequest="80" HeightRequest="80" VerticalOptions="Center" HorizontalOptions="End" x:Name="confirm_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ToNextPage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+
+            <StackLayout Spacing="5" IsVisible="False" x:Name="congratulation">
+                <Label Text="You're registered." FontAttributes="Bold"/>
+                <Label Text="You will receive an email notification after our verification purpose." FontAttributes="Bold"/>
+                <Label Text="" FontAttributes="Bold" x:Name="reply"/>
+
+                <Image Source="camera.png" WidthRequest="80" HeightRequest="80" VerticalOptions="Center"  x:Name="camera_icon" IsVisible="False">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TakeImage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+            </StackLayout>
+
+            <zxing:ZXingBarcodeImageView BarcodeFormat="QR_CODE" x:Name="barCode" HeightRequest="150" WidthRequest="250"/>
+            <Grid  x:Name="imageGrid"></Grid>
+            
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

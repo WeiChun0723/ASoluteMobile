@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.MasterPage"
+             Title="Job Lists"
+             Icon="hamburger.png">
+     <StackLayout Orientation="Vertical">
+        
+        <!-- 
+             This StackLayout you can use for other
+             data that you want to have in your menu drawer
+        -->
+        <StackLayout BackgroundColor="#DB4437"
+                     HeightRequest="100"
+                     Padding="0,20,0,20">
+          <Image x:Name="LogoImage" Source="" HeightRequest="50" Aspect="AspectFit" />
+
+
+            <Label x:Name="ownerName"
+                 FontSize="10"
+                 VerticalOptions="CenterAndExpand"
+                 TextColor="White"
+                 HorizontalOptions="Center"/>
+            <Label x:Name="appVersion"
+                 FontSize="11"
+                 VerticalOptions="CenterAndExpand"
+                 TextColor="White"
+                 HorizontalOptions="Center"/>
+        </StackLayout>
+
+        <ListView x:Name="listView"
+                  RowHeight="60"
+                  SeparatorVisibility="None"
+                  BackgroundColor="#FFFFFF">
+
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <ViewCell>
+                
+                <!-- Main design for our menu items -->
+                <StackLayout VerticalOptions="FillAndExpand"
+                             Orientation="Horizontal"
+                             Padding="20,10,0,10"
+                             Spacing="20">
+
+                  <Image Source="{Binding IconSource}"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         VerticalOptions="Center" />
+
+                  <Label Text="{Binding Title}"
+                         FontSize="Small"
+                         VerticalOptions="Center"
+                         TextColor="Black"/>
+                </StackLayout>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </StackLayout>
+</ContentPage>

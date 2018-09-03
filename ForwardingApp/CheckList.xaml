@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"      
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             x:Class="ASolute_Mobile.CheckList">
+
+    <StackLayout x:Name="CheckItem" Spacing="15" Padding="15,15,15,15">
+
+            <StackLayout Orientation="Horizontal">
+                <controls:CheckBox DefaultText="All good" x:Name="selectAll" HorizontalOptions="FillAndExpand" FontSize="25" CheckedChanged="disableList"/>
+            </StackLayout>
+
+            <ListView ItemsSource="{Binding Check}" x:Name="checkList" SeparatorColor="Black" BackgroundColor="White">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:CheckBox DefaultText="{Binding Name}" Checked="{Binding IsSelected}" HorizontalOptions="FillAndExpand" FontSize="15"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+        <Image Source="nextPage.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="End" x:Name="confirm_icon">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="toNextPage"/>
+            </Image.GestureRecognizers>
+        </Image>
+    </StackLayout>
+  
+</ContentPage>

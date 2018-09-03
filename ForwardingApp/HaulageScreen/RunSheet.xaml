@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ASolute_Mobile.HaulageScreen.RunSheet">
+    <StackLayout >
+        <StackLayout Orientation="Horizontal" Spacing="15" Padding="15,15,15,15">
+            <Label Text="Date" FontAttributes="Bold" VerticalOptions="CenterAndExpand"  FontSize="Medium"/>
+            <DatePicker x:Name="datePicker"  HorizontalOptions="FillAndExpand" BackgroundColor="LightYellow" Scale="1.0" DateSelected="recordDate"/>
+            <!---->
+            <StackLayout Orientation="Horizontal" Spacing="5">
+                <Image Source="angleLeft.png" WidthRequest="40" HeightRequest="40"   x:Name="previous_icon">
+                  <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PreviousDate"/>
+                </Image.GestureRecognizers>
+                </Image>
+                <Image Source="angleRight.png" WidthRequest="40" HeightRequest="40" x:Name="next_icon">
+                    <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="NextDate"/>
+                </Image.GestureRecognizers>
+                </Image>
+               
+            </StackLayout>
+        </StackLayout>
+    
+    
+        <ListView x:Name="runSheetHistory" IsPullToRefreshEnabled="True" Refreshing="runSheetRefresh" SeparatorColor="White" BackgroundColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsVisible="False"></ListView>
+        
+        <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>
+    
+        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
+   </StackLayout>
+</ContentPage>
