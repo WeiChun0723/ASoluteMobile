@@ -3,7 +3,9 @@ using ASolute_Mobile.Ultis;
 using Plugin.Media;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -128,6 +130,16 @@ namespace ASolute_Mobile.Utils
             }
             
             App.Database.SaveActivity(history);
+        }
+
+        public static async Task GetWebService(string value)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://api.asolute.com/");
+            var uri = ControllerUtil.getBaseURL(value);
+            var response = await client.GetAsync(uri);
+            var content = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(content);
         }
 
     }
