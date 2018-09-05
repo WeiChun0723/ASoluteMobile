@@ -61,7 +61,7 @@ namespace ASolute_Mobile
            
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
             PageContent();
@@ -1037,7 +1037,8 @@ namespace ASolute_Mobile
                 {
                     await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
                 }
-                
+
+                App.Database.deleteAppImage();
                 await Navigation.PopAsync();
                 /*GetActionID();
                 await DisplayAlert("Success", "Job updated", "OK");*/
@@ -1089,7 +1090,6 @@ namespace ASolute_Mobile
                     uploadedImage++;
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);
-
                 }
             }
 
@@ -1108,7 +1108,7 @@ namespace ASolute_Mobile
             {
                 await Navigation.PushAsync(new ImageViewer((AppImage)((TappedEventArgs)e).Parameter));
             };
-            image.GestureRecognizers.Add(tapGestureRecognizer);
+            //image.GestureRecognizers.Add(tapGestureRecognizer);
             int noOfImages = imageGrid.Children.Count();
             int noOfCols = imageGrid.ColumnDefinitions.Count();
             int rowNo = noOfImages / noOfCols;
@@ -1124,7 +1124,7 @@ namespace ASolute_Mobile
                 imageGrid.Children.Clear();
                 if(jobItem.Done == 0)
                 {
-                    images = App.Database.GetRecordImagesAsync(jobItem.Id, false);
+                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.Id, "NormalImage");
                 }
                 else
                 {

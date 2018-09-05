@@ -90,7 +90,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobDetails.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobLists.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JobListTabbedPage.xaml.cs">
       <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
       <SubType>Code</SubType>

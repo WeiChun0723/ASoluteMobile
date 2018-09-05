@@ -23,6 +23,7 @@ namespace ASolute_Mobile
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
 
+
         public MainMenu ()
 		{
 			InitializeComponent ();
@@ -40,10 +41,12 @@ namespace ASolute_Mobile
                 Title = "Menu Utama";
             }
 
-            if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("Yes")) 
+            string test = Ultis.Settings.UpdatedRecord;
+            if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("Yes") ) 
             {          
                 getMainMenu();
                 Ultis.Settings.UpdatedRecord = "No";
+            
             }
             else
             {                

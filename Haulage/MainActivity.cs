@@ -15,6 +15,9 @@ using Tesseract;
 using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using Plugin.CurrentActivity;
+using TinyIoC;
+using XLabs.Platform.Device;
+using XLabs.Ioc.TinyIOC;
 //using Android;
 
 namespace ASolute_Mobile.Droid
@@ -28,17 +31,26 @@ namespace ASolute_Mobile.Droid
         protected override void OnCreate(Bundle bundle)
         {
             Ultis.Settings.App = "Haulage";
-            TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
-                
+            TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;                
             ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
-            
+
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.SetVmPolicy(builder.Build());
+
             base.OnCreate(bundle);
 
             Rg.Plugins.Popup.Popup.Init(this, bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
-            var containerBuilder = new Autofac.ContainerBuilder();
+            var container = TinyIoCContainer.Current;
+            container.Register<IDevice>(AndroidDevice.CurrentDevice);
+            container.Register<ITesseractApi>((cont, parameters) =>
+            {
+                return new TesseractApi(ApplicationContext, AssetsDeployment.OncePerInitialization);
+            });
+            Resolver.SetResolver(new TinyResolver(container));
+            /*var containerBuilder = new Autofac.ContainerBuilder();
 
             containerBuilder.Register(c => this).As<Context>();
             containerBuilder.RegisterType<MediaPicker>().As<IMediaPicker>();            
@@ -48,7 +60,7 @@ namespace ASolute_Mobile.Droid
                 (pi, c) => AssetsDeployment.OncePerInitialization);
 
             
-            //Resolver.SetResolver(new AutofacResolver(containerBuilder.Build()));
+            Resolver.SetResolver(new AutofacResolver(containerBuilder.Build()));*/
 
             UserDialogs.Init(this);
 

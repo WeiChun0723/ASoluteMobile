@@ -40,7 +40,7 @@ namespace ASolute_Mobile.Ultis
         private const string AppVersion = "";
         private const string previousOdo = "";
         private const string contextMenuTitle = "";
-        private const string UpdateRecord = "yes";
+        private const string UpdateRecord = "Yes";
  
         #endregion
 

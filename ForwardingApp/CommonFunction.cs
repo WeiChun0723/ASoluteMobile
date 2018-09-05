@@ -1,5 +1,7 @@
-﻿using ASolute_Mobile.Models;
+﻿using ASolute.Mobile.Models;
+using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
+using Newtonsoft.Json;
 using Plugin.Media;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,6 @@ namespace ASolute_Mobile.Utils
 {
     public class CommonFunction
     {
-        public CommonFunction()
-        {
-
-        }
 
         //capture image and store local path in db function
         public static async Task StoreImages(string id, ContentPage contentPage)
@@ -66,9 +64,9 @@ namespace ASolute_Mobile.Utils
                 File.WriteAllBytes(image.photoThumbnailFileLocation, thumbnailByte);
                 App.Database.SaveRecordImageAsync(image);
             }
-            catch(Exception exception)
+            catch(Exception ex)
             {
-                await contentPage.DisplayAlert("Reminder", exception.Message, "OK");
+                await contentPage.DisplayAlert("Reminder", ex.Message, "OK");
             }
         }
 
@@ -105,10 +103,11 @@ namespace ASolute_Mobile.Utils
                 captureSignature.type = "signature";
                 App.Database.SaveRecordImageAsync(captureSignature);
             }
-            catch(Exception exception)
+            catch
             {
-                await contentPage.DisplayAlert("Signature error", "Please sign for the job", "OK");
+                await contentPage.DisplayAlert("Reminder", "Please sign the job.", "OK");
             }
+
             
         }
 
@@ -132,7 +131,8 @@ namespace ASolute_Mobile.Utils
             App.Database.SaveActivity(history);
         }
 
-        public static async Task GetWebService(string value)
+        //call when calling the web service to get response
+        public static async Task<clsResponse> GetWebService(string value)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://api.asolute.com/");
@@ -140,6 +140,10 @@ namespace ASolute_Mobile.Utils
             var response = await client.GetAsync(uri);
             var content = await response.Content.ReadAsStringAsync();
             Debug.WriteLine(content);
+
+            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            return json_response;
         }
 
     }

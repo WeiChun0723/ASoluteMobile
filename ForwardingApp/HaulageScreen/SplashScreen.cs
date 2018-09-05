@@ -14,11 +14,11 @@ namespace ASolute_Mobile
 {
     public class SplashScreen : ContentPage
     {
-        Image splashImage,splashDeviceImage;
-        CustomEntry entry;
-        CustomButton submit;
-        Label title;
-        StackLayout layout;
+        readonly Image splashImage,splashDeviceImage;
+        readonly CustomEntry entry;
+        readonly CustomButton submit;
+        readonly Label title;
+        readonly StackLayout layout;
         ScrollView ScrollView;
 
         public SplashScreen()
@@ -161,6 +161,11 @@ namespace ASolute_Mobile
                     Ultis.Settings.AppEnterpriseName = entry.Text.ToUpper();
                     Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                 }
+                else
+                {
+                    await DisplayAlert("Json Error", json_response.Message, "OK");
+                }
+
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
             };
         }

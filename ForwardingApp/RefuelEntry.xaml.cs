@@ -12,10 +12,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Tesseract;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XLabs.Ioc;
+using XLabs.Platform.Device;
 using XLabs.Platform.Services.Media;
 using ZXing.Net.Mobile.Forms;
 
@@ -32,8 +34,10 @@ namespace ASolute_Mobile
         string newFuelID, focusField;
         int station_choice, payment_choice;
         string mandatory;
-        private readonly IMediaPicker _mediaPicker;
-        private readonly ITesseractApi _tesseract;
+        /*private readonly IMediaPicker _mediaPicker;
+        private readonly ITesseractApi _tesseract;*/
+        private readonly ITesseractApi _tesseractApi;
+        private readonly IDevice _device;
 
         public RefuelEntry ()
 		{
@@ -65,6 +69,8 @@ namespace ASolute_Mobile
 
             /*_mediaPicker = Resolver.Resolve<IMediaPicker>();
             _tesseract = Resolver.Resolve<ITesseractApi>();*/
+            _tesseractApi = Resolver.Resolve<ITesseractApi>();
+            _device = Resolver.Resolve<IDevice>();
 
             lblDateTime.Text = "Date & Time";           
 
@@ -94,43 +100,58 @@ namespace ASolute_Mobile
 
         public async void ScanImage(object sender, EventArgs e)
         {
-            var result = await _mediaPicker.TakePhotoAsync(new CameraMediaStorageOptions());
-
-            if (result.Source == null)
-                return;
-
-            var imageBytes = new byte[result.Source.Length];
-            result.Source.Position = 0;
-            result.Source.Read(imageBytes, 0, (int)result.Source.Length);
-            result.Source.Position = 0;
-
-            byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imageBytes, 500, 450, 100,true);
-            
-            if (!_tesseract.Initialized)
+            try
             {
-                var initialised = await _tesseract.Init("eng");
-                if (!initialised)
-                    return;
-            }
-            bool success = await _tesseract.SetImage(scaledImageByte);
-            if (success)
-            {
-                string field = focusField;
-                switch (field)
+              
+                if (!_tesseractApi.Initialized)
+                    await _tesseractApi.Init("eng");
+                _tesseractApi.SetWhitelist("ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789");
+                var photo = await TakePic();
+                if (photo != null)
                 {
-                    case "fuel":
-                        fuelCard.Text = _tesseract.Text;
-                        break;
+                    var imageBytes = new byte[photo.Source.Length];
+                    photo.Source.Position = 0;
+                    photo.Source.Read(imageBytes, 0, (int)photo.Source.Length);
+                    photo.Source.Position = 0;
 
-                    case "voucher":
-                        voucher.Text = _tesseract.Text;
-                        break;
+                    byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imageBytes, 500, 450, 100, true);
+                    var tessResult = await _tesseractApi.SetImage(scaledImageByte);
+                    if (tessResult)
+                    {
+                        string field = focusField;
+                        switch (field)
+                        {
+                            case "fuel":
+                                fuelCard.Text = _tesseractApi.Text;
+                                break;
 
-                    case "other":
-                        other.Text = _tesseract.Text;
-                        break;
-                }                
+                            case "voucher":
+                                voucher.Text = _tesseractApi.Text;
+                                break;
+
+                            case "other":
+                                other.Text = _tesseractApi.Text;
+                                break;
+                        }
+                    }
+                }
             }
+            catch
+            {
+                await DisplayAlert("Error", "Please try again", "OK");
+            }
+         
+        }
+
+        private async Task<MediaFile> TakePic()
+        {
+            var mediaStorageOptions = new CameraMediaStorageOptions
+            {
+                DefaultCamera = CameraDevice.Rear
+            };
+            var mediaFile = await _device.MediaPicker.TakePhotoAsync(mediaStorageOptions);
+
+            return mediaFile;
         }
 
         public void FuelEntryFocus(object sender, FocusEventArgs e)

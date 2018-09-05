@@ -26,6 +26,12 @@ namespace ASolute_Mobile.HaulageScreen
 		{
 			InitializeComponent ();
 
+            Ultis.Settings.App = "Haulage";           
+
+        }
+
+        protected async override void OnAppearing()
+        {
             if (Ultis.Settings.Language.Equals("English"))
             {
                 Title = "Job Lists";
@@ -35,8 +41,7 @@ namespace ASolute_Mobile.HaulageScreen
                 Title = "Senarai Kerja";
             }
 
-            Ultis.Settings.App = "Haulage";
-            string test = Ultis.Settings.UpdatedRecord;           
+            string test = Ultis.Settings.UpdatedRecord;
 
             if (Ultis.Settings.SessionUserItem.TrailerPrefix.Length == 0)
             {
@@ -45,15 +50,22 @@ namespace ASolute_Mobile.HaulageScreen
 
             if (NetworkCheck.IsInternet())
             {
-                CallWebService(false);
-            }
+                if(Ultis.Settings.UpdatedRecord.Equals("Yes"))
+                {
+                    CallWebService(true);
+                }
+                else
+                {
+                    CallWebService(true);
+
+                }
+            }           
             else
             {
                 loadJobList();
             }
         }
 
-      
         protected void CallWebService(bool wait)
         {
             if (wait == true)
@@ -62,7 +74,8 @@ namespace ASolute_Mobile.HaulageScreen
             }
             else if (wait == false)
             {
-                Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); });
+                Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this);});
+
             }            
             loadJobList();
         }
