@@ -77,6 +77,7 @@ namespace ASolute_Mobile
                 }
 
                 AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+
                 StackLayout cellWrapper = new StackLayout()
                 {
                     //Padding = new Thickness(10, 10, 10, 10),
@@ -89,10 +90,11 @@ namespace ASolute_Mobile
                 foreach(SummaryItems items in summaryRecord)
                 {
                     Label label = new Label();
-                    
+
                     if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee")
                     {
                         label.Text = items.Value;
+                        
                     }
                     else if(items.Caption == "Action" || items.Display == false)
                     {
@@ -109,7 +111,8 @@ namespace ASolute_Mobile
                         firstSummaryLine = false;
                         label.FontAttributes = FontAttributes.Bold;
                     }
-                                        
+                     
+                    
                     cellWrapper.Children.Add(label);
 
                     if (!(String.IsNullOrEmpty(items.BackColor)))
@@ -122,13 +125,14 @@ namespace ASolute_Mobile
 
                 absoluteLayout.Children.Add(cellWrapper);
 
-                
+
 
                 View = new Frame
-                 {
-                     Content = absoluteLayout,
-                     HasShadow =  true,
-                     Margin = 5,                    
+                {
+                    Content = absoluteLayout,
+                    HasShadow = true,
+                    Margin = 5,
+                 
                  };
 
                 if (!(String.IsNullOrEmpty(color)))

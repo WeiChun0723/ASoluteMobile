@@ -143,18 +143,13 @@ namespace ASolute_Mobile
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
             }
 
+           
             submit.Clicked += async (sender, e)  => 
             {
-                Ultis.Settings.AppFirstInstall = "Second";
-               
-                var client = new HttpClient();
-                client.BaseAddress = new Uri("https://api.asolute.com/");
-                var uri = ControllerUtil.getBaseURL(entry.Text.ToUpper());
-                var response = await client.GetAsync(uri);
-                var content = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine(content);
+                Ultis.Settings.AppFirstInstall = "Second";                       
 
-                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                clsResponse json_response = JsonConvert.DeserializeObject <clsResponse>(await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(entry.Text.ToUpper())));
 
                 if (json_response.IsGood)
                 {

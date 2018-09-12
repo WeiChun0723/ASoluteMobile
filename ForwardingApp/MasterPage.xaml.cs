@@ -19,7 +19,7 @@ namespace ASolute_Mobile
                 LogoImage.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }			
             ownerName.Text = Ultis.Settings.SessionUserItem.CompanyName;
-            appVersion.Text = "App Version : 21";
+            appVersion.Text = "App Version : 23";
 
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
 

@@ -74,7 +74,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
         {
-            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", getPositionAsync(), ownerID, userID, password, ICNo);
+            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", "0", ownerID, userID, password, ICNo);
         }
 
         public static String getLoginURL(string encryptedUserId, string encryptedPassword)
@@ -130,7 +130,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadHaulageListURL()
         {
-            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
         }
 
         public static String getDownloadHaulageHistoryURL(string date)
@@ -170,7 +170,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getReasonListURL()
         {
-            return String.Format("Trucking/ReasonList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Trucking/ReasonList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
         }
 
         public static String getUploadImageURL(string LinkId)
@@ -234,7 +234,8 @@ namespace ASolute_Mobile.Utils
            
                 var locator = CrossGeolocator.Current;
 
-                if(locator != null && locator.IsGeolocationEnabled){
+                if(locator != null && locator.IsGeolocationEnabled)
+                {
                     if(App.gpsLocationLat == 0 || App.gpsLocationLong == 0){
                         Position position = null;
                         Boolean latestPosition = false;
@@ -242,7 +243,7 @@ namespace ASolute_Mobile.Utils
                         {
                             try
                             {
-                                Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10)); }).Wait();
+                                Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(5)); }).Wait();
                                 latestPosition = true;
                             }
                             catch (TaskCanceledException exception)
@@ -254,7 +255,8 @@ namespace ASolute_Mobile.Utils
 
                         if (position == null && !latestPosition)
                         {
-                            Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
+                            //Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
+                            return "0";
                         }
 
                         if (position != null)

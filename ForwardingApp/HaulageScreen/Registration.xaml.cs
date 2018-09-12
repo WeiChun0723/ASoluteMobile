@@ -22,8 +22,10 @@ namespace ASolute_Mobile.HaulageScreen
 	public partial class Registration : ContentPage
 	{
         bool success = false;
+        public string encryptedUserId, encryptedPassword;
 
-		public Registration ()
+
+        public Registration ()
 		{
 			InitializeComponent ();
 
@@ -91,39 +93,18 @@ namespace ASolute_Mobile.HaulageScreen
                 if (!(String.IsNullOrEmpty(enterpriseEntry.Text)) && !(String.IsNullOrEmpty(userIDEntry.Text)) && !(String.IsNullOrEmpty(passwordEntry.Text)) && !(String.IsNullOrEmpty(icEntry.Text)))
                 {
                     activityIndicator.IsRunning = true;
-                    string encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
-                    string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
+
+                    encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
+                    encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                     GetBasedURL();
-
-                    if (success)
-                    {
-                        var client = new HttpClient();
-                        client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                        var uri = ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text);
-                        var response = await client.GetAsync(uri);
-                        var content = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(content);
-                        clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                        if (register_response.IsGood)
-                        {
-                            await DisplayAlert("Success", "Registration successfully", "OK");
-                            Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;                           
-                            DownloadLogo();
-                            
-                        }
-                        else
-                        {
-                            await DisplayAlert("Failed", register_response.Message, "OK");
-                        }
-                    }                   
+                       
                 }
                 else
                 {
                     await DisplayAlert("Error", "Please fill in all the field.", "OK");
                 }
 
-                activityIndicator.IsRunning = false;
+               
             }
             catch(Exception exception)
             {
@@ -145,13 +126,38 @@ namespace ASolute_Mobile.HaulageScreen
 
             if (json_response.IsGood)
             {
-                success = true;
+               
                 Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                 Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
+                RegisterUser();
             }
             else
             {
                 await DisplayAlert("Error", json_response.Message, "OK");
+            }
+        }
+
+        public async void RegisterUser()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+            var success_uri = ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text);
+            var success_response = await client.GetAsync(success_uri);
+            var success_content = await success_response.Content.ReadAsStringAsync();
+            Debug.WriteLine(success_content);
+            clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(success_content);
+
+            if (register_response.IsGood)
+            {
+                await DisplayAlert("Success", "Registration successfully", "OK");
+                Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
+                DownloadLogo();
+
+            }
+            else
+            {
+                await DisplayAlert("Failed", register_response.Message, "OK");
+                activityIndicator.IsRunning = false;
             }
         }
 
@@ -160,8 +166,8 @@ namespace ASolute_Mobile.HaulageScreen
             try
             {
 
-                string encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
-                string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
+                encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
+                encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
 
                 // string uri;
                 var client = new HttpClient();
@@ -175,6 +181,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                 if (login_response.IsGood == true)
                 {
+                    activityIndicator.IsRunning = false;
                     //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
 
                     var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
@@ -299,7 +306,7 @@ namespace ASolute_Mobile.HaulageScreen
             }
             catch
             {
-
+                await DisplayAlert("Error", "Please try again", "OK");
             }
         }
 

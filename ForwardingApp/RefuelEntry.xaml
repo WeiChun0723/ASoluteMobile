@@ -5,9 +5,9 @@
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              BackgroundColor="#e8e5e5">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem  Order="Secondary" Priority="1" Text="OCR scanner" Clicked="ScanImage"/>
-    </ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Order="Secondary" Priority="1" Text="OCR scanner" Clicked="ScanImage"/>
+    </ContentPage.ToolbarItems>-->
     
     <ScrollView>
     <StackLayout Padding="15,15,15,15">

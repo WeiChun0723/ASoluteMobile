@@ -40,13 +40,12 @@ namespace ASolute_Mobile
             {
                 Title = "Menu Utama";
             }
-
-            string test = Ultis.Settings.UpdatedRecord;
+                      
             if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("Yes") ) 
             {          
                 getMainMenu();
                 Ultis.Settings.UpdatedRecord = "No";
-            
+                      
             }
             else
             {                
@@ -167,7 +166,10 @@ namespace ASolute_Mobile
                 var content = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine(content);               
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
-                
+
+                //clsResponse login_response = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+
+
                 if (login_response.IsGood == true)
                 {
                     var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();

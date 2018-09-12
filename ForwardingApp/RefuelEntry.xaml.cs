@@ -34,10 +34,8 @@ namespace ASolute_Mobile
         string newFuelID, focusField;
         int station_choice, payment_choice;
         string mandatory;
-        /*private readonly IMediaPicker _mediaPicker;
-        private readonly ITesseractApi _tesseract;*/
-        private readonly ITesseractApi _tesseractApi;
-        private readonly IDevice _device;
+        //private readonly ITesseractApi _tesseractApi;
+        //private readonly IDevice _device;
 
         public RefuelEntry ()
 		{
@@ -67,10 +65,9 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-            /*_mediaPicker = Resolver.Resolve<IMediaPicker>();
-            _tesseract = Resolver.Resolve<ITesseractApi>();*/
-            _tesseractApi = Resolver.Resolve<ITesseractApi>();
-            _device = Resolver.Resolve<IDevice>();
+
+            //_tesseractApi = Resolver.Resolve<ITesseractApi>();
+            //_device = Resolver.Resolve<IDevice>();
 
             lblDateTime.Text = "Date & Time";           
 
@@ -103,9 +100,9 @@ namespace ASolute_Mobile
             try
             {
               
-                if (!_tesseractApi.Initialized)
-                    await _tesseractApi.Init("eng");
-                _tesseractApi.SetWhitelist("ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789");
+               /*if (!_tesseractApi.Initialized)
+                    //await _tesseractApi.Init("eng");
+
                 var photo = await TakePic();
                 if (photo != null)
                 {
@@ -134,7 +131,7 @@ namespace ASolute_Mobile
                                 break;
                         }
                     }
-                }
+                }*/
             }
             catch
             {
@@ -143,16 +140,16 @@ namespace ASolute_Mobile
          
         }
 
-        private async Task<MediaFile> TakePic()
+        /*private async Task<MediaFile> TakePic()
         {
             var mediaStorageOptions = new CameraMediaStorageOptions
             {
                 DefaultCamera = CameraDevice.Rear
             };
-            var mediaFile = await _device.MediaPicker.TakePhotoAsync(mediaStorageOptions);
+            //var mediaFile = await _device.MediaPicker.TakePhotoAsync(mediaStorageOptions);
 
-            return mediaFile;
-        }
+            //return mediaFile;
+        }*/
 
         public void FuelEntryFocus(object sender, FocusEventArgs e)
         {

@@ -16,6 +16,20 @@ namespace ASolute_Mobile.Utils
 {
     public class CommonFunction
     {
+        //call when calling the web service to get response
+        public static async Task<string> GetWebService(string baseAdd,string callUri)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(baseAdd);
+            var uri = callUri;
+            var response = await client.GetAsync(uri);
+            var content = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(content);
+
+            //clsResponse return_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            return content;
+        }
 
         //capture image and store local path in db function
         public static async Task StoreImages(string id, ContentPage contentPage)
@@ -131,21 +145,7 @@ namespace ASolute_Mobile.Utils
             App.Database.SaveActivity(history);
         }
 
-        //call when calling the web service to get response
-        public static async Task<clsResponse> GetWebService(string value)
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://api.asolute.com/");
-            var uri = ControllerUtil.getBaseURL(value);
-            var response = await client.GetAsync(uri);
-            var content = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(content);
-
-            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            return json_response;
-        }
-
+       
     }
 
 }

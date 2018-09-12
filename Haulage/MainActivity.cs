@@ -43,24 +43,15 @@ namespace ASolute_Mobile.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
-            var container = TinyIoCContainer.Current;
+            /*var container = TinyIoCContainer.Current;
             container.Register<IDevice>(AndroidDevice.CurrentDevice);
             container.Register<ITesseractApi>((cont, parameters) =>
             {
                 return new TesseractApi(ApplicationContext, AssetsDeployment.OncePerInitialization);
-            });
-            Resolver.SetResolver(new TinyResolver(container));
-            /*var containerBuilder = new Autofac.ContainerBuilder();
-
-            containerBuilder.Register(c => this).As<Context>();
-            containerBuilder.RegisterType<MediaPicker>().As<IMediaPicker>();            
-            containerBuilder.RegisterType<TesseractApi>()
-                .As<ITesseractApi>()
-                .WithParameter((pi, c) => pi.ParameterType == typeof(AssetsDeployment),
-                (pi, c) => AssetsDeployment.OncePerInitialization);
-
-            
-            Resolver.SetResolver(new AutofacResolver(containerBuilder.Build()));*/
+            });*/
+            //Resolver.ResetResolver();
+            //Resolver.SetResolver(new TinyResolver(container));
+           
 
             UserDialogs.Init(this);
 

@@ -32,38 +32,45 @@ namespace ASolute_Mobile.HaulageScreen
 
         protected async override void OnAppearing()
         {
-            if (Ultis.Settings.Language.Equals("English"))
+            try
             {
-                Title = "Job Lists";
-            }
-            else
-            {
-                Title = "Senarai Kerja";
-            }
-
-            string test = Ultis.Settings.UpdatedRecord;
-
-            if (Ultis.Settings.SessionUserItem.TrailerPrefix.Length == 0)
-            {
-                scan_icon.IsEnabled = false;
-            }
-
-            if (NetworkCheck.IsInternet())
-            {
-                if(Ultis.Settings.UpdatedRecord.Equals("Yes"))
+                if (Ultis.Settings.Language.Equals("English"))
                 {
-                    CallWebService(true);
+                    Title = "Job Lists";
                 }
                 else
                 {
-                    CallWebService(true);
-
+                    Title = "Senarai Kerja";
                 }
-            }           
-            else
-            {
-                loadJobList();
+
+                string test = Ultis.Settings.UpdatedRecord;
+
+                if (Ultis.Settings.SessionUserItem.TruckId.Length == 0)
+                {
+                    scan_icon.IsEnabled = false;
+                }
+
+                if (NetworkCheck.IsInternet())
+                {
+                    if (Ultis.Settings.UpdatedRecord.Equals("Yes"))
+                    {
+                        CallWebService(true);
+                    }
+                    else
+                    {
+                        CallWebService(true);
+                    }
+                }
+                else
+                {
+                    loadJobList();
+                }
             }
+            catch
+            {
+                await DisplayAlert("Error","Please refresh menu and try again", "OK");
+            }
+
         }
 
         protected void CallWebService(bool wait)
@@ -95,7 +102,6 @@ namespace ASolute_Mobile.HaulageScreen
             {
                 var scanPage = new ZXingScannerPage();
                 await Navigation.PushAsync(scanPage);
-
                 scanPage.OnScanResult += (result) =>
                 {                    
                     Device.BeginInvokeOnMainThread(async () =>
@@ -112,6 +118,7 @@ namespace ASolute_Mobile.HaulageScreen
                         if (jsonResponse.IsGood)
                         {
                             CallWebService(true);
+                            //Ultis.Settings.UpdatedRecord = "Yes";
                             displayToast("Job added to job list.");                           
                             scanPage.ResumeAnalysis();
                         }
@@ -130,7 +137,7 @@ namespace ASolute_Mobile.HaulageScreen
                     });
                 };
             }
-            catch(AggregateException test)
+            catch
             {
                 await DisplayAlert("Error", "Please try again later", "OK");
             }
@@ -138,10 +145,18 @@ namespace ASolute_Mobile.HaulageScreen
         }
 
         public void jobListRefresh(object sender, EventArgs e)
-        {            
-            Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
-            loadJobList();
-            jobList.IsRefreshing = false;
+        {       
+            try
+            {
+                Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
+                loadJobList();
+                jobList.IsRefreshing = false;
+            }
+            catch
+            {
+                 DisplayAlert("Error", "Please try again later", "OK");
+            }
+
         }
 
         public void loadJobList()
@@ -155,7 +170,7 @@ namespace ASolute_Mobile.HaulageScreen
 
             if (jobs.Count == 0)
             {
-                jobList.IsVisible = false;
+                jobList.IsVisible = true;
                 noData.IsVisible = true;
             }
             else

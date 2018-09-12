@@ -22,13 +22,13 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MasterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ChangePasswordPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Logout.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\ChangePasswordPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -148,9 +148,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MasterPage.xaml.cs">
       <DependentUpon>MasterPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ChangePasswordPage.xaml.cs">
-      <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Logout.xaml.cs">
       <DependentUpon>Logout.xaml</DependentUpon>
     </Compile>
@@ -165,11 +162,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UploadFileDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ControllerUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\ChangePasswordPage.xaml.cs">
+      <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
     <Folder Include="$(MSBuildThisFileDirectory)FleetScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)TransportScreen\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CommonScreen\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)RefuelHistory.xaml">

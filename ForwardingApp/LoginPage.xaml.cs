@@ -46,7 +46,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Haulage";
+                AppLabel.Text = "AILS Haulage V23" ;
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
@@ -191,7 +191,7 @@ namespace ASolute_Mobile
                     if (login_response.IsGood == true)
                     {
                         //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
-
+                        Ultis.Settings.UpdatedRecord = "Yes";
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
                         Ultis.Settings.SessionPassword = passwordEntry.Text;
 
@@ -308,14 +308,7 @@ namespace ASolute_Mobile
                             }
                         }
 
-                        if(usernameEntry.Text == passwordEntry.Text)
-                        {
-                            Application.Current.MainPage = new ChangePasswordPage();
-                        }
-                        else
-                        {
-                            Application.Current.MainPage = new MainPage();
-                        }
+                        Application.Current.MainPage = new MainPage();
                        
                     }                                  
                     else

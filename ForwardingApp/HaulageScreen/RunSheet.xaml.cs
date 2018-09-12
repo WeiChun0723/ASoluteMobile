@@ -39,12 +39,12 @@ namespace ASolute_Mobile.HaulageScreen
 
         protected override void OnAppearing()
         {
-            downloadRunSheet(datePicker.Date.ToString("dd/MMMM/yyyy"));
+            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
         }
 
         public void recordDate(object sender, DateChangedEventArgs e)
         {
-            selectDate = e.NewDate.ToString("dd/MMMM/yyyy");
+            selectDate = e.NewDate.ToString("yyyy MMMMM dd");
 
             downloadRunSheet(selectDate);
         }
@@ -74,14 +74,14 @@ namespace ASolute_Mobile.HaulageScreen
                     break;
             }
 
-            selectDate = displayDate.ToString("dd/MMMM/yyyy");
+            selectDate = displayDate.ToString("yyyy MMMMM dd");
             downloadRunSheet(selectDate);
             return displayDate;
         }
 
         protected void runSheetRefresh(object sender, EventArgs e)
         {
-            downloadRunSheet(datePicker.Date.ToString("dd/MMMM/yyyy"));
+            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
             runSheetHistory.IsRefreshing = false;
         }
 
@@ -171,7 +171,16 @@ namespace ASolute_Mobile.HaulageScreen
                 }
                 else
                 {
-                    await DisplayAlert("Error", json_response.Message, "OK");
+                    if (json_response.Message == "Invalid Session !")
+                    {
+                        BackgroundTask.Logout(this);
+                        await DisplayAlert("Error", json_response.Message, "Ok");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", json_response.Message, "Ok");
+                    }
+
                 }
             }
             catch(Exception exception)

@@ -135,7 +135,16 @@ namespace ASolute_Mobile.HaulageScreen
             }
             else
             {
-                await DisplayAlert("Json Error", json_response.Message, "OK");
+                if (json_response.Message == "Invalid Session !")
+                {
+                    BackgroundTask.Logout(this);
+                    await DisplayAlert("Error", json_response.Message, "Ok");
+                }
+                else
+                {
+                    await DisplayAlert("Error", json_response.Message, "Ok");
+                }
+               
             }
         }
     }

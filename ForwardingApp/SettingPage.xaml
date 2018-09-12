@@ -8,7 +8,7 @@
             <Label TextColor="#ffffff" FontSize="20" Text="Change Enterprise Name" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
             <StackLayout Padding="0, 40">
             </StackLayout>
-            <Entry x:Name="urlEntry" Placeholder="Enterprise name" PlaceholderColor="#B48F93" TextColor="#FFFFFF" />
+            <Entry x:Name="nameEntry" Placeholder="Enterprise name" PlaceholderColor="#B48F93" TextColor="#FFFFFF" TextChanged="EnterpriseName"/>
             <Button x:Name="SubmitButton" Text="Submit" Clicked="Url_Clicked" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" FontSize="16" BackgroundColor="#ED1C24" TextColor="#FFFFFF" FontAttributes="Bold" />
             <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>

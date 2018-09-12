@@ -28,7 +28,7 @@ namespace ASolute_Mobile
         static string uploadUri;
         static string imageEventID;
         static int uploadedImage = 0;
-        static string history,backColor;
+        static string history;
         static string previousLocation = "";
 
         public BackgroundTask()
@@ -451,6 +451,7 @@ namespace ASolute_Mobile
                     }
                 }
             }
+           
         }
                   
         public static void Logout()
@@ -748,7 +749,16 @@ namespace ASolute_Mobile
             }
             else
             {
-                await contentPage.DisplayAlert("Download Error", json_response.Message, "OK");
+                if (json_response.Message == "Invalid Session !")
+                {
+                    BackgroundTask.Logout(contentPage);
+                    await contentPage.DisplayAlert("Error", json_response.Message, "Ok");
+                }
+                else
+                {
+                    await contentPage.DisplayAlert("Error", json_response.Message, "Ok");
+                }
+               
             }
             
         }

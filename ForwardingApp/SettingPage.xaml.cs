@@ -2,10 +2,8 @@
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
+
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -19,38 +17,55 @@ namespace ASolute_Mobile
             {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
-            urlEntry.Text = Ultis.Settings.AppEnterpriseName;
+            nameEntry.Text = Ultis.Settings.AppEnterpriseName;
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        async  void Url_Clicked(object sender, EventArgs e)
+        void EnterpriseName(object sender, TextChangedEventArgs e)
         {
-            if(urlEntry.Text.Length > 0){
-                this.activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
-                Ultis.Settings.SessionBaseURI = urlEntry.Text;
-                var client = new HttpClient();
-                client.BaseAddress = new Uri("https://api.asolute.com/");
-                var uri = ControllerUtil.getBaseURL(urlEntry.Text.ToUpper());
-                var response = await client.GetAsync(uri);
-                var content = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine(content);
+            string _name = nameEntry.Text.ToUpper();
 
+            if (_name.Length > 15)
+            {
+                _name = _name.Remove(_name.Length - 1);
+
+                nameEntry.Unfocus();
+            }
+
+            nameEntry.Text = _name;
+        }
+
+        async void Url_Clicked(object sender, EventArgs e)
+        {
+
+                this.activityIndicator.IsRunning = true;
+
+                var content = await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text.ToUpper()));
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood)
                 {
-                    Ultis.Settings.AppEnterpriseName = urlEntry.Text.ToUpper();
-                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
-                    await DisplayAlert("Success", "Enterprise name updated.", "Ok");
-                    await Navigation.PopAsync();
+                    string returnUri = json_response.Result;
+                    if (!(returnUri.Contains("Unknown")))
+                    {
+                        Ultis.Settings.AppEnterpriseName = nameEntry.Text.ToUpper();
+                        Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                        await DisplayAlert("Success", "Enterprise name updated.", "Ok");
+                        await Navigation.PopAsync();
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "Enterprise name unknown", "OK");
+                    }
+                   
                 }
-            } else {
-                await DisplayAlert("Error", "Base URL must not be empty.", "Ok");
-            }
+                else
+                {
+                await DisplayAlert("Error", json_response.Message, "OK");
+                }   
 
-            this.activityIndicator.IsRunning = false;
-            activityIndicator.IsVisible = false;
+                this.activityIndicator.IsRunning = false;
+                
         }
     }
 }
