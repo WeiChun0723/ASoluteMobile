@@ -5,6 +5,7 @@ using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Geolocator;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,15 +23,73 @@ namespace ASolute_Mobile
 	{
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
-
+        string previousLocation = "";
+        string chklocation = "0";
 
         public MainMenu ()
 		{
 			InitializeComponent ();
-            BackgroundTask.StartListening();          
+            StartListening();
         }
 
-       protected override void OnAppearing()
+        public async Task StartListening()
+        {
+
+            if (CrossGeolocator.Current.IsListening)
+                return;
+
+            await CrossGeolocator.Current.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
+            {
+                ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
+                AllowBackgroundUpdates = true,
+                DeferLocationUpdates = true,
+                DeferralDistanceMeters = 1,
+                ListenForSignificantChanges = true,
+                PauseLocationUpdatesAutomatically = true
+            });
+
+            CrossGeolocator.Current.PositionChanged += Current_PositionChanged;
+        }
+
+        public async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
+        {
+
+            if (chklocation != previousLocation)
+            {
+                try
+                {
+                    var position = e.Position;
+                    string location = position.Latitude + "," + position.Longitude;
+                    chklocation = Math.Round(position.Latitude, 2) + "," + Math.Round(position.Longitude, 2);
+                    previousLocation = Math.Round(position.Latitude, 2) + "," + Math.Round(position.Longitude, 2);
+                    await sendLocation(location);
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
+        public async Task sendLocation(string location)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+            var uri = ControllerUtil.getGPSTracking(location);
+            var response = await client.GetAsync(uri);
+            var content = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(content);
+            clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if (gps_response.IsGood)
+            {
+                previousLocation = location;
+
+            }
+        }
+
+        protected override void OnAppearing()
         {
             if (Ultis.Settings.Language.Equals("English"))
             {
@@ -45,7 +104,6 @@ namespace ASolute_Mobile
             {          
                 getMainMenu();
                 Ultis.Settings.UpdatedRecord = "No";
-                      
             }
             else
             {                
@@ -159,15 +217,8 @@ namespace ASolute_Mobile
                 activityIndicator.IsRunning = true;
                 activityIndicator.IsVisible = true;
 
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var uri = ControllerUtil.getDownloadMenuURL();
-                var response = await client.GetAsync(uri);
-                var content = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine(content);               
-                clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                //clsResponse login_response = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+                clsResponse login_response = JsonConvert.DeserializeObject <clsResponse>(content);
 
 
                 if (login_response.IsGood == true)
@@ -348,7 +399,7 @@ namespace ASolute_Mobile
             getMainMenu();
             MainMenuList.IsRefreshing = false;
             //Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
-            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); }).Wait();            
+            //Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); }).Wait();            
         }
 
 

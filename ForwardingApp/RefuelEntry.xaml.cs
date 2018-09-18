@@ -34,8 +34,8 @@ namespace ASolute_Mobile
         string newFuelID, focusField;
         int station_choice, payment_choice;
         string mandatory;
-        //private readonly ITesseractApi _tesseractApi;
-        //private readonly IDevice _device;
+        /*private readonly ITesseractApi _tesseractApi;
+        private readonly IDevice _device;*/
 
         public RefuelEntry ()
 		{
@@ -64,7 +64,6 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
 
             //_tesseractApi = Resolver.Resolve<ITesseractApi>();
             //_device = Resolver.Resolve<IDevice>();
@@ -99,37 +98,40 @@ namespace ASolute_Mobile
         {
             try
             {
-              
-               /*if (!_tesseractApi.Initialized)
-                    //await _tesseractApi.Init("eng");
 
-                var photo = await TakePic();
-                if (photo != null)
-                {
-                    var imageBytes = new byte[photo.Source.Length];
-                    photo.Source.Position = 0;
-                    photo.Source.Read(imageBytes, 0, (int)photo.Source.Length);
-                    photo.Source.Position = 0;
+                /*if (!_tesseractApi.Initialized)
+                     await _tesseractApi.Init("eng");
 
-                    byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imageBytes, 500, 450, 100, true);
-                    var tessResult = await _tesseractApi.SetImage(scaledImageByte);
-                    if (tessResult)
-                    {
-                        string field = focusField;
-                        switch (field)
-                        {
-                            case "fuel":
-                                fuelCard.Text = _tesseractApi.Text;
-                                break;
+                 var photo = await TakePic();
+                 if (photo != null)
+                 {
+                     var imageBytes = new byte[photo.Source.Length];
+                     photo.Source.Position = 0;
+                     photo.Source.Read(imageBytes, 0, (int)photo.Source.Length);
+                     photo.Source.Position = 0;
 
-                            case "voucher":
-                                voucher.Text = _tesseractApi.Text;
-                                break;
 
-                            case "other":
-                                other.Text = _tesseractApi.Text;
-                                break;
-                        }
+                     byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imageBytes, 500, 450, 100, true);
+                     var tessResult = await _tesseractApi.SetImage(scaledImageByte);
+                     if (tessResult)
+                     {
+                         await DisplayAlert("Result", _tesseractApi.Text, "OK");
+                         /*string field = focusField;
+                         switch (field)
+                         {
+                             case "fuel":
+                                 fuelCard.Text = _tesseractApi.Text;
+                                 break;
+
+                             case "voucher":
+                                 voucher.Text = _tesseractApi.Text;
+                                 break;
+
+                             case "other":
+                                 other.Text = _tesseractApi.Text;
+                                 break;
+                         }
+
                     }
                 }*/
             }
@@ -146,9 +148,9 @@ namespace ASolute_Mobile
             {
                 DefaultCamera = CameraDevice.Rear
             };
-            //var mediaFile = await _device.MediaPicker.TakePhotoAsync(mediaStorageOptions);
+            var mediaFile = await _device.MediaPicker.TakePhotoAsync(mediaStorageOptions);
 
-            //return mediaFile;
+            return mediaFile;
         }*/
 
         public void FuelEntryFocus(object sender, FocusEventArgs e)
@@ -230,11 +232,11 @@ namespace ASolute_Mobile
                                 refuel_Data.OtherRef = other.Text;                                                               
                                 refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
                                 App.Database.SaveRecordAsync(refuel_Data);
-                                await BackgroundTask.UploadLatestRecord();
-                                confirm_icon.IsEnabled = false;
+                                await BackgroundTask.UploadLatestRecord(this);
+                                /*confirm_icon.IsEnabled = false;
                                 confirm_icon.Source = "confirmDisable.png";
 
-                                string status = "";
+                                /*string status = "";
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
                                     status = "New fuel record added.";
@@ -243,9 +245,9 @@ namespace ASolute_Mobile
                                 {
                                     status = "Record baru ditambah.";
                                 }
-                                await DisplayAlert("", status, "OK");
+                                await DisplayAlert("", status, "OK");*/
 
-                                await Navigation.PopAsync();
+                               
                             }
                             catch (Exception exception)
                             {
@@ -331,22 +333,56 @@ namespace ASolute_Mobile
 
         public void LiterInput(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            try
             {
-                amount.Text = "RM 0.00";
-                liter.Placeholder = "Maximum 500 liter only";
+                if (string.IsNullOrEmpty(e.NewTextValue))
+                {
+                    amount.Text = "RM 0.00";
+                    liter.Placeholder = "Maximum 500 liter only";
+                }
+                else
+                {
+
+                    double fuelLiter = Convert.ToDouble(e.NewTextValue);
+
+                    double result = Convert.ToDouble(costPerLiter.Text.ToString()) * fuelLiter;
+
+                    amount.Text = "RM" + result.ToString();
+                }
             }
-            else
+            catch
             {
-
-                double fuelLiter = Convert.ToDouble(e.NewTextValue);
-
-                double result = Convert.ToDouble(costPerLiter.Text.ToString()) * fuelLiter;
-
-                amount.Text = "RM" + result.ToString();
+                DisplayAlert("Error", "Please try again", "OK");
             }
+
         }
-             
+
+        public void CostLiter(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt16(liter.Text) == 0)
+                {
+                    amount.Text = "RM 0.00";
+
+                }
+                else
+                {
+
+                    double costLiter = Convert.ToDouble(e.NewTextValue);
+
+                    double result = Convert.ToDouble(liter.Text.ToString()) * costLiter;
+
+                    amount.Text = "RM" + result.ToString();
+                }
+            }
+            catch
+            {
+                DisplayAlert("Error", "Please try again", "OK");
+            }
+           
+        }
+
         public  void VoucherText(object sender, TextChangedEventArgs e)
         {
             string _vouchertext = voucher.Text.ToUpper();

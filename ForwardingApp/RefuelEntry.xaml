@@ -60,7 +60,7 @@
                 </StackLayout>
             
             <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="costPerLiter" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" Keyboard="Numeric" HorizontalTextAlignment="End" LineColor="LightYellow"/>
+                    <controls:CustomEntry x:Name="costPerLiter" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" Keyboard="Numeric" HorizontalTextAlignment="End" LineColor="LightYellow" TextChanged="CostLiter"/>
                 <Label x:Name="amount" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightGray"  WidthRequest="130" FontAttributes="Bold"  TextColor="Black"/>
             </StackLayout>
 

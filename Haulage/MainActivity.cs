@@ -18,7 +18,8 @@ using Plugin.CurrentActivity;
 using TinyIoC;
 using XLabs.Platform.Device;
 using XLabs.Ioc.TinyIOC;
-//using Android;
+using ASolute_Mobile.Droid.Services;
+using Android;
 
 namespace ASolute_Mobile.Droid
 {
@@ -48,11 +49,10 @@ namespace ASolute_Mobile.Droid
             container.Register<ITesseractApi>((cont, parameters) =>
             {
                 return new TesseractApi(ApplicationContext, AssetsDeployment.OncePerInitialization);
-            });*/
-            //Resolver.ResetResolver();
-            //Resolver.SetResolver(new TinyResolver(container));
-           
+            });
 
+            Resolver.SetResolver(new TinyResolver(container));*/
+           
             UserDialogs.Init(this);
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
@@ -71,9 +71,9 @@ namespace ASolute_Mobile.Droid
 
             App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
 
-            //if(Ultis.Settings.SessionUserItem.CaptureGPS){
 
-            /* LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
+
+            /*LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
                  {
                      Log.Debug(logTag, "ServiceConnected Event Raised");
                      // notifies us of location changes from the system
@@ -85,12 +85,8 @@ namespace ASolute_Mobile.Droid
                      LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
                  };*/
 
-            //LocationApp.StartLocationService();
-            //
+            //LocationApp.StartLocationService();     
 
-            //BackgroundTask.RetrieveLocation();
-
-            
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
@@ -113,6 +109,7 @@ namespace ASolute_Mobile.Droid
             //{
             Log.Debug(logTag, "OnResume: Location app is moving into foreground");
             base.OnResume();
+          
             //}
         }
 

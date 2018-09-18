@@ -43,8 +43,6 @@ namespace ASolute_Mobile.HaulageScreen
                     Title = "Senarai Kerja";
                 }
 
-                string test = Ultis.Settings.UpdatedRecord;
-
                 if (Ultis.Settings.SessionUserItem.TruckId.Length == 0)
                 {
                     scan_icon.IsEnabled = false;
@@ -52,14 +50,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                 if (NetworkCheck.IsInternet())
                 {
-                    if (Ultis.Settings.UpdatedRecord.Equals("Yes"))
-                    {
-                        CallWebService(true);
-                    }
-                    else
-                    {
-                        CallWebService(true);
-                    }
+                    CallWebService();
                 }
                 else
                 {
@@ -73,17 +64,9 @@ namespace ASolute_Mobile.HaulageScreen
 
         }
 
-        protected void CallWebService(bool wait)
+        protected void CallWebService()
         {
-            if (wait == true)
-            {
-                Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
-            }
-            else if (wait == false)
-            {
-                Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this);});
-
-            }            
+            Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
             loadJobList();
         }
 
@@ -117,7 +100,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                         if (jsonResponse.IsGood)
                         {
-                            CallWebService(true);
+                            CallWebService();
                             //Ultis.Settings.UpdatedRecord = "Yes";
                             displayToast("Job added to job list.");                           
                             scanPage.ResumeAnalysis();

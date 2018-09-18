@@ -59,7 +59,7 @@ namespace ASolute_Mobile.Droid.Services
             //for example, we might want to preserve power, or get extreme accuracy
             var locationCriteria = new Criteria();
 
-            locationCriteria.Accuracy = Accuracy.NoRequirement;
+            locationCriteria.Accuracy = Accuracy.Fine;
             locationCriteria.PowerRequirement = Power.NoRequirement;
 
             // get provider: GPS, Network, etc.
@@ -91,7 +91,6 @@ namespace ASolute_Mobile.Droid.Services
 
             // This should be updating every time we request new location updates
             // both when teh app is in the background, and in the foreground
-
 
             Log.Debug(logTag, String.Format("Latitude is {0}", location.Latitude));
             Log.Debug(logTag, String.Format("Longitude is {0}", location.Longitude));

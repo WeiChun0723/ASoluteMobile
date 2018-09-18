@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.HaulageScreen.JobDetail"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer">
+    <StackLayout Style="{StaticResource stackStyle}">
+        
+        <StackLayout x:Name="jobDetailsStackLayout" Padding="15,5,0,0" BackgroundColor="#e8e5e5">
+            
+        </StackLayout>
+        
+        <StackLayout x:Name="mapPhoneStackLayout" Padding="15,0,0,25" BackgroundColor="#e8e5e5" Orientation="Horizontal">
+            
+        </StackLayout>
+        
+        <StackLayout x:Name="remarksStackLayout" Padding="15,10,15,10" Spacing="0" HeightRequest="100" IsVisible="false">
+            <controls:CustomEntry WidthRequest="120" HeightRequest="100" LineColor="#FFFF33"/>
+        </StackLayout>
+        
+        <StackLayout x:Name="signatureStackLayout" Spacing="0" HeightRequest="150" Padding="15,10,15,10" IsVisible="false">
+            
+        </StackLayout>
+        
+        <StackLayout x:Name="imageButtonStackLayout" Spacing="30" HorizontalOptions="Center" Orientation="Horizontal" Padding="15,10,15,10" IsVisible="false">
+            
+        </StackLayout>
+        
+        <StackLayout x:Name="containerStackLayout" Spacing="5" Orientation="Horizontal">
+            <controls:CustomEntry x:Name="contPrefix" Style="{StaticResource customEntryStyle}" HorizontalTextAlignment="Start"/>
+            <controls:CustomEntry x:Name="contNumber" Style="{StaticResource customEntryStyle}" HorizontalTextAlignment="Start" Keyboard="Numeric"/>
+        </StackLayout>
+        
+        <StackLayout x:Name="checkedStackLayout" Spacing="5" Orientation="Horizontal">
+            
+        </StackLayout>
+        
+        <Grid x:Name="confirmGrid" IsVisible="false" Padding="15,0,15,0">
+             <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />              
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            
+        </Grid>
+        
+        <Grid x:Name="trailerContainerGrid" IsVisible="false" Padding="15,0,15,0">
+             <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />              
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Label Text="Trailer Id" Style="{StaticResource labelStyle}"/>
+            <Label Text="Container No." Style="{StaticResource labelStyle}"/>
+            <Label Text="Collect Seal" Style="{StaticResource labelStyle}"/>
+            <Label Text="Seal No." Style="{StaticResource labelStyle}"/>
+            <Label Text="MGW(KG)" Style="{StaticResource labelStyle}"/>
+            <Label Text="Seal No." Style="{StaticResource labelStyle}"/>
+            
+            <controls:CustomEntry />
+            <controls:CustomEntry/>
+            <controls:CustomEntry/>
+            <controls:CustomEntry/>
+        </Grid>
+        
+        <Grid  x:Name="imageGrid" ColumnSpacing="0" RowSpacing="0"></Grid>
+        
+    </StackLayout>
+</ContentPage>

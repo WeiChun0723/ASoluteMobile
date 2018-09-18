@@ -105,7 +105,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadRefuelHistoryURL()
         {
-            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
         }
 
         public static String getDownloadPendingRecURL()
@@ -135,7 +135,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadHaulageHistoryURL(string date)
         {
-            return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),date);
+            return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, "0",date);
         }
 
         public static String postContainerNumberURL(string containerNumber)
@@ -145,7 +145,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getPendingCollectionURL()
         {
-            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
         }
 
         public static String postHaulageURL()
@@ -165,7 +165,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getNewFuelCostURL()
         {
-            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
         }
 
         public static String getReasonListURL()

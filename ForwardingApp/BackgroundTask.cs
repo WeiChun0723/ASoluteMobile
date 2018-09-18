@@ -35,61 +35,9 @@ namespace ASolute_Mobile
         {
         }
 
-        public static async void StartListening()
-        {
-         
-            if (CrossGeolocator.Current.IsListening)
-                return;
-
-            await CrossGeolocator.Current.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
-            {
-                ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
-                AllowBackgroundUpdates = true,
-                DeferLocationUpdates = true,
-                DeferralDistanceMeters = 10,
-                ListenForSignificantChanges = true,
-                PauseLocationUpdatesAutomatically = true
-            });
-            CrossGeolocator.Current.PositionChanged += Current_PositionChanged;           
-        }
-
-        public static void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
-        {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                var position = e.Position;
-                string location = position.Latitude + "," + position.Longitude;
-
-                if (location != previousLocation)
-                {
-                    try
-                    {
-
-                        var client = new HttpClient();
-                        client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                        var uri = ControllerUtil.getGPSTracking(location);
-                        var response = await client.GetAsync(uri);
-                        var content = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(content);
-                        clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                        if (gps_response.IsGood)
-                        {
-                            previousLocation = location;
-                           
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
-              
-            });
-
-        }
+      
   
-        public static async Task UploadLatestRecord()
+        public static async Task UploadLatestRecord(ContentPage page)
         {
             if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
             {
@@ -239,23 +187,29 @@ namespace ASolute_Mobile
                                 Ultis.Settings.UpdatedRecord = "Yes";
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
-                                    CommonFunction.AppActivity("Add refuel record", "Succeed", status.Message);
+                                    //CommonFunction.AppActivity("Add refuel record", "Succeed", status.Message);
+                                    await page.DisplayAlert("Success", "Record added", "OK");
                                 }
                                 else
                                 {
-                                    CommonFunction.AppActivity("Isi minyak entri", "Berjaya", status.Message);
+                                    //CommonFunction.AppActivity("Isi minyak entri", "Berjaya", status.Message);
+                                    await page.DisplayAlert("Berjaya", "Record baru ditambah", "OK");
                                 }
+
+                                await page.Navigation.PopAsync();
                                 
                             }
                             else
                             {
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
-                                    CommonFunction.AppActivity("Add refuel record", "Failed", status.Message);
+                                    //CommonFunction.AppActivity("Add refuel record", "Failed", status.Message);
+                                    await page.DisplayAlert("Error", "No truck is assigned to this account.", "OK");
                                 }
                                 else
                                 {
-                                    CommonFunction.AppActivity("Isi minyak entri", "Gagal", status.Message);
+                                    //CommonFunction.AppActivity("Isi minyak entri", "Gagal", status.Message);
+                                    await page.DisplayAlert("Gagal", "No truck is assigned to this account.", "OK");
                                 }    
                             }
                         }                          

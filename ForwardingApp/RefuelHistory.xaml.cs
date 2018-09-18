@@ -160,7 +160,7 @@ namespace ASolute_Mobile
         {
             getRefuelHistory();           
             refuel_history.IsRefreshing = false;
-            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); }).Wait();
+            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(this); }).Wait();
         }
 
         public void loadRefuelHistory()
@@ -174,7 +174,7 @@ namespace ASolute_Mobile
 
             if (recordItems.Count == 0)
             {
-                refuel_history.IsVisible = false;
+                refuel_history.IsVisible = true;
                 noData.IsVisible = true;
             }
             else

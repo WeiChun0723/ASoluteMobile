@@ -168,7 +168,7 @@ namespace ASolute_Mobile
         {
             downloadLogHistory(logDate.Date.ToString("dd-MMMM-yyyy"));    
             logHistory.IsRefreshing = false;
-            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); }).Wait();
+            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(this); }).Wait();
         }
 
         public async void selectLog(object sender, ItemTappedEventArgs e)

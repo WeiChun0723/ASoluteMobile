@@ -7,6 +7,25 @@
             <OnPlatform x:TypeArguments="Color" Android="#FFFFFF" iOS="#000000" WinPhone="#000000" x:Key="EntryTextColor" />
             <OnPlatform x:TypeArguments="x:Double" Android="40" iOS="40" WinPhone="40" x:Key="EntryHeightRequest" />
             
+            
+            <Style x:Key="stackStyle" TargetType="StackLayout">
+                <Setter Property="Spacing" Value="10" />
+                <Setter Property="BackgroundColor" Value="#e8e5e5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            </Style>
+            <Style x:Key="customEntryStyle" TargetType="Entry">
+                <Setter Property="PlaceholderColor" Value="#FFFF33" />
+                <Setter Property="HeightRequest" Value="40" />
+               <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            </Style>
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="WidthRequest" Value="100" />
+                <Setter Property="MinimumWidthRequest" Value="100" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+            </Style>
             <Style x:Key="entryStyle" TargetType="Entry">
                 <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
                 <Setter Property="PlaceholderColor" Value="#ffffff" />
