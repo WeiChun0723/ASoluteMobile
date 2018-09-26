@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
+using Android;
+using Android.Support.V4.App;
+using Android.Telephony;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.DeviceInfo;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile.CustomerTracking
@@ -16,7 +20,13 @@ namespace ASolute_Mobile.CustomerTracking
         public AppNavigation()
         {
             NavigationPage.SetHasNavigationBar(this, false);
+
+            if(Device.RuntimePlatform == Device.Android)
+            {
+               // Ultis.Settings.DeviceUniqueID = DependencyService.Get<GetDeviceID>().GetIdentifier(); 
           
+            }
+
         }
 
         protected override async void OnAppearing()
@@ -49,10 +59,6 @@ namespace ASolute_Mobile.CustomerTracking
                         case "Activate":
                             Application.Current.MainPage = new AccountActivation();
                             break;
-
-                        case "MyProviders":
-                            Application.Current.MainPage = new MainPage();
-                            break;
                         
                         case "Home":
                             Application.Current.MainPage = new MainPage();
@@ -60,14 +66,11 @@ namespace ASolute_Mobile.CustomerTracking
                     }
 
                 }
-                else
-                {
-                    Application.Current.MainPage = new MainMenu();
-                }
+               
             }
             else
             {
-
+                await DisplayAlert("JsonError", login_response.Message, "OK");
             }
 
         }

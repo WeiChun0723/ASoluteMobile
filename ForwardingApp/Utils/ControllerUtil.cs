@@ -72,7 +72,12 @@ namespace ASolute_Mobile.Utils
 
         public static String getCategoryList(string code)
         {
-            return String.Format("Providers/ContainerSummary?Id={0}&Code={1}", Ultis.Settings.SessionSettingKey,code);
+            return String.Format("Providers/ContainerSummary?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey,code);
+        }
+
+        public static String getContainerList(string code, string category)
+        {
+            return String.Format("Providers/ContainerList?SessionId={0}&Code={1}&Category={2}", Ultis.Settings.SessionSettingKey, code, category);
         }
 
         #endregion

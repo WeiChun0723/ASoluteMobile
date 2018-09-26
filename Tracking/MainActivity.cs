@@ -21,15 +21,20 @@ using XLabs.Ioc.TinyIOC;
 using ASolute_Mobile.Droid.Services;
 using Android;
 using Com.OneSignal;
+using Android.Support.V4.App;
+using System.Threading.Tasks;
+using Android.Widget;
+using Xamarin.Forms;
 
 namespace ASolute_Mobile.Droid
 {
     [Activity(Label = "AILS Tracking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
-        string ID;
+       
         readonly string logTag = "MainActivity";
-             
+        //private static int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
+
         protected override void OnCreate(Bundle bundle)
         {
             //Ultis.Settings.App = "Tracking";
@@ -45,6 +50,11 @@ namespace ASolute_Mobile.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
+            if(Ultis.Settings.DeviceUniqueID.Equals(""))
+            {
+                TryToGetPermissions();
+            }
+
             /*var container = TinyIoCContainer.Current;
             container.Register<IDevice>(AndroidDevice.CurrentDevice);
             container.Register<ITesseractApi>((cont, parameters) =>
@@ -53,17 +63,12 @@ namespace ASolute_Mobile.Droid
             });
 
             Resolver.SetResolver(new TinyResolver(container));*/
-           
+
             UserDialogs.Init(this);
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
+
             LoadApplication(new App());
-
-
-            Android.Telephony.TelephonyManager mTelephonyMgr;
-            mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
-            //IMEI number  
-            Ultis.Settings.DeviceUniqueID = mTelephonyMgr.DeviceId;
 
 
             var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
@@ -84,8 +89,94 @@ namespace ASolute_Mobile.Droid
 
         }
 
+        #region RuntimePermissions
+
+        async Task TryToGetPermissions()
+        {
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                await GetPermissionsAsync();
+                return;
+            }
+
+
+        }
+        const int RequestLocationId = 0;
+
+        readonly string[] PermissionsGroupLocation =
+            {
+                            //TODO add more permissions
+                            Manifest.Permission.ReadPhoneState
+
+        };
+
+        async Task GetPermissionsAsync()
+        {
+            const string permission = Manifest.Permission.ReadPhoneState;
+
+            if (CheckSelfPermission(permission) == (int)Android.Content.PM.Permission.Granted)
+            {
+                //TODO change the message to show the permissions name
+                Android.Telephony.TelephonyManager mTelephonyMgr;
+                mTelephonyMgr = (Android.Telephony.TelephonyManager)Forms.Context.GetSystemService(Android.Content.Context.TelephonyService);
+                Ultis.Settings.DeviceUniqueID =  mTelephonyMgr.DeviceId;
+               
+            }
+
+            if (ShouldShowRequestPermissionRationale(permission))
+            {
+                //set alert for executing the task
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle("Permissions Needed");
+                alert.SetMessage("The application need special permissions to continue");
+                alert.SetPositiveButton("Request Permissions", (senderAlert, args) =>
+                {
+                    RequestPermissions(PermissionsGroupLocation, RequestLocationId);
+                });
+
+                alert.SetNegativeButton("Cancel", (senderAlert, args) =>
+                {
+                    Toast.MakeText(this, "Cancelled!", ToastLength.Short).Show();
+                });
+
+                Dialog dialog = alert.Create();
+                dialog.Show();
+
+
+                return;
+            }
+
+            RequestPermissions(PermissionsGroupLocation, RequestLocationId);
+
+        }
+      
+
+        #endregion
+
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
+            switch (requestCode)
+            {
+                case RequestLocationId:
+                    {
+                        if (grantResults[0] == (int)Android.Content.PM.Permission.Granted)
+                        {
+                            Android.Telephony.TelephonyManager mTelephonyMgr;
+                            mTelephonyMgr = (Android.Telephony.TelephonyManager)Forms.Context.GetSystemService(Android.Content.Context.TelephonyService);
+                            Ultis.Settings.DeviceUniqueID = mTelephonyMgr.DeviceId;
+
+                        }
+                        else
+                        {
+                            //Permission Denied :(
+                           // Toast.MakeText(this, "Special permissions denied", ToastLength.Short).Show();
+
+                        }
+                    }
+                    break;
+            }
+
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }       
 

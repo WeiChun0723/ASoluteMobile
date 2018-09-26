@@ -85,6 +85,11 @@ namespace ASolute_Mobile
                     AppMenu model = (AppMenu)this.BindingContext;
                     providers = App.Database.Providers(model.menuId);  
                 }
+                if (Ultis.Settings.ListType == "container_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Container");
+                }
 
                 AbsoluteLayout absoluteLayout = new AbsoluteLayout();
 
@@ -95,52 +100,59 @@ namespace ASolute_Mobile
                     VerticalOptions = LayoutOptions.FillAndExpand
                 };
 
-                //bool firstSummaryLine = true;
+                bool firstSummaryLine = true;
 
-                foreach (ProviderInfo items in providers)
+                if(Ultis.Settings.ListType == "provider_List")
                 {
-                    Label label = new Label();
-                    label.FontAttributes = FontAttributes.Bold;
-                    label.Text = items.Name;
-                    cellWrapper.Children.Add(label);
-                }
-                
-                /*foreach (SummaryItems items in summaryRecord)
-                {
-                    Label label = new Label();
-
-                    if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee")
+                    foreach (ProviderInfo items in providers)
                     {
-                        label.Text = items.Value;
-                        
-                    }
-                    else if(items.Caption == "Action" || items.Display == false)
-                    {
-                        label.IsVisible = false;
-                    }                   
-                    else
-                    {
-                        label.Text = items.Caption + ": " + items.Value;
-                    }
-
-                    if (firstSummaryLine)
-                    {
-                       
-                        firstSummaryLine = false;
+                        Label label = new Label();
                         label.FontAttributes = FontAttributes.Bold;
+                        label.Text = items.Name;
+                        cellWrapper.Children.Add(label);
                     }
-                     
-                    
-                    cellWrapper.Children.Add(label);
 
-                    if (!(String.IsNullOrEmpty(items.BackColor)))
+                }
+                else
+                {
+
+                    foreach (SummaryItems items in summaryRecord)
                     {
-                        cellWrapper.BackgroundColor = Color.FromHex(items.BackColor);
-                        color = items.BackColor;
-                    }
-                    
-                }*/
+                        Label label = new Label();
 
+                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee")
+                        {
+                            label.Text = items.Value;
+
+                        }
+                        else if (items.Caption == "Action" || items.Display == false)
+                        {
+                            label.IsVisible = false;
+                        }
+                        else
+                        {
+                            label.Text = items.Caption + ": " + items.Value;
+                        }
+
+                        if (firstSummaryLine)
+                        {
+
+                            firstSummaryLine = false;
+                            label.FontAttributes = FontAttributes.Bold;
+                        }
+
+
+                        cellWrapper.Children.Add(label);
+
+                        if (!(String.IsNullOrEmpty(items.BackColor)))
+                        {
+                            cellWrapper.BackgroundColor = Color.FromHex(items.BackColor);
+                            color = items.BackColor;
+                        }
+
+                    }
+                }
+                       
                 absoluteLayout.Children.Add(cellWrapper);
 
                 MenuItem menuItem = new MenuItem()

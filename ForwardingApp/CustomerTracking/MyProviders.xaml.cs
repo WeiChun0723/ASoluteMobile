@@ -16,14 +16,19 @@ namespace ASolute_Mobile.CustomerTracking
         {
             InitializeComponent();
             Title = "Home";
+
+        }
+
+        protected override void OnAppearing()
+        {
             getProviderList();
         }
 
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
-            string providerCode = ((AppMenu)e.Item).menuId;
+    
 
-            await Navigation.PushAsync(new ProviderDetails(((AppMenu)e.Item).menuId));
+            await Navigation.PushAsync(new ProviderDetails(((AppMenu)e.Item).menuId,((AppMenu)e.Item).name));
         }
 
         protected void refreshProviderList(object sender, EventArgs e)
@@ -52,6 +57,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                     AppMenu menu = new AppMenu();
                     menu.menuId = p.Code;
+                    menu.name = p.Name;
                     App.Database.SaveMenuAsync(menu);
 
                     ProviderInfo available_provider = new ProviderInfo();

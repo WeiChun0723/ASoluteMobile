@@ -71,6 +71,7 @@ namespace ASolute_Mobile.Models
     public class AppMenu : Generic
     {
         public string menuId { get; set; }
+        public string name { get; set; }
     }
 
     public class Log : Generic

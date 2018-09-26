@@ -211,6 +211,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml.cs">
       <DependentUpon>ProviderDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\GetDeviceID.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

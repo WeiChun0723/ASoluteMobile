@@ -177,9 +177,6 @@
     <Reference Include="Refractored.XamForms.PullToRefresh.Droid">
       <HintPath>..\packages\Refractored.XamForms.PullToRefresh.2.0.0.13\lib\MonoAndroid10\Refractored.XamForms.PullToRefresh.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.CurrentActivity">
-      <HintPath>..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
-    </Reference>
     <Reference Include="Plugin.Media.Abstractions">
       <HintPath>..\packages\Xam.Plugin.Media.3.0.1\lib\MonoAndroid10\Plugin.Media.Abstractions.dll</HintPath>
     </Reference>
@@ -355,6 +352,12 @@
     <Reference Include="ASolute.Mobile.Models">
       <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.DeviceInfo">
+      <HintPath>..\packages\Xam.Plugin.DeviceInfo.4.0.0.13\lib\monoandroid71\Plugin.DeviceInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.CurrentActivity">
+      <HintPath>..\packages\Plugin.CurrentActivity.2.1.0.4\lib\monoandroid44\Plugin.CurrentActivity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseApplication.cs" />
@@ -378,6 +381,7 @@
     <Compile Include="Services\LocationServiceConnection.cs" />
     <Compile Include="Services\ServiceConnectedEventArgs.cs" />
     <Compile Include="Services\BackgroundCleanUpReceiver.cs" />
+    <Compile Include="DeviceID.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

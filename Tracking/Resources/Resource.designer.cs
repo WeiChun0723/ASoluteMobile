@@ -3775,26 +3775,26 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f020057
 			public const int avd_hide_password = 2130837591;
 			
+			// aapt resource value: 0x7f020150
+			public const int avd_hide_password_1 = 2130837840;
+			
 			// aapt resource value: 0x7f020151
-			public const int avd_hide_password_1 = 2130837841;
+			public const int avd_hide_password_2 = 2130837841;
 			
 			// aapt resource value: 0x7f020152
-			public const int avd_hide_password_2 = 2130837842;
-			
-			// aapt resource value: 0x7f020153
-			public const int avd_hide_password_3 = 2130837843;
+			public const int avd_hide_password_3 = 2130837842;
 			
 			// aapt resource value: 0x7f020058
 			public const int avd_show_password = 2130837592;
 			
+			// aapt resource value: 0x7f020153
+			public const int avd_show_password_1 = 2130837843;
+			
 			// aapt resource value: 0x7f020154
-			public const int avd_show_password_1 = 2130837844;
+			public const int avd_show_password_2 = 2130837844;
 			
 			// aapt resource value: 0x7f020155
-			public const int avd_show_password_2 = 2130837845;
-			
-			// aapt resource value: 0x7f020156
-			public const int avd_show_password_3 = 2130837846;
+			public const int avd_show_password_3 = 2130837845;
 			
 			// aapt resource value: 0x7f020059
 			public const int barCode = 2130837593;
@@ -4483,11 +4483,11 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f02013d
 			public const int notification_icon_background = 2130837821;
 			
-			// aapt resource value: 0x7f02014f
-			public const int notification_template_icon_bg = 2130837839;
+			// aapt resource value: 0x7f02014e
+			public const int notification_template_icon_bg = 2130837838;
 			
-			// aapt resource value: 0x7f020150
-			public const int notification_template_icon_low_bg = 2130837840;
+			// aapt resource value: 0x7f02014f
+			public const int notification_template_icon_low_bg = 2130837839;
 			
 			// aapt resource value: 0x7f02013e
 			public const int notification_tile_bg = 2130837822;
@@ -4511,34 +4511,31 @@ namespace Haulage.Droid
 			public const int phone = 2130837828;
 			
 			// aapt resource value: 0x7f020145
-			public const int plus = 2130837829;
+			public const int refuel = 2130837829;
 			
 			// aapt resource value: 0x7f020146
-			public const int refuel = 2130837830;
+			public const int roundedbg = 2130837830;
 			
 			// aapt resource value: 0x7f020147
-			public const int roundedbg = 2130837831;
+			public const int roundedbgdark = 2130837831;
 			
 			// aapt resource value: 0x7f020148
-			public const int roundedbgdark = 2130837832;
+			public const int sample1 = 2130837832;
 			
 			// aapt resource value: 0x7f020149
-			public const int sample1 = 2130837833;
+			public const int sfclosebutton = 2130837833;
 			
 			// aapt resource value: 0x7f02014a
-			public const int sfclosebutton = 2130837834;
+			public const int splashScreenlogo = 2130837834;
 			
 			// aapt resource value: 0x7f02014b
-			public const int splashScreenlogo = 2130837835;
+			public const int styleinfo = 2130837835;
 			
 			// aapt resource value: 0x7f02014c
-			public const int styleinfo = 2130837836;
+			public const int truck = 2130837836;
 			
 			// aapt resource value: 0x7f02014d
-			public const int truck = 2130837837;
-			
-			// aapt resource value: 0x7f02014e
-			public const int user = 2130837838;
+			public const int user = 2130837837;
 			
 			static Drawable()
 			{
