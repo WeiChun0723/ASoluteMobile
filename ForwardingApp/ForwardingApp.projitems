@@ -35,6 +35,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\AccountActivation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\MyProviders.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\AddServiceProvider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -172,12 +192,32 @@
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobDetail.xaml.cs">
       <DependentUpon>JobDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml.cs">
+      <DependentUpon>CustomerRegistration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\AccountActivation.xaml.cs">
+      <DependentUpon>AccountActivation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\AppNavigation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\MyProviders.xaml.cs">
+      <DependentUpon>MyProviders.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\AddServiceProvider.xaml.cs">
+      <DependentUpon>AddServiceProvider.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\Provider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\PropertyChange.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\ProviderListViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml.cs">
+      <DependentUpon>ProviderDetails.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
     <Folder Include="$(MSBuildThisFileDirectory)FleetScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)TransportScreen\" />
-    <Folder Include="$(MSBuildThisFileDirectory)CommonScreen\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CustomerTracking\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)RefuelHistory.xaml">

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CustomerTracking.AddServiceProvider"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             xmlns:chkBox="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms">
+  
+    <ScrollView>
+    <StackLayout>
+        
+        <ListView ItemsSource="{Binding Check}" x:Name="checkList" SeparatorColor="Black" BackgroundColor="White">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <chkBox:CheckBox DefaultText="{Binding Name}" Checked="{Binding IsSelected}" HorizontalOptions="FillAndExpand" FontSize="15"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+        </ListView>
+        
+        <Label Text="A request will be sent to the selected providers. You may only start tracking the movements once the selected providers have approved your request." />
+        
+        <Button Style="{StaticResource buttonStyle}" x:Name="ConfirmButton" Text ="Confirm" Clicked="Confirm_Clicked" />
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

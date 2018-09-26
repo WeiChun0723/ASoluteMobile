@@ -13,6 +13,8 @@ using Microsoft.AppCenter.Crashes;
 using ASolute_Mobile.Utils;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Courier;
+using ASolute.Mobile.Models;
+using ASolute_Mobile.CustomerTracking;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ASolute_Mobile
@@ -30,17 +32,21 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-            if (sessionKey != "")
-            {
-                MainPage = new MainPage();
-            }
-            else
-            {
-                MainPage = new CustomNavigationPage(new SplashScreen());
-                //MainPage = new CustomNavigationPage(new LoginPage());
-                
-            }
+            /* if (sessionKey != "")
+             {
+                 MainPage = new MainPage();
+             }
+             else 
+             {
+                 //MainPage = new CustomNavigationPage(new SplashScreen());
+                 Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+                 MainPage = new CustomNavigationPage(new AppNavigation());
 
+             }*/
+            Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+            MainPage = new CustomNavigationPage(new AppNavigation());
+
+            //MainPage = new CustomNavigationPage(new HaulageScreen.Registration());
         }
 
         public static Database Database
@@ -58,32 +64,7 @@ namespace ASolute_Mobile
 
         protected override void OnStart()
         {
-            // Handle string that contain driver name and owner name that will attach to the crash report
-            /*Crashes.GetErrorAttachments = (ErrorReport report) =>
-            {
-                string userinfo = "";
-                if (Ultis.Settings.CrashInLoginPage == "Yes" )
-                {
-                userinfo = "App ID: " + Ultis.Settings.GeneratedAppID + Environment.NewLine + "App crash in login page.";
-                }
-                
-                else
-                {
-                 
-                userinfo = "App ID: " + Ultis.Settings.GeneratedAppID + Environment.NewLine + "==============================" + Environment.NewLine +
-                "Owner name: " + Ultis.Settings.SessionUserItem.CompanyName + Environment.NewLine + "Driver name: " + Ultis.Settings.SessionDriveName +
-                Environment.NewLine + "Account ID : " + Ultis.Settings.SessionUserId;                      
-                }
-
-                return new ErrorAttachmentLog[]
-                {
-                   ErrorAttachmentLog.AttachmentWithText(userinfo,"Info")
-                };
-                
-            };
-
-            AppCenter.Start("android=b4e96eda-a89f-499f-a407-7f81c9f06e15;",
-            typeof(Analytics), typeof(Crashes));*/
+           
         }
 
         protected override void OnSleep()

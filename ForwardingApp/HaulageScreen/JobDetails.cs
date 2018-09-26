@@ -188,7 +188,7 @@ namespace ASolute_Mobile
                         }
                         catch (Exception exception)
                         {
-                            await DisplayAlert("Sub string Error", exception.Message, "OK");
+                            //await DisplayAlert("Sub string Error", exception.Message, "OK");
                         }
                     }
                 }

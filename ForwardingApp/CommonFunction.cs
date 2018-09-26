@@ -24,11 +24,23 @@ namespace ASolute_Mobile.Utils
             var uri = callUri;
             var response = await client.GetAsync(uri);
             var content = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(content);
-
-            //clsResponse return_response = JsonConvert.DeserializeObject<clsResponse>(content);
+           Debug.WriteLine(content);
 
             return content;
+        }
+
+        public static async Task<string> PostRequest(object data, string baseAdd, string calllUri)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(baseAdd);
+            var uri = calllUri;
+            var content = JsonConvert.SerializeObject(data);
+            var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(uri, httpContent);
+            var reply = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(reply);
+
+            return reply;
         }
 
         //capture image and store local path in db function

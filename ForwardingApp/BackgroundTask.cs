@@ -204,12 +204,12 @@ namespace ASolute_Mobile
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
                                     //CommonFunction.AppActivity("Add refuel record", "Failed", status.Message);
-                                    await page.DisplayAlert("Error", "No truck is assigned to this account.", "OK");
+                                    await page.DisplayAlert("Error", "Failed" + status.Message, "OK");
                                 }
                                 else
                                 {
                                     //CommonFunction.AppActivity("Isi minyak entri", "Gagal", status.Message);
-                                    await page.DisplayAlert("Gagal", "No truck is assigned to this account.", "OK");
+                                    await page.DisplayAlert("Gagal", status.Message, "OK");
                                 }    
                             }
                         }                          
@@ -381,8 +381,9 @@ namespace ASolute_Mobile
                         }
                         else if(Ultis.Settings.App == "Haulage")
                         {
-                            await GetWebService(ControllerUtil.getReasonListURL(), "ReasonList", contentPage, "");
                             await GetWebService(ControllerUtil.getDownloadHaulageListURL(), "HaulageJobList", contentPage, "HaulageJob");
+                            await GetWebService(ControllerUtil.getReasonListURL(), "ReasonList", contentPage, "");
+
                         }
                         else if (Ultis.Settings.App == "Fowarding")
                         {

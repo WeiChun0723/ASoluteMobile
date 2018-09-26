@@ -16,6 +16,7 @@ namespace ASolute_Mobile.Data
 		public Database(string dbPath)
 		{
             database = new SQLiteConnection(dbPath);
+            database.CreateTable<ProviderInfo>();
             database.CreateTable<UserItem>();
             database.CreateTable<UserDetail>();
             database.CreateTable<RefuelData>();
@@ -38,7 +39,7 @@ namespace ASolute_Mobile.Data
 		public void DropDB()
 		{
             database.DropTable<UserItem>();
-            database.CreateTable<UserDetail>();
+            database.DropTable<UserDetail>();
             database.DropTable<RefuelData>();
             database.DropTable<LogBookData>();
             database.DropTable<RefuelHistoryData>();
@@ -52,8 +53,50 @@ namespace ASolute_Mobile.Data
             database.DropTable<ActivityLog>();
             database.DropTable<pickerValue>();
             database.DropTable<FuelCostNew>();
-            database.CreateTable<ListObject>();
+            database.DropTable<ListObject>();
+            database.DropTable<ProviderInfo>();
         }
+
+        #region Customer Tracking table function
+
+        public int SaveProvider(ProviderInfo provider)
+        {
+            provider.owner = Ultis.Settings.SessionUserId;
+            if (provider.tableID != 0)
+            {
+
+                return database.Update(provider);
+            }
+            else
+            {
+
+                return database.Insert(provider);
+            }
+        }
+
+
+        public void DeleteProvider()
+        {
+            database.Query<ProviderInfo>("DELETE FROM ProviderInfo");
+        }
+
+        public List<ProviderInfo> Providers(string Code)
+        {
+            return database.Query<ProviderInfo>("SELECT * FROM [ProviderInfo] WHERE [Code] = ?", Code);
+        }
+
+        public int DeleteMenu(AppMenu menu)
+        {
+            deleteProvider(menu.menuId);
+           
+            return database.Delete(menu);
+        }
+
+        public void deleteProvider(string id)
+        {
+            database.Query<ProviderInfo>("DELETE FROM [ProviderInfo] WHERE [Code] = ?", id);
+        }
+        #endregion
 
         public int SaveUserItem(UserItem userItem)
         {
@@ -394,6 +437,7 @@ namespace ASolute_Mobile.Data
                 return database.Insert(activity);
             }
         }
+
 
         public int SaveFuelCostNew(FuelCostNew fuelCost)
         {

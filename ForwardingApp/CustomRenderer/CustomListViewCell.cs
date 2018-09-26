@@ -1,6 +1,10 @@
-﻿using ASolute_Mobile.Models;
+﻿using ASolute.Mobile.Models;
+using ASolute_Mobile.Models;
+using ASolute_Mobile.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Xamarin.Forms;
 
@@ -9,7 +13,8 @@ namespace ASolute_Mobile
 {
     public class CustomListViewCell : ViewCell
     {
-        public static List<SummaryItems> summaryRecord;
+        public static List<SummaryItems> summaryRecord ;
+        public static List<ProviderInfo> providers;
         string color;
         
         public CustomListViewCell()
@@ -75,6 +80,11 @@ namespace ASolute_Mobile
                     ListObject model = (ListObject)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "pendingCollection");
                 }
+                if (Ultis.Settings.ListType == "provider_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    providers = App.Database.Providers(model.menuId);  
+                }
 
                 AbsoluteLayout absoluteLayout = new AbsoluteLayout();
 
@@ -85,9 +95,17 @@ namespace ASolute_Mobile
                     VerticalOptions = LayoutOptions.FillAndExpand
                 };
 
-                bool firstSummaryLine = true;
+                //bool firstSummaryLine = true;
 
-                foreach(SummaryItems items in summaryRecord)
+                foreach (ProviderInfo items in providers)
+                {
+                    Label label = new Label();
+                    label.FontAttributes = FontAttributes.Bold;
+                    label.Text = items.Name;
+                    cellWrapper.Children.Add(label);
+                }
+                
+                /*foreach (SummaryItems items in summaryRecord)
                 {
                     Label label = new Label();
 
@@ -121,9 +139,43 @@ namespace ASolute_Mobile
                         color = items.BackColor;
                     }
                     
-                }
+                }*/
 
                 absoluteLayout.Children.Add(cellWrapper);
+
+                MenuItem menuItem = new MenuItem()
+                {
+                    Text = "Delete",
+                    IsDestructive = true
+                };
+
+                menuItem.Clicked += (sender, e) =>
+                {
+
+                    AppMenu menu = (AppMenu)((MenuItem)sender).BindingContext;
+                    int results = 0;
+                    results = App.Database.DeleteMenu(menu);
+                    if (results > 0)
+                    {
+                        ListView parent = (ListView)this.Parent;
+                        ObservableCollection<AppMenu> itemSource = ((ObservableCollection<AppMenu>)parent.ItemsSource);
+                        if (itemSource.Contains(menu))
+                        {
+                            itemSource.Remove(menu);
+                        }
+
+                        callWebService(menu.menuId);
+                    }
+                };
+
+                menuItem.BindingContextChanged += (sender, e) => {
+                    if (((MenuItem)sender).BindingContext != null)
+                    {
+
+                    }
+                };
+
+                this.ContextActions.Add(menuItem);
 
 
 
@@ -143,5 +195,12 @@ namespace ASolute_Mobile
             }
 
         }
+
+        public async void callWebService(string code)
+        {
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProvider(code));
+            clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
+        }
+
     }
 }

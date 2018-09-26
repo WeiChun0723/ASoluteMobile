@@ -207,6 +207,15 @@ namespace ASolute_Mobile
                                     {
                                         refuel_Data.FuelCardNo = "";
                                     }
+
+                                    if(!(String.IsNullOrEmpty(voucher.Text)))
+                                    {
+                                        refuel_Data.VoucherNo = voucher.Text;
+                                    }
+                                    else
+                                    {
+                                        refuel_Data.VoucherNo = " ";
+                                    }
                                 }
                                 else if (mandatory == "fuel_card" || fuelCard.Text != null)
                                 {
@@ -224,9 +233,9 @@ namespace ASolute_Mobile
                                         refuel_Data.VoucherNo = "";
                                     }
                                 }
-                                else if (mandatory == "voucher" || voucher.Text != null)
+                                else if (mandatory == "voucher" && voucher.Text != null)
                                 {
-                                    refuel_Data.VoucherNo = voucher.Text.ToString();
+                                    refuel_Data.VoucherNo = voucher.Text;
                                 }
 
                                 refuel_Data.OtherRef = other.Text;                                                               
@@ -251,7 +260,7 @@ namespace ASolute_Mobile
                             }
                             catch (Exception exception)
                             {
-                                await DisplayAlert("Error", exception.Message, "OK");
+                                await DisplayAlert("Error", "Please key in all mandatory field.", "OK");
                             }
                         }
                         else
@@ -317,15 +326,15 @@ namespace ASolute_Mobile
                 if(paymentPicker.SelectedIndex == 0)
                 {
                     //voucher.BackgroundColor = Color.FromHex("#FFFFE0");
-                    voucher.LineColor = Color.LightYellow;
-                    fuelCard.LineColor = Color.White;
+                    voucher.LineColor = Color.FromHex("#FFFF33");
+                    fuelCard.LineColor = Color.Transparent;
                     mandatory = "voucher";
                 }
 
                 if (paymentPicker.SelectedIndex == 1)
                 {
                     voucher.LineColor = Color.Transparent;
-                    fuelCard.LineColor = Color.White;
+                    fuelCard.LineColor = Color.FromHex("#FFFF33");
                     mandatory = "fuel_card";
                 }
             }
@@ -378,7 +387,8 @@ namespace ASolute_Mobile
             }
             catch
             {
-                DisplayAlert("Error", "Please try again", "OK");
+                //DisplayAlert("Error", "Please try again", "OK");
+                string test = "";
             }
            
         }

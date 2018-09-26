@@ -60,7 +60,6 @@ namespace ASolute_Mobile
           {
                 activityIndicator.IsRunning = true;
                 activityIndicator.IsVisible = true;
-
                 var client = new HttpClient();
             client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
             var uri = ControllerUtil.getDownloadRefuelHistoryURL();

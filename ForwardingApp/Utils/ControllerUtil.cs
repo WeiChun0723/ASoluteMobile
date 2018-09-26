@@ -20,6 +20,72 @@ namespace ASolute_Mobile.Utils
             return String.Format("host/handshake?Enterprise={0}", enterpriseName);
         }
 
+        #region Common url
+        #endregion 
+
+        #region Customer Tracking url
+
+        public static String getActionURL(string deviceID,string firebase)
+        {
+            return String.Format("Account/Login?Id={0}&FirebaseId={1}", deviceID,firebase);
+        }
+
+        public static String getCompanyNameURL(string RegNo)
+        {
+            return String.Format("Account/GetCompanyName?RegNo={0}", RegNo);
+        }
+
+        public static String postRegisterURL()
+        {
+            return String.Format("Account/Register");
+        }
+
+        public static String sendActivationURL( string activationCode)
+        {
+            return String.Format("Account/Activate?Id={0}&ActivationCode={1}", Ultis.Settings.DeviceUniqueID, activationCode);
+        }
+
+        public static String sendActivationURL()
+        {
+            return String.Format("Account/Resend?Id={0}", Ultis.Settings.DeviceUniqueID);
+        }
+
+        public static String getProviderList()
+        {
+            return String.Format("Providers/List?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String getAvailableProvider()
+        {
+            return String.Format("Providers/New?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String saveProvider()
+        {
+            return String.Format("Providers/Save?SessionId={0}",Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String deleteSavedProvider(string code)
+        {
+            return String.Format("Providers/Delete?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey,code);
+        }
+
+        public static String getCategoryList(string code)
+        {
+            return String.Format("Providers/ContainerSummary?Id={0}&Code={1}", Ultis.Settings.SessionSettingKey,code);
+        }
+
+        #endregion
+
+        #region Trucking url
+        #endregion
+
+        #region fleet url
+        #endregion
+
+        #region haulage url
+        #endregion
+
         public static String postNewRecordURL()
         {
             return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());

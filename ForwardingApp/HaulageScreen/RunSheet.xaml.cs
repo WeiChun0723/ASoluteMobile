@@ -20,7 +20,7 @@ namespace ASolute_Mobile.HaulageScreen
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class RunSheet : ContentPage
 	{
-        string selectDate;
+        string selectDate,option = "none";
 
 		public RunSheet ()
 		{
@@ -39,49 +39,47 @@ namespace ASolute_Mobile.HaulageScreen
 
         protected override void OnAppearing()
         {
-            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
+
+            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));    
         }
 
         public void recordDate(object sender, DateChangedEventArgs e)
         {
-            selectDate = e.NewDate.ToString("yyyy MMMMM dd");
+            if(option == "none")
+            {
+                selectDate = e.NewDate.ToString("yyyy MMMMM dd");
 
-            downloadRunSheet(selectDate);
+
+                downloadRunSheet(selectDate);
+            }
+
         }
 
         public void PreviousDate(object sender, EventArgs e)
         {
-            datePicker.Date = CauculateDate("previous");
-            
+
+           
+            previous_icon.IsEnabled = false;
+            next_icon.IsEnabled = false;
+            option = "previous";
+            downloadRunSheet(datePicker.Date.AddDays(-1).ToString("yyyy MMMMM dd"));
+
         }
 
         public void NextDate(object sender, EventArgs e)
         {
-            datePicker.Date = CauculateDate("next");           
+           
+            previous_icon.IsEnabled = false;
+            next_icon.IsEnabled = false;
+            option = "next";
+            downloadRunSheet(datePicker.Date.AddDays(1).ToString("yyyy MMMMM dd"));
         }
 
-        public DateTime CauculateDate(string option)
-        {
-            int currentDay = datePicker.Date.Day;
-            DateTime displayDate = DateTime.Now;
-            switch (option)
-            {
-                case "previous":                                        
-                    displayDate = datePicker.Date.AddDays(-1);
-                    break;
-                case "next":                  
-                    displayDate = datePicker.Date.AddDays(1);
-                    break;
-            }
-
-            selectDate = displayDate.ToString("yyyy MMMMM dd");
-            downloadRunSheet(selectDate);
-            return displayDate;
-        }
 
         protected void runSheetRefresh(object sender, EventArgs e)
         {
             downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
+
             runSheetHistory.IsRefreshing = false;
         }
 
@@ -105,6 +103,19 @@ namespace ASolute_Mobile.HaulageScreen
 
                 if (json_response.IsGood == true)
                 {
+                    switch (option)
+                    {
+                        case "previous":
+                            datePicker.Date = datePicker.Date.AddDays(-1);
+                            break;
+                        case "next":
+                            datePicker.Date = datePicker.Date.AddDays(1);
+                            break;
+                        case "none":
+                            break;
+                    }
+
+
                     var JobList = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
 
                     App.Database.deleteHaulage("HaulageHistory");
@@ -167,6 +178,8 @@ namespace ASolute_Mobile.HaulageScreen
 
                     }
 
+
+                    option = "none";
                     refreshRunSheetHistory();
                 }
                 else
@@ -214,6 +227,8 @@ namespace ASolute_Mobile.HaulageScreen
 
             this.activityIndicator.IsRunning = false;
             activityIndicator.IsVisible = false;
+            previous_icon.IsEnabled = true;
+            next_icon.IsEnabled = true;
         }
     }
 }

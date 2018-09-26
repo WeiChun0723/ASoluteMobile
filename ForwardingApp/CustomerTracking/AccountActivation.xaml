@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CustomerTracking.AccountActivation"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             BackgroundColor = "#9A2116">
+    
+    <ScrollView>
+    <StackLayout Padding = "20, 0, 20, 20" >
+        <StackLayout Padding="0,30">
+
+        </StackLayout>
+        <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
+        <StackLayout Padding = "0, 10"></StackLayout>
+        <Label TextColor="#FFFFFF" FontSize = "20" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" Text="Account Activation"/>
+        <StackLayout Padding = "0, 15"></StackLayout>
+        
+        <Label Text="We have sent the activation code to your email account. Please copy and paste the value here." HorizontalOptions="EndAndExpand"/>
+        <StackLayout Padding = "0, 15"></StackLayout>
+        <controls:CustomEntry Placeholder="Enter Activation code" x:Name = "ActivationEntry" Image="user" Style="{StaticResource entryStyle}" />
+        
+        <Button Style="{StaticResource buttonStyle}" x:Name="SubmitButton" Text = "Submit" Clicked="Submit_Clicked" />
+        <Button Style="{StaticResource buttonStyle}" x:Name="ResendButton" Text = "Resend Activation Code" Clicked="Resend_Clicked" />
+
+        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
+        
+    </StackLayout>
+    </ScrollView>
+    
+</ContentPage>

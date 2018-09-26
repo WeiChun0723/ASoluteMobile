@@ -129,7 +129,7 @@ namespace ASolute_Mobile
               splashImage.RotateYTo(13 * 360, duration)
             );
 
-            if(Ultis.Settings.AppFirstInstall == "First")
+            /*if(Ultis.Settings.AppFirstInstall == "First")
             {
                 title.IsVisible = true;
                 entry.IsVisible = true;
@@ -140,14 +140,22 @@ namespace ASolute_Mobile
             }
             else
             {
-                Application.Current.MainPage = new NavigationPage(new LoginPage());
-            }
+                //Application.Current.MainPage = new NavigationPage(new LoginPage());
+                CustomerTracking.Action.AppAction();
+            }*/
 
-           
+
+            title.IsVisible = true;
+            entry.IsVisible = true;
+            submit.IsVisible = true;
+            splashDeviceImage.IsVisible = true;
+            splashImage.IsVisible = false;
+            layout.Children.RemoveAt(0);
+
+
             submit.Clicked += async (sender, e)  => 
             {
                 Ultis.Settings.AppFirstInstall = "Second";                       
-
 
                 clsResponse json_response = JsonConvert.DeserializeObject <clsResponse>(await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(entry.Text.ToUpper())));
 
@@ -161,7 +169,10 @@ namespace ASolute_Mobile
                     await DisplayAlert("Json Error", json_response.Message, "OK");
                 }
 
+               
+               
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
+
             };
         }
 

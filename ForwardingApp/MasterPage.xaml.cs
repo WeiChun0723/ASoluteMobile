@@ -1,4 +1,5 @@
 ﻿using ASolute.Mobile.Models;
+using ASolute_Mobile.CustomerTracking;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
 using System;
@@ -18,28 +19,15 @@ namespace ASolute_Mobile
             if(File.Exists(Ultis.Settings.GetAppLogoFileLocation())){
                 LogoImage.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }			
-            ownerName.Text = Ultis.Settings.SessionUserItem.CompanyName;
-            appVersion.Text = "App Version : 23";
+            ownerName.Text = Ultis.Settings.SessionUserId;
+            appVersion.Text = "App Version : 24";
 
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
 
             var masterPageItems = new List<MasterPageItem>();
-         
-            /*MasterPageItem mainMenu = new MasterPageItem();
-            mainMenu.Id = "MainMenu";
-            if (Ultis.Settings.Language.Equals("English"))
-            {
-                mainMenu.Title = "Main Menu";
-            }
-            else
-            {
-                mainMenu.Title = "Menu Utama";
-            }
-            mainMenu.IconSource = "MainMenu.png";
-            mainMenu.TargetType = typeof(MainMenu);
-            masterPageItems.Add(mainMenu);*/
+        
 
-            foreach (SummaryItems item in contextMenu)
+            /*foreach (SummaryItems item in contextMenu)
             {
                 string option;
                 if (item.Display)
@@ -75,13 +63,22 @@ namespace ASolute_Mobile
                             pageItem.TargetType = typeof(CurrentLocation);
                          
                             break;
+
                     }
 
                     masterPageItems.Add(pageItem);
                 }
-            }
+            }*/
 
-            MasterPageItem language = new MasterPageItem();
+            MasterPageItem provider = new MasterPageItem();
+            provider.Id = "AddProvider";
+            provider.Title = "Add Service Providers";
+            provider.IconSource = "language.png";
+            provider.TargetType = typeof(AddServiceProvider);
+            masterPageItems.Add(provider);
+
+
+            /*MasterPageItem language = new MasterPageItem();
             language.Id = "Language";
             if (Ultis.Settings.Language.Equals("English"))
             {
@@ -105,7 +102,7 @@ namespace ASolute_Mobile
                 logoff.Title = "Log Keluar";
             }
             logoff.IconSource = "logout.png";
-            masterPageItems.Add(logoff);
+            masterPageItems.Add(logoff);*/
 
             listView.ItemsSource = masterPageItems;
 

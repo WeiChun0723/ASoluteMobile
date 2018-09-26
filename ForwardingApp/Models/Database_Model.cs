@@ -16,6 +16,13 @@ namespace ASolute_Mobile.Models
         public DateTime? updatedDate { get; set; }      
     }
 
+    public class ProviderInfo : Generic
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string Url { get; set; }
+    } 
+
     public class ActivityLog : Generic
     {
         public string activity { get; set; }

@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.HaulageScreen.Registration"
              BackgroundColor = "#9A2116"       
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer">
-    
+    <ScrollView>
     <StackLayout Padding = "20, 0, 20, 20" >
         <StackLayout Padding="0,30">
 
@@ -12,7 +12,7 @@
         <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
         <StackLayout Padding = "0, 10"></StackLayout>
         <Label TextColor="#FFFFFF" FontSize = "20" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" Text="Registration"/>
-        <StackLayout Padding = "0, 30"></StackLayout>
+        <StackLayout Padding = "0, 15"></StackLayout>
 
         <StackLayout Orientation="Horizontal" >
             <controls:CustomEntry Placeholder="Enterprise"  x:Name="enterpriseEntry" Image="organization" Style="{StaticResource entryStyle}"   HorizontalOptions="FillAndExpand" TextChanged="enterTextChange"/>
@@ -30,4 +30,5 @@
 
 
     </StackLayout>
+    </ScrollView>
 </ContentPage>

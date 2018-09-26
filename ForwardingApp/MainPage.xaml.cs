@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ASolute.Mobile.Models;
+using ASolute_Mobile.CustomerTracking;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
@@ -18,9 +19,16 @@ namespace ASolute_Mobile
     public partial class MainPage : MasterDetailPage
     {
         public static int selection;
+        MasterPage masterPage = new MasterPage();
+
         public MainPage()
         {
             InitializeComponent();
+
+
+            Master = masterPage;
+            Detail = new NavigationPage(new MyProviders());
+
             masterPage.ListView.ItemSelected += OnItemSelected;
             MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
             {
@@ -31,6 +39,7 @@ namespace ASolute_Mobile
                 });
             });
 
+          
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)

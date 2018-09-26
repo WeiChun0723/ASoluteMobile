@@ -41,8 +41,22 @@ namespace ASolute_Mobile.Ultis
         private const string previousOdo = "";
         private const string contextMenuTitle = "";
         private const string UpdateRecord = "Yes";
- 
+        private const string DeviceID = "";
+
         #endregion
+
+
+        public static string DeviceUniqueID
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(DeviceID, "");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(DeviceID, value);
+            }
+        }
 
         public static string UpdatedRecord
         {
@@ -148,7 +162,7 @@ namespace ASolute_Mobile.Ultis
         {
             get
             {
-                return AppSettings.GetValueOrDefault(AppVersion, SettingsDefault);
+                return AppSettings.GetValueOrDefault(AppVersion, "");
             }
             set
             {

@@ -20,13 +20,14 @@ using XLabs.Platform.Device;
 using XLabs.Ioc.TinyIOC;
 using ASolute_Mobile.Droid.Services;
 using Android;
+using Com.OneSignal;
 
 namespace ASolute_Mobile.Droid
 {
     [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
-
+        string ID;
         readonly string logTag = "MainActivity";
              
         protected override void OnCreate(Bundle bundle)
@@ -34,7 +35,7 @@ namespace ASolute_Mobile.Droid
             Ultis.Settings.App = "Haulage";
             TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;                
             ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
-
+            OneSignal.Current.StartInit("cf7d6e9e-e959-4749-aeba-6846623e8b1a").EndInit();
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.SetVmPolicy(builder.Build());
 
@@ -57,6 +58,13 @@ namespace ASolute_Mobile.Droid
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());
+
+
+            Android.Telephony.TelephonyManager mTelephonyMgr;
+            mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
+            //IMEI number  
+            Ultis.Settings.DeviceUniqueID = mTelephonyMgr.DeviceId;
+
 
             var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
             var alarmManagerBackgroundDataSync = GetSystemService(AlarmService).JavaCast<AlarmManager>();

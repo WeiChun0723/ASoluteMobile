@@ -46,7 +46,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Haulage V23" ;
+                AppLabel.Text = "AILS Haulage V24" ;
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
@@ -206,7 +206,7 @@ namespace ASolute_Mobile
                           existingEquipment.Type = "Equipment";
                           App.Database.SaveAutoCompleteAsync(existingEquipment);
 
-                        var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+                        var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>(); 
                  
                         foreach (clsDataRow contextMenu in login_user.ContextMenu)
                         {

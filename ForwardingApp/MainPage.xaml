@@ -3,7 +3,10 @@
                   xmlns:local="clr-namespace:ASolute_Mobile"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
                   x:Class="ASolute_Mobile.MainPage">
-  <MasterDetailPage.Master>
+  
+</MasterDetailPage>
+
+<!--<MasterDetailPage.Master>
     <local:MasterPage x:Name="masterPage"/>
   </MasterDetailPage.Master>
    <MasterDetailPage.Detail>
@@ -12,5 +15,4 @@
                 <local:MainMenu />
             </x:Arguments>
         </NavigationPage>
-    </MasterDetailPage.Detail>
-</MasterDetailPage>
+    </MasterDetailPage.Detail>-->
