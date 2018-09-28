@@ -15,56 +15,35 @@ using Tesseract;
 using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using Plugin.CurrentActivity;
-using TinyIoC;
-using XLabs.Platform.Device;
-using XLabs.Ioc.TinyIOC;
-using ASolute_Mobile.Droid.Services;
-using Android;
-using Com.OneSignal;
+//using Android;
 
 namespace ASolute_Mobile.Droid
 {
     [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
-        string ID;
+
         readonly string logTag = "MainActivity";
              
         protected override void OnCreate(Bundle bundle)
         {
             Ultis.Settings.App = "Haulage";
-            TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;                
+            TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
+                
             ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
-            OneSignal.Current.StartInit("cf7d6e9e-e959-4749-aeba-6846623e8b1a").EndInit();
-            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-            StrictMode.SetVmPolicy(builder.Build());
-
+            
             base.OnCreate(bundle);
 
             Rg.Plugins.Popup.Popup.Init(this, bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            Xamarin.FormsMaps.Init(this, bundle);
+            //Resolver.SetResolver(new AutofacResolver(containerBuilder.Build()));
 
-            /*var container = TinyIoCContainer.Current;
-            container.Register<IDevice>(AndroidDevice.CurrentDevice);
-            container.Register<ITesseractApi>((cont, parameters) =>
-            {
-                return new TesseractApi(ApplicationContext, AssetsDeployment.OncePerInitialization);
-            });
-
-            Resolver.SetResolver(new TinyResolver(container));*/
-           
             UserDialogs.Init(this);
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());
-
-
-            Android.Telephony.TelephonyManager mTelephonyMgr;
-            mTelephonyMgr = (Android.Telephony.TelephonyManager)GetSystemService(TelephonyService);
-            //IMEI number  
-            Ultis.Settings.DeviceUniqueID = mTelephonyMgr.DeviceId;
-
 
             var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
             var alarmManagerBackgroundDataSync = GetSystemService(AlarmService).JavaCast<AlarmManager>();
@@ -79,9 +58,9 @@ namespace ASolute_Mobile.Droid
 
             App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
 
+            //if(Ultis.Settings.SessionUserItem.CaptureGPS){
 
-
-            /*LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
+            /* LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
                  {
                      Log.Debug(logTag, "ServiceConnected Event Raised");
                      // notifies us of location changes from the system
@@ -93,8 +72,12 @@ namespace ASolute_Mobile.Droid
                      LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
                  };*/
 
-            //LocationApp.StartLocationService();     
+            //LocationApp.StartLocationService();
+            //
 
+            //BackgroundTask.RetrieveLocation();
+
+            
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
@@ -117,7 +100,6 @@ namespace ASolute_Mobile.Droid
             //{
             Log.Debug(logTag, "OnResume: Location app is moving into foreground");
             base.OnResume();
-          
             //}
         }
 

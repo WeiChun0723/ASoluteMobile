@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSHaulage" android:installLocation="auto" android:versionCode="24" android:versionName="24">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSHaulage" android:installLocation="auto" android:versionCode="20" android:versionName="20">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -9,11 +9,13 @@
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.FLASHLIGHT" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 	<application android:name="ASoulute Haulage" android:theme="@style/MyTheme" android:label="AILS Haulage" android:icon="@drawable/appIcon">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
+		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCJryTEIDMIlD0FrjU83OtJ54RndmRKXuM" />
 	</application>
 	<receiver android:name=".BackgroundReceiver"></receiver>
 </manifest>

@@ -1,80 +1,134 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Android;
 using Android.Support.V4.App;
 using Android.Telephony;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
-using Com.OneSignal;
+//using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Plugin.DeviceInfo;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile.CustomerTracking
 {
     public partial class AppNavigation: ContentPage
     {
-        static string firebaseID;
+        static string firebaseID = "qwert-qwer45-asfafaf";
+        readonly Image splashImage, splashDeviceImage;
 
         public AppNavigation()
         {
+
             NavigationPage.SetHasNavigationBar(this, false);
 
-            if(Device.RuntimePlatform == Device.Android)
-            {
-               // Ultis.Settings.DeviceUniqueID = DependencyService.Get<GetDeviceID>().GetIdentifier(); 
-          
-            }
+            var sub = new AbsoluteLayout();
 
+            splashImage = new Image
+            {
+                Source = "appIcon.png",
+                HeightRequest = 100,
+                WidthRequest = 100
+            };
+
+            Label welcome = new Label
+            {
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Text = "Loading",
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 20,
+                IsVisible = false
+            };
+
+            AbsoluteLayout.SetLayoutFlags(splashImage, AbsoluteLayoutFlags.PositionProportional);
+            AbsoluteLayout.SetLayoutBounds(splashImage, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+
+            sub.Children.Add(splashImage);
+
+            ScrollView scroll = new ScrollView();
+
+            StackLayout layout = new StackLayout
+            {
+                Spacing = 20,
+                Padding = new Thickness(15, 10),
+                //HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+
+            layout.Children.Add(sub);
+            layout.Children.Add(splashDeviceImage);
+            layout.Children.Add(welcome);
+
+
+            scroll.Content = layout;
+            this.BackgroundColor = Color.FromHex("#ffffff");
+            this.Content = scroll;
         }
+
+
 
         protected override async void OnAppearing()
         {
-            string test2 = Ultis.Settings.DeviceUniqueID;
+            base.OnAppearing();
 
-            OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+            uint duration = 5 * 1000;
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID, firebaseID));
-            clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
+            await Task.WhenAll(
 
-            if (login_response.IsGood)
+              splashImage.RotateYTo(13 * 360, duration)
+            );
+
+            //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
+            /*if(firebaseID.Equals(""))
             {
-
-                var result = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-
-                Ultis.Settings.SessionSettingKey = result.SessionId;
-                Ultis.Settings.SessionUserId = result.UserName;
-
-                if (result.MainMenu.Count == 1)
-                {
-                    string action = result.MainMenu[0].Id;
-
-                    switch (action)
-                    {
-                        case "Register":
-                            Application.Current.MainPage = new CustomerRegistration();
-                            break;
-
-                        case "Activate":
-                            Application.Current.MainPage = new AccountActivation();
-                            break;
-                        
-                        case "Home":
-                            Application.Current.MainPage = new MainPage();
-                            break;
-                    }
-
-                }
-               
+                firebaseID = "testing";
+            }*/
+            if (Ultis.Settings.DeviceUniqueID.Equals(""))
+            {
+                Application.Current.MainPage = new CustomerRegistration();
             }
             else
             {
-                await DisplayAlert("JsonError", login_response.Message, "OK");
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID, firebaseID));
+                clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (login_response.IsGood)
+                {
+
+                    var result = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+
+                    Ultis.Settings.SessionSettingKey = result.SessionId;
+                    Ultis.Settings.SessionUserId = result.UserName;
+
+                    if (result.MainMenu.Count == 1)
+                    {
+                        string action = result.MainMenu[0].Id;
+
+                        switch (action)
+                        {
+                          
+                            case "Activate":
+                                Application.Current.MainPage = new AccountActivation();
+                                break;
+
+                            case "Home":
+                                Application.Current.MainPage = new MainPage();
+                                break;
+                        }
+
+                    }
+                }
+
+                else
+                {
+                    await DisplayAlert("JsonError", login_response.Message, "OK");
+                }
+
             }
 
         }
-
 
     }
 }

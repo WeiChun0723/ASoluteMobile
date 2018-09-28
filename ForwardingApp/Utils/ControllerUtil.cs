@@ -50,6 +50,11 @@ namespace ASolute_Mobile.Utils
             return String.Format("Account/Resend?Id={0}", Ultis.Settings.DeviceUniqueID);
         }
 
+        public static String getAutoScan()
+        {
+            return String.Format("Providers/AutoScan?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
         public static String getProviderList()
         {
             return String.Format("Providers/List?SessionId={0}", Ultis.Settings.SessionSettingKey);
@@ -78,6 +83,11 @@ namespace ASolute_Mobile.Utils
         public static String getContainerList(string code, string category)
         {
             return String.Format("Providers/ContainerList?SessionId={0}&Code={1}&Category={2}", Ultis.Settings.SessionSettingKey, code, category);
+        }
+
+        public static String getContainerDetail(string code, string container)
+        {
+            return String.Format("Providers/ContainerDetail?SessionId={0}&Code={1}&ContainerId={2}", Ultis.Settings.SessionSettingKey, code, container);
         }
 
         #endregion

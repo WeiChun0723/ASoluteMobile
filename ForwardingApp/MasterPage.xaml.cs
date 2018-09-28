@@ -74,7 +74,6 @@ namespace ASolute_Mobile
             provider.Id = "AddProvider";
             provider.Title = "Add Service Providers";
             provider.IconSource = "language.png";
-            provider.TargetType = typeof(AddServiceProvider);
             masterPageItems.Add(provider);
 
 

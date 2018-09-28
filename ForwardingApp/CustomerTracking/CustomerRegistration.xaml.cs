@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
-using Com.OneSignal;
+//using Com.OneSignal;
 using Newtonsoft.Json;
 using Xamarin.Forms;
 
@@ -10,7 +10,7 @@ namespace ASolute_Mobile.CustomerTracking
 {
     public partial class CustomerRegistration : ContentPage
     {
-        string firebaseID;
+        static string firebaseID = "qwert-qwer45-asfafaf";
 
         public CustomerRegistration()
         {
@@ -109,13 +109,13 @@ namespace ASolute_Mobile.CustomerTracking
                 {
                     clsRegister register = new clsRegister();
 
-                    register.DeviceId = Ultis.Settings.DeviceUniqueID;
+                    register.DeviceId = emailAddressEntry.Text;
                     register.UserName = userNameEntry.Text;
                     register.Email = emailAddressEntry.Text;
                     register.MobileNo = phoneEntry.Text;
                     register.RegNo = businessRegEntry.Text;
                     register.CompanyName = companyEntry.Text;
-                    OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+                    //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
                     register.FirebaseId = firebaseID;
                    
 
@@ -124,6 +124,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                     if(register_response.IsGood)
                     {
+                        Ultis.Settings.DeviceUniqueID = emailAddressEntry.Text;
                         Application.Current.MainPage = new AccountActivation();
                     }
                     else

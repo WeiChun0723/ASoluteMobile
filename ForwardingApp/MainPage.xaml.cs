@@ -54,7 +54,21 @@ namespace ASolute_Mobile
 
                 if (item != null)
                 {
-                   
+                    if (item.Id.Equals("AddProvider"))
+                    {
+                        var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                        clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (autoScan_response.IsGood)
+                        {
+                            await DisplayAlert("Succeed", autoScan_response.Result, "OK");
+                           
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", autoScan_response.Message, "OK");
+                        }
+                    }
                     if (item.Id.Equals("Panic"))
                     {
                         string panic = "";

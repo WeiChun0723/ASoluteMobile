@@ -12,15 +12,16 @@ namespace ASolute_Mobile.CustomerTracking
 {
     public partial class ProviderDetails : ContentPage
     {
-        string providerCode;
+        string providerCode, categorycode;
         List<clsCaptionValue> categories;
 
-        public ProviderDetails(string code, string provider)
+        public ProviderDetails(string code, string provider, string category)
         {
             InitializeComponent();
             providerCode = code;
+            categorycode = category;
             Title = provider;
-            getCategory();
+            GetContainer();
         }
 
         protected void refreshContainerList(object sender, EventArgs e)
@@ -29,19 +30,19 @@ namespace ASolute_Mobile.CustomerTracking
             container_list.IsRefreshing = false;
         }
 
-        public void CategorySelected(object sender, SelectedPositionChangedEventArgs e)
+        public async void selectContainer(object sender, ItemTappedEventArgs e)
         {
-            GetContainer();
+            await Navigation.PushAsync(new ContainerDetails(providerCode, ((AppMenu)e.Item).menuId));
         }
 
         public async void GetContainer()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerList(providerCode, categories[categoryPicker.SelectedIndex].Caption));
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerList(providerCode, categorycode));
             clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (container_response.IsGood)
             {
-                var containers = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
+                List<clsDataRow> containers = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
                 App.Database.deleteMainMenu();
                 App.Database.deleteMenuItems("Container");
@@ -73,27 +74,6 @@ namespace ASolute_Mobile.CustomerTracking
             }
         }
 
-        public async void getCategory()
-        {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryList(providerCode));
-            clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            if(provider_response.IsGood)
-            {
-                categoryPicker.Items.Clear();
-
-                categories = JObject.Parse(content)["Result"].ToObject<List<clsCaptionValue>>();
-
-                foreach(clsCaptionValue category in categories)
-                {
-                    categoryPicker.Items.Add(category.Value);
-                }
-            }
-            else
-            {
-                await DisplayAlert("JsonError", provider_response.Message, "OK");
-            }
-        }
 
         public void loadContainerList()
         {

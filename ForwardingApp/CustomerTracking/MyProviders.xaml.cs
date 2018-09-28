@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile.CustomerTracking
@@ -19,16 +21,55 @@ namespace ASolute_Mobile.CustomerTracking
 
         }
 
-        protected override void OnAppearing()
+        public async Task StartListening()
         {
-            getProviderList();
+
+            if (CrossGeolocator.Current.IsListening)
+                return;
+
+            await CrossGeolocator.Current.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
+            {
+                ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
+                AllowBackgroundUpdates = true,
+                DeferLocationUpdates = true,
+                DeferralDistanceMeters = 1,
+                ListenForSignificantChanges = true,
+                PauseLocationUpdatesAutomatically = true
+            });
+
+        }
+
+
+        protected async override void OnAppearing()
+        {
+            if (Ultis.Settings.AppFirstInstall == "First")
+            {
+                StartListening();
+                Ultis.Settings.AppFirstInstall = "Second";
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if(autoScan_response.IsGood)
+                {
+                    await DisplayAlert("Succeed", autoScan_response.Result, "OK");
+                    getProviderList();
+                }
+                else
+                {
+                    await DisplayAlert("Error", autoScan_response.Message, "OK");
+                }
+            }
+            else
+            {
+                getProviderList();
+            }
+                
         }
 
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
-    
-
-            await Navigation.PushAsync(new ProviderDetails(((AppMenu)e.Item).menuId,((AppMenu)e.Item).name));
+   
+            await Navigation.PushAsync(new ContainerCategory(((AppMenu)e.Item).menuId,((AppMenu)e.Item).name));
         }
 
         protected void refreshProviderList(object sender, EventArgs e)
@@ -40,6 +81,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void getProviderList()
         {
+        
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderList());
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -84,6 +126,10 @@ namespace ASolute_Mobile.CustomerTracking
             provide_list.HasUnevenRows = true;
             provide_list.Style = (Style)App.Current.Resources["recordListStyle"];
             provide_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+
+            loading.IsEnabled = false;
+            loading.IsVisible = false;
+            loading.IsRunning = false;
         }
     }
 }

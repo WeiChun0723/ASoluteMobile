@@ -55,11 +55,10 @@ namespace ASolute_Mobile.Droid
 
         public static void StartLocationService()
         {
-
-
             // Starting a service like this is blocking, so we want to do it on a background thread
             new Task(() =>
             {
+
                 // Start our main service
                 Log.Debug("App", "Calling StartService");
                 Android.App.Application.Context.StartService(new Intent(Android.App.Application.Context, typeof(LocationService)));
@@ -74,7 +73,6 @@ namespace ASolute_Mobile.Droid
                 // Finally, we can bind to the Service using our Intent and the ServiceConnection we
                 // created in a previous step.
                 Android.App.Application.Context.BindService(locationServiceIntent, locationServiceConnection, Bind.AutoCreate);
-
             }).Start();
         }
 

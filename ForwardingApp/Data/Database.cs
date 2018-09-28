@@ -327,6 +327,11 @@ namespace ASolute_Mobile.Data
             database.Query<AppMenu>("DELETE FROM AppMenu");
         }
 
+        public void deleteAllDetail()
+        {
+            database.Query<DetailItems>("DELETE FROM DetailItems");
+        }
+
         public void deleteHistory()
         {
             database.Query<RefuelHistoryData>("DELETE FROM RefuelHistoryData ");

@@ -47,11 +47,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\AddServiceProvider.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ContainerDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ContainerCategory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -202,16 +206,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\MyProviders.xaml.cs">
       <DependentUpon>MyProviders.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\AddServiceProvider.xaml.cs">
-      <DependentUpon>AddServiceProvider.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\Provider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\PropertyChange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\ProviderListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml.cs">
       <DependentUpon>ProviderDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\GetDeviceID.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ContainerDetails.xaml.cs">
+      <DependentUpon>ContainerDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ContainerCategory.xaml.cs">
+      <DependentUpon>ContainerCategory.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

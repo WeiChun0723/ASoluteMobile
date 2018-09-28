@@ -90,6 +90,11 @@ namespace ASolute_Mobile
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Container");
                 }
+                if (Ultis.Settings.ListType == "category_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
+                }
 
                 AbsoluteLayout absoluteLayout = new AbsoluteLayout();
 
@@ -102,7 +107,7 @@ namespace ASolute_Mobile
 
                 bool firstSummaryLine = true;
 
-                if(Ultis.Settings.ListType == "provider_List")
+                if(Ultis.Settings.ListType == "provider_List" && Ultis.Settings.ListType == "category_List")
                 {
                     foreach (ProviderInfo items in providers)
                     {
