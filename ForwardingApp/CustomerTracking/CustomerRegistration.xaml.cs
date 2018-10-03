@@ -5,9 +5,11 @@ using ASolute_Mobile.Utils;
 //using Com.OneSignal;
 using Newtonsoft.Json;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CustomerRegistration : ContentPage
     {
         static string firebaseID = "qwert-qwer45-asfafaf";
@@ -16,6 +18,11 @@ namespace ASolute_Mobile.CustomerTracking
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this,false);
+
+            if(!(String.IsNullOrEmpty(Ultis.Settings.Email)))
+            {
+                emailAddressEntry.Text = Ultis.Settings.Email;
+            }
         }
 
         public void userNameTextChange(object sender, TextChangedEventArgs e)

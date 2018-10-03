@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CustomerTracking.MyProviders">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CustomerTracking.MyProviders">
       
     <StackLayout>
-      
+     
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>
-        <ActivityIndicator x:Name="loading" Color="Blue" IsVisible="true" IsEnabled="true" IsRunning="true"/>
-        <ListView x:Name="provide_list" IsPullToRefreshEnabled="True" Refreshing="refreshProviderList" SeparatorColor="White" ItemTapped="selectProvider"></ListView>
-        <StackLayout Padding="10,10,15,15">
-       
-        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
-        </StackLayout>
-        
+        <ActivityIndicator x:Name="loading"/>
+        <ListView x:Name="provide_list" IsPullToRefreshEnabled="True" Refreshing="refreshProviderList" SeparatorColor="White" ItemTapped="selectProvider" >
+          
+        </ListView>
+     
     </StackLayout>
     
 </ContentPage>

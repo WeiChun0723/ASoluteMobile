@@ -90,8 +90,6 @@ namespace Haulage.Droid
 			global::Com.Syncfusion.Autocomplete.Resource.Styleable.RecyclerView_reverseLayout = global::Haulage.Droid.Resource.Styleable.RecyclerView_reverseLayout;
 			global::Com.Syncfusion.Autocomplete.Resource.Styleable.RecyclerView_spanCount = global::Haulage.Droid.Resource.Styleable.RecyclerView_spanCount;
 			global::Com.Syncfusion.Autocomplete.Resource.Styleable.RecyclerView_stackFromEnd = global::Haulage.Droid.Resource.Styleable.RecyclerView_stackFromEnd;
-			global::Tesseract.Droid.Resource.String.ApplicationName = global::Haulage.Droid.Resource.String.ApplicationName;
-			global::Tesseract.Droid.Resource.String.Hello = global::Haulage.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Haulage.Droid.Resource.Attribute.actionBarSize;
 			global::XLabs.Forms.Resource.Animation.abc_fade_in = global::Haulage.Droid.Resource.Animation.abc_fade_in;
 			global::XLabs.Forms.Resource.Animation.abc_fade_out = global::Haulage.Droid.Resource.Animation.abc_fade_out;

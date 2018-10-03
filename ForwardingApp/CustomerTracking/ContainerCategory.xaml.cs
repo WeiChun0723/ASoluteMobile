@@ -7,9 +7,11 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContainerCategory : ContentPage
     {
 
@@ -20,7 +22,7 @@ namespace ASolute_Mobile.CustomerTracking
         {
             InitializeComponent();
             providerCode = code;
-            Title = provider + "Category";
+            Title = provider + " Summary";
             getCategory();
         }
 
@@ -87,6 +89,10 @@ namespace ASolute_Mobile.CustomerTracking
             category_list.HasUnevenRows = true;
             category_list.Style = (Style)App.Current.Resources["recordListStyle"];
             category_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+
+            loading.IsEnabled = false;
+            loading.IsVisible = false;
+            loading.IsRunning = false;
         }
     }
 }

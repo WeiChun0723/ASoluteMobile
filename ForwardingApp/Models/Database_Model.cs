@@ -72,6 +72,7 @@ namespace ASolute_Mobile.Models
     {
         public string menuId { get; set; }
         public string name { get; set; }
+        public string category { get; set; }
     }
 
     public class Log : Generic

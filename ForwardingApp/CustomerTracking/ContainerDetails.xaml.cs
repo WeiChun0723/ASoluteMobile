@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
@@ -7,9 +8,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContainerDetails : ContentPage
     {
         string provider_code, provider_container, latitude, longtitude;
@@ -20,14 +23,19 @@ namespace ASolute_Mobile.CustomerTracking
             InitializeComponent();
             provider_code = code;
             provider_container = container;
-            GetContainerDetail();
+        }
 
+        protected async override void OnAppearing()
+        {
+            await GetContainerDetail();
         }
 
         void ShowOnMap()
         {
             if(!(String.IsNullOrEmpty(latitude)) && !(String.IsNullOrEmpty(longtitude)))
             {
+                GoogleMap.IsVisible = true;
+
                 double loc_latitude = Convert.ToDouble(latitude);
                 double loc_longtitude = Convert.ToDouble(longtitude);
 
@@ -41,10 +49,14 @@ namespace ASolute_Mobile.CustomerTracking
 
                 GoogleMap.Pins.Add(pin);
             }
+            else
+            {
+                GoogleMap.IsVisible = false;
+            }
         
         }
 
-        public async void GetContainerDetail()
+        public async Task GetContainerDetail()
         {
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerDetail(provider_code, provider_container));
             clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -55,18 +67,38 @@ namespace ASolute_Mobile.CustomerTracking
 
                 foreach (clsCaptionValue details in containers.Details)
                 {
-                    if(details.Display == true)
+                    StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
+
+
+                    if (details.Display == true)
                     {
-                        Label label = new Label();
-                        label.Text = details.Caption + ":  " + details.Value;
-                        label.FontAttributes = FontAttributes.Bold;
-                                     
-                        containerDetails.Children.Add(label);
+                        Label captionLabel = new Label()
+                        {
+                            FontAttributes = FontAttributes.Bold,
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            Text = details.Caption + ":  ",
+                            WidthRequest = 120
+
+                         };
+                        Label valueLabel = new Label()
+                        {
+                            FontAttributes = FontAttributes.Bold,
+                            Text = details.Value
+                        };
+
+                        stackLayout.Children.Add(captionLabel);
+                        stackLayout.Children.Add(valueLabel);
+                        containerDetails.Children.Add(stackLayout);
                     }
 
+                   
                     if(details.Caption.Equals("Container No."))
                     {
                         Title = details.Value;
+                    }
+                    else if(String.IsNullOrEmpty(Title))
+                    {
+                        Title = provider_container;
                     }
 
                     if (details.Caption.Equals("Latitude"))
@@ -77,6 +109,8 @@ namespace ASolute_Mobile.CustomerTracking
                     {
                         longtitude = details.Value;
                     }
+
+                   
                 }
 
                 ShowOnMap();

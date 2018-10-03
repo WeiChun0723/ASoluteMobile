@@ -5,9 +5,11 @@ using ASolute_Mobile.Utils;
 //using Com.OneSignal;
 using Newtonsoft.Json;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AccountActivation : ContentPage
     {
         static string firebaseID = "qwert-qwer45-asfafaf";

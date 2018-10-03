@@ -9,21 +9,26 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
 
 namespace ASolute_Mobile.CustomerTracking
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MyProviders : ContentPage
     {
+
         public MyProviders()
         {
             InitializeComponent();
             Title = "Home";
-
+            loading.IsRunning = true;
+            loading.IsVisible = true;
+            loading.IsEnabled = true;
         }
 
         public async Task StartListening()
         {
-
             if (CrossGeolocator.Current.IsListening)
                 return;
 
@@ -36,15 +41,13 @@ namespace ASolute_Mobile.CustomerTracking
                 ListenForSignificantChanges = true,
                 PauseLocationUpdatesAutomatically = true
             });
-
         }
-
 
         protected async override void OnAppearing()
         {
             if (Ultis.Settings.AppFirstInstall == "First")
             {
-                StartListening();
+                await StartListening();
                 Ultis.Settings.AppFirstInstall = "Second";
                 var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
                 clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -52,7 +55,7 @@ namespace ASolute_Mobile.CustomerTracking
                 if(autoScan_response.IsGood)
                 {
                     await DisplayAlert("Succeed", autoScan_response.Result, "OK");
-                    getProviderList();
+                    await getProviderList();
                 }
                 else
                 {
@@ -61,7 +64,16 @@ namespace ASolute_Mobile.CustomerTracking
             }
             else
             {
-                getProviderList();
+
+                if(App.Database.GetMainMenu("ProviderList").Count == 0)
+                {
+                    await getProviderList();
+                }
+                else
+                {
+                    await LoadProviderList();
+                }
+
             }
                 
         }
@@ -72,16 +84,15 @@ namespace ASolute_Mobile.CustomerTracking
             await Navigation.PushAsync(new ContainerCategory(((AppMenu)e.Item).menuId,((AppMenu)e.Item).name));
         }
 
-        protected void refreshProviderList(object sender, EventArgs e)
+        protected async void refreshProviderList(object sender, EventArgs e)
         {
-            getProviderList();
+            await getProviderList();
             provide_list.IsRefreshing = false;
 
         }
 
-        public async void getProviderList()
+        public async Task getProviderList()
         {
-        
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderList());
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -89,18 +100,19 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 var providers = JObject.Parse(content)["Result"].ToObject<List<clsProvider>>();
 
-                int test = providers.Count;
-
-                App.Database.deleteMainMenu();
+              
+                App.Database.deleteMainMenuItem("ProviderList");
                 App.Database.DeleteProvider();
-
+                
                 foreach(clsProvider p in providers)
                 {
 
                     AppMenu menu = new AppMenu();
                     menu.menuId = p.Code;
                     menu.name = p.Name;
-                    App.Database.SaveMenuAsync(menu);
+                    menu.category = "ProviderList";
+                   App.Database.SaveMenuAsync(menu);
+
 
                     ProviderInfo available_provider = new ProviderInfo();
                     available_provider.Code = p.Code;
@@ -109,8 +121,8 @@ namespace ASolute_Mobile.CustomerTracking
 
                     App.Database.SaveProvider(available_provider);
                 }
-
-                loadProviderList();
+               
+                await LoadProviderList();
             }
             else
             {
@@ -118,18 +130,18 @@ namespace ASolute_Mobile.CustomerTracking
             }
         }
 
-        public void loadProviderList()
+        public async Task LoadProviderList()
         {
+
             Ultis.Settings.ListType = "provider_List";
-            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
+            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("ProviderList"));
             provide_list.ItemsSource = Item;
-            provide_list.HasUnevenRows = true;
-            provide_list.Style = (Style)App.Current.Resources["recordListStyle"];
+            provide_list.HasUnevenRows = true;          
             provide_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-            loading.IsEnabled = false;
-            loading.IsVisible = false;
             loading.IsRunning = false;
+            loading.IsVisible = false;
+            loading.IsEnabled = false;
         }
     }
 }

@@ -10,16 +10,13 @@ using Acr.UserDialogs;
 using Xamarin.Forms.Platform.Android;
 using Autofac;
 using XLabs.Platform.Services.Media;
-using Tesseract.Droid;
-using Tesseract;
 using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using Plugin.CurrentActivity;
-//using Android;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Tracking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -27,7 +24,7 @@ namespace ASolute_Mobile.Droid
              
         protected override void OnCreate(Bundle bundle)
         {
-            Ultis.Settings.App = "Haulage";
+           
             TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
                 
             ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;

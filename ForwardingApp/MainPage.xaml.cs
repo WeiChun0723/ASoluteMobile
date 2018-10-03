@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
+using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomerTracking;
-using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -24,7 +22,6 @@ namespace ASolute_Mobile
         public MainPage()
         {
             InitializeComponent();
-
 
             Master = masterPage;
             Detail = new NavigationPage(new MyProviders());
@@ -56,20 +53,40 @@ namespace ASolute_Mobile
                 {
                     if (item.Id.Equals("AddProvider"))
                     {
-                        var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
-                        clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                        var answer = await DisplayAlert("", "Refresh provider list?", "Yes", "No");
+                        if (answer.Equals(true))
+                        {
+                            try
+                            {
+                                var client = new HttpClient();
+                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                                var uri = ControllerUtil.getAutoScan();
+                                var response = await client.GetAsync(uri);
+                                var content = await response.Content.ReadAsStringAsync();
+                                Debug.WriteLine(content);
+                                clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                               
+                                if (autoScan_response.IsGood)
+                                {
+                                    await DisplayAlert("Success", autoScan_response.Result, "OK");
 
-                        if (autoScan_response.IsGood)
-                        {
-                            await DisplayAlert("Succeed", autoScan_response.Result, "OK");
-                           
+                                }
+                                else
+                                {
+                                  
+                                    await DisplayAlert("Success", autoScan_response.Message, "OK");
+                                }
+
+             
+                            }
+                            catch
+                            {
+                                await DisplayAlert("Error", "Problem occur", "OK");
+                            }
                         }
-                        else
-                        {
-                            await DisplayAlert("Error", autoScan_response.Message, "OK");
-                        }
+                       
                     }
-                    if (item.Id.Equals("Panic"))
+                    else if(item.Id.Equals("Panic"))
                     {
                         string panic = "";
                         if (Ultis.Settings.Language.Equals("English"))

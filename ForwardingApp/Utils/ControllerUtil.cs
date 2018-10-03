@@ -25,6 +25,11 @@ namespace ASolute_Mobile.Utils
 
         #region Customer Tracking url
 
+        public static String emailVerify(string email)
+        {
+            return String.Format("Account/VerifyEmail?Email={0}", email);
+        }
+
         public static String getActionURL(string deviceID,string firebase)
         {
             return String.Format("Account/Login?Id={0}&FirebaseId={1}", deviceID,firebase);

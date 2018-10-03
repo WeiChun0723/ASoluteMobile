@@ -42,8 +42,21 @@ namespace ASolute_Mobile.Ultis
         private const string contextMenuTitle = "";
         private const string UpdateRecord = "Yes";
         private const string DeviceID = "";
-
+        private const string UserEmail = "";
         #endregion
+
+
+        public static string Email
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(UserEmail, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(UserEmail, value);
+            }
+        }
 
 
         public static string DeviceUniqueID

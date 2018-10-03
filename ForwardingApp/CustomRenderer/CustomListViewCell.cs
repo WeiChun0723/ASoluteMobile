@@ -1,4 +1,5 @@
 ﻿using ASolute.Mobile.Models;
+using ASolute_Mobile.CustomerTracking;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace ASolute_Mobile
     {
         public static List<SummaryItems> summaryRecord ;
         public static List<ProviderInfo> providers;
+
         string color;
         
         public CustomListViewCell()
@@ -84,6 +86,7 @@ namespace ASolute_Mobile
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     providers = App.Database.Providers(model.menuId);  
+
                 }
                 if (Ultis.Settings.ListType == "container_List")
                 {
@@ -107,7 +110,7 @@ namespace ASolute_Mobile
 
                 bool firstSummaryLine = true;
 
-                if(Ultis.Settings.ListType == "provider_List" && Ultis.Settings.ListType == "category_List")
+                if(Ultis.Settings.ListType == "provider_List" )
                 {
                     foreach (ProviderInfo items in providers)
                     {
@@ -125,7 +128,7 @@ namespace ASolute_Mobile
                     {
                         Label label = new Label();
 
-                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee")
+                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.ListType.Equals("category_List"))
                         {
                             label.Text = items.Value;
 

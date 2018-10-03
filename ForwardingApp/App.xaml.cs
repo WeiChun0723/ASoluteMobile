@@ -46,7 +46,6 @@ namespace ASolute_Mobile
             Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
             MainPage = new CustomNavigationPage(new AppNavigation());
 
-            //MainPage = new CustomNavigationPage(new HaulageScreen.Registration());
         }
 
         public static Database Database

@@ -122,8 +122,6 @@
       <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomListViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomNavigationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Database.cs" />
@@ -147,7 +145,6 @@
       <DependentUpon>MainMenu.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\PropertyChange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ListObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Database_Model.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MasterPageItem.cs" />
@@ -206,9 +203,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\MyProviders.xaml.cs">
       <DependentUpon>MyProviders.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\Provider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\PropertyChange.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\ProviderListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ProviderDetails.xaml.cs">
       <DependentUpon>ProviderDetails.xaml</DependentUpon>
     </Compile>
@@ -218,13 +212,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ContainerCategory.xaml.cs">
       <DependentUpon>ContainerCategory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\PropertyChange.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
     <Folder Include="$(MSBuildThisFileDirectory)FleetScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)TransportScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)CustomerTracking\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Models\ProvidersModel\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)RefuelHistory.xaml">

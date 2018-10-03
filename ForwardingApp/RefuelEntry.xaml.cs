@@ -13,7 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Tesseract;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XLabs.Ioc;
@@ -34,8 +33,7 @@ namespace ASolute_Mobile
         string newFuelID, focusField;
         int station_choice, payment_choice;
         string mandatory;
-        /*private readonly ITesseractApi _tesseractApi;
-        private readonly IDevice _device;*/
+      
 
         public RefuelEntry ()
 		{
@@ -65,9 +63,6 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-            //_tesseractApi = Resolver.Resolve<ITesseractApi>();
-            //_device = Resolver.Resolve<IDevice>();
-
             lblDateTime.Text = "Date & Time";           
 
             if (NetworkCheck.IsInternet())
@@ -94,64 +89,6 @@ namespace ASolute_Mobile
             DisplayImage();
         }
 
-        public async void ScanImage(object sender, EventArgs e)
-        {
-            try
-            {
-
-                /*if (!_tesseractApi.Initialized)
-                     await _tesseractApi.Init("eng");
-
-                 var photo = await TakePic();
-                 if (photo != null)
-                 {
-                     var imageBytes = new byte[photo.Source.Length];
-                     photo.Source.Position = 0;
-                     photo.Source.Read(imageBytes, 0, (int)photo.Source.Length);
-                     photo.Source.Position = 0;
-
-
-                     byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imageBytes, 500, 450, 100, true);
-                     var tessResult = await _tesseractApi.SetImage(scaledImageByte);
-                     if (tessResult)
-                     {
-                         await DisplayAlert("Result", _tesseractApi.Text, "OK");
-                         /*string field = focusField;
-                         switch (field)
-                         {
-                             case "fuel":
-                                 fuelCard.Text = _tesseractApi.Text;
-                                 break;
-
-                             case "voucher":
-                                 voucher.Text = _tesseractApi.Text;
-                                 break;
-
-                             case "other":
-                                 other.Text = _tesseractApi.Text;
-                                 break;
-                         }
-
-                    }
-                }*/
-            }
-            catch
-            {
-                await DisplayAlert("Error", "Please try again", "OK");
-            }
-         
-        }
-
-        /*private async Task<MediaFile> TakePic()
-        {
-            var mediaStorageOptions = new CameraMediaStorageOptions
-            {
-                DefaultCamera = CameraDevice.Rear
-            };
-            var mediaFile = await _device.MediaPicker.TakePhotoAsync(mediaStorageOptions);
-
-            return mediaFile;
-        }*/
 
         public void FuelEntryFocus(object sender, FocusEventArgs e)
         {

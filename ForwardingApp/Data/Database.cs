@@ -237,6 +237,11 @@ namespace ASolute_Mobile.Data
             return database.Query<AppMenu>("SELECT * FROM [AppMenu] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }
 
+        public List<AppMenu> GetMainMenu(string category)
+        {
+            return database.Query<AppMenu>("SELECT * FROM [AppMenu] WHERE [category] = ?", category);
+        }
+
         public List<Log> GetLogItems()
         {
             return database.Query<Log>("SELECT * FROM [Log] WHERE [owner] = ? ", Ultis.Settings.SessionUserId);
@@ -325,6 +330,11 @@ namespace ASolute_Mobile.Data
         public void deleteMainMenu()
         {
             database.Query<AppMenu>("DELETE FROM AppMenu");
+        }
+
+        public void deleteMainMenuItem(string category)
+        {
+            database.Query<AppMenu>("DELETE FROM AppMenu WHERE [category] = ?", category);
         }
 
         public void deleteAllDetail()
