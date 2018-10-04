@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Utils;
-using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 using Xamarin.Forms;
 using ASolute_Mobile.Models;
@@ -394,7 +393,7 @@ namespace ASolute_Mobile
                     catch (Exception exception)
                     {
                         await contentPage.DisplayAlert("Download Error", exception.Message, "OK");
-                        Crashes.TrackError(exception);
+                       
                     }
 
                 }

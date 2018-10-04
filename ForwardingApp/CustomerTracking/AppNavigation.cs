@@ -26,9 +26,6 @@ namespace ASolute_Mobile.CustomerTracking
 
         public AppNavigation()
         {
-
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzEyNDdAMzEzNjJlMzMyZTMwZTEwVHdObHh0ZmpQaGxaLzlFU2JWcS9iYUo2aTMzV09zTWdkbFpaRWF3QT0=");
-
             NavigationPage.SetHasNavigationBar(this, false);
 
             var sub = new AbsoluteLayout();
@@ -124,20 +121,27 @@ namespace ASolute_Mobile.CustomerTracking
 
             submit.Clicked += async (sender, e) =>
             {
-                loading.IsRunning = true;
-                loading.IsVisible = true;
-                loading.IsEnabled = true;
-
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
-                clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                if(verify_response.IsGood)
+                try
                 {
-                    WebService(entry.Text);
+                    loading.IsRunning = true;
+                    loading.IsVisible = true;
+                    loading.IsEnabled = true;
+
+                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
+                    clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (verify_response.IsGood)
+                    {
+                        WebService(entry.Text);
+                    }
+                    else
+                    {
+                        await DisplayAlert("JsonError", verify_response.Message, "OK");
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    await DisplayAlert("JsonError", verify_response.Message, "OK");
+                    await DisplayAlert("Error", ex.Message, "OK");
                 }
         
             };
@@ -154,57 +158,64 @@ namespace ASolute_Mobile.CustomerTracking
 
         async void WebService(string id)
         {
-          
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(id, firebaseID));
-            clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            if (login_response.IsGood)
+            try
             {
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(id, firebaseID));
+                clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                var result = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-
-                Ultis.Settings.SessionSettingKey = result.SessionId;
-                Ultis.Settings.SessionUserId = result.UserName;
-
-
-                if (result.MainMenu.Count == 1)
+                if (login_response.IsGood)
                 {
-                    loading.IsRunning = false;
-                    loading.IsVisible = false;
-                    loading.IsEnabled = false;
 
-                    string action = result.MainMenu[0].Id;
+                    var result = JObject.Parse(content)["Result"].ToObject<clsLogin>();
 
-                    switch (action)
+                    Ultis.Settings.SessionSettingKey = result.SessionId;
+                    Ultis.Settings.SessionUserId = result.UserName;
+
+
+                    if (result.MainMenu.Count == 1)
                     {
-                        case "Register":
-                            if (!(String.IsNullOrEmpty(entry.Text)))
-                            {
-                                Ultis.Settings.Email = entry.Text;
-                            }
-                            Application.Current.MainPage = new CustomerRegistration();
-                            break;
+                        loading.IsRunning = false;
+                        loading.IsVisible = false;
+                        loading.IsEnabled = false;
 
-                        case "Activate":
-                            Application.Current.MainPage = new AccountActivation();
-                            break;
+                        string action = result.MainMenu[0].Id;
 
-                        case "Home":
-                            if(!(String.IsNullOrEmpty(entry.Text)))
-                            {
-                                Ultis.Settings.DeviceUniqueID = entry.Text;
-                            }
-                            Application.Current.MainPage = new MainPage();
-                            break;
+                        switch (action)
+                        {
+                            case "Register":
+                                if (!(String.IsNullOrEmpty(entry.Text)))
+                                {
+                                    Ultis.Settings.Email = entry.Text;
+                                }
+                                Application.Current.MainPage = new CustomerRegistration();
+                                break;
+
+                            case "Activate":
+                                Application.Current.MainPage = new AccountActivation();
+                                break;
+
+                            case "Home":
+                                if (!(String.IsNullOrEmpty(entry.Text)))
+                                {
+                                    Ultis.Settings.DeviceUniqueID = entry.Text;
+                                }
+                                Application.Current.MainPage = new MainPage();
+                                break;
+                        }
+
                     }
+                }
 
+                else
+                {
+                    await DisplayAlert("JsonError", login_response.Message, "OK");
                 }
             }
-
-            else
+            catch(Exception ex)
             {
-                await DisplayAlert("JsonError", login_response.Message, "OK");
+                await DisplayAlert("Error", ex.Message, "OK");
             }
+
 
         }
 

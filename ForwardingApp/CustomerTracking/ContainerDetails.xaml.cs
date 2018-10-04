@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ASolute.Mobile.Models;
-using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -68,7 +67,6 @@ namespace ASolute_Mobile.CustomerTracking
                 foreach (clsCaptionValue details in containers.Details)
                 {
                     StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
-
 
                     if (details.Display == true)
                     {

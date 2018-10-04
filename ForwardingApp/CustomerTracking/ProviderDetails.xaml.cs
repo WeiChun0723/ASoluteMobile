@@ -59,14 +59,13 @@ namespace ASolute_Mobile.CustomerTracking
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
-                   await loadContainerList();
+                   loadContainerList();
                 }
 
                 else
                 {
                     List<AppMenu> test = new List<AppMenu>(App.Database.GetMainMenuItems());
                     container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) ||  x.name.Contains(searchKey));
-                    //container_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 }
             }
             catch
@@ -129,7 +128,7 @@ namespace ASolute_Mobile.CustomerTracking
                     App.Database.SaveMenuAsync(menu);
                 }
 
-                await loadContainerList();
+                loadContainerList();
             }
             else
             {
@@ -138,14 +137,13 @@ namespace ASolute_Mobile.CustomerTracking
         }
 
 
-        public async Task loadContainerList()
+        public void loadContainerList()
         {
             Ultis.Settings.ListType = "container_List";
             List<AppMenu> Item = new List<AppMenu>(App.Database.GetMainMenuItems());
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;
-            //container_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-
+   
             loading.IsRunning = false;
             loading.IsVisible = false;
             loading.IsEnabled = false;

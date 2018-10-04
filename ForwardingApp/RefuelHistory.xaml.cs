@@ -2,7 +2,6 @@
 using ASolute_Mobile.Data;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
-using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;

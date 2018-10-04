@@ -7,13 +7,6 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Xamarin.Forms;
 using ASolute_Mobile.Data;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using ASolute_Mobile.Utils;
-using ASolute_Mobile.Ultis;
-using ASolute_Mobile.Courier;
-using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomerTracking;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]

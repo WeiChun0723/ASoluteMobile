@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ASolute_Mobile.Ultis;
-using Microsoft.AppCenter.Crashes;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using ASolute_Mobile.Models;
@@ -335,7 +334,7 @@ namespace ASolute_Mobile.Utils
                             catch (TaskCanceledException exception)
                             {
                                 Debug.WriteLine(exception);
-                                Crashes.TrackError(exception);
+                               
                             }
                         }
 

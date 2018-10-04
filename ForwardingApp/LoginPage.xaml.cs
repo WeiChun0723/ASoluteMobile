@@ -6,7 +6,6 @@ using Xamarin.Forms;
 using ASolute_Mobile.Models;
 using System.IO;
 using ASolute_Mobile.Utils;
-using Microsoft.AppCenter.Crashes;
 using System.Diagnostics;
 using ASolute.Mobile.Models;
 using Newtonsoft.Json.Linq;
@@ -321,7 +320,7 @@ namespace ASolute_Mobile
                 {
                     await DisplayAlert("Unable to connect", "Please try again later", "Ok");
                     Application.Current.MainPage = new LoginPage();
-                    Crashes.TrackError(exception);
+
                 }
                 catch(Exception exception)
                 {

@@ -3,12 +3,14 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.CustomerTracking.ContainerDetails" 
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps">
-    <ScrollView>
+    
     <StackLayout Padding="15,15,15,15">
         
+       <ScrollView> 
         <StackLayout x:Name="containerDetails" Padding="0,5,0,5"  HorizontalOptions="Start" VerticalOptions="Center"></StackLayout>
+        </ScrollView>
        
        <maps:Map  x:Name="GoogleMap" IsShowingUser="true" MapType="Street" HeightRequest="300" WidthRequest="800" IsVisible="false"/>
     </StackLayout>
-   </ScrollView>
+ 
 </ContentPage>
