@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
@@ -19,7 +18,6 @@ namespace ASolute_Mobile.CustomerTracking
     public partial class ProviderDetails : ContentPage
     {
         string providerCode, categorycode;
-        ObservableCollection<AppMenu> containerList = new ObservableCollection<AppMenu>();
 
         public ProviderDetails(string code, string provider, string category)
         {
@@ -32,13 +30,16 @@ namespace ASolute_Mobile.CustomerTracking
             loading.IsVisible = true;
             loading.IsEnabled = true;
 
-            App.Database.deleteMainMenu();
-            App.Database.deleteMenuItems("Container");
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                App.Database.deleteMainMenu();
+                App.Database.deleteMenuItems("Container");
 
-            GetContainer();
+                await GetContainer();
+
+            });
 
         }
-
 
         protected async void refreshContainerList(object sender, EventArgs e)
         {
@@ -50,37 +51,29 @@ namespace ASolute_Mobile.CustomerTracking
             container_list.IsRefreshing = false;
         }
 
-        private void SearchContainer(object sender, TextChangedEventArgs e)
+        private async void SearchContainer(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(e.NewTextValue))
+                string searchKey = e.NewTextValue.ToUpper();
+
+                if (string.IsNullOrEmpty(searchKey))
                 {
-                    loadContainerList();
+                   await loadContainerList();
                 }
 
                 else
                 {
                     List<AppMenu> test = new List<AppMenu>(App.Database.GetMainMenuItems());
-                    container_list.ItemsSource = test.Where(x => x.menuId.Contains(e.NewTextValue) ||  x.name.Contains(e.NewTextValue));
-                    container_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-
+                    container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) ||  x.name.Contains(searchKey));
+                    //container_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 }
             }
             catch
             {
-                DisplayAlert("Error", "Please try again", "OK");
+                await DisplayAlert("Error", "Please try again", "OK");
             }
 
-        }
-
-
-        public async void loadData(object sender, EventArgs e)
-        {
-            loading.IsRunning = true;
-            loading.IsVisible = true;
-            loading.IsEnabled = true;
-            await LoadItems();
         }
 
         public async Task LoadItems()
@@ -106,32 +99,37 @@ namespace ASolute_Mobile.CustomerTracking
                
                 foreach (clsDataRow container in containers)
                 {
+                    string summary = "";
+                    bool firstLine = true;
                     AppMenu menu = new AppMenu();
                     menu.menuId = container.Id;
-
+                    menu.category = "Container";
 
                     foreach (clsCaptionValue summaryList in container.Summary)
                     {
-                        SummaryItems summaryItem = new SummaryItems();
-                        summaryItem.Id = container.Id;
-                        summaryItem.Caption = summaryList.Caption;
-                        summaryItem.Value = summaryList.Value;
-                        summaryItem.Display = summaryList.Display;
-                        summaryItem.Type = "Container";
-                        summaryItem.BackColor = container.BackColor;
-                        App.Database.SaveSummarysAsync(summaryItem);
-
-                        if(String.IsNullOrEmpty(summaryItem.Caption) || summaryItem.Caption == "")
+                    
+                        if(firstLine)
                         {
-                            menu.name = summaryItem.Value;
+                            summary += summaryList.Value + "\r\n" + "\r\n";
+                            firstLine = false;
+                        }
+                        else
+                        {
+                            summary += summaryList.Caption + "  :  " + summaryList.Value + "\r\n" + "\r\n";
+                        }
+
+                        if (String.IsNullOrEmpty(summaryList.Caption) || summaryList.Caption == "")
+                        {
+                            menu.name = summaryList.Value;
                         }
                       
                     }
+                    menu.summary = summary;
 
                     App.Database.SaveMenuAsync(menu);
                 }
-                            
-                loadContainerList();
+
+                await loadContainerList();
             }
             else
             {
@@ -140,14 +138,13 @@ namespace ASolute_Mobile.CustomerTracking
         }
 
 
-        public void loadContainerList()
+        public async Task loadContainerList()
         {
             Ultis.Settings.ListType = "container_List";
-            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
-            int TEST = Item.Count;
+            List<AppMenu> Item = new List<AppMenu>(App.Database.GetMainMenuItems());
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;
-            container_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+            //container_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
             loading.IsRunning = false;
             loading.IsVisible = false;

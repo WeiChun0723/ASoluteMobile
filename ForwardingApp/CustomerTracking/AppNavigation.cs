@@ -26,7 +26,9 @@ namespace ASolute_Mobile.CustomerTracking
 
         public AppNavigation()
         {
-               
+
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzEyNDdAMzEzNjJlMzMyZTMwZTEwVHdObHh0ZmpQaGxaLzlFU2JWcS9iYUo2aTMzV09zTWdkbFpaRWF3QT0=");
+
             NavigationPage.SetHasNavigationBar(this, false);
 
             var sub = new AbsoluteLayout();

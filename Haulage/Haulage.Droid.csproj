@@ -100,15 +100,6 @@
     <Reference Include="SignaturePad.Forms, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Controls.SignaturePad.Forms.2.3.0\lib\MonoAndroid\SignaturePad.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SfAutoComplete.Android, Version=16.1451.0.32, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.1.0.32\lib\MonoAndroid10\Syncfusion.SfAutoComplete.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfAutoComplete.XForms, Version=16.1451.0.32, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.1.0.32\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfAutoComplete.XForms.Android, Version=16.1451.0.32, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.1.0.32\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.Android.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />
     <Reference Include="System.IdentityModel" />
@@ -329,6 +320,18 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Maps">
       <HintPath>..\packages\Xamarin.Forms.Maps.2.5.0.280555\lib\MonoAndroid10\Xamarin.Forms.Maps.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing">
+      <HintPath>..\packages\Syncfusion.Licensing.16.3.0.21\lib\MonoAndroid10\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfAutoComplete.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfAutoComplete.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfAutoComplete.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfAutoComplete.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -99,7 +99,7 @@ namespace ASolute_Mobile
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
                 }
 
-                AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+              //  AbsoluteLayout absoluteLayout = new AbsoluteLayout();
 
                 StackLayout cellWrapper = new StackLayout()
                 {
@@ -161,49 +161,50 @@ namespace ASolute_Mobile
                     }
                 }
                        
-                absoluteLayout.Children.Add(cellWrapper);
+               // absoluteLayout.Children.Add(cellWrapper);
 
-                MenuItem menuItem = new MenuItem()
+                if(Ultis.Settings.ListType.Equals("provider_List"))
                 {
-                    Text = "Delete",
-                    IsDestructive = true
-                };
-
-                menuItem.Clicked += (sender, e) =>
-                {
-
-                    AppMenu menu = (AppMenu)((MenuItem)sender).BindingContext;
-                    int results = 0;
-                    results = App.Database.DeleteMenu(menu);
-                    if (results > 0)
+                    MenuItem menuItem = new MenuItem()
                     {
-                        ListView parent = (ListView)this.Parent;
-                        ObservableCollection<AppMenu> itemSource = ((ObservableCollection<AppMenu>)parent.ItemsSource);
-                        if (itemSource.Contains(menu))
+                        Text = "Delete",
+                        IsDestructive = true
+                    };
+
+                    menuItem.Clicked += (sender, e) =>
+                    {
+
+                        AppMenu menu = (AppMenu)((MenuItem)sender).BindingContext;
+                        int results = 0;
+                        results = App.Database.DeleteMenu(menu);
+                        if (results > 0)
                         {
-                            itemSource.Remove(menu);
+                            ListView parent = (ListView)this.Parent;
+                            ObservableCollection<AppMenu> itemSource = ((ObservableCollection<AppMenu>)parent.ItemsSource);
+                            if (itemSource.Contains(menu))
+                            {
+                                itemSource.Remove(menu);
+                            }
+
+                            callWebService(menu.menuId);
                         }
+                    };
 
-                        callWebService(menu.menuId);
-                    }
-                };
+                    menuItem.BindingContextChanged += (sender, e) => {
+                        if (((MenuItem)sender).BindingContext != null)
+                        {
 
-                menuItem.BindingContextChanged += (sender, e) => {
-                    if (((MenuItem)sender).BindingContext != null)
-                    {
+                        }
+                    };
 
-                    }
-                };
-
-                this.ContextActions.Add(menuItem);
-
-
-
+                    this.ContextActions.Add(menuItem);
+                }
+ 
                 View = new Frame
                 {
-                    Content = absoluteLayout,
+                    Content = cellWrapper,
                     HasShadow = true,
-                    Margin = 5,
+                    Margin = 5
                  
                  };
 

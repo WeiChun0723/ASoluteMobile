@@ -67,6 +67,14 @@ namespace Haulage.Droid
 			global::PCLCrypto.Resource.String.Hello = global::Haulage.Droid.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::Haulage.Droid.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::Haulage.Droid.Resource.String.Hello;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteBorderColor = global::Haulage.Droid.Resource.Attribute.autocompleteBorderColor;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteShowBorder = global::Haulage.Droid.Resource.Attribute.autocompleteShowBorder;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteShowClearButton = global::Haulage.Droid.Resource.Attribute.autocompleteShowClearButton;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteText = global::Haulage.Droid.Resource.Attribute.autocompleteText;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteTextColor = global::Haulage.Droid.Resource.Attribute.autocompleteTextColor;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteTextSize = global::Haulage.Droid.Resource.Attribute.autocompleteTextSize;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteWatermark = global::Haulage.Droid.Resource.Attribute.autocompleteWatermark;
+			global::Com.Syncfusion.Autocomplete.Resource.Attribute.autocompleteWatermarkColor = global::Haulage.Droid.Resource.Attribute.autocompleteWatermarkColor;
 			global::Com.Syncfusion.Autocomplete.Resource.Attribute.layoutManager = global::Haulage.Droid.Resource.Attribute.layoutManager;
 			global::Com.Syncfusion.Autocomplete.Resource.Attribute.reverseLayout = global::Haulage.Droid.Resource.Attribute.reverseLayout;
 			global::Com.Syncfusion.Autocomplete.Resource.Attribute.spanCount = global::Haulage.Droid.Resource.Attribute.spanCount;
@@ -90,6 +98,15 @@ namespace Haulage.Droid
 			global::Com.Syncfusion.Autocomplete.Resource.Styleable.RecyclerView_reverseLayout = global::Haulage.Droid.Resource.Styleable.RecyclerView_reverseLayout;
 			global::Com.Syncfusion.Autocomplete.Resource.Styleable.RecyclerView_spanCount = global::Haulage.Droid.Resource.Styleable.RecyclerView_spanCount;
 			global::Com.Syncfusion.Autocomplete.Resource.Styleable.RecyclerView_stackFromEnd = global::Haulage.Droid.Resource.Styleable.RecyclerView_stackFromEnd;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete = global::Haulage.Droid.Resource.Styleable.SfAutoComplete;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteBorderColor = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteBorderColor;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteShowBorder = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteShowBorder;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteShowClearButton = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteShowClearButton;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteText = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteText;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteTextColor = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteTextColor;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteTextSize = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteTextSize;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteWatermark = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteWatermark;
+			global::Com.Syncfusion.Autocomplete.Resource.Styleable.SfAutoComplete_autocompleteWatermarkColor = global::Haulage.Droid.Resource.Styleable.SfAutoComplete_autocompleteWatermarkColor;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Haulage.Droid.Resource.Attribute.actionBarSize;
 			global::XLabs.Forms.Resource.Animation.abc_fade_in = global::Haulage.Droid.Resource.Animation.abc_fade_in;
 			global::XLabs.Forms.Resource.Animation.abc_fade_out = global::Haulage.Droid.Resource.Animation.abc_fade_out;
@@ -1639,41 +1656,41 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f01009f
 			public const int activityChooserViewStyle = 2130772127;
 			
-			// aapt resource value: 0x7f010175
-			public const int ahBarColor = 2130772341;
-			
 			// aapt resource value: 0x7f01017d
-			public const int ahBarLength = 2130772349;
+			public const int ahBarColor = 2130772349;
 			
-			// aapt resource value: 0x7f01017c
-			public const int ahBarWidth = 2130772348;
+			// aapt resource value: 0x7f010185
+			public const int ahBarLength = 2130772357;
+			
+			// aapt resource value: 0x7f010184
+			public const int ahBarWidth = 2130772356;
+			
+			// aapt resource value: 0x7f010182
+			public const int ahCircleColor = 2130772354;
+			
+			// aapt resource value: 0x7f010181
+			public const int ahDelayMillis = 2130772353;
+			
+			// aapt resource value: 0x7f010183
+			public const int ahRadius = 2130772355;
+			
+			// aapt resource value: 0x7f01017e
+			public const int ahRimColor = 2130772350;
+			
+			// aapt resource value: 0x7f01017f
+			public const int ahRimWidth = 2130772351;
+			
+			// aapt resource value: 0x7f010180
+			public const int ahSpinSpeed = 2130772352;
 			
 			// aapt resource value: 0x7f01017a
-			public const int ahCircleColor = 2130772346;
-			
-			// aapt resource value: 0x7f010179
-			public const int ahDelayMillis = 2130772345;
+			public const int ahText = 2130772346;
 			
 			// aapt resource value: 0x7f01017b
-			public const int ahRadius = 2130772347;
+			public const int ahTextColor = 2130772347;
 			
-			// aapt resource value: 0x7f010176
-			public const int ahRimColor = 2130772342;
-			
-			// aapt resource value: 0x7f010177
-			public const int ahRimWidth = 2130772343;
-			
-			// aapt resource value: 0x7f010178
-			public const int ahSpinSpeed = 2130772344;
-			
-			// aapt resource value: 0x7f010172
-			public const int ahText = 2130772338;
-			
-			// aapt resource value: 0x7f010173
-			public const int ahTextColor = 2130772339;
-			
-			// aapt resource value: 0x7f010174
-			public const int ahTextSize = 2130772340;
+			// aapt resource value: 0x7f01017c
+			public const int ahTextSize = 2130772348;
 			
 			// aapt resource value: 0x7f0100c4
 			public const int alertDialogButtonGroupStyle = 2130772164;
@@ -1704,6 +1721,30 @@ namespace Haulage.Droid
 			
 			// aapt resource value: 0x7f0100cb
 			public const int autoCompleteTextViewStyle = 2130772171;
+			
+			// aapt resource value: 0x7f010176
+			public const int autocompleteBorderColor = 2130772342;
+			
+			// aapt resource value: 0x7f010172
+			public const int autocompleteShowBorder = 2130772338;
+			
+			// aapt resource value: 0x7f010173
+			public const int autocompleteShowClearButton = 2130772339;
+			
+			// aapt resource value: 0x7f010178
+			public const int autocompleteText = 2130772344;
+			
+			// aapt resource value: 0x7f010175
+			public const int autocompleteTextColor = 2130772341;
+			
+			// aapt resource value: 0x7f010179
+			public const int autocompleteTextSize = 2130772345;
+			
+			// aapt resource value: 0x7f010177
+			public const int autocompleteWatermark = 2130772343;
+			
+			// aapt resource value: 0x7f010174
+			public const int autocompleteWatermarkColor = 2130772340;
 			
 			// aapt resource value: 0x7f010045
 			public const int background = 2130772037;
@@ -8565,18 +8606,18 @@ namespace Haulage.Droid
 			public const int PopupWindowBackgroundState_state_above_anchor = 0;
 			
 			public static int[] ProgressWheel = new int[] {
-					2130772338,
-					2130772339,
-					2130772340,
-					2130772341,
-					2130772342,
-					2130772343,
-					2130772344,
-					2130772345,
 					2130772346,
 					2130772347,
 					2130772348,
-					2130772349};
+					2130772349,
+					2130772350,
+					2130772351,
+					2130772352,
+					2130772353,
+					2130772354,
+					2130772355,
+					2130772356,
+					2130772357};
 			
 			// aapt resource value: 3
 			public const int ProgressWheel_ahBarColor = 3;
@@ -8731,6 +8772,40 @@ namespace Haulage.Droid
 			
 			// aapt resource value: 12
 			public const int SearchView_voiceIcon = 12;
+			
+			public static int[] SfAutoComplete = new int[] {
+					2130772338,
+					2130772339,
+					2130772340,
+					2130772341,
+					2130772342,
+					2130772343,
+					2130772344,
+					2130772345};
+			
+			// aapt resource value: 4
+			public const int SfAutoComplete_autocompleteBorderColor = 4;
+			
+			// aapt resource value: 0
+			public const int SfAutoComplete_autocompleteShowBorder = 0;
+			
+			// aapt resource value: 1
+			public const int SfAutoComplete_autocompleteShowClearButton = 1;
+			
+			// aapt resource value: 6
+			public const int SfAutoComplete_autocompleteText = 6;
+			
+			// aapt resource value: 3
+			public const int SfAutoComplete_autocompleteTextColor = 3;
+			
+			// aapt resource value: 7
+			public const int SfAutoComplete_autocompleteTextSize = 7;
+			
+			// aapt resource value: 5
+			public const int SfAutoComplete_autocompleteWatermark = 5;
+			
+			// aapt resource value: 2
+			public const int SfAutoComplete_autocompleteWatermarkColor = 2;
 			
 			public static int[] SignInButton = new int[] {
 					2130771994,
