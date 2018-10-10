@@ -2,15 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.CustomerTracking.ContainerDetails" 
-             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps">
-    
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer">
+    <ScrollView> 
     <StackLayout Padding="15,15,15,15">
         
-       <ScrollView> 
-        <StackLayout x:Name="containerDetails" Padding="0,5,0,5"  HorizontalOptions="Start" VerticalOptions="Center"></StackLayout>
-        </ScrollView>
+        <controls:CustomButton Text="RFC" BackgroundColor="#87ceeb" WidthRequest="100" IsVisible="false" x:Name="rfc" Clicked="updateRFC"/>
        
-       <maps:Map  x:Name="GoogleMap" IsShowingUser="true" MapType="Street" HeightRequest="300" WidthRequest="800" IsVisible="false"/>
+        <StackLayout x:Name="containerDetails" Padding="0,5,0,5"  HorizontalOptions="Start" VerticalOptions="Center"></StackLayout>
+       
+       
+        <maps:Map x:Name="GoogleMap" IsShowingUser="true" MapType="Street" HeightRequest="300" WidthRequest="800" IsVisible="false" />
+        <StackLayout Orientation="Horizontal" x:Name="switchChange">
+                <Switch x:Name="changeMap" Toggled="switchMap" />
+                <Label Text="Satelite map "/>
+         </StackLayout>
     </StackLayout>
- 
+  </ScrollView>
 </ContentPage>

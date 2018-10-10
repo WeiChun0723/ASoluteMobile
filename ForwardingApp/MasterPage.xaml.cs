@@ -27,7 +27,7 @@ namespace ASolute_Mobile
             var masterPageItems = new List<MasterPageItem>();
         
 
-            /*foreach (SummaryItems item in contextMenu)
+           /* foreach (SummaryItems item in contextMenu)
             {
                 string option;
                 if (item.Display)
@@ -77,7 +77,7 @@ namespace ASolute_Mobile
             masterPageItems.Add(provider);
 
 
-            /*MasterPageItem language = new MasterPageItem();
+          /*  MasterPageItem language = new MasterPageItem();
             language.Id = "Language";
             if (Ultis.Settings.Language.Equals("English"))
             {

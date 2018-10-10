@@ -148,7 +148,6 @@ namespace ASolute_Mobile.HaulageScreen
             ObservableCollection<JobItems> jobs = new ObservableCollection<JobItems>(App.Database.GetJobItems(doneStatus, "HaulageJob"));
             jobList.ItemsSource = jobs;
             jobList.HasUnevenRows = true;
-            jobList.Style = (Style)App.Current.Resources["recordListStyle"];
             jobList.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
             if (jobs.Count == 0)

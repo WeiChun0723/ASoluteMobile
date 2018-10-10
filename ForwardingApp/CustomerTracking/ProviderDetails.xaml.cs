@@ -25,7 +25,7 @@ namespace ASolute_Mobile.CustomerTracking
             providerCode = code;
             categorycode = provider;
             Title = category;
-           
+
             loading.IsRunning = true;
             loading.IsVisible = true;
             loading.IsEnabled = true;
@@ -40,6 +40,14 @@ namespace ASolute_Mobile.CustomerTracking
             });
 
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+
+        }
+       
 
         protected async void refreshContainerList(object sender, EventArgs e)
         {
@@ -64,8 +72,15 @@ namespace ASolute_Mobile.CustomerTracking
 
                 else
                 {
-                    List<AppMenu> test = new List<AppMenu>(App.Database.GetMainMenuItems());
-                    container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) ||  x.name.Contains(searchKey));
+                    try
+                    {
+                        List<AppMenu> test = new List<AppMenu>(App.Database.GetMainMenuItems());
+                        container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) || x.name.Contains(searchKey) || x.summary.Contains(searchKey));
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please try again", "OK");
+                    }
                 }
             }
             catch
@@ -82,8 +97,14 @@ namespace ASolute_Mobile.CustomerTracking
    
         }
 
+        public void switchMap(object sender, EventArgs e)
+        {
+            
+        }
+
         public async void selectContainer(object sender, ItemTappedEventArgs e)
         {
+
             await Navigation.PushAsync(new ContainerDetails(providerCode, ((AppMenu)e.Item).menuId));
         }
 
@@ -104,6 +125,15 @@ namespace ASolute_Mobile.CustomerTracking
                     menu.menuId = container.Id;
                     menu.category = "Container";
 
+                    if(!(String.IsNullOrEmpty(container.BackColor)))
+                    {
+                        menu.background = container.BackColor;
+                    }
+                    else
+                    {
+                        menu.background = "#ffffff";
+                    }
+
                     foreach (clsCaptionValue summaryList in container.Summary)
                     {
                     
@@ -121,7 +151,15 @@ namespace ASolute_Mobile.CustomerTracking
                         {
                             menu.name = summaryList.Value;
                         }
-                      
+                        if(summaryList.Caption.Equals("Booking"))
+                        {
+                            menu.booking = summaryList.Value;
+                        }
+                        if (summaryList.Caption.Equals("Customer Ref"))
+                        {
+                            menu.customerRef = summaryList.Value;
+                        }
+
                     }
                     menu.summary = summary;
 

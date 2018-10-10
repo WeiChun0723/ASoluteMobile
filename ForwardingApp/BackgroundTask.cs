@@ -631,32 +631,34 @@ namespace ASolute_Mobile
                                 existingRecord.SealMode = job.SealMode;
                                 App.Database.SaveJobsAsync(existingRecord);
 
-                                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(job.Id, jobType);
+                            List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(job.Id, jobType);
 
                                 int index = 0;
                                 foreach (clsCaptionValue summaryList in job.Summary)
                                 {
-                                    SummaryItems summaryItem = null;
-                                    if (index < existingSummaryItems.Capacity)
-                                    {
-                                        summaryItem = existingSummaryItems.ElementAt(index);
-                                    }
+                                SummaryItems summaryItem = null;
+                                 if (index < existingSummaryItems.Capacity)
+                                 {
+                                     summaryItem = existingSummaryItems.ElementAt(index);
+                                 }
 
-                                    if (summaryItem == null)
-                                    {
-                                        summaryItem = new SummaryItems();
-                                    }
+                                 if (summaryItem == null)
+                                 {
+                                     summaryItem = new SummaryItems();
+                                 }
 
-                                    summaryItem.Id = job.Id;
-                                    summaryItem.Caption = summaryList.Caption;
-                                    summaryItem.Value = summaryList.Value;
-                                    summaryItem.Display = summaryList.Display;
-                                    summaryItem.Type = jobType;
-                                    summaryItem.BackColor = job.BackColor;
-                                    App.Database.SaveSummarysAsync(summaryItem);
-                                    index++;
+                                 summaryItem.Id = job.Id;
+                                 summaryItem.Caption = summaryList.Caption;
+                                 summaryItem.Value = summaryList.Value;
+                                 summaryItem.Display = summaryList.Display;
+                                 summaryItem.Type = jobType;
+                                 summaryItem.BackColor = job.BackColor;
+                                 App.Database.SaveSummarysAsync(summaryItem);
+                                 index++;
+
                                 }
 
+                     
                                 if (existingSummaryItems != null)
                                 {
                                     for (; index < existingSummaryItems.Count; index++)

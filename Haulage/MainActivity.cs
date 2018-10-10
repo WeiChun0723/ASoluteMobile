@@ -14,6 +14,7 @@ using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using Plugin.CurrentActivity;
 
+
 namespace ASolute_Mobile.Droid
 {
     [Activity(Label = "AILS Tracking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -35,7 +36,7 @@ namespace ASolute_Mobile.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.FormsMaps.Init(this, bundle);
-            //Resolver.SetResolver(new AutofacResolver(containerBuilder.Build()));
+            OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
 
             UserDialogs.Init(this);
 
@@ -54,33 +55,13 @@ namespace ASolute_Mobile.Droid
             alarmManagercleanUpPending.SetRepeating(AlarmType.RtcWakeup, midnightDateTime.Ticks, AlarmManager.IntervalDay, cleanUpPendingIntent);
 
             App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
-
-            //if(Ultis.Settings.SessionUserItem.CaptureGPS){
-
-            /* LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
-                 {
-                     Log.Debug(logTag, "ServiceConnected Event Raised");
-                     // notifies us of location changes from the system
-                     LocationApp.Current.LocationService.LocationChanged += HandleLocationChanged;
-                     //notifies us of user changes to the location provider (ie the user disables or enables GPS)
-                     LocationApp.Current.LocationService.ProviderDisabled += HandleProviderDisabled;
-                     LocationApp.Current.LocationService.ProviderEnabled += HandleProviderEnabled;
-                     // notifies us of the changing status of a provider (ie GPS no longer available)
-                     LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
-                 };*/
-
-            //LocationApp.StartLocationService();
-            //
-
-            //BackgroundTask.RetrieveLocation();
-
-            
+                      
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }       
+        }
 
         protected override void OnPause()
         {
@@ -120,6 +101,18 @@ namespace ASolute_Mobile.Droid
             App.gpsLocationLat = location.Latitude;
             App.gpsLocationLong = location.Longitude;
                                  
+        }
+
+        public override void OnBackPressed()
+        {
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
+            {
+                // Do something if there are some pages in the `PopupStack`
+            }
+            else
+            {
+                // Do something if there are not any pages in the `PopupStack`
+            }
         }
 
         public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)

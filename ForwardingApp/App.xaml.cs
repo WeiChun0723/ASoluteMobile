@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Xamarin.Forms;
 using ASolute_Mobile.Data;
 using ASolute_Mobile.CustomerTracking;
+using Com.OneSignal;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ASolute_Mobile
@@ -25,19 +26,20 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-            /* if (sessionKey != "")
+             /*if (sessionKey != "")
              {
                  MainPage = new MainPage();
              }
              else 
              {
-                 //MainPage = new CustomNavigationPage(new SplashScreen());
-                 Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-                 MainPage = new CustomNavigationPage(new AppNavigation());
-
+                 MainPage = new CustomNavigationPage(new SplashScreen());
+               
              }*/
             Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
             MainPage = new CustomNavigationPage(new AppNavigation());
+
+            OneSignal.Current.StartInit("562c88f7-d485-4de0-b79f-a5154c40024d")
+                     .EndInit();
 
         }
 

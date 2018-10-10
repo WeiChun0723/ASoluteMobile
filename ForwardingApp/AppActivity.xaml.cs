@@ -22,6 +22,7 @@ namespace ASolute_Mobile
             {
                Title = "Aktiviti";
             }
+            
 
             ObservableCollection<ActivityLog> activity = new ObservableCollection<ActivityLog>(App.Database.GetActivitiesLog());          
             ActivityList.ItemsSource = activity;          

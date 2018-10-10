@@ -4,15 +4,19 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
                   x:Class="ASolute_Mobile.MainPage">
   
-</MasterDetailPage>
+
 
 <!--<MasterDetailPage.Master>
     <local:MasterPage x:Name="masterPage"/>
-  </MasterDetailPage.Master>
-   <MasterDetailPage.Detail>
+  </MasterDetailPage.Master>-->
+
+   <!--<MasterDetailPage.Detail>
         <NavigationPage BarBackgroundColor="#9A2116" x:Name="navigation">
             <x:Arguments>
                 <local:MainMenu />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>-->
+    
+    
+    </MasterDetailPage>

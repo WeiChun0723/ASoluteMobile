@@ -7,7 +7,7 @@ using Android.Telephony;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomRenderer;
 using ASolute_Mobile.Utils;
-//using Com.OneSignal;
+using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
@@ -18,15 +18,17 @@ namespace ASolute_Mobile.CustomerTracking
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppNavigation: ContentPage
     {
-        static string firebaseID = "qwert-qwer45-asfafaf";
+        //static string firebaseID = "qwert-qwer45-asfafaf";
         readonly Image splashImage;
         readonly CustomEntry entry;
         readonly CustomButton submit;
+        string firebaseID = "";
         ActivityIndicator loading;
 
         public AppNavigation()
         {
             NavigationPage.SetHasNavigationBar(this, false);
+
 
             var sub = new AbsoluteLayout();
 
@@ -104,7 +106,7 @@ namespace ASolute_Mobile.CustomerTracking
             this.Content = scroll;
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
@@ -146,13 +148,7 @@ namespace ASolute_Mobile.CustomerTracking
         
             };
 
-            //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
-
-            /*if(firebaseID.Equals(""))
-            {
-                firebaseID = "testing";
-            }*/
-        
+           
 
         }
 
@@ -160,6 +156,8 @@ namespace ASolute_Mobile.CustomerTracking
         {
             try
             {
+                OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
                 var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(id, firebaseID));
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 

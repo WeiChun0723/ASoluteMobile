@@ -72,8 +72,11 @@ namespace ASolute_Mobile.Models
     {
         public string menuId { get; set; }
         public string name { get; set; }
+        public string booking { get; set; }
+        public string customerRef { get; set; }
         public string category { get; set; }
         public string summary { get; set; }
+        public string background { get; set; }
     }
 
     public class Log : Generic
@@ -116,6 +119,7 @@ namespace ASolute_Mobile.Models
         public string UpdateType { get; set; }
         public string JobType { get; set; }
         public string SealMode { get; set; }
+        public string Summary { get; set; }
 
     }
 

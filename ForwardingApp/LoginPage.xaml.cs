@@ -11,7 +11,6 @@ using ASolute.Mobile.Models;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using ASolute_Mobile.Ultis;
-using ASolute_Mobile.Courier;
 using XLabs.Forms.Behaviors;
 using XLabs.Forms.Controls;
 

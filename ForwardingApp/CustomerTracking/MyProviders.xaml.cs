@@ -8,6 +8,7 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -80,8 +81,10 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
-   
+
             await Navigation.PushAsync(new ContainerCategory(((AppMenu)e.Item).menuId,((AppMenu)e.Item).name));
+
+
         }
 
         protected async void refreshProviderList(object sender, EventArgs e)
@@ -90,7 +93,7 @@ namespace ASolute_Mobile.CustomerTracking
             provide_list.IsRefreshing = false;
 
         }
-
+    
         public async Task getProviderList()
         {
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderList());
@@ -132,7 +135,6 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async Task LoadProviderList()
         {
-
             Ultis.Settings.ListType = "provider_List";
             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("ProviderList"));
             provide_list.ItemsSource = Item;

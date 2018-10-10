@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSTracking" android:installLocation="auto" android:versionCode="20" android:versionName="20">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSTracking" android:installLocation="auto" android:versionCode="26" android:versionName="26">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,11 +11,22 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <permission android:name="asolute.Mobile.AILSTracking.permission.C2D_MESSAGE"
+            android:protectionLevel="signature" />
+    <uses-permission android:name="asolute.Mobile.AILSTracking.permission.C2D_MESSAGE" />
 	<application android:name="ASoulute Haulage" android:theme="@style/MyTheme" android:label="AILS Tracking" android:icon="@drawable/appIcon">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCJryTEIDMIlD0FrjU83OtJ54RndmRKXuM" />
+        
+        <receiver android:name="com.onesignal.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+             <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <category android:name="asolute.Mobile.AILSTracking" />
+            </intent-filter>
+         </receiver>
 	</application>
 	<receiver android:name=".BackgroundReceiver"></receiver>
 </manifest>

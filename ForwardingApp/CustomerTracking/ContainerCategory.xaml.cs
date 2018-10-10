@@ -29,10 +29,10 @@ namespace ASolute_Mobile.CustomerTracking
         public async void selectCategory(object sender, ItemTappedEventArgs e)
         {
             await Navigation.PushAsync(new ProviderDetails(providerCode,((AppMenu)e.Item).menuId, ((AppMenu)e.Item).name));
+            
         }
 
-      
-
+     
         protected void refreshCategoryList(object sender, EventArgs e)
         {
             getCategory();
@@ -90,9 +90,9 @@ namespace ASolute_Mobile.CustomerTracking
             category_list.Style = (Style)App.Current.Resources["recordListStyle"];
             category_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-            loading.IsEnabled = false;
-            loading.IsVisible = false;
-            loading.IsRunning = false;
+            activityIndicator.IsEnabled = false;
+            activityIndicator.IsVisible = false;
+            activityIndicator.IsRunning = false;
         }
     }
 }

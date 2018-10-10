@@ -58,16 +58,17 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-           
+
+            PageContent();
+            Action();
+
+            Ultis.Settings.MenuAction = "Job_List";
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            PageContent();
-            Action();
 
-            Ultis.Settings.MenuAction = "Job_List";
         }
       
         public static Label CreateLabel(string labelText)
@@ -179,16 +180,19 @@ namespace ASolute_Mobile
                     {
                         try
                         {
-                            string input = jobItem.ContainerNo.ToString();
+                            string input = jobItem.ContainerNo;
                             string prefix = input.Substring(0, 4);
                             string number = input.Substring(4, 7);
 
                             contPrefix.Text = prefix;
                             contNumber.Text = number;
+
+                            contPrefix.IsEnabled = false;
+                            contNumber.IsEnabled = false;
                         }
                         catch (Exception exception)
                         {
-                            //await DisplayAlert("Sub string Error", exception.Message, "OK");
+                            await DisplayAlert("Sub string Error", exception.Message, "OK");
                         }
                     }
                 }
@@ -541,6 +545,8 @@ namespace ASolute_Mobile
                     contNumber.Unfocus();
                 }
             };
+
+           
 
             check1 = new CheckBox
             {

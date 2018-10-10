@@ -5,7 +5,22 @@
     
         <StackLayout>
             <Image Source="nodatafound.png"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>    
-            <ListView x:Name="jobList"  ItemTapped="selectJob" IsPullToRefreshEnabled="True" Refreshing="jobListRefresh" SeparatorColor="White" ></ListView>
+            <ListView x:Name="jobList"  ItemTapped="selectJob" IsPullToRefreshEnabled="True" Refreshing="jobListRefresh" SeparatorColor="White" >
+               <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell >
+                            
+                     <Frame HasShadow="true" Margin="5">
+                       <StackLayout>
+                                <Label Text="{Binding Summary}"  />
+                        </StackLayout>
+                        
+                    </Frame>
+                         
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+         </ListView>
             <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="70" HorizontalOptions="End"  x:Name="scan_icon">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="BarCodeScan"/>

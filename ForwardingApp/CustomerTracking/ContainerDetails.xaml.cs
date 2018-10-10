@@ -5,6 +5,7 @@ using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
@@ -14,14 +15,19 @@ namespace ASolute_Mobile.CustomerTracking
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContainerDetails : ContentPage
     {
-        string provider_code, provider_container, latitude, longtitude;
-        
+        string provider_code, provider_container, latitude, longtitude, rfcValue, rfcHours;
+        public ProviderDetails previousPage;
 
         public ContainerDetails(string code, string container)
         {
             InitializeComponent();
             provider_code = code;
             provider_container = container;
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "OnCategoryCreated", (sender)  => {
+                GetContainerDetail();
+            });
+
         }
 
         protected async override void OnAppearing()
@@ -34,7 +40,9 @@ namespace ASolute_Mobile.CustomerTracking
             if(!(String.IsNullOrEmpty(latitude)) && !(String.IsNullOrEmpty(longtitude)))
             {
                 GoogleMap.IsVisible = true;
-
+                switchChange.IsVisible = true;
+                GoogleMap.IsShowingUser = false;
+            
                 double loc_latitude = Convert.ToDouble(latitude);
                 double loc_longtitude = Convert.ToDouble(longtitude);
 
@@ -43,7 +51,7 @@ namespace ASolute_Mobile.CustomerTracking
                 var pin = new Pin
                 {
                     Position = new Position(loc_latitude, loc_longtitude),
-                    Label = "Container Location"
+                    Label = ""
                 };
 
                 GoogleMap.Pins.Add(pin);
@@ -51,8 +59,29 @@ namespace ASolute_Mobile.CustomerTracking
             else
             {
                 GoogleMap.IsVisible = false;
+                switchChange.IsVisible = false;
             }
         
+        }
+
+        public async void updateRFC(object sender, EventArgs e)
+        {
+            PopUp up = new PopUp(provider_code, rfcValue, rfcHours, provider_container);
+            
+            await PopupNavigation.Instance.PushAsync(up);
+           
+        }
+
+        public void switchMap(object sender, ToggledEventArgs e)
+        {
+            if(changeMap.IsToggled)
+            {
+                GoogleMap.MapType = MapType.Satellite;
+            }
+            else
+            {
+                GoogleMap.MapType = MapType.Street;
+            }
         }
 
         public async Task GetContainerDetail()
@@ -62,11 +91,14 @@ namespace ASolute_Mobile.CustomerTracking
 
             if(container_response.IsGood)
             {
+                rfc.IsVisible = false;
                 var containers = JObject.Parse(content)["Result"].ToObject<clsDataRow>();
+                containerDetails.Children.Clear();
 
                 foreach (clsCaptionValue details in containers.Details)
                 {
                     StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
+
 
                     if (details.Display == true)
                     {
@@ -76,7 +108,6 @@ namespace ASolute_Mobile.CustomerTracking
                             HorizontalOptions = LayoutOptions.FillAndExpand,
                             Text = details.Caption + ":  ",
                             WidthRequest = 120
-
                          };
                         Label valueLabel = new Label()
                         {
@@ -89,7 +120,6 @@ namespace ASolute_Mobile.CustomerTracking
                         containerDetails.Children.Add(stackLayout);
                     }
 
-                   
                     if(details.Caption.Equals("Container No."))
                     {
                         Title = details.Value;
@@ -108,7 +138,16 @@ namespace ASolute_Mobile.CustomerTracking
                         longtitude = details.Value;
                     }
 
-                   
+                    if(details.Caption.Equals("RFC"))
+                    {
+                        rfcValue = details.Value;
+                        rfc.IsVisible = true;
+                    }
+                    else if (details.Caption.Equals("RFC Hour"))
+                    {
+                        rfcHours = details.Value;
+                        rfc.IsVisible = true;
+                    }
                 }
 
                 ShowOnMap();

@@ -23,7 +23,7 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-            Master = masterPage;
+           Master = masterPage;
             Detail = new NavigationPage(new MyProviders());
 
             masterPage.ListView.ItemSelected += OnItemSelected;

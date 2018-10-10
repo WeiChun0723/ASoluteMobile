@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             x:Class="ASolute_Mobile.CustomerTracking.PopUp"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             BackgroundColor="Transparent">
+    
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+    
+      <StackLayout 
+        VerticalOptions="Center" 
+        HorizontalOptions="Center" 
+        Padding="20, 20, 20, 20">
+        
+        <Frame CornerRadius="10" Padding="0" BackgroundColor="#87ceeb">
+            
+            <StackLayout Padding="15,15,15,15">
+            <Grid >
+                 <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+              
+                    
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+               
+                <Label Text="Require Date" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" />
+                <DatePicker x:Name="datePicker"  HorizontalOptions="FillAndExpand" Scale="1.0" Grid.Row="0" Grid.Column="1" BackgroundColor="#FFFFE0"/>
+                
+                <Label Text="Require Time" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center"/>
+                <controls:CustomPicker x:Name="timePicker" Grid.Row="1" Grid.Column="1" Image="ic_arrow_drop_down" HorizontalOptions="Fill" BackgroundColor="#FFFFE0"/>
+  
+            </Grid>
+                
+                <controls:CustomEntry Placeholder="Remarks" x:Name="remarks" HeightRequest="100" LineColor="White" HorizontalOptions="FillAndExpand"/>
+                
+                <Button Text="Confirm" HorizontalOptions="End" Clicked="updateRFC"/>
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</pages:PopupPage>

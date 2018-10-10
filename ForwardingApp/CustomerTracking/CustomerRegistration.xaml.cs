@@ -114,30 +114,39 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 if(term.Checked)
                 {
-                    clsRegister register = new clsRegister();
-
-                    register.DeviceId = emailAddressEntry.Text;
-                    register.UserName = userNameEntry.Text;
-                    register.Email = emailAddressEntry.Text;
-                    register.MobileNo = phoneEntry.Text;
-                    register.RegNo = businessRegEntry.Text;
-                    register.CompanyName = companyEntry.Text;
-                    //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
-                    register.FirebaseId = firebaseID;
-                   
-
-                    var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
-                    clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if(register_response.IsGood)
+                    if(!(String.IsNullOrEmpty(emailAddressEntry.Text)) && !(String.IsNullOrEmpty(userNameEntry.Text)) && !(String.IsNullOrEmpty(phoneEntry.Text))
+                      && !(String.IsNullOrEmpty(businessRegEntry.Text)) && !(String.IsNullOrEmpty(companyEntry.Text)))
                     {
-                        Ultis.Settings.DeviceUniqueID = emailAddressEntry.Text;
-                        Application.Current.MainPage = new AccountActivation();
+                        clsRegister register = new clsRegister();
+
+                        register.DeviceId = emailAddressEntry.Text;
+                        register.UserName = userNameEntry.Text;
+                        register.Email = emailAddressEntry.Text;
+                        register.MobileNo = phoneEntry.Text;
+                        register.RegNo = businessRegEntry.Text;
+                        register.CompanyName = companyEntry.Text;
+                        //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+                        register.FirebaseId = firebaseID;
+
+
+                        var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
+                        clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (register_response.IsGood)
+                        {
+                            Ultis.Settings.DeviceUniqueID = emailAddressEntry.Text;
+                            Application.Current.MainPage = new AccountActivation();
+                        }
+                        else
+                        {
+                            await DisplayAlert("Json Error", register_response.Message, "OK");
+                        }
                     }
                     else
                     {
-                        await DisplayAlert("Json Error", register_response.Message, "OK");
+                        await DisplayAlert("Error", "Please enter all the field .", "OK");
                     }
+                   
                 }
                 else
                 {
