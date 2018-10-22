@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.TransportScreen.JobDetails"
+             xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             BackgroundColor="#e8e5e5">
+   
+      <ScrollView>
+        <StackLayout Padding="10,10,10,10">
+            <StackLayout x:Name="jobDetails" Padding="15,15,0,0" ></StackLayout>
+
+            <StackLayout Orientation="Horizontal"  Padding="15,0,0,0">
+               
+                <Image Source="map.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="map_icon" IsVisible="False">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="navigateToDest"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="phone.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="phone_icon" IsVisible="False">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="callTelNo"/>
+                    </Image.GestureRecognizers>
+                </Image>
+             
+            </StackLayout>
+
+            <StackLayout Spacing="0" Padding="15,0,0,0">
+                <Label Text="Remark" FontAttributes="Bold" />
+                <controls:CustomEntry x:Name="remarkTextEditor" HeightRequest="100" LineColor="White"/>
+            </StackLayout>
+
+            <StackLayout x:Name="signatureStack" IsVisible="False" HeightRequest="150" Spacing="0" Padding="15,0,0,0">
+                <Label Text="Signature"  FontAttributes="Bold"/>
+                <forms:SignaturePadView x:Name="signature" CaptionText="" StrokeColor="Black" BackgroundColor="White"  StrokeWidth="3" WidthRequest="120" HeightRequest="240" PromptText="" SignatureLineColor="White"/>
+            </StackLayout>
+
+            <Grid RowSpacing="0" ColumnSpacing="0"  Padding="15,0,0,0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+
+                <Image Source="futile.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" x:Name="futile_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="futileTrip"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="camera.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" x:Name="camera_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="takeImage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="updateJob"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+
+          
+            <Grid  x:Name="imageGrid" ></Grid>
+           
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

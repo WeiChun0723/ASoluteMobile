@@ -44,7 +44,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Haulage V24" ;
+                AppLabel.Text = "AILS WareHouse" ;
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
@@ -116,7 +116,7 @@ namespace ASolute_Mobile
 
         protected override void OnAppearing()
         {
-            organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
+            //organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
         }
         
 

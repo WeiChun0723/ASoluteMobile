@@ -107,146 +107,180 @@ namespace ASolute_Mobile
 
         public async void ConfirmRefuel(object sender, EventArgs e)
         {            
-            int fuelLiter = Convert.ToInt16(liter.Text);
-            if (fuelLiter <= 500)
+            try
             {
-                double cost = Convert.ToDouble(costPerLiter.Text);
-                if (cost != 0.00)
-               {
-                    int odo = Convert.ToInt32(odometer.Text);
-                    if(!(fuelCostNew.PreviousOdometer >= odo ))
+                double fuelLiter = Convert.ToDouble(liter.Text);
+                if (fuelLiter <= 500.00)
+                {
+                    double cost = Convert.ToDouble(costPerLiter.Text);
+                    if (cost != 0.00)
                     {
-                        //combine the date and time together               
-                        string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
-
-                        RefuelData refuel_Data = new RefuelData();
-                        if (stationPicker.SelectedIndex != -1 && paymentPicker.SelectedIndex != -1 && liter.Text != null && fuelCard.Text!= null)
+                        int odo = Convert.ToInt32(odometer.Text);
+                        if (!(fuelCostNew.PreviousOdometer >= odo))
                         {
-                            try
-                            {
-                                refuel_Data.ID = newFuelID;
-                                refuel_Data.Done = 0;
-                                refuel_Data.TruckId = Ultis.Settings.SessionUserItem.TruckId;
-                                refuel_Data.Odometer = Convert.ToInt32(odometer.Text);
-                                refuel_Data.DriverId = Ultis.Settings.SessionUserItem.DriverId;
-                                refuel_Data.VendorCode = fuelCostNew.VendorList[station_choice].Key;
-                                refuel_Data.PaymentMode = paymentPicker.SelectedIndex;
-                                refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
-                                refuel_Data.Quantity = Convert.ToDouble(liter.Text);
+                            //combine the date and time together               
+                            string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
 
-                                if (mandatory == "voucher")
+                            RefuelData refuel_Data = new RefuelData();
+                            if (stationPicker.SelectedIndex != -1 && paymentPicker.SelectedIndex != -1 && liter.Text != null && fuelCard.Text != null)
+                            {
+                                try
                                 {
-                                    if (!(String.IsNullOrEmpty(fuelCard.Text)))
+                                    refuel_Data.ID = newFuelID;
+                                    refuel_Data.Done = 0;
+                                    refuel_Data.TruckId = Ultis.Settings.SessionUserItem.TruckId;
+                                    refuel_Data.Odometer = Convert.ToInt32(odometer.Text);
+                                    refuel_Data.DriverId = Ultis.Settings.SessionUserItem.DriverId;
+                                    refuel_Data.VendorCode = fuelCostNew.VendorList[station_choice].Key;
+                                    refuel_Data.PaymentMode = paymentPicker.SelectedIndex;
+                                    refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
+                                    refuel_Data.Quantity = Convert.ToDouble(liter.Text);
+
+                                    /*if (mandatory == "voucher")
+                                    {
+                                        if (!(String.IsNullOrEmpty(fuelCard.Text)))
+                                        {
+                                            refuel_Data.FuelCardNo = fuelCard.Text.ToString();
+                                        }
+                                        else
+                                        {
+                                            refuel_Data.FuelCardNo = "";
+                                        }
+
+                                        if(!(String.IsNullOrEmpty(voucher.Text)))
+                                        {
+                                            refuel_Data.VoucherNo = voucher.Text;
+                                        }
+                                        else
+                                        {
+                                            refuel_Data.VoucherNo = " ";
+                                        }
+                                    }
+                                    else if (mandatory == "fuel_card" || fuelCard.Text != null)
                                     {
                                         refuel_Data.FuelCardNo = fuelCard.Text.ToString();
                                     }
-                                    else
+
+                                    if (mandatory == "fuel_card")
+                                    {
+                                        if (!(String.IsNullOrEmpty(voucher.Text)))
+                                        {
+                                            refuel_Data.VoucherNo = voucher.Text.ToString();
+                                        }
+                                        else
+                                        {
+                                            refuel_Data.VoucherNo = "";
+                                        }
+                                    }
+                                    else if (mandatory == "voucher" && voucher.Text != null)
+                                    {
+                                        refuel_Data.VoucherNo = voucher.Text;
+                                    }*/
+
+                                    if (String.IsNullOrEmpty(fuelCard.Text))
                                     {
                                         refuel_Data.FuelCardNo = "";
                                     }
-
-                                    if(!(String.IsNullOrEmpty(voucher.Text)))
-                                    {
-                                        refuel_Data.VoucherNo = voucher.Text;
-                                    }
                                     else
                                     {
-                                        refuel_Data.VoucherNo = " ";
+                                        refuel_Data.FuelCardNo = fuelCard.Text;
                                     }
-                                }
-                                else if (mandatory == "fuel_card" || fuelCard.Text != null)
-                                {
-                                    refuel_Data.FuelCardNo = fuelCard.Text.ToString();
-                                }
 
-                                if (mandatory == "fuel_card")
-                                {
-                                    if (!(String.IsNullOrEmpty(voucher.Text)))
-                                    {
-                                        refuel_Data.VoucherNo = voucher.Text.ToString();
-                                    }
-                                    else
+                                    if (String.IsNullOrEmpty(voucher.Text))
                                     {
                                         refuel_Data.VoucherNo = "";
                                     }
-                                }
-                                else if (mandatory == "voucher" && voucher.Text != null)
-                                {
-                                    refuel_Data.VoucherNo = voucher.Text;
-                                }
+                                    else
+                                    {
+                                        refuel_Data.VoucherNo = voucher.Text;
+                                    }
 
-                                refuel_Data.OtherRef = other.Text;                                                               
-                                refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
-                                App.Database.SaveRecordAsync(refuel_Data);
-                                await BackgroundTask.UploadLatestRecord(this);
-                                /*confirm_icon.IsEnabled = false;
-                                confirm_icon.Source = "confirmDisable.png";
+                                    if (String.IsNullOrEmpty(other.Text))
+                                    {
+                                        refuel_Data.OtherRef = "";
+                                    }
+                                    else
+                                    {
+                                        refuel_Data.OtherRef = other.Text;
+                                    }
 
-                                /*string status = "";
-                                if (Ultis.Settings.Language.Equals("English"))
-                                {
-                                    status = "New fuel record added.";
-                                }
-                                else
-                                {
-                                    status = "Record baru ditambah.";
-                                }
-                                await DisplayAlert("", status, "OK");*/
+                                    refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
+                                    App.Database.SaveRecordAsync(refuel_Data);
+                                    await BackgroundTask.UploadLatestRecord(this);
+                                    /*confirm_icon.IsEnabled = false;
+                                    confirm_icon.Source = "confirmDisable.png";
 
-                               
-                            }
-                            catch (Exception exception)
-                            {
-                                await DisplayAlert("Error", "Please key in all mandatory field.", "OK");
-                            }
-                        }
-                        else
-                        {
-                            string check = "";
-                            if (Ultis.Settings.Language.Equals("English"))
-                            {
-                                check = "Please fill in all the field.";
+                                    /*string status = "";
+                                    if (Ultis.Settings.Language.Equals("English"))
+                                    {
+                                        status = "New fuel record added.";
+                                    }
+                                    else
+                                    {
+                                        status = "Record baru ditambah.";
+                                    }
+                                    await DisplayAlert("", status, "OK");*/
+
+
+                                }
+                                catch (Exception exception)
+                                {
+                                    await DisplayAlert("Error", "Please key in all mandatory field.", "OK");
+                                }
                             }
                             else
                             {
-                                check = "Sila isi semua data yang diperlukan.";
+                                string check = "";
+                                if (Ultis.Settings.Language.Equals("English"))
+                                {
+                                    check = "Please fill in all the field.";
+                                }
+                                else
+                                {
+                                    check = "Sila isi semua data yang diperlukan.";
+                                }
+                                await DisplayAlert("Error", check, "OK");
                             }
-                            await DisplayAlert("Error", check, "OK");
-                        }
-                    }
-                    else
-                    {
-
-                        string check = "";
-                        if (Ultis.Settings.Language.Equals("English"))
-                        {
-                            check = "Odometer entered cannot less than default odometer value ";
                         }
                         else
                         {
-                            check = "Odometer tidak boleh kurang daripda odometer asal";
+
+                            string check = "";
+                            if (Ultis.Settings.Language.Equals("English"))
+                            {
+                                check = "Odometer entered cannot less than default odometer value ";
+                            }
+                            else
+                            {
+                                check = "Odometer tidak boleh kurang daripda odometer asal";
+                            }
+                            await DisplayAlert("", check, "OK");
                         }
-                        await DisplayAlert("", check, "OK");
-                    }                   
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Cost Per Liter cannot be 0.00", "OK");
-                }                  
-            }
-            else
-            {
-                    string check = "";
-                    if (Ultis.Settings.Language.Equals("English"))
-                    {
-                    check = "Fuel liter should not exceed 500 liter";
                     }
                     else
                     {
-                    check = "Sila isi semua data yang diperlukan.";
+                        await DisplayAlert("Error", "Cost Per Liter cannot be 0.00", "OK");
+                    }
+                }
+                else
+                {
+                    string check = "";
+                    if (Ultis.Settings.Language.Equals("English"))
+                    {
+                        check = "Fuel liter should not exceed 500 liter";
+                    }
+                    else
+                    {
+                        check = "Sila isi semua data yang diperlukan.";
                     }
                     await DisplayAlert("", check, "OK");
+                }
             }
+            catch
+            {
+                await DisplayAlert("Error", "Odometer cannot contain decimal", "OK");
+            }
+
             
         }    
 

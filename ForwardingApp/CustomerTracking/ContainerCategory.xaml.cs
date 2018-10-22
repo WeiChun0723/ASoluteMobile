@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.SfChart.XForms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -17,6 +19,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         string providerCode;
         List<clsCaptionValue> categories;
+        ObservableCollection<TrackingCategory> pieData = new ObservableCollection<TrackingCategory>();
 
         public ContainerCategory(string code, string provider)
         {
@@ -47,7 +50,6 @@ namespace ASolute_Mobile.CustomerTracking
 
             if (provider_response.IsGood)
             {
-            
                 categories = JObject.Parse(content)["Result"].ToObject<List<clsCaptionValue>>();
 
                 App.Database.deleteMainMenu();
@@ -71,9 +73,27 @@ namespace ASolute_Mobile.CustomerTracking
                     summaryItem.BackColor = "";
                     App.Database.SaveSummarysAsync(summaryItem);
 
+                   /* string quantity = new String(category.Value.Where(Char.IsDigit).ToArray());
+                    string[] name = category.Value.Split('(');
+
+                    TrackingCategory trackingCategory = new TrackingCategory();
+                    trackingCategory.CategoryCode = category.Caption;
+                    trackingCategory.Name = name[0];
+                    trackingCategory.Amount = Convert.ToInt32(quantity);
+
+                    pieData.Add(trackingCategory);*/
                 }
 
-                loadCateogoryList();
+               /* bar.ItemsSource = pieData;
+                bar.XBindingPath = "Name";
+                bar.YBindingPath = "Amount";
+
+
+                activityIndicator.IsEnabled = false;
+                activityIndicator.IsVisible = false;
+                activityIndicator.IsRunning = false;*/
+
+                 loadCateogoryList();
             }
             else
             {
@@ -81,18 +101,31 @@ namespace ASolute_Mobile.CustomerTracking
             }
         }
 
-        public void loadCateogoryList()
-        {
-            Ultis.Settings.ListType = "category_List";
-            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
-            category_list.ItemsSource = Item;
-            category_list.HasUnevenRows = true;
-            category_list.Style = (Style)App.Current.Resources["recordListStyle"];
-            category_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-            activityIndicator.IsEnabled = false;
-            activityIndicator.IsVisible = false;
-            activityIndicator.IsRunning = false;
+        public async void select_Category(object sender, ChartSelectionChangingEventArgs e)
+        {
+            e.Cancel = true;
+
+            if (e.SelectedDataPointIndex > -1)
+            {
+                int indicator = e.SelectedDataPointIndex;
+                await Navigation.PushAsync(new ProviderDetails(providerCode, pieData[indicator].CategoryCode, pieData[indicator].Name));
+            }
+
+
         }
+         public void loadCateogoryList()
+         {
+             Ultis.Settings.ListType = "category_List";
+             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
+             category_list.ItemsSource = Item;
+             category_list.HasUnevenRows = true;
+             category_list.Style = (Style)App.Current.Resources["recordListStyle"];
+             category_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+
+             activityIndicator.IsEnabled = false;
+             activityIndicator.IsVisible = false;
+             activityIndicator.IsRunning = false;
+         }
     }
 }

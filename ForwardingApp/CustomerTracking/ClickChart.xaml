@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CustomerTracking.ClickChart"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms">
+ 
+
+      <chart:SfChart SelectionChanging="testing">
+        
+        <chart:SfChart.PrimaryAxis>
+
+        <chart:CategoryAxis>
+            <chart:CategoryAxis.Title>
+                    
+                     <chart:ChartAxisTitle Text="Name"> </chart:ChartAxisTitle>
+                </chart:CategoryAxis.Title>
+        </chart:CategoryAxis>
+
+    </chart:SfChart.PrimaryAxis>
+
+    <chart:SfChart.SecondaryAxis>
+
+        <chart:NumericalAxis>
+            <chart:NumericalAxis.Title>
+           
+                 <chart:ChartAxisTitle Text="Height (in cm)"></chart:ChartAxisTitle>
+           
+          </chart:NumericalAxis.Title>      
+        </chart:NumericalAxis>
+
+    </chart:SfChart.SecondaryAxis>
+        
+        
+        <chart:BarSeries x:Name="bar" EnableAnimation="true" EnableDataPointSelection="true" DataMarkerPosition="Top" Width="0.5">
+            <chart:BarSeries.DataMarker>
+                 <chart:ChartDataMarker LabelContent="Percentage">
+
+                    </chart:ChartDataMarker>
+            </chart:BarSeries.DataMarker>
+        </chart:BarSeries>
+        
+        <!--<chart:SfChart.Legend>
+            <chart:ChartLegend>
+                <chart:ChartLegend.LabelStyle>
+                    <chart:ChartLegendLabelStyle Font="15"/>
+                </chart:ChartLegend.LabelStyle>
+            </chart:ChartLegend>
+            
+        </chart:SfChart.Legend>
+        
+        <chart:SfChart.Title>
+
+        <chart:ChartTitle Text="Efficiency of oil-fired power production" TextColor="Blue"/>
+
+        </chart:SfChart.Title>  
+        
+            <chart:SfChart.Series>
+        
+        
+        
+            <chart:PieSeries x:Name="pie"  EnableAnimation="true" EnableDataPointSelection="true" EnableTooltip="true" IsVisibleOnLegend="true" ExplodeOnTouch="true">
+                <chart:PieSeries.DataMarker>
+                    <chart:ChartDataMarker LabelContent="Percentage">
+
+                    </chart:ChartDataMarker>
+              
+                </chart:PieSeries.DataMarker>
+                
+            </chart:PieSeries>
+            </chart:SfChart.Series>-->
+        </chart:SfChart>
+        
+</ContentPage>

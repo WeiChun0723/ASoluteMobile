@@ -8,15 +8,14 @@
 
 <!--<MasterDetailPage.Master>
     <local:MasterPage x:Name="masterPage"/>
-  </MasterDetailPage.Master>-->
+  </MasterDetailPage.Master>
 
-   <!--<MasterDetailPage.Detail>
+   <MasterDetailPage.Detail>
         <NavigationPage BarBackgroundColor="#9A2116" x:Name="navigation">
             <x:Arguments>
                 <local:MainMenu />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>-->
-    
     
     </MasterDetailPage>

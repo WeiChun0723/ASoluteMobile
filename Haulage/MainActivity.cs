@@ -14,10 +14,9 @@ using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using Plugin.CurrentActivity;
 
-
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Tracking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Business", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 

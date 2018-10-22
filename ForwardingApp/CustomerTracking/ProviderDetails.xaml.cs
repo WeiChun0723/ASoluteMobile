@@ -52,7 +52,7 @@ namespace ASolute_Mobile.CustomerTracking
         protected async void refreshContainerList(object sender, EventArgs e)
         {
             App.Database.deleteMainMenu();
-            App.Database.deleteMenuItems("Container");
+
        
             await GetContainer();
 

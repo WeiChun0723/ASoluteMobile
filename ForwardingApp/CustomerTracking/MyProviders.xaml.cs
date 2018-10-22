@@ -120,7 +120,7 @@ namespace ASolute_Mobile.CustomerTracking
                     ProviderInfo available_provider = new ProviderInfo();
                     available_provider.Code = p.Code;
                     available_provider.Name = p.Name;
-                    available_provider.Url = p.Url;
+                    
 
                     App.Database.SaveProvider(available_provider);
                 }

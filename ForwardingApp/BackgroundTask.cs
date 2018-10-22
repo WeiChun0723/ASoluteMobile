@@ -203,7 +203,7 @@ namespace ASolute_Mobile
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
                                     //CommonFunction.AppActivity("Add refuel record", "Failed", status.Message);
-                                    await page.DisplayAlert("Error", "Failed" + status.Message, "OK");
+                                    await page.DisplayAlert("Error", "Failed " + status.Message, "OK");
                                 }
                                 else
                                 {
@@ -217,7 +217,7 @@ namespace ASolute_Mobile
                     {
                         if (Ultis.Settings.Language.Equals("English"))
                         {
-                            CommonFunction.AppActivity("Sync refuel record", "Failed", exception.Message);
+                            CommonFunction.AppActivity("Sync refuel record", "Failed ", exception.Message);
                         }
                         else
                         {
@@ -374,9 +374,9 @@ namespace ASolute_Mobile
                     {
                         if ( Ultis.Settings.App == "Fleet")
                         {
-                           await GetWebService(ControllerUtil.getDownloadTruckListURL(), "JobList", contentPage, "JobItem");
-                           await GetWebService(ControllerUtil.getDownloadPendingLoadURL(), "JobList", contentPage, "PendingLoad");
-                           await GetWebService(ControllerUtil.getDownloadPendingRecURL(), "JobList", contentPage, "PendingReceiving");                           
+                           //await GetWebService(ControllerUtil.getDownloadTruckListURL(), "JobList", contentPage, "JobItem");
+                           //await GetWebService(ControllerUtil.getDownloadPendingLoadURL(), "JobList", contentPage, "PendingLoad");
+                           //await GetWebService(ControllerUtil.getDownloadPendingRecURL(), "JobList", contentPage, "PendingReceiving");                           
                         }
                         else if(Ultis.Settings.App == "Haulage")
                         {
@@ -419,7 +419,7 @@ namespace ASolute_Mobile
             {
                 contentPage.IsBusy = true;
             }
-            Ultis.Settings.SessionUserItem.UserId = "";
+            //Ultis.Settings.SessionUserItem.UserId = "";
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";
             
@@ -597,7 +597,7 @@ namespace ASolute_Mobile
                         }                       
                         break;
                     case "HaulageJobList":
-                        App.Database.deleteHaulage("HaulageJob");
+                        App.Database.deleteHaulage();
                         App.Database.deleteHaulageSummary("HaulageJob");
                         App.Database.deleteHaulageDetail();
 
@@ -741,7 +741,7 @@ namespace ASolute_Mobile
 
                 var image_client = new HttpClient();
                 image_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var image_uri = ControllerUtil.getUploadImageURL(imageEventID);
+                var image_uri = ControllerUtil.UploadImageURL(imageEventID);
                 var imagecontent = JsonConvert.SerializeObject(image);
                 var image_httpContent = new StringContent(imagecontent, Encoding.UTF8, "application/json");
 

@@ -17,15 +17,17 @@
 
 
             <Label x:Name="ownerName"
-                 FontSize="10"
+                 FontSize="12"
                  VerticalOptions="CenterAndExpand"
                  TextColor="White"
-                 HorizontalOptions="Center"/>
+                 HorizontalOptions="Center"
+                   FontAttributes="Bold"/>
             <Label x:Name="appVersion"
-                 FontSize="11"
+                 FontSize="12"
                  VerticalOptions="CenterAndExpand"
                  TextColor="White"
-                 HorizontalOptions="Center"/>
+                 HorizontalOptions="Center"
+                   FontAttributes="Bold"/>
         </StackLayout>
 
         <ListView x:Name="listView"
@@ -51,7 +53,8 @@
                   <Label Text="{Binding Title}"
                          FontSize="Small"
                          VerticalOptions="Center"
-                         TextColor="Black"/>
+                         TextColor="Black"
+                         FontAttributes="Bold"/>
                 </StackLayout>
               </ViewCell>
             </DataTemplate>

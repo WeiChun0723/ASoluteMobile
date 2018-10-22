@@ -10,6 +10,7 @@ using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.DeviceInfo;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,11 +19,10 @@ namespace ASolute_Mobile.CustomerTracking
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppNavigation: ContentPage
     {
-        //static string firebaseID = "qwert-qwer45-asfafaf";
         readonly Image splashImage;
         readonly CustomEntry entry;
         readonly CustomButton submit;
-        string firebaseID = "";
+        string firebaseID = "business";
         ActivityIndicator loading;
 
         public AppNavigation()
@@ -104,66 +104,95 @@ namespace ASolute_Mobile.CustomerTracking
             scroll.Content = layout;
             this.BackgroundColor = Color.FromHex("#ffffff");
             this.Content = scroll;
-        }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
 
-            if(Ultis.Settings.DeviceUniqueID.Equals(""))
+            string test = CrossDeviceInfo.Current.AppVersion;
+
+            if (Ultis.Settings.DeviceUniqueID.Equals("testing"))
             {
-                entry.IsVisible = true;
-                submit.IsVisible = true;
+                Ultis.Settings.DeviceUniqueID = Guid.NewGuid().ToString("N");
             }
-            else
-            {
-                WebService(Ultis.Settings.DeviceUniqueID);
-            }
+
+            WebService(Ultis.Settings.DeviceUniqueID);
 
 
             submit.Clicked += async (sender, e) =>
             {
                 try
                 {
+                    if (!(String.IsNullOrEmpty(entry.Text)))
+                    {
+                        Ultis.Settings.Email = entry.Text;
+                    }
+
+
                     loading.IsRunning = true;
                     loading.IsVisible = true;
                     loading.IsEnabled = true;
 
-                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
-                    clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if (verify_response.IsGood)
+                    clsRegister register = new clsRegister
                     {
-                        WebService(entry.Text);
+                        DeviceId = Ultis.Settings.DeviceUniqueID,
+                        UserName = "",
+                        Email = entry.Text,
+                        MobileNo = "",
+                        RegNo = "",
+                        CompanyName = "",
+                        FirebaseId = firebaseID,
+                        DeviceIdiom = CrossDeviceInfo.Current.Idiom.ToString(),
+                        DeviceMfg = CrossDeviceInfo.Current.Manufacturer,
+                        DeviceModel = CrossDeviceInfo.Current.Model,
+                        OSPlatform = CrossDeviceInfo.Current.Platform.ToString(),
+                        OSVer = CrossDeviceInfo.Current.VersionNumber.ToString(),
+                        AppVer = CrossDeviceInfo.Current.AppVersion,
+                        AppName = clsRegister.AppNameConst.Business
+                    };
+
+                    var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
+                    clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    /*var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
+                    clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);*/
+
+                    if (register_response.IsGood)
+                    {
+                        loading.IsRunning = false;
+                        loading.IsVisible = false;
+                        loading.IsEnabled = false;
+
+                        //await Navigation.PushAsync(new CustomerRegistration(content));
+                        Application.Current.MainPage = new AccountActivation();
                     }
                     else
                     {
-                        await DisplayAlert("JsonError", verify_response.Message, "OK");
+                        await DisplayAlert("JsonError", register_response.Message, "OK");
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     await DisplayAlert("Error", ex.Message, "OK");
                 }
-        
+
             };
-
-           
-
         }
 
         async void WebService(string id)
         {
             try
             {
-                OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+                if (Ultis.Settings.FireID.Equals("firebase"))
+                {
+                    OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
+                    Ultis.Settings.FireID = firebaseID;
+                }
+
 
                 var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(id, firebaseID));
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (login_response.IsGood)
                 {
-
+            
                     var result = JObject.Parse(content)["Result"].ToObject<clsLogin>();
 
                     Ultis.Settings.SessionSettingKey = result.SessionId;
@@ -181,11 +210,10 @@ namespace ASolute_Mobile.CustomerTracking
                         switch (action)
                         {
                             case "Register":
-                                if (!(String.IsNullOrEmpty(entry.Text)))
-                                {
-                                    Ultis.Settings.Email = entry.Text;
-                                }
-                                Application.Current.MainPage = new CustomerRegistration();
+
+                                entry.IsVisible = true;
+                                submit.IsVisible = true;
+
                                 break;
 
                             case "Activate":
@@ -193,10 +221,11 @@ namespace ASolute_Mobile.CustomerTracking
                                 break;
 
                             case "Home":
-                                if (!(String.IsNullOrEmpty(entry.Text)))
-                                {
-                                    Ultis.Settings.DeviceUniqueID = entry.Text;
-                                }
+
+                                Application.Current.MainPage = new MainPage();
+                                break;
+                            case "HaulageVolume":
+                                //Application.Current.MainPage = new CustomNavigationPage(new LoadingScreen());
                                 Application.Current.MainPage = new MainPage();
                                 break;
                         }

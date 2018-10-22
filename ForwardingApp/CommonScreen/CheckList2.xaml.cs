@@ -149,7 +149,7 @@ namespace ASolute_Mobile
                 {
                     var imageClient = new HttpClient();
                     imageClient.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var imageUri = ControllerUtil.getUploadImageURL(linkId);                   
+                    var imageUri = ControllerUtil.UploadImageURL(linkId);                   
                     var content = JsonConvert.SerializeObject(capturedImage);
                     var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
 

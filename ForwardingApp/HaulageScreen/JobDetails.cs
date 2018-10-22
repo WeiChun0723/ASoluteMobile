@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
 
@@ -62,6 +63,7 @@ namespace ASolute_Mobile
             PageContent();
             Action();
 
+           
             Ultis.Settings.MenuAction = "Job_List";
         }
 
@@ -198,10 +200,7 @@ namespace ASolute_Mobile
                 }
                 else if (Ultis.Settings.ActionID.Equals("Point1_In") || Ultis.Settings.ActionID.Equals("Point2_In"))
                 {
-                    var answer = await DisplayAlert("", actionMessage, "Yes", "No");
 
-                    if (answer.Equals(true))
-                    {
                         try
                         {
                             clsHaulageModel haulage = new clsHaulageModel();
@@ -239,7 +238,7 @@ namespace ASolute_Mobile
                         {
                             await DisplayAlert("Error", exception.Message, "OK");
                         }
-                    }
+
 
                     signatureStackLayout.IsVisible = false;
                 }
@@ -1082,7 +1081,7 @@ namespace ASolute_Mobile
 
                 var image_client = new HttpClient();
                 image_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var image_uri = ControllerUtil.getUploadImageURL(jobItem.EventRecordId.ToString());
+                var image_uri = ControllerUtil.UploadImageURL(jobItem.EventRecordId.ToString());
                 var imagecontent = JsonConvert.SerializeObject(image);
                 var image_httpContent = new StringContent(imagecontent, Encoding.UTF8, "application/json");
 

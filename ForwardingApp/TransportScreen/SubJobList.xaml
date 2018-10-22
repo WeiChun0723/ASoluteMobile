@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.TransportScreen.SubJobList">
+         <StackLayout Padding="15,15,15,15">
+            <Image Source="nodatafound.png"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>    
+            <ListView x:Name="subJobList"  ItemTapped="selectSubJob" IsPullToRefreshEnabled="True" Refreshing="subJobListRefresh" SeparatorColor="White">
+               <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell >
+                            
+                     <Frame HasShadow="true" Margin="5">
+                       <StackLayout>
+                                <Label Text="{Binding Summary}"  FontAttributes="Bold"/>
+                        </StackLayout>
+                    </Frame>
+                         
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+         </ListView>
+          
+            <ActivityIndicator x:Name="loading" IsEnabled="True" IsVisible="true" HorizontalOptions="FillAndExpand" IsRunning="True"/>
+        </StackLayout>
+</ContentPage>

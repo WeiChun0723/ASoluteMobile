@@ -10,29 +10,13 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)LoginPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SettingPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MasterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Logout.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\ChangePasswordPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\JobDetail.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml">
@@ -67,6 +51,70 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ClickChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\PendingReceiving_Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\JobList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\JobDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\Futile_CargoReturn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\CargoItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\SubJobList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\DataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\CheckList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\CheckList2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\JobListTabbedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\ImageViewer.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelHistory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\SettingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\Logout.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -96,14 +144,6 @@
       <DependentUpon>CargoEntry.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CheckList.xaml.cs">
-      <DependentUpon>CheckList.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CheckList2.xaml.cs">
-      <DependentUpon>CheckList2.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomEntry.cs" />
@@ -118,12 +158,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobDetails.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JobListTabbedPage.xaml.cs">
-      <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomListViewCell.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CustomNavigationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Database.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\EquipmentInquiry.xaml.cs">
       <DependentUpon>EquipmentInquiry.xaml</DependentUpon>
@@ -149,39 +184,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Database_Model.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MasterPageItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCheck.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RefuelEntry.xaml.cs">
-      <DependentUpon>RefuelEntry.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)RefuelHistory.xaml.cs">
-      <DependentUpon>RefuelHistory.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utils\CloseApp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonFunction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Settings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SettingPage.xaml.cs">
-      <DependentUpon>SettingPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MasterPage.xaml.cs">
       <DependentUpon>MasterPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Logout.xaml.cs">
-      <DependentUpon>Logout.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)IFileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HelperUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IThumbnailHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImageViewer.xaml.cs">
-      <DependentUpon>ImageViewer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BackgroundTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UploadFileDTO.cs" />
@@ -189,9 +202,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\ChangePasswordPage.xaml.cs">
       <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobDetail.xaml.cs">
-      <DependentUpon>JobDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml.cs">
       <DependentUpon>CustomerRegistration.xaml</DependentUpon>
@@ -221,18 +231,77 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ClickChart.xaml.cs">
+      <DependentUpon>ClickChart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\Person.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TrackingCategory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\PendingReceiving_Loading.xaml.cs">
+      <DependentUpon>PendingReceiving_Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\JobList.xaml.cs">
+      <DependentUpon>JobList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\JobDetails.xaml.cs">
+      <DependentUpon>JobDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\Futile_CargoReturn.xaml.cs">
+      <DependentUpon>Futile_CargoReturn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\CargoItem.xaml.cs">
+      <DependentUpon>CargoItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\SubJobList.xaml.cs">
+      <DependentUpon>SubJobList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)InputValidation\MaxLengthValidation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\DataGrid.xaml.cs">
+      <DependentUpon>DataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\LoadingScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CheckList.xaml.cs">
+      <DependentUpon>CheckList.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CheckList2.xaml.cs">
+      <DependentUpon>CheckList2.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CustomNavigationPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IFileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\JobListTabbedPage.xaml.cs">
+      <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\ImageViewer.xaml.cs">
+      <DependentUpon>ImageViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IThumbnailHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelEntry.xaml.cs">
+      <DependentUpon>RefuelEntry.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelHistory.xaml.cs">
+      <DependentUpon>RefuelHistory.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\SettingPage.xaml.cs">
+      <DependentUpon>SettingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\Logout.xaml.cs">
+      <DependentUpon>Logout.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
     <Folder Include="$(MSBuildThisFileDirectory)FleetScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)TransportScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)CustomerTracking\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)RefuelHistory.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
+    <Folder Include="$(MSBuildThisFileDirectory)InputValidation\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CommonScreen\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainMenu.xaml">
@@ -259,12 +328,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)RefuelEntry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\CargoEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -278,24 +341,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)AppActivity.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CheckList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CheckList2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)JobListTabbedPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

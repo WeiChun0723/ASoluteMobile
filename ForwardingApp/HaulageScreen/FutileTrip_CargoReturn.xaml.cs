@@ -248,7 +248,7 @@ namespace ASolute_Mobile
 
                 var image_client = new HttpClient();
                 image_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var image_uri = ControllerUtil.getUploadImageURL(jobItem.EventRecordId.ToString());
+                var image_uri = ControllerUtil.UploadImageURL(jobItem.EventRecordId.ToString());
                 var imagecontent = JsonConvert.SerializeObject(image);
                 var image_httpContent = new StringContent(imagecontent, Encoding.UTF8, "application/json");
 

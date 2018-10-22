@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
+using Com.OneSignal;
 //using Com.OneSignal;
 using Newtonsoft.Json;
 using Xamarin.Forms;
@@ -12,18 +13,12 @@ namespace ASolute_Mobile.CustomerTracking
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AccountActivation : ContentPage
     {
-        static string firebaseID = "qwert-qwer45-asfafaf";
-
+        string firebaseID = "business"; 
         public AccountActivation()
         {
             InitializeComponent();
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            Application.Current.MainPage = new MainPage();
-            return true;
-        }
 
         public async void Submit_Clicked(object sender, EventArgs e)
         {
@@ -32,9 +27,18 @@ namespace ASolute_Mobile.CustomerTracking
 
             if (send_response.IsGood)
             {
-               // OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+                try
+                {
+                    OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
 
-                var login_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID, firebaseID));
+                    Ultis.Settings.FireID = firebaseID;
+                }
+                catch
+                {
+
+                }
+
+                var login_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID,  firebaseID ));
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(login_content);
 
                 if(login_response.IsGood)

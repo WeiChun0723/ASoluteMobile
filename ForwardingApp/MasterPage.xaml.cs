@@ -2,6 +2,7 @@
 using ASolute_Mobile.CustomerTracking;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
+using Plugin.DeviceInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,16 +19,21 @@ namespace ASolute_Mobile
 			InitializeComponent();
             if(File.Exists(Ultis.Settings.GetAppLogoFileLocation())){
                 LogoImage.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
-            }			
+            }
+            else
+            {
+                LogoImage.Source = "user_icon.png";
+
+            }
             ownerName.Text = Ultis.Settings.SessionUserId;
-            appVersion.Text = "App Version : 24";
+            appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppVersion; 
 
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
 
             var masterPageItems = new List<MasterPageItem>();
         
 
-           /* foreach (SummaryItems item in contextMenu)
+           /*foreach (SummaryItems item in contextMenu)
             {
                 string option;
                 if (item.Display)
@@ -70,14 +76,14 @@ namespace ASolute_Mobile
                 }
             }*/
 
-            MasterPageItem provider = new MasterPageItem();
+            /*MasterPageItem provider = new MasterPageItem();
             provider.Id = "AddProvider";
             provider.Title = "Add Service Providers";
             provider.IconSource = "language.png";
-            masterPageItems.Add(provider);
+            masterPageItems.Add(provider);*/
 
 
-          /*  MasterPageItem language = new MasterPageItem();
+          /* MasterPageItem language = new MasterPageItem();
             language.Id = "Language";
             if (Ultis.Settings.Language.Equals("English"))
             {

@@ -24,22 +24,28 @@ namespace ASolute_Mobile
 
         public App()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzMzNDFAMzEzNjJlMzMyZTMwWGIyZ3BLaHVqMzBINU5TbkFrc2YxVllKeWVTTEM5Q1hZV0p0U0tHS0RJTT0=");
+
             InitializeComponent();
 
-             /*if (sessionKey != "")
-             {
-                 MainPage = new MainPage();
-             }
-             else 
-             {
-                 MainPage = new CustomNavigationPage(new SplashScreen());
-               
-             }*/
+            /*if (sessionKey != "")
+            {
+                MainPage = new MainPage();
+
+            }
+            else 
+            {
+                MainPage = new CustomNavigationPage(new SplashScreen());
+                //MainPage = new CustomNavigationPage(new LoginPage());
+
+
+            }*/
+            //MainPage = new CustomNavigationPage(new CustomerTracking.DataGrid());
             Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
             MainPage = new CustomNavigationPage(new AppNavigation());
 
-            OneSignal.Current.StartInit("562c88f7-d485-4de0-b79f-a5154c40024d")
-                     .EndInit();
+             OneSignal.Current.StartInit("562c88f7-d485-4de0-b79f-a5154c40024d")
+                      .EndInit();
 
         }
 

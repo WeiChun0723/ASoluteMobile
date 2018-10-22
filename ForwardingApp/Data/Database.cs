@@ -28,12 +28,14 @@ namespace ASolute_Mobile.Data
             database.CreateTable<Log>();          
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
-            database.CreateTable<JobItems>();
+            database.CreateTable<TruckModel>();
             database.CreateTable<ActivityLog>();
             database.CreateTable<pickerValue>();
             database.CreateTable<FuelCostNew> ();
             database.CreateTable<AutoComplete>();
             database.CreateTable<ListObject>();
+            database.CreateTable<JobItems>();
+           
         }
 
 		public void DropDB()
@@ -49,12 +51,13 @@ namespace ASolute_Mobile.Data
             database.DropTable<Log>();           
             database.DropTable<AppImage>();               
             database.DropTable<JobNoList>();
-            database.DropTable<JobItems>();
+            database.DropTable<TruckModel>();
             database.DropTable<ActivityLog>();
             database.DropTable<pickerValue>();
             database.DropTable<FuelCostNew>();
             database.DropTable<ListObject>();
             database.DropTable<ProviderInfo>();
+            database.DropTable<JobItems>();
         }
 
         #region Customer Tracking table function
@@ -97,6 +100,54 @@ namespace ASolute_Mobile.Data
             database.Query<ProviderInfo>("DELETE FROM [ProviderInfo] WHERE [Code] = ?", id);
         }
         #endregion
+
+        #region Trucking
+        public int SaveTruckModelAsync(TruckModel record)
+        {
+            record.owner = Ultis.Settings.SessionUserId;
+            if (record.tableID != 0)
+            {
+
+                return database.Update(record);
+            }
+            else
+            {
+
+                return database.Insert(record);
+            }
+
+        }
+
+        public List<TruckModel> GetPendingRecord()
+        {
+            return database.Query<TruckModel>("SELECT * FROM [TruckModel]");
+        }
+
+        public void DeleteTruckModel()
+        {
+            database.Query<TruckModel>("DELETE FROM TruckModel");
+        }
+
+
+        public int SaveDetailsAsync(DetailItems item)
+        {
+            if (item.tableID != 0)
+            {
+
+                return database.Update(item);
+            }
+            else
+            {
+
+                return database.Insert(item);
+            }
+        }
+
+        public void DeleteTruckModeDetail()
+        {
+            database.Query<DetailItems>("DELETE FROM DetailItems");
+        }
+        #endregion 
 
         public int SaveUserItem(UserItem userItem)
         {
@@ -383,10 +434,10 @@ namespace ASolute_Mobile.Data
             database.Query<JobItems>("DELETE FROM JobItems WHERE [Id] = ?", id);
         }
 
-        /*public void deleteHaulage()
+        public void deleteHaulage()
         {
             database.Query<JobItems>("DELETE FROM JobItems ");
-        }*/
+        }
 
         public void deleteHaulage(string type)
         {
@@ -608,19 +659,7 @@ namespace ASolute_Mobile.Data
             }
         }
 
-        public int SaveDetailsAsync(DetailItems item)
-        {
-            if (item.tableID != 0)
-            {
-
-                return database.Update(item);
-            }
-            else
-            {
-
-                return database.Insert(item);
-            }
-        }
+       
 
         public int SaveJobNoAsync(JobNoList item)
         {

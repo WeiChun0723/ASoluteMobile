@@ -41,10 +41,24 @@ namespace ASolute_Mobile.Ultis
         private const string previousOdo = "";
         private const string contextMenuTitle = "";
         private const string UpdateRecord = "Yes";
-        private const string DeviceID = "";
+        private const string DeviceID = "testing";
+        private const string FirebaseID = "firebase";
         private const string UserEmail = "";
+        private const string Cargo_Return = "return";
         #endregion
 
+
+        public static string CargoReturn
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(Cargo_Return, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(Cargo_Return, value);
+            }
+        }
 
         public static string Email
         {
@@ -63,11 +77,23 @@ namespace ASolute_Mobile.Ultis
         {
             get
             {
-                return AppSettings.GetValueOrDefault(DeviceID, "");
+                return AppSettings.GetValueOrDefault(DeviceID, "testing");
             }
             set
             {
                 AppSettings.AddOrUpdateValue(DeviceID, value);
+            }
+        }
+
+        public static string FireID
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(FirebaseID, "firebase");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(FirebaseID, value);
             }
         }
 

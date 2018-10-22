@@ -88,6 +88,7 @@ namespace ASolute_Mobile.Models
 
     public class JobNoList : Generic
     {
+        public string menuId { get; set; }
         public string JobId { get; set; }
         public string JobNoValue { get; set; }
         public bool Uploaded { get; set; }
@@ -123,6 +124,22 @@ namespace ASolute_Mobile.Models
 
     }
 
+    public class TruckModel : Generic
+    {
+        public string TruckId { get; set; }
+        public string TelNo { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public bool ReqSign { get; set; }
+        public long EventRecordId { get; set; }
+        public string Title { get; set; }
+        public string RefNo { get; set; }
+        public string ReasonCode { get; set; }
+        public string Remark { get; set; }
+        public string RecordId { get; set; }
+        public string Summary { get; set; }
+        public string JobNo { get; set; }
+    }
 
     public class pickerValue : Generic
     {
@@ -193,5 +210,15 @@ namespace ASolute_Mobile.Models
         public string OrderType { get; set; }
         public DateTime OrderDate { get; set; }
         public Double Weight { get; set; }
+    }
+
+    public class HaulageVolume
+    {
+        public string Entity { get; set; }
+
+        public string Job { get; set; }
+
+        public string Revenue { get; set; }
+
     }
 }

@@ -16,14 +16,14 @@
         <Label TextColor="#FFFFFF" FontSize = "Medium" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" />
         <StackLayout Padding = "0, 30"></StackLayout>
 
-            <StackLayout Orientation="Horizontal" >
+            <!--<StackLayout Orientation="Horizontal" >
                 <controls:CustomEntry Placeholder="Owner"  x:Name="organizationEntry" Image="organization" Style="{StaticResource entryStyle}" IsEnabled="False" PlaceholderColor="White" HorizontalOptions="FillAndExpand"/>
                 <Image Source="edit.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="End"  x:Name="edit_icon">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Update_URL_Clicked"/>
                     </Image.GestureRecognizers>
                 </Image>
-            </StackLayout>
+            </StackLayout>-->
            
         <controls:CustomEntry Placeholder="UserID" x:Name = "usernameEntry" Image="user" Style="{StaticResource entryStyle}" />
         <controls:CustomEntry Placeholder="Password" IsPassword="True" x:Name = "passwordEntry" Image="pass" Style="{StaticResource entryStyle}" />
@@ -39,11 +39,11 @@
             <Button Style="{StaticResource buttonStyle}" x:Name="loginButton" Text = "Login" Clicked="Login_Clicked" />
        
         <StackLayout Orientation="Horizontal">
-            <Label x:Name="newUser" FontAttributes="Bold" TextColor="AntiqueWhite" Text="New User ?" HorizontalOptions="StartAndExpand" >
+           <!-- <Label x:Name="newUser" FontAttributes="Bold" TextColor="AntiqueWhite" Text="New User ?" HorizontalOptions="StartAndExpand" >
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="NewUser"/>
                 </Label.GestureRecognizers>
-            </Label>
+            </Label>-->
             <Label x:Name="AppID" FontAttributes="Bold" TextColor="#FFF" HorizontalOptions="End"/>
         </StackLayout>
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />

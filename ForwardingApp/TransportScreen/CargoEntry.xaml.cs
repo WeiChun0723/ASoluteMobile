@@ -20,48 +20,52 @@ namespace ASolute_Mobile
         //public JobList previousPage;
         public static string jobRecordID = "";
         public string uri = "";
-        
+        List<JobNoList> jobValueList = new List<JobNoList>();
 
-        public CargoEntry (string TruckID, string RecordID)
+        public CargoEntry (string truckID, string recordID, string title)
 		{
 			InitializeComponent ();
-            equipmentNo.Text = TruckID;
-            jobRecordID = RecordID;
+            equipmentNo.Text = truckID;
+            jobRecordID = recordID;
             App.Database.deleteJobNo();
-            if (Ultis.Settings.MenuAction == "pending_receiving")
-            {
-                Title = "Carogo Receiving Entry";
-
-
-            }
-            else if (Ultis.Settings.MenuAction == "pending_loading")
-            {
-                Title = "Cargo Loading Entry";
-            }
+          
+            Title = (title == "CargoRec") ? "Carogo Receiving Entry" : "Cargo Loading Entry";
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            List<JobNoList> jobValue = new List<JobNoList>(App.Database.GetJobNo(jobRecordID,false));
-            cargoList.ItemsSource = jobValue;
+            jobValueList = App.Database.GetJobNo(jobRecordID,false);
+            cargoList.ItemsSource = jobValueList;
 
+        }
+
+        public async void Cargo(object sender, ItemTappedEventArgs e)
+        {
+            await Navigation.PushAsync(new TransportScreen.CargoItem(((JobNoList)e.Item).JobNoValue));
         }
 
         protected override bool OnBackButtonPressed()
         {
-            
-            Device.BeginInvokeOnMainThread(async () =>
+            if(jobValueList.Count != 0)
             {
-                if(await DisplayAlert("Reminder", "Are you sure you want to close this screen without submitting the data?", "Yes", "No"))
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    base.OnBackButtonPressed();
-                    
-                    await Navigation.PopAsync();
-                }
-               
-            });
+                    if (await DisplayAlert("Reminder", "Are you sure you want to close this screen without submitting the data?", "Yes", "No"))
+                    {
+                        base.OnBackButtonPressed();
+
+                        await Navigation.PopAsync();
+                    }
+
+                });
+
+            }
+            else
+            {
+                Navigation.PopAsync();
+            }
 
             return true;
         } 
@@ -91,8 +95,8 @@ namespace ASolute_Mobile
             if(jobNo.Text != null)
             {
                 JobNoList(jobNo.Text);
-                List<JobNoList> jobValue = new List<JobNoList>(App.Database.GetJobNo(jobRecordID,false));
-                cargoList.ItemsSource = jobValue;
+                jobValueList = App.Database.GetJobNo(jobRecordID,false);
+                cargoList.ItemsSource = jobValueList;
 
                 jobNo.Text = string.Empty;
             }
@@ -102,25 +106,32 @@ namespace ASolute_Mobile
             }
         }
 
-        public void JobNoList(string JobNo)
+        public async void JobNoList(string JobNo)
         {
-
-            JobNoList existingJobNo = App.Database.GetJobNoAsync(JobNo);
-
-            if (existingJobNo == null)
+            if(!(String.IsNullOrEmpty(JobNo)))
             {
-                existingJobNo = new JobNoList();                
-                displayToast("New job no added to list");
+                JobNoList existingJobNo = App.Database.GetJobNoAsync(JobNo);
+
+                if (existingJobNo == null)
+                {
+                    existingJobNo = new JobNoList();
+                    displayToast("New job no added to list");
+                }
+                else
+                {
+                    displayToast("Job No already exist in list");
+                }
+
+                existingJobNo.JobNoValue = JobNo;
+                existingJobNo.JobId = jobRecordID;
+                existingJobNo.Uploaded = false;
+                App.Database.SaveJobNoAsync(existingJobNo);
             }
             else
             {
-                displayToast("Job No already exist in list");
+                await DisplayAlert("Error", "Value cannot be empty", "OK");
             }
 
-            existingJobNo.JobNoValue = JobNo;
-            existingJobNo.JobId = jobRecordID;
-            existingJobNo.Uploaded = false;
-            App.Database.SaveJobNoAsync(existingJobNo);
         }
 
        
@@ -150,7 +161,7 @@ namespace ASolute_Mobile
 
                   if(json_response.IsGood == true)
                   {
-
+                      
                       await DisplayAlert("Success", "Data uploaded", "OK");
                       await Navigation.PopAsync();
                   }

@@ -23,8 +23,8 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-           Master = masterPage;
-            Detail = new NavigationPage(new MyProviders());
+         Master = masterPage;
+            Detail = new NavigationPage(new DataGrid());
 
             masterPage.ListView.ItemSelected += OnItemSelected;
             MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
@@ -69,15 +69,13 @@ namespace ASolute_Mobile
                                 if (autoScan_response.IsGood)
                                 {
                                     await DisplayAlert("Success", autoScan_response.Result, "OK");
-
+                                    Application.Current.MainPage = new MainPage();
                                 }
                                 else
                                 {
-                                  
                                     await DisplayAlert("Success", autoScan_response.Message, "OK");
                                 }
 
-             
                             }
                             catch
                             {
@@ -108,8 +106,8 @@ namespace ASolute_Mobile
                                 var response = await client.GetAsync(uri);                           
                                 var content = await response.Content.ReadAsStringAsync();
                                 Debug.WriteLine(content);
-                                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
-                                if (json_response.IsGood == true)
+                                clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                                if (panic_response.IsGood == true)
                                 {
                                     string reply = "";
                                     if (Ultis.Settings.Language.Equals("English"))
@@ -124,7 +122,7 @@ namespace ASolute_Mobile
                                 }
                                 else
                                 {
-                                    await DisplayAlert("", json_response.Message, "Okay");
+                                    await DisplayAlert("Json Error", panic_response.Message, "Okay");
                                 }
                             }
                             catch(Exception exception)
@@ -166,8 +164,8 @@ namespace ASolute_Mobile
                                 var uri = ControllerUtil.getCallOperatorURL();
                                 var response = await client.GetAsync(uri);
                                 var content = await response.Content.ReadAsStringAsync();
-                                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
-                                if (json_response.IsGood == true)
+                                clsResponse callMe_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                                if (callMe_response.IsGood == true)
                                 {
                                     string reply = "";
                                     if (Ultis.Settings.Language.Equals("English"))
@@ -182,7 +180,7 @@ namespace ASolute_Mobile
                                 }
                                 else
                                 {
-                                    await DisplayAlert("", json_response.Message, "Okay");
+                                    await DisplayAlert("Json_Error", callMe_response.Message, "Okay");
                                 }
 
                             }
@@ -241,54 +239,9 @@ namespace ASolute_Mobile
                                     }
                                
                                     await DisplayAlert("", reply, "Okay");
-                                    
 
-                                    var context_client = new HttpClient();
-                                    context_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                                    var context_uri = ControllerUtil.getDownloadMenuURL();
-                                    var context_response = await context_client.GetAsync(context_uri);
-                                    var context_content = await context_response.Content.ReadAsStringAsync();
+                                    refreshMainPage();
 
-                                    clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
-
-                                    var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();
-                                    foreach (clsDataRow contextMenu in contextMenuItems.ContextMenu)
-                                    {
-                                        List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
-
-                                        int index = 0;
-                                        foreach (clsCaptionValue summaryList in contextMenu.Summary)
-                                        {
-                                            SummaryItems summaryItem = null;
-                                            if (index < existingSummaryItems.Capacity)
-                                            {
-                                                summaryItem = existingSummaryItems.ElementAt(index);
-                                            }
-
-                                            if (summaryItem == null)
-                                            {
-                                                summaryItem = new SummaryItems();
-                                            }
-
-                                            summaryItem.Id = contextMenu.Id;
-                                            summaryItem.Caption = summaryList.Caption;
-                                            summaryItem.Value = summaryList.Value;
-                                            summaryItem.Display = summaryList.Display;
-                                            summaryItem.Type = "ContextMenu";
-                                            App.Database.SaveSummarysAsync(summaryItem);
-                                            index++;
-                                        }
-
-                                        if (existingSummaryItems != null)
-                                        {
-                                            for (; index < existingSummaryItems.Count; index++)
-                                            {
-                                                App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
-                                            }
-                                        }
-                                    }
-
-                                    Application.Current.MainPage = new MainPage();
                                 }
                                 else
                                 {
@@ -364,6 +317,55 @@ namespace ASolute_Mobile
             throw new NotImplementedException();
         }
 
+        public async void refreshMainPage()
+        {
+            var context_client = new HttpClient();
+            context_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+            var context_uri = ControllerUtil.getDownloadMenuURL();
+            var context_response = await context_client.GetAsync(context_uri);
+            var context_content = await context_response.Content.ReadAsStringAsync();
+
+            clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
+
+            var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();
+            foreach (clsDataRow contextMenu in contextMenuItems.ContextMenu)
+            {
+                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
+
+                int index = 0;
+                foreach (clsCaptionValue summaryList in contextMenu.Summary)
+                {
+                    SummaryItems summaryItem = null;
+                    if (index < existingSummaryItems.Capacity)
+                    {
+                        summaryItem = existingSummaryItems.ElementAt(index);
+                    }
+
+                    if (summaryItem == null)
+                    {
+                        summaryItem = new SummaryItems();
+                    }
+
+                    summaryItem.Id = contextMenu.Id;
+                    summaryItem.Caption = summaryList.Caption;
+                    summaryItem.Value = summaryList.Value;
+                    summaryItem.Display = summaryList.Display;
+                    summaryItem.Type = "ContextMenu";
+                    App.Database.SaveSummarysAsync(summaryItem);
+                    index++;
+                }
+
+                if (existingSummaryItems != null)
+                {
+                    for (; index < existingSummaryItems.Count; index++)
+                    {
+                        App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
+                    }
+                }
+            }
+
+            Application.Current.MainPage = new MainPage();
+        }
       
     }
 }

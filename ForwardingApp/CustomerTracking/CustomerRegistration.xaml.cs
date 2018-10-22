@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
-//using Com.OneSignal;
+using Com.OneSignal;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Plugin.DeviceInfo;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,9 +14,10 @@ namespace ASolute_Mobile.CustomerTracking
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CustomerRegistration : ContentPage
     {
-        static string firebaseID = "qwert-qwer45-asfafaf";
+       string firebaseID = "";
+        clsRegister result;
 
-        public CustomerRegistration()
+        public CustomerRegistration(string content)
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this,false);
@@ -23,6 +26,22 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 emailAddressEntry.Text = Ultis.Settings.Email;
             }
+
+            if(content!="")
+            {
+                clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (verify_response.Result != null)
+                {
+                    result = JObject.Parse(content)["Result"].ToObject<clsRegister>();
+
+                    userNameEntry.Text = result.UserName;
+                    phoneEntry.Text = result.MobileNo;
+                    businessRegEntry.Text = result.RegNo;
+                    companyEntry.Text = result.CompanyName;
+                }
+            }
+
         }
 
         public void userNameTextChange(object sender, TextChangedEventArgs e)
@@ -117,24 +136,39 @@ namespace ASolute_Mobile.CustomerTracking
                     if(!(String.IsNullOrEmpty(emailAddressEntry.Text)) && !(String.IsNullOrEmpty(userNameEntry.Text)) && !(String.IsNullOrEmpty(phoneEntry.Text))
                       && !(String.IsNullOrEmpty(businessRegEntry.Text)) && !(String.IsNullOrEmpty(companyEntry.Text)))
                     {
+                        try
+                        {
+                            OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
+                            Ultis.Settings.FireID = firebaseID;
+                        }
+                        catch
+                        {
+
+                        }
+
                         clsRegister register = new clsRegister();
 
-                        register.DeviceId = emailAddressEntry.Text;
+                        register.DeviceId = Ultis.Settings.DeviceUniqueID;
                         register.UserName = userNameEntry.Text;
                         register.Email = emailAddressEntry.Text;
                         register.MobileNo = phoneEntry.Text;
                         register.RegNo = businessRegEntry.Text;
                         register.CompanyName = companyEntry.Text;
-                        //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
                         register.FirebaseId = firebaseID;
-
+                        register.DeviceIdiom = CrossDeviceInfo.Current.Idiom.ToString();
+                        register.DeviceMfg = CrossDeviceInfo.Current.Manufacturer;
+                        register.DeviceModel = CrossDeviceInfo.Current.Model;
+                        register.OSPlatform = CrossDeviceInfo.Current.Platform.ToString();
+                        register.OSVer = CrossDeviceInfo.Current.VersionNumber.ToString();
+                        register.AppVer = CrossDeviceInfo.Current.AppVersion;
 
                         var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
                         clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (register_response.IsGood)
                         {
-                            Ultis.Settings.DeviceUniqueID = emailAddressEntry.Text;
+                          
                             Application.Current.MainPage = new AccountActivation();
                         }
                         else

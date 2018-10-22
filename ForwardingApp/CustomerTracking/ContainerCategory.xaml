@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CustomerTracking.ContainerCategory">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CustomerTracking.ContainerCategory"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms">
+    
        <StackLayout>
       
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>
        
+        
+        
         <ListView x:Name="category_list" IsPullToRefreshEnabled="True" Refreshing="refreshCategoryList" SeparatorColor="White" ItemTapped="selectCategory"></ListView>
         <StackLayout Padding="10,10,15,15">
        
@@ -11,4 +17,30 @@
         </StackLayout>
         
     </StackLayout>
+    
+    
+        <!-- <chart:SfChart SelectionChanging="select_Category">
+        <chart:BarSeries x:Name="bar" EnableAnimation="true" EnableDataPointSelection="true" DataMarkerPosition="OutsideExtended"/>
+       <chart:SfChart.Legend>
+            <chart:ChartLegend OverflowMode="Wrap">
+                <chart:ChartLegend.LabelStyle>
+                    <chart:ChartLegendLabelStyle Font="15" />
+                </chart:ChartLegend.LabelStyle>
+            </chart:ChartLegend>
+            
+        </chart:SfChart.Legend>
+        
+            <chart:SfChart.Series>
+       
+            <chart:PieSeries x:Name="pie"  EnableAnimation="true" EnableDataPointSelection="true" EnableTooltip="true" IsVisibleOnLegend="true" ExplodeOnTouch="true" DataMarkerPosition="OutsideExtended">
+                <chart:PieSeries.DataMarker >
+                    <chart:ChartDataMarker LabelContent="YValue" >
+
+                    </chart:ChartDataMarker>
+              
+                </chart:PieSeries.DataMarker>
+                
+            </chart:PieSeries>
+            </chart:SfChart.Series>
+        </chart:SfChart>-->
 </ContentPage>

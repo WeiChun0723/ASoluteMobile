@@ -32,7 +32,7 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-            Task.Run(async () => { await StartListening(); });
+           // Task.Run(async () => { await StartListening(); });
 
            
         }
@@ -170,31 +170,33 @@ namespace ASolute_Mobile
                     break;
                
                 case "CargoRec":
-                    Ultis.Settings.MenuAction = "pending_receiving";
-                    JobListTabbedPage pendingReceiving = new JobListTabbedPage();
-                    pendingReceiving.previousPage = this;
-                    await Navigation.PushAsync(pendingReceiving);
+                    await Navigation.PushAsync(new  TransportScreen.PendingReceiving_Loading(menuAction));
                     break;
 
                 case "CargoLoad":
-                    Ultis.Settings.MenuAction = "pending_loading";
-                    JobListTabbedPage pendingLoading = new JobListTabbedPage();
-                    pendingLoading.previousPage = this;
-                    await Navigation.PushAsync(pendingLoading);
+                    await Navigation.PushAsync(new TransportScreen.PendingReceiving_Loading(menuAction));
+                    break;
+
+                case "CargoMeasure":
+                    await Navigation.PushAsync(new TransportScreen.PendingReceiving_Loading(menuAction));
                     break;
 
                 case "JobList":
-                    Ultis.Settings.MenuAction = "Job_List";
-                    //JobListTabbedPage jobList = new JobListTabbedPage();
-                    //jobList.previousPage = this;
-                    await Navigation.PushAsync(new JobList());
+                    await Navigation.PushAsync(new TransportScreen.JobList());
+                    //await Navigation.PushAsync(new HaulageScreen.JobList());
                     break;
 
                 case "CargoReturn":
-                    Ultis.Settings.MenuAction = "Cargo_Return";
-                    FutileTrip_CargoReturn cargoReturn = new FutileTrip_CargoReturn();
-                    cargoReturn.menuPreviousPage = this;
-                    await Navigation.PushAsync(cargoReturn);
+                    string return_id = "test"; 
+                    string return_eventID = "1000";
+                    if(!(String.IsNullOrEmpty(Ultis.Settings.CargoReturn)))
+                    {
+                        string[] info = Ultis.Settings.CargoReturn.Split(',');
+                        return_id = info[0];
+                        return_eventID = info[1];
+                    }
+                    long test = Convert.ToInt64(return_eventID);
+                    await Navigation.PushAsync(new TransportScreen.Futile_CargoReturn("CargoReturn",return_id, test));
                     break;
 
                 case "AppActivity":                   
