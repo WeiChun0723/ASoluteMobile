@@ -55,6 +55,9 @@ namespace ASolute_Mobile.HaulageScreen
             {
                 icEntry.Unfocus();
             };
+
+            
+            enterpriseEntry.Text = Ultis.Settings.AppEnterpriseName;
         }
 
         public void enterTextChange(object sender, TextChangedEventArgs e)
@@ -133,20 +136,16 @@ namespace ASolute_Mobile.HaulageScreen
             }
             else
             {
-                await DisplayAlert("Error", json_response.Message, "OK");
+                await DisplayAlert("WebServiceError", json_response.Message, "OK");
             }
         }
 
         public async void RegisterUser()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-            var success_uri = ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text);
-            var success_response = await client.GetAsync(success_uri);
-            var success_content = await success_response.Content.ReadAsStringAsync();
-            Debug.WriteLine(success_content);
-            clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(success_content);
-
+        
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text));
+            clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
+           
             if (register_response.IsGood)
             {
                 await DisplayAlert("Success", "Registration successfully", "OK");

@@ -17,14 +17,14 @@ namespace ASolute_Mobile
     public partial class MainPage : MasterDetailPage
     {
         public static int selection;
-        MasterPage masterPage = new MasterPage();
+        //MasterPage masterPage = new MasterPage();
 
         public MainPage()
         {
             InitializeComponent();
 
-         Master = masterPage;
-            Detail = new NavigationPage(new DataGrid());
+         //Master = masterPage;
+            //Detail = new NavigationPage(new DataGrid());
 
             masterPage.ListView.ItemSelected += OnItemSelected;
             MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
@@ -100,12 +100,8 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var client = new HttpClient();
-                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                                var uri = ControllerUtil.getPanicURL();
-                                var response = await client.GetAsync(uri);                           
-                                var content = await response.Content.ReadAsStringAsync();
-                                Debug.WriteLine(content);
+
+                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL());
                                 clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (panic_response.IsGood == true)
                                 {
@@ -159,11 +155,8 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var client = new HttpClient();
-                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                                var uri = ControllerUtil.getCallOperatorURL();
-                                var response = await client.GetAsync(uri);
-                                var content = await response.Content.ReadAsStringAsync();
+                              
+                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getCallOperatorURL());
                                 clsResponse callMe_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (callMe_response.IsGood == true)
                                 {
@@ -227,7 +220,7 @@ namespace ASolute_Mobile
                                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (json_response.IsGood == true)
                                 {
-
+                                    Ultis.Settings.UpdatedRecord = "Yes";
                                     string reply = "";
                                     if (Ultis.Settings.Language.Equals("English"))
                                     {
@@ -317,11 +310,12 @@ namespace ASolute_Mobile
             throw new NotImplementedException();
         }
 
+       
         public async void refreshMainPage()
         {
             var context_client = new HttpClient();
             context_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-            var context_uri = ControllerUtil.getDownloadMenuURL();
+            var context_uri = ControllerUtil.getDownloadMenuURL(Ultis.Settings.FireID);
             var context_response = await context_client.GetAsync(context_uri);
             var context_content = await context_response.Content.ReadAsStringAsync();
 

@@ -76,6 +76,27 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
 
+            if (Ultis.Settings.NewJob.Equals("Yes"))
+            {
+                CommonFunction.CreateToolBarItem(this);
+            }
+            else
+            {
+                this.ToolbarItems.Clear();
+            }
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+
+                try
+                {
+                    CommonFunction.NewJobNotification(this);
+                }
+                catch (Exception e)
+                {
+                    DisplayAlert("Notification error", e.Message, "OK");
+                }
+            });
+
             if (Ultis.Settings.deleteImage == "Yes")
             {
                 DisplayImage();

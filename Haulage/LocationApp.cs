@@ -6,10 +6,10 @@ using ASolute_Mobile.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    public class LocationApp
+    /* public class LocationApp
     {
         // events
-        public event EventHandler<ServiceConnectedEventArgs> LocationServiceConnected = delegate { };
+       public event EventHandler<ServiceConnectedEventArgs> LocationServiceConnected = delegate { };
 
         // declarations
         protected readonly string logTag = "LocationApp";
@@ -21,7 +21,7 @@ namespace ASolute_Mobile.Droid
         }
         private static LocationApp current;
 
-        public LocationService LocationService
+       /* public LocationService LocationService
         {
             get
             {
@@ -97,5 +97,5 @@ namespace ASolute_Mobile.Droid
         }
 
         #endregion
-    }
+    }*/
 }

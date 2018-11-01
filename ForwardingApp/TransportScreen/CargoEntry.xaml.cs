@@ -29,7 +29,7 @@ namespace ASolute_Mobile
             jobRecordID = recordID;
             App.Database.deleteJobNo();
           
-            Title = (title == "CargoRec") ? "Carogo Receiving Entry" : "Cargo Loading Entry";
+            Title = (title == "CargoRec") ? "Cargo Receiving Entry" : "Cargo Loading Entry";
         }
 
         protected override void OnAppearing()
@@ -115,11 +115,11 @@ namespace ASolute_Mobile
                 if (existingJobNo == null)
                 {
                     existingJobNo = new JobNoList();
-                    displayToast("New job no added to list");
+                    displayToast("New job added to list");
                 }
                 else
                 {
-                    displayToast("Job No already exist in list");
+                    displayToast("Job already exist in list");
                 }
 
                 existingJobNo.JobNoValue = JobNo;
@@ -186,11 +186,11 @@ namespace ASolute_Mobile
             toastConfig.SetDuration(2000);
             toastConfig.Position = 0;
             toastConfig.SetMessageTextColor(System.Drawing.Color.FromArgb(0, 0, 0));
-            if(message == "New job no added to list")
+            if(message == "New job added to list")
             {
                 toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(0, 128, 0));
             }
-            else if(message == "Job No already exist in list")
+            else if(message == "Job already exist in list")
             {
                 toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(255, 0, 0));
             }

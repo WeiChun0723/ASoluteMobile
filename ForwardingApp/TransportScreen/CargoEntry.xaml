@@ -14,7 +14,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Text="Equipment No" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+            <Label Text="Equipment" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" />
             <Label x:Name="equipmentNo" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightGray" VerticalTextAlignment="Center" />
             <Label Text="Job No." FontAttributes="Bold" Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" />
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">

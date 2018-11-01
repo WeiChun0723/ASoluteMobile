@@ -1,8 +1,9 @@
 ﻿using Acr.UserDialogs;
 using ASolute.Mobile.Models;
-using ASolute_Mobile.HaulageScreen;
+using ASolute_Mobile.CustomRenderer;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
+using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator;
@@ -14,27 +15,28 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+
 
 namespace ASolute_Mobile
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainMenu : ContentPage
     {
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string previousLocation = "";
         string chklocation = "0";
-        string checking = "_";
-
+        string firebaseID,testing;
+        int count = 0;
 
         public MainMenu()
         {
             InitializeComponent();
 
-           // Task.Run(async () => { await StartListening(); });
+            Task.Run(async () => { await StartListening(); });
 
-           
+            OneSignal.Current.IdsAvailable(IdsAvailable);
+
         }
 
         public async Task StartListening()
@@ -87,29 +89,47 @@ namespace ASolute_Mobile
                     {
                         previousLocation = location;
 
+                        App.gpsLocationLat = position.Latitude;
+                        App.gpsLocationLong = position.Longitude;
+
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    string error = ex.Message;
                 }
 
             }
         }
 
-        protected async override void OnAppearing()
+        protected override void OnAppearing()
         {
-            if (Ultis.Settings.Language.Equals("English"))
+            if(Ultis.Settings.NewJob.Equals("Yes"))
             {
-                Title = "Main Menu";
+                CommonFunction.CreateToolBarItem(this);
             }
             else
             {
-                Title = "Menu Utama";
+                this.ToolbarItems.Clear();
             }
-                      
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing",(sender) => {
+
+                try
+                {
+                    CommonFunction.NewJobNotification(this);
+                }
+                catch(Exception e)
+                {
+                    DisplayAlert("Notification error", e.Message, "OK");
+                }
+            });
+
+            Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
+
+
             if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("Yes") ) 
-            {          
+            {
                 getMainMenu();
                 Ultis.Settings.UpdatedRecord = "No";
             }
@@ -119,6 +139,16 @@ namespace ASolute_Mobile
             }
 
         }
+
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            //this.ToolbarItems.Clear();
+
+        }
+
 
         //press twice back button to exit the app within 3 second
         protected override bool OnBackButtonPressed()
@@ -141,10 +171,11 @@ namespace ASolute_Mobile
                 doubleBackToExitPressedOnce = false;
             }
             );
-            
-            return true;
-        }     
 
+           
+            return true;
+        }
+    
         public async void selectMenu(object sender, ItemTappedEventArgs e)
         {
             string menuAction = ((AppMenu)e.Item).menuId;
@@ -182,27 +213,23 @@ namespace ASolute_Mobile
                     break;
 
                 case "JobList":
-                    await Navigation.PushAsync(new TransportScreen.JobList());
-                    //await Navigation.PushAsync(new HaulageScreen.JobList());
+                    //await Navigation.PushAsync(new TransportScreen.JobLists());
+                    //await Navigation.PushAsync(new TransportScreen.JobList());
+                    await Navigation.PushAsync(new HaulageScreen.JobList());
                     break;
 
                 case "CargoReturn":
                     string return_id = "test"; 
                     string return_eventID = "1000";
-                    if(!(String.IsNullOrEmpty(Ultis.Settings.CargoReturn)))
-                    {
-                        string[] info = Ultis.Settings.CargoReturn.Split(',');
-                        return_id = info[0];
-                        return_eventID = info[1];
-                    }
-                    long test = Convert.ToInt64(return_eventID);
-                    await Navigation.PushAsync(new TransportScreen.Futile_CargoReturn("CargoReturn",return_id, test));
-                    break;
+                    /*if(!(String.IsNullOrEmpty(Ultis.Settings.CargoReturn)))
+                     {
+                         string[] info = Ultis.Settings.CargoReturn.Split(',');
+                         return_id = info[0];
+                         return_eventID = info[1];
 
-                case "AppActivity":                   
-                    AppActivity activity = new AppActivity();
-                    activity.previousPage = this;
-                    await Navigation.PushAsync(activity);
+                     }*/
+                    long test = Convert.ToInt64(return_eventID);
+                    await Navigation.PushAsync(new TransportScreen.Futile_CargoReturn("CargoReturn", return_id, test));
                     break;
 
                 case "RunSheet":
@@ -215,22 +242,35 @@ namespace ASolute_Mobile
                 case "PendingCollection":
                     await Navigation.PushAsync(new HaulageScreen.PendingCollection(menuAction));
                     break;
+                case "DriverRFC" :
+                    await Navigation.PushAsync(new HaulageScreen.DriverRFC());
+                    break;
             }
        
             MainMenuList.SelectedItem = null;
         }
 
+        private void IdsAvailable(string userID, string pushToken)
+        {
+            Debug.WriteLine("UserID:" + userID);
+            Debug.WriteLine("pushToken:" + pushToken);
+
+        }
+
         public async void getMainMenu()
         {
+            OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
+            Ultis.Settings.FireID = firebaseID;
+
             checkItems.Clear();
             try
             {
                 activityIndicator.IsRunning = true;
                 activityIndicator.IsVisible = true;
 
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(firebaseID));
                 clsResponse login_response = JsonConvert.DeserializeObject <clsResponse>(content);
-
 
                 if (login_response.IsGood == true)
                 {
@@ -264,7 +304,7 @@ namespace ASolute_Mobile
                                 }
 
                                 existingRecord.menuId = mainMenu.Id;
-                                App.Database.SaveMenuAsync(existingRecord);
+
 
                                 List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
 
@@ -282,6 +322,11 @@ namespace ASolute_Mobile
                                         summaryItem = new SummaryItems();
                                     }
 
+                                    if(String.IsNullOrEmpty(summaryList.Caption))
+                                    {
+                                        existingRecord.name = summaryList.Value;
+                                    }
+
                                     summaryItem.Id = mainMenu.Id;
                                     summaryItem.Caption = summaryList.Caption;
                                     summaryItem.Value = summaryList.Value;
@@ -292,6 +337,7 @@ namespace ASolute_Mobile
                                     index++;
                                 }
 
+                                App.Database.SaveMenuAsync(existingRecord);
                                 if (existingSummaryItems != null)
                                 {
                                     for (; index < existingSummaryItems.Count; index++)
@@ -339,27 +385,8 @@ namespace ASolute_Mobile
                         }
                     }
 
-                    /*AppMenu history = new AppMenu();
-                    history.menuId = "AppActivity";
-                    App.Database.SaveMenuAsync(history);
-
-                    SummaryItems summary  = new SummaryItems();
-                    summary.Id = "AppActivity";
-                    summary.Caption = "";
-                    if (Ultis.Settings.Language.Equals("English"))
-                    {
-                        summary.Value = "Activity";
-                    }
-                    else
-                    {
-                        summary.Value = "Aktiviti";
-                    }                   
-                    summary.Display = true;
-                    summary.Type = "MainMenu";
-                    App.Database.SaveSummarysAsync(summary);*/
-
                     loadMainMenu();
-
+                    //loadDashBoard();
                     // if the check list not empty then display the check list page
                    if (checkItems.Count != 0)
                     {                  
@@ -409,8 +436,7 @@ namespace ASolute_Mobile
         {
             getMainMenu();
             MainMenuList.IsRefreshing = false;
-            //Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
-            //Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); }).Wait();            
+                    
         }
 
 
@@ -423,6 +449,71 @@ namespace ASolute_Mobile
             MainMenuList.HasUnevenRows = true;
             MainMenuList.Style = (Style)App.Current.Resources["recordListStyle"];
             MainMenuList.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-        }     
+        }
+
+        int row = 0;
+        int column = 0;
+
+        public async void loadDashBoard()
+        {
+            ObservableCollection<AppMenu> Items = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
+
+            try
+            {
+                for (int i = 1; i < Items.Count; i++)
+                {
+                    string menuAction = Items[i].menuId;
+                    Dashboard_Template dashboard = new Dashboard_Template();
+
+                    switch (menuAction)
+                    {
+                        case "JobList":
+                            dashboard.Icon = "jobList.png";
+                            break;
+                        default:
+                            dashboard.Icon = "refuel.png";
+                            break;
+                    }
+                   
+
+                    dashboard.Label = Items[i].name;
+
+                    var showLabel = new TapGestureRecognizer();
+                    showLabel.Tapped += async (sender, e) =>
+                    {
+                        await DisplayAlert("OK", "Hi " + dashboard.Label, "OK");
+                    };
+                    dashboard.GestureRecognizers.Add(showLabel);
+
+                    if (row < test.RowDefinitions.Count)
+                    {
+                        if (column < test.ColumnDefinitions.Count)
+                        {
+
+                            test.Children.Add(dashboard, column, row);
+                            column++;
+                        }
+                        else
+                        {
+                            row++;
+                            column = 0;
+
+                            test.Children.Add(dashboard, column, row);
+                            column++;
+                        }
+
+                    }
+
+
+                }
+
+            }
+            catch(Exception e)
+            {
+                await DisplayAlert("gg", e.Message, "KO");
+            }
+
+
+        }
     }
 }

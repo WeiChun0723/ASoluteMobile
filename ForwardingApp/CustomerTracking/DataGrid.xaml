@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.CustomerTracking.DataGrid"      
-             
+             x:Class="ASolute_Mobile.CustomerTracking.DataGrid" 
              xmlns:syncfusion="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms" 
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms">
+       
+    <ContentPage >
+        <StackLayout>
+            <ActivityIndicator IsVisible="true" IsRunning="true" IsEnabled="true"/>
+        </StackLayout>
+    </ContentPage>
     
- 
-    
-    
-    <ScrollView Orientation="Vertical">
-     <StackLayout Spacing="10" HorizontalOptions="Center" Padding="10,10,10,10">
+    <ContentPage>
+        <StackLayout>
+            <ActivityIndicator IsVisible="true" IsRunning="true" IsEnabled="true"/>
+        </StackLayout>
+    <!--<ScrollView Orientation="Vertical">
+        <StackLayout Padding="10,10,10,10">
         <ActivityIndicator x:Name="loading"/>
-         <StackLayout HeightRequest="300" Padding="0,0,0,10"><syncfusion:SfDataGrid x:Name="dataGrid" 
-                           HorizontalOptions="CenterAndExpand" AutoGenerateColumns="false" >
+       <syncfusion:SfDataGrid x:Name="dataGrid" 
+                           HorizontalOptions="CenterAndExpand" AutoGenerateColumns="true" >
                     
                     <syncfusion:SfDataGrid.Columns>
                      <syncfusion:GridTextColumn MappingName="Entity" Width="100" >
@@ -36,27 +42,26 @@
                   <syncfusion:GridTextColumn MappingName="Revenue" Width="100" TextAlignment="Center">
                             <syncfusion:GridTextColumn.HeaderTemplate> 
                 <DataTemplate> 
-                    <Label Text="Revenue" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                    <Label Text="Revenue/K" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
                 </DataTemplate> 
             </syncfusion:GridTextColumn.HeaderTemplate> 
                             </syncfusion:GridTextColumn>
                             
         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
+             
+             
+    <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center">
+                <Label TextColor="#FFCC00" Text="Job" FontAttributes="Bold" FontSize="Medium"/>
+                <Label TextColor="Green" Text="Revenue" FontAttributes="Bold" FontSize="Medium"/>
+    </StackLayout>
+    <chart:SfChart  VerticalOptions="FillAndExpand" HeightRequest="600" IsEnabled="false">
             
-            </StackLayout>
-   
- 
-            
-    <chart:SfChart  VerticalOptions="FillAndExpand" HeightRequest="400">
         
-        <chart:SfChart.PrimaryAxis>
+        <chart:SfChart.PrimaryAxis >
 
         <chart:CategoryAxis>
-            <chart:CategoryAxis.Title>
-                    
-                     <chart:ChartAxisTitle Text="Entity"> </chart:ChartAxisTitle>
-                </chart:CategoryAxis.Title>
+            
         </chart:CategoryAxis>
 
     </chart:SfChart.PrimaryAxis>
@@ -64,54 +69,25 @@
     <chart:SfChart.SecondaryAxis>
 
         <chart:NumericalAxis>
-            <chart:NumericalAxis.Title>
-           
-                 <chart:ChartAxisTitle Text="Job"></chart:ChartAxisTitle>
-           
-          </chart:NumericalAxis.Title>      
+              
         </chart:NumericalAxis>
 
     </chart:SfChart.SecondaryAxis>
         
-        
-        <chart:BarSeries x:Name="job" EnableAnimation="true" EnableDataPointSelection="true" DataMarkerPosition="Top" Width="0.5" >
-          
-        </chart:BarSeries>
-        
+        <chart:SfChart.Series>
+        <chart:BarSeries x:Name="job" EnableAnimation="true" EnableDataPointSelection="true" DataMarkerPosition="Top" Width="0.5" IsVisibleOnLegend="true" Color="#FFCC00" />
+        <chart:BarSeries x:Name="revenue" EnableAnimation="true" EnableDataPointSelection="true" DataMarkerPosition="Top" Width="0.5" Color="Green" IsVisibleOnLegend="true"/>
+       
+        </chart:SfChart.Series>
      </chart:SfChart>
-      
 
-      <chart:SfChart  VerticalOptions="FillAndExpand" HeightRequest="400" >
-        
-        <chart:SfChart.PrimaryAxis>
-
-        <chart:CategoryAxis>
-            <chart:CategoryAxis.Title>
-                    
-                     <chart:ChartAxisTitle Text="Entity"> </chart:ChartAxisTitle>
-                </chart:CategoryAxis.Title>
-        </chart:CategoryAxis>
-
-    </chart:SfChart.PrimaryAxis>
-
-    <chart:SfChart.SecondaryAxis>
-
-        <chart:NumericalAxis>
-            <chart:NumericalAxis.Title>
-           
-                 <chart:ChartAxisTitle Text="Revenue"></chart:ChartAxisTitle>
-           
-          </chart:NumericalAxis.Title>      
-        </chart:NumericalAxis>
-
-    </chart:SfChart.SecondaryAxis>
-        
-        
-        <chart:BarSeries x:Name="revenue" EnableAnimation="true" EnableDataPointSelection="true" DataMarkerPosition="Top" Width="0.5" Color="Green">
-           
-        </chart:BarSeries>
-        
-     </chart:SfChart>
-         </StackLayout>
-        </ScrollView>
-</ContentPage>
+       </StackLayout>
+        </ScrollView>-->
+        </ContentPage>
+    
+    <ContentPage>
+         <StackLayout>
+            <ActivityIndicator IsVisible="true" IsRunning="true" IsEnabled="true"/>
+        </StackLayout>
+    </ContentPage>
+</CarouselPage>

@@ -6,9 +6,9 @@ using Android.Util;
 
 namespace ASolute_Mobile.Droid.Services
 {
-    public class LocationServiceConnection : Java.Lang.Object, IServiceConnection
+   /* public class LocationServiceConnection : Java.Lang.Object, IServiceConnection
     {
-        public event EventHandler<ServiceConnectedEventArgs> ServiceConnected = delegate {};
+       /* public event EventHandler<ServiceConnectedEventArgs> ServiceConnected = delegate {};
 
         public LocationServiceBinder Binder
         {
@@ -49,5 +49,5 @@ namespace ASolute_Mobile.Droid.Services
             this.binder.IsBound = false;
             Log.Debug ( "ServiceConnection", "Service unbound" );
         }
-    }
+    }*/
 }

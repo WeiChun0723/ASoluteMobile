@@ -1,11 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.MainMenu">
    
+    
+ 
         <StackLayout>
         <ListView x:Name="MainMenuList" ItemTapped="selectMenu" IsPullToRefreshEnabled="True" Refreshing="refreshMainMenu"  SeparatorColor="White"></ListView>
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False"/>
-        </StackLayout>
+        
    
+         <Grid Grid.Row="1" ColumnSpacing="30" HorizontalOptions="Center"
+              RowSpacing="30" VerticalOptions="Center" x:Name="test">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" x:Name="row1"/>
+                <RowDefinition Height="*" x:Name="row2"/>
+                <RowDefinition Height="*" x:Name="row3"/>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+        </Grid>
+    </StackLayout>
+        
+      
 </ContentPage>

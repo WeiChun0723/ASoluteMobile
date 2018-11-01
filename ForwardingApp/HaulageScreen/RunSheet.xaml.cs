@@ -40,7 +40,29 @@ namespace ASolute_Mobile.HaulageScreen
         protected override void OnAppearing()
         {
 
-            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));    
+            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
+
+            if (Ultis.Settings.NewJob.Equals("Yes"))
+            {
+                CommonFunction.CreateToolBarItem(this);
+            }
+            else
+            {
+                this.ToolbarItems.Clear();
+            }
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+
+                try
+                {
+
+                    CommonFunction.NewJobNotification(this);
+                }
+                catch (Exception e)
+                {
+                    DisplayAlert("Notification error", e.Message, "OK");
+                }
+            });
         }
 
         public void recordDate(object sender, DateChangedEventArgs e)

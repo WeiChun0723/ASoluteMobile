@@ -26,6 +26,28 @@ namespace ASolute_Mobile.HaulageScreen
 			InitializeComponent ();
             Title = title;
             Ultis.Settings.App = "Haulage";
+
+            if (Ultis.Settings.NewJob.Equals("Yes"))
+            {
+                CommonFunction.CreateToolBarItem(this);
+            }
+            else
+            {
+                this.ToolbarItems.Clear();
+            }
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+
+                try
+                {
+
+                    CommonFunction.NewJobNotification(this);
+                }
+                catch (Exception e)
+                {
+                    DisplayAlert("Notification error", e.Message, "OK");
+                }
+            });
         }
 
         public async void Confirm(object sender, EventArgs e)

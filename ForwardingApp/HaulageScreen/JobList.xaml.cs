@@ -4,12 +4,9 @@ using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -25,23 +22,36 @@ namespace ASolute_Mobile.HaulageScreen
         public JobList ()
 		{
 			InitializeComponent ();
-
-            Ultis.Settings.App = "Haulage";           
-
         }
 
         protected async override void OnAppearing()
         {
             try
             {
-                if (Ultis.Settings.Language.Equals("English"))
+
+                MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+
+                    try
+                    {
+
+                        CommonFunction.NewJobNotification(this);
+                    }
+                    catch (Exception e)
+                    {
+                        DisplayAlert("Notification error", e.Message, "OK");
+                    }
+                });
+
+                if (Ultis.Settings.NewJob.Equals("Yes"))
                 {
-                    Title = "Job Lists";
+                    CommonFunction.CreateToolBarItem(this);
                 }
                 else
                 {
-                    Title = "Senarai Kerja";
+                    this.ToolbarItems.Clear();
                 }
+
+                Title = (Ultis.Settings.Language.Equals("English")) ? "Job List" : "Senarai Kerja";
 
                 if (Ultis.Settings.SessionUserItem.TruckId.Length == 0)
                 {
@@ -137,7 +147,8 @@ namespace ASolute_Mobile.HaulageScreen
             }
             catch
             {
-                 DisplayAlert("Error", "Please try again later", "OK");
+                BackgroundTask.Logout(this);
+               DisplayAlert("Error", "Invalid session.", "OK");
             }
 
         }
@@ -161,7 +172,6 @@ namespace ASolute_Mobile.HaulageScreen
                 noData.IsVisible = false;
             }
 
-           
         }
 
         public void displayToast(string message)

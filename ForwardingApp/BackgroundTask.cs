@@ -34,8 +34,6 @@ namespace ASolute_Mobile
         {
         }
 
-      
-  
         public static async Task UploadLatestRecord(ContentPage page)
         {
             if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
@@ -273,16 +271,7 @@ namespace ASolute_Mobile
                                 {
                                     Log.Done = 1;
                                 }
-
-                                /*if(Log.StartOdometer != 0 )
-                                {
-                                    Ultis.Settings.logOdometer = log_response.Result["StartOdometer"];
-                                }
-                                else if (Log.EndOdometer != 0)
-                                {
-                                    Ultis.Settings.logOdometer = log_response.Result["EndOdometer"];
-                                }*/
-                                
+                   
                                 Log.Id = log_response.Result["Id"];
                                 App.Database.SaveLogRecordAsync(Log);
                                 imageEventID = log_response.Result["LinkId"];                                
@@ -319,46 +308,7 @@ namespace ASolute_Mobile
 
                     }
                   
-                    /*try
-                    {
-                        List<JobNoList> jobValue = new List<JobNoList>(App.Database.GetJobNo(Ultis.Settings.WareHouse_JobNo,false));
-                        List<string> jobsData = new List<string>();
-                        for (int i = 0; i < jobValue.Count; i++)
-                        {
-                            jobsData.Add(jobValue[i].JobNoValue);
-                        } 
-
-                        var client = new HttpClient();
-                        string baseAddress = Ultis.Settings.SessionBaseURI;
-                        var url = baseAddress + ControllerUtil.postNewCargoRecordURL("hello");
-                        Uri uri = new Uri(url);
-                        var content = JsonConvert.SerializeObject("jobsData");
-                        var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-                        var response = await client.PostAsync(uri, httpContent);
-                        var reply = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(reply);
-
-                        clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
-                        ActivityLog result = new ActivityLog();
-                        if (json_response.IsGood == true)
-                        {
-                            result.activity = "Job No uploaded";
-                            result.status = "Status: Success";
-                            result.message = "Message: " + json_response.Message;                         
-                        }
-                        else
-                        {
-                            result.activity = "Job No upload fail";
-                            result.status = "Status: Failed";
-                            result.message = "Message: " + json_response.Message;
-                        }
-
-                        App.Database.SaveActivity(result);
-                    }                  
-                    catch (Exception exception)
-                    {
-                       
-                    }*/
+                  
                 }
                 
             }
@@ -707,7 +657,7 @@ namespace ASolute_Mobile
             {
                 if (json_response.Message == "Invalid Session !")
                 {
-                    BackgroundTask.Logout(contentPage);
+                    //BackgroundTask.Logout(contentPage);
                     await contentPage.DisplayAlert("Error", json_response.Message, "Ok");
                 }
                 else

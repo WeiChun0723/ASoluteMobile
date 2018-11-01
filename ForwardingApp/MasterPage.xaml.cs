@@ -31,50 +31,50 @@ namespace ASolute_Mobile
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
 
             var masterPageItems = new List<MasterPageItem>();
-        
 
-           /*foreach (SummaryItems item in contextMenu)
-            {
-                string option;
-                if (item.Display)
-                {
-                    MasterPageItem pageItem = new MasterPageItem();
 
-                    pageItem.Id = item.Id;
-                    pageItem.Title = item.Value;
-                    option = item.Id;
+            foreach (SummaryItems item in contextMenu)
+              {
+                  string option;
+                  if (item.Display)
+                  {
+                      MasterPageItem pageItem = new MasterPageItem();
 
-                    switch (option)
-                    {
-                        case "CallOffice":
-                            pageItem.IconSource = "controller.png";
-                            break;
+                      pageItem.Id = item.Id;
+                      pageItem.Title = item.Value;
+                      option = item.Id;
 
-                        case "CallMe":
-                            pageItem.IconSource = "call.png";
-                            break;
+                      switch (option)
+                      {
+                          case "CallOffice":
+                              pageItem.IconSource = "controller.png";
+                              break;
 
-                        case "Panic":
-                            pageItem.IconSource = "panic.png";
-                            break;
+                          case "CallMe":
+                              pageItem.IconSource = "call.png";
+                              break;
 
-                        case "ChangePwd":
-                            pageItem.IconSource = "password.png";
-                            pageItem.TargetType = typeof(ChangePasswordPage);
-                          
+                          case "Panic":
+                              pageItem.IconSource = "panic.png";
+                              break;
 
-                            break;
-                        case "CurrentLoc":
-                            pageItem.IconSource = "map.png";
-                            pageItem.TargetType = typeof(CurrentLocation);
-                         
-                            break;
+                          case "ChangePwd":
+                              pageItem.IconSource = "password.png";
+                              pageItem.TargetType = typeof(ChangePasswordPage);
 
-                    }
 
-                    masterPageItems.Add(pageItem);
-                }
-            }*/
+                              break;
+                          case "CurrentLoc":
+                              pageItem.IconSource = "map.png";
+                              pageItem.TargetType = typeof(CurrentLocation);
+
+                              break;
+
+                      }
+
+                      masterPageItems.Add(pageItem);
+                  }
+              }
 
             /*MasterPageItem provider = new MasterPageItem();
             provider.Id = "AddProvider";
@@ -83,32 +83,31 @@ namespace ASolute_Mobile
             masterPageItems.Add(provider);*/
 
 
-          /* MasterPageItem language = new MasterPageItem();
-            language.Id = "Language";
-            if (Ultis.Settings.Language.Equals("English"))
-            {
-                language.Title = "Language";
-            }
-            else
-            {
-                language.Title = "Bahasa";
-            }
-            language.IconSource = "language.png";            
-            masterPageItems.Add(language);
-          
-            MasterPageItem logoff = new MasterPageItem();
-            logoff.Id = "LogOff";
-            if (Ultis.Settings.Language.Equals("English"))
-            {
-                logoff.Title = "Log Off";
-            }
-            else
-            {
-                logoff.Title = "Log Keluar";
-            }
-            logoff.IconSource = "logout.png";
-            masterPageItems.Add(logoff);*/
+            MasterPageItem language = new MasterPageItem();
+              language.Id = "Language";
+              if (Ultis.Settings.Language.Equals("English"))
+              {
+                  language.Title = "Language";
+              }
+              else
+              {
+                  language.Title = "Bahasa";
+              }
+              language.IconSource = "language.png";            
+              masterPageItems.Add(language);
 
+              MasterPageItem logoff = new MasterPageItem();
+              logoff.Id = "LogOff";
+              if (Ultis.Settings.Language.Equals("English"))
+              {
+                  logoff.Title = "Log Off";
+              }
+              else
+              {
+                  logoff.Title = "Log Keluar";
+              }
+              logoff.IconSource = "logout.png";
+              masterPageItems.Add(logoff);
             listView.ItemsSource = masterPageItems;
 
 			listView.ItemTapped += (object sender, ItemTappedEventArgs e) => {

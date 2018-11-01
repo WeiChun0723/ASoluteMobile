@@ -13,10 +13,13 @@ using XLabs.Platform.Services.Media;
 using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using Plugin.CurrentActivity;
+using System.Net;
+using Xamarin.Forms;
+
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Business", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -24,7 +27,7 @@ namespace ASolute_Mobile.Droid
              
         protected override void OnCreate(Bundle bundle)
         {
-           
+
             TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
                 
             ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
@@ -35,10 +38,9 @@ namespace ASolute_Mobile.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.FormsMaps.Init(this, bundle);
-            OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
 
             UserDialogs.Init(this);
-
+           
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());
 

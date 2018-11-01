@@ -10,8 +10,8 @@
                 <DataTemplate>
                      <ViewCell >
                             
-                     <Frame HasShadow="true" Margin="5">
-                       <StackLayout>
+                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding BackColor}">
+                       <StackLayout BackgroundColor="{Binding BackColor}">
                                 <Label Text="{Binding Summary}" FontAttributes="Bold" />
                         </StackLayout>
                     </Frame>
@@ -20,7 +20,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
          </ListView>
-          
+          <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="70" HorizontalOptions="End"  x:Name="scan_icon">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BarCodeScan"/>
+                </Image.GestureRecognizers>
+            </Image>
             <ActivityIndicator x:Name="loading" IsEnabled="True" IsVisible="true" HorizontalOptions="FillAndExpand" IsRunning="True"/>
         </StackLayout>
 </ContentPage>

@@ -8,7 +8,7 @@ using Android.Locations;
 
 namespace ASolute_Mobile.Droid.Services
 {
-    [Service]
+   /* [Service]
     public class LocationService : Service, ILocationListener
     {
         public event EventHandler<LocationChangedEventArgs> LocationChanged = delegate { };
@@ -118,5 +118,5 @@ namespace ASolute_Mobile.Droid.Services
 
         #endregion
 
-    }
+    }*/
 }

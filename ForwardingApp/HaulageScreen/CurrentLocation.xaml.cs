@@ -30,6 +30,27 @@ namespace ASolute_Mobile.HaulageScreen
                 Title = "Hantar Lokasi Semasa";
             }
             Ultis.Settings.App = "Haulage";
+
+            if (Ultis.Settings.NewJob.Equals("Yes"))
+            {
+                CommonFunction.CreateToolBarItem(this);
+            }
+            else
+            {
+                this.ToolbarItems.Clear();
+            }
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+
+                try
+                {
+                    CommonFunction.NewJobNotification(this);
+                }
+                catch (Exception e)
+                {
+                    DisplayAlert("Notification error", e.Message, "OK");
+                }
+            });
         }
 
         public void editorTextChanged(object sender, TextChangedEventArgs e)

@@ -139,6 +139,7 @@ namespace ASolute_Mobile.Models
         public string RecordId { get; set; }
         public string Summary { get; set; }
         public string JobNo { get; set; }
+        public string BackColor { get; set; }
     }
 
     public class pickerValue : Generic

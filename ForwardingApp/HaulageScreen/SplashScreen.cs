@@ -4,8 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using ASolute_Mobile.CustomRenderer;
-using System.Net.Http;
-using System.Diagnostics;
 using ASolute_Mobile.Utils;
 using ASolute.Mobile.Models;
 using Newtonsoft.Json;
@@ -92,7 +90,7 @@ namespace ASolute_Mobile
             {
                 Spacing = 20,
                 Padding = new Thickness(15, 10),
-                //HorizontalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             };
 
@@ -129,7 +127,7 @@ namespace ASolute_Mobile
               splashImage.RotateYTo(13 * 360, duration)
             );
 
-            /*if(Ultis.Settings.AppFirstInstall == "First")
+            if(Ultis.Settings.AppFirstInstall == "First")
             {
                 title.IsVisible = true;
                 entry.IsVisible = true;
@@ -140,17 +138,9 @@ namespace ASolute_Mobile
             }
             else
             {
-                //Application.Current.MainPage = new NavigationPage(new LoginPage());
-                CustomerTracking.Action.AppAction();
-            }*/
-
-
-            title.IsVisible = true;
-            entry.IsVisible = true;
-            submit.IsVisible = true;
-            splashDeviceImage.IsVisible = true;
-            splashImage.IsVisible = false;
-            layout.Children.RemoveAt(0);
+                Application.Current.MainPage = new NavigationPage(new LoginPage());
+                //CustomerTracking.Action.AppAction();
+            }
 
 
             submit.Clicked += async (sender, e)  => 

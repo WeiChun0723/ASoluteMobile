@@ -1,4 +1,5 @@
-﻿using ASolute.Mobile.Models;
+﻿using Acr.UserDialogs;
+using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
 using Newtonsoft.Json;
@@ -16,15 +17,18 @@ namespace ASolute_Mobile.Utils
 {
     public class CommonFunction
     {
+        static ContentPage pages;
+
         //call when calling the web service to get response
         public static async Task<string> GetWebService(string baseAdd,string callUri)
         {
             var client = new HttpClient();
+          
             client.BaseAddress = new Uri(baseAdd);
             var uri = callUri;
             var response = await client.GetAsync(uri);
             var content = await response.Content.ReadAsStringAsync();
-           Debug.WriteLine(content);
+            Debug.WriteLine(content);
 
             return content;
         }
@@ -135,6 +139,56 @@ namespace ASolute_Mobile.Utils
             }
 
             
+        }
+
+        public static void NewJobNotification(ContentPage page)
+        {
+            try
+            {
+                pages = page;
+
+                var toastConfig = new ToastConfig("New job available in the job list.");
+                toastConfig.SetDuration(6000);
+                toastConfig.SetPosition(ToastPosition.Top);
+                toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(12, 131, 193));
+                UserDialogs.Instance.Toast(toastConfig);
+
+                CreateToolBarItem(page);
+            }
+            catch
+            {
+                 pages.DisplayAlert("Error", "Notification error", "OK");
+            }
+        }
+
+        public static void CreateToolBarItem(ContentPage contentPage)
+        {
+            pages.ToolbarItems.Clear();
+
+            if (contentPage.ToolbarItems.Count == 0)
+            {
+                var item = new ToolbarItem
+                {
+                    Text = "Item1",
+                    Icon = "new_job.png",
+                    Priority = 0,
+                    Order = ToolbarItemOrder.Primary,
+
+                };
+
+                item.Clicked += Handle_Clicked;
+
+                contentPage.ToolbarItems.Add(item);
+            }
+
+        }
+
+        static async void Handle_Clicked(object sender, System.EventArgs e)
+        {
+
+            Ultis.Settings.NewJob = "No";
+            await pages.Navigation.PushAsync(new HaulageScreen.JobList());
+
         }
 
         public static void AppActivity(string update, string status, string message)

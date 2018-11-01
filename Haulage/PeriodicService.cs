@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace ASolute_Mobile.Droid
 {
-    public class PeriodicService : Service
+   /* public class PeriodicService : Service
     {
         public override IBinder OnBind(Intent intent)
         {
@@ -20,5 +20,5 @@ namespace ASolute_Mobile.Droid
 
             return StartCommandResult.NotSticky;
         }
-    }
+    }*/
 }

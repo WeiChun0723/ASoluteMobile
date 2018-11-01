@@ -44,13 +44,12 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS WareHouse" ;
+                AppLabel.Text = "AILS Haulage";
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
 
             usernameEntry.Text = Ultis.Settings.SessionUserId;
-            
 
             // display the equipment that input by user before an load into list for user to choose when they type similar eq id (autocomplete)
 
@@ -116,7 +115,7 @@ namespace ASolute_Mobile
 
         protected override void OnAppearing()
         {
-            //organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
+            organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
         }
         
 
@@ -170,6 +169,7 @@ namespace ASolute_Mobile
                 {
                    // string uri;
                     var client = new HttpClient();
+
                     client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
                     //equipment.Text
                     string uri;
@@ -317,7 +317,7 @@ namespace ASolute_Mobile
                 }
                 catch (HttpRequestException exception)
                 {
-                    await DisplayAlert("Unable to connect", "Please try again later", "Ok");
+                    await DisplayAlert("Unable to connect", exception.Message, "Ok");
                     Application.Current.MainPage = new LoginPage();
 
                 }

@@ -45,7 +45,6 @@ namespace ASolute_Mobile.TransportScreen
 
             }
 
-
             ReasonList();
 
             imageGrid.RowSpacing = 0;
@@ -141,7 +140,7 @@ namespace ASolute_Mobile.TransportScreen
                 {
                     clsTruckingModel futile = new clsTruckingModel();
 
-                    futile.Id = jobID;
+                    futile.Id = "";
                     futile.Remarks = remarkTextEditor.Text;
                     futile.ReasonCode = keyValue[ReasonPicker.SelectedIndex].Key;
 
@@ -163,7 +162,6 @@ namespace ASolute_Mobile.TransportScreen
                         await DisplayAlert("Error", futile_response.Message, "OK");
                     }
                 }
-
             }
             catch
             {

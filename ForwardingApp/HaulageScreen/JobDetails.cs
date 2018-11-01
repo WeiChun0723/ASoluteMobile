@@ -60,6 +60,28 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
+            if (Ultis.Settings.NewJob.Equals("Yes"))
+            {
+                CommonFunction.CreateToolBarItem(this);
+            }
+            else
+            {
+                this.ToolbarItems.Clear();
+            }
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+
+                try
+                {
+
+                    CommonFunction.NewJobNotification(this);
+                }
+                catch (Exception e)
+                {
+                    DisplayAlert("Notification error", e.Message, "OK");
+                }
+            });
+
             PageContent();
             Action();
 
@@ -1045,12 +1067,9 @@ namespace ASolute_Mobile
 
                 App.Database.deleteAppImage();
                 await Navigation.PopAsync();
-                /*GetActionID();
-                await DisplayAlert("Success", "Job updated", "OK");*/
             }
             else
-            {
-                               
+            {                         
                 await DisplayAlert("Upload Error", json_response.Message, "OK");               
                 confirm.IsEnabled = true;
                 confirm.Source = "confirm.png";

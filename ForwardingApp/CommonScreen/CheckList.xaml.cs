@@ -77,16 +77,7 @@ namespace ASolute_Mobile
 
             return true;
         }
-
-       /* public async void cancelList(object sender, EventArgs e)
-        {
-            itemList.Clear();
-            uri = ControllerUtil.postCheckList(false, remarkEditor.Text);
-            uploadList();
-            await Navigation.PopAsync();
-        }*/
-
-             
+          
         public void disableList(object sender, ToggledEventArgs e)
         {
             if (selectAll.Checked == true)

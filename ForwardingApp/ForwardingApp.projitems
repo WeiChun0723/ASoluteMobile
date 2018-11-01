@@ -43,10 +43,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\PieChart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\PopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -115,14 +111,18 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\Logout.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomRenderer\Dashboard_Template.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)AppActivity.xaml.cs">
-      <DependentUpon>AppActivity.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\CurrentLocation.xaml.cs">
       <DependentUpon>CurrentLocation.xaml</DependentUpon>
@@ -225,9 +225,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\PropertyChange.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\PieChart.xaml.cs">
-      <DependentUpon>PieChart.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
@@ -258,7 +255,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\DataGrid.xaml.cs">
       <DependentUpon>DataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\LoadingScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CheckList.xaml.cs">
       <DependentUpon>CheckList.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -293,6 +289,14 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\Logout.xaml.cs">
       <DependentUpon>Logout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ListViewCommonScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\JobLists.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\Dashboard_Template.xaml.cs">
+      <DependentUpon>Dashboard_Template.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml.cs">
+      <DependentUpon>DriverRFC.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -335,12 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\FutileTrip_CargoReturn.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)AppActivity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

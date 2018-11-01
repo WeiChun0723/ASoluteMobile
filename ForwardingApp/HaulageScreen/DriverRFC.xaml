@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.HaulageScreen.DriverRFC"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             BackgroundColor="#e8e5e5">
+    
+    
+    <StackLayout Padding="15,15,15,15">
+        
+        <Label Text="Container No." FontAttributes="Bold" FontSize="Medium"/>
+        
+        <StackLayout Orientation="Horizontal" Padding="15,15,15,15" Spacing="15">
+            <controls:CustomEntry LineColor="LightYellow" x:Name="contPrefix"  HorizontalOptions="Fill"  WidthRequest="100" MinimumWidthRequest="100" TextChanged="ContPreChange" />
+            <controls:CustomEntry LineColor="LightYellow" x:Name="contNum"  HorizontalOptions="FillAndExpand" TextChanged="ContNumChange" Keyboard="Numeric"/>
+
+        </StackLayout> 
+        
+        <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"  HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SendContainerNumber"/>
+                    </Image.GestureRecognizers>
+         </Image>
+    </StackLayout>
+    
+</ContentPage>

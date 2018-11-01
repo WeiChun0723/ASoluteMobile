@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Utils;
@@ -236,8 +235,7 @@ namespace ASolute_Mobile.TransportScreen
                 if (!(String.IsNullOrEmpty(cargoDesc.Text)) && !(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(weight.Text)) && !(String.IsNullOrEmpty(lengthEntry.Text))
              && !(String.IsNullOrEmpty(widthEntry.Text)) && !(String.IsNullOrEmpty(heightEntry.Text)) && UOMPicker.SelectedIndex != -1)
                 {
-                       if (!(quantity.Text.Contains('.')) && !(lengthEntry.Text.Contains('.')) && !(widthEntry.Text.Contains('.')) && !(heightEntry.Text.Contains('.')))
-                        {
+                       
                             if (Convert.ToDouble(weight.Text) <= 2000)
                             {
                                 if (Convert.ToInt16(lengthEntry.Text) <= 300 && Convert.ToInt16(widthEntry.Text) <= 300 && Convert.ToInt16(heightEntry.Text) <= 300)
@@ -286,13 +284,7 @@ namespace ASolute_Mobile.TransportScreen
                             }
 
                         }
-                        else
-                        {
-                            await DisplayAlert("Input Error", "Please make sure other value except weight does not have decimal.", "OK");
-                        }
-                  
-
-                }
+ 
                 else
                 {
                     await DisplayAlert("Error", "Please key in all the field", "OK");

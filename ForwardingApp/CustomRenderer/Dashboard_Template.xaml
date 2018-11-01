@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CustomRenderer.Dashboard_Template">
+    
+ <StackLayout Orientation="Vertical">
+
+        <Image x:Name="DashboardIcon" 
+               HorizontalOptions="CenterAndExpand" 
+               HeightRequest="100"
+               WidthRequest="100"
+               Source="{Binding Icon}" />
+
+        <Label x:Name="DashboardLabel" 
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Start"
+               LineBreakMode="WordWrap"
+               Text="{Binding Label}"
+               TextColor="#3A444D" />
+      
+    </StackLayout>
+    
+</ContentView>

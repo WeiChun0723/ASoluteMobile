@@ -24,14 +24,13 @@ namespace ASolute_Mobile.Utils
 
         public static String postNewRecordURL()
         {
-            return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
         public static String postCheckList(bool status, string remark, int odo)
         {
             return String.Format("CheckList/Save?SessionId={0}&GeoLoc={1}&IsGood={2}&Remarks={3}&Odometer={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), status, remark, odo);
         }
-
 
         public static String getChangePasswordURL(string encryptedNewPassword)
         {
@@ -40,17 +39,17 @@ namespace ASolute_Mobile.Utils
 
         public static String getPanicURL()
         {
-            return String.Format("Util/Panic?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Util/Panic?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getCallOperatorURL()
         {
-            return String.Format("Util/CallMe?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Util/CallMe?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getLanguageURL(int language_value)
         {
-            return String.Format("Util/ChangeLanguage?SessionId={0}&GeoLoc={1}&Language={2}", Ultis.Settings.SessionSettingKey, "0", language_value);
+            return String.Format("Util/ChangeLanguage?SessionId={0}&GeoLoc={1}&Language={2}", Ultis.Settings.SessionSettingKey, "", language_value);
         }
         #endregion 
 
@@ -131,9 +130,9 @@ namespace ASolute_Mobile.Utils
             return String.Format("Providers/UpdateRFC?SessionId={0}&Code={1}&ProcessId={2}&RequiredTime={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, code, value, time, remark);
         }
 
-        public static String getHaulageVolume()
+        public static String getHaulageVolume(string dateTime)
         {
-            return String.Format("Providers/HaulageVolume?SessionId={0}&ViewDate={1}", Ultis.Settings.SessionSettingKey, DateTime.Now.ToString("yyyy-MM-dd"));
+            return String.Format("Providers/HaulageVolume?SessionId={0}&ViewDate={1}", Ultis.Settings.SessionSettingKey, dateTime);
         }
 
         #endregion
@@ -199,6 +198,11 @@ namespace ASolute_Mobile.Utils
         #endregion
 
         #region haulage url
+
+        public static String postDriverRFCURL(string containerNum)
+        {
+            return String.Format("Haulage/DriverRFC?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, "", containerNum);
+        }
         #endregion
 
 
@@ -235,7 +239,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
         {
-            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", "0", ownerID, userID, password, ICNo);
+            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", "", ownerID, userID, password, ICNo);
         }
 
         public static String getLoginURL(string encryptedUserId, string encryptedPassword)
@@ -257,16 +261,16 @@ namespace ASolute_Mobile.Utils
             return String.Format("File/LogoUpdated?SessionId={0}", Ultis.Settings.SessionSettingKey);
         }
 
-        public static String getDownloadMenuURL()
+        public static String getDownloadMenuURL(string firebase)
         {
-            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
+            return String.Format("Session/Load?Id={0}&FirebaseId={1}", Ultis.Settings.SessionSettingKey,firebase);
         }
 
         
 
         public static String getDownloadRefuelHistoryURL()
         {
-            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
 
@@ -277,27 +281,27 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadHaulageListURL()
         {
-            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
         public static String getDownloadHaulageHistoryURL(string date)
         {
-            return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, "0",date);
+            return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, "",date);
         }
 
         public static String postContainerNumberURL(string containerNumber)
         {
-            return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, "0", containerNumber);
+            return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, "", containerNumber);
         }
 
         public static String getPendingCollectionURL()
         {
-            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
         public static String postHaulageURL()
         {
-            return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
         public static String addJobURL(string container)
@@ -312,7 +316,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getNewFuelCostURL()
         {
-            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
        
@@ -362,7 +366,7 @@ namespace ASolute_Mobile.Utils
                         {
                             try
                             {
-                            Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(5)); }).Wait();
+                            Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(5));});
                                 latestPosition = true;
                             }
                             catch (TaskCanceledException exception)
@@ -375,7 +379,7 @@ namespace ASolute_Mobile.Utils
                         if (position == null && !latestPosition)
                         {
                             //Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
-                            return "0";
+                            return "";
                         }
 
                         if (position != null)

@@ -6,7 +6,7 @@
   
 
 
-<!--<MasterDetailPage.Master>
+<MasterDetailPage.Master>
     <local:MasterPage x:Name="masterPage"/>
   </MasterDetailPage.Master>
 
@@ -16,6 +16,6 @@
                 <local:MainMenu />
             </x:Arguments>
         </NavigationPage>
-    </MasterDetailPage.Detail>-->
+    </MasterDetailPage.Detail>
     
     </MasterDetailPage>

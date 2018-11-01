@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<d:ListViewScreen xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.TestShared"
+             xmlns:d="clr-namespace:ASolute_Mobile;assembly=ASolute_Mobile">
+    <ContentPage.Content>
+    </ContentPage.Content>
+    
+</d:ListViewScreen>

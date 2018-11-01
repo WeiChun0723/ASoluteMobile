@@ -15,12 +15,13 @@ namespace ASolute_Mobile.TransportScreen
     public partial class JobDetails : ContentPage
     {
         string jobID, telNo, location;
-        bool reqSign;
+        bool reqSign = false;
         long eventRecordID;
         double imageWidth;
         static List<DetailItems> job_Details;
         bool first_appear = true;
         private byte[] scaledImageByte;
+        List<AppImage> images = new List<AppImage>();
 
         public JobDetails(TruckModel record)
         {
@@ -57,6 +58,34 @@ namespace ASolute_Mobile.TransportScreen
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         }
 
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            images.Clear();
+            imageGrid.Children.Clear();
+
+            images = App.Database.GetUplodedRecordImagesAsync(jobID, "NormalImage");
+
+            foreach (AppImage Image in images)
+            {
+                byte[] imageByte;
+
+                IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
+                Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
+                    stream.CopyTo(ms);  // was empty without stream.Position = 0;
+                    imageByte = ms.ToArray();
+                }
+                var image = new Image();
+                image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
+                AddThumbnailToImageGrid(image, Image);
+            }
+        }
+
         public void PageContent()
         {
             if (first_appear == true)
@@ -87,8 +116,6 @@ namespace ASolute_Mobile.TransportScreen
                             captionLabel.Text = detailItem.Caption + ":  ";
                             captionLabel.WidthRequest = 120;
 
-
-
                             valueLabel.FontAttributes = FontAttributes.Bold;
                             valueLabel.Text = detailItem.Value;
 
@@ -103,16 +130,11 @@ namespace ASolute_Mobile.TransportScreen
                                 captionLabel.FontAttributes = FontAttributes.Bold;
                                 captionLabel.HorizontalOptions = LayoutOptions.FillAndExpand;
                                 captionLabel.Text = detailItem.Value ;
-                                captionLabel.WidthRequest = 120;
                                 jobDetails.Children.Add(captionLabel);
-                            }
-
+                           }
                         }
-
                     }
-
                 }
-
             }
 
         }
@@ -142,8 +164,7 @@ namespace ASolute_Mobile.TransportScreen
             UploadImage(jobID);
             try
             {
-                List<AppImage> images = new List<AppImage>();
-
+              
                 images.Clear();
                 imageGrid.Children.Clear();
                
@@ -218,7 +239,7 @@ namespace ASolute_Mobile.TransportScreen
                 if(update_response.IsGood)
                 {
                     Ultis.Settings.CargoReturn = jobID + "," + eventRecordID + "," + reqSign;
-                    await Navigation.PopAsync();
+                    //await Navigation.PopAsync();
                 }
                 else
                 {
@@ -230,7 +251,6 @@ namespace ASolute_Mobile.TransportScreen
                 }
             }
         }
-
 
         public async void UploadImage(string uploadID)
         {

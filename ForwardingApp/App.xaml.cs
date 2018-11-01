@@ -9,6 +9,8 @@ using Xamarin.Forms;
 using ASolute_Mobile.Data;
 using ASolute_Mobile.CustomerTracking;
 using Com.OneSignal;
+using Com.OneSignal.Abstractions;
+using System.Collections.Generic;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ASolute_Mobile
@@ -28,25 +30,33 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            /*if (sessionKey != "")
+            if (sessionKey != "")
             {
                 MainPage = new MainPage();
 
             }
             else 
             {
-                MainPage = new CustomNavigationPage(new SplashScreen());
+                 MainPage = new CustomNavigationPage(new SplashScreen());
                 //MainPage = new CustomNavigationPage(new LoginPage());
-
-
-            }*/
+            }
+          
             //MainPage = new CustomNavigationPage(new CustomerTracking.DataGrid());
-            Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-            MainPage = new CustomNavigationPage(new AppNavigation());
+            // Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+             // MainPage = new CustomNavigationPage(new AppNavigation());
 
-             OneSignal.Current.StartInit("562c88f7-d485-4de0-b79f-a5154c40024d")
-                      .EndInit();
+               OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
+                        .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
+                        .HandleNotificationReceived(HandleNotificationReceived)
+                        .EndInit();
 
+        }
+
+        void HandleNotificationReceived(OSNotification notification)
+        {
+            var test = notification;
+            Ultis.Settings.NewJob = "Yes";
+            MessagingCenter.Send<App>((App)Application.Current, "Testing");
         }
 
         public static Database Database

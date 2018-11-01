@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.HaulageScreen.CurrentLocation"
@@ -8,7 +8,7 @@
     <StackLayout Spacing="15" Padding="15,15,15,15">
         <Image Source="map.png" HeightRequest="150" WidthRequest="50"/>
         <Label Text="Company name" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="CenterAndExpand"/>
-        <controls:CustomEntry HeightRequest="40" LineColor="LightYellow" x:Name="locationName" TextChanged="editorTextChanged"/>
+        <controls:CustomEntry  LineColor="LightYellow" x:Name="locationName" TextChanged="editorTextChanged"/>
         <controls:CustomButton HorizontalOptions="Fill" Text="Submit" Clicked="updateLocation"/>
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
     </StackLayout>
