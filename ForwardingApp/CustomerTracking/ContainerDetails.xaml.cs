@@ -24,8 +24,8 @@ namespace ASolute_Mobile.CustomerTracking
             provider_code = code;
             provider_container = container;
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "OnCategoryCreated", (sender)  => {
-                GetContainerDetail();
+            MessagingCenter.Subscribe<App>((App)Application.Current, "OnCategoryCreated",async  (sender)  => {
+                await GetContainerDetail();
             });
 
         }

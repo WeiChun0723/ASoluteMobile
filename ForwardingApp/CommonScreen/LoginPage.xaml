@@ -4,20 +4,21 @@
              x:Class="ASolute_Mobile.LoginPage" BackgroundColor = "#9A2116"              
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              xmlns:lc="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
-             xmlns:lb="clr-namespace:XLabs.Forms.Behaviors;assembly=XLabs.Forms">
+             xmlns:lb="clr-namespace:XLabs.Forms.Behaviors;assembly=XLabs.Forms"
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation">
 
     <ScrollView>
     <StackLayout Padding = "20, 0, 20, 20" >
         <StackLayout Padding="0,30">
-                      
+                     
         </StackLayout>
         <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
         <StackLayout Padding = "0, 10"></StackLayout>
-        <Label TextColor="#FFFFFF" FontSize = "Medium" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" />
+        <Label TextColor="#FFFFFF" FontSize = "Medium" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold"/>
         <StackLayout Padding = "0, 30"></StackLayout>
 
         <StackLayout Orientation="Horizontal" >
-                <controls:CustomEntry Placeholder="Owner"  x:Name="organizationEntry" Image="organization" Style="{StaticResource entryStyle}" IsEnabled="False" PlaceholderColor="White" HorizontalOptions="FillAndExpand"/>
+                <controls:CustomEntry Placeholder="Enterprise name"  x:Name="organizationEntry" Image="organization" Style="{StaticResource entryStyle}" IsEnabled="False" PlaceholderColor="White" HorizontalOptions="FillAndExpand"/>
                 <Image Source="edit.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="End"  x:Name="edit_icon">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Update_URL_Clicked"/>
@@ -25,8 +26,16 @@
                 </Image>
         </StackLayout>
            
-        <controls:CustomEntry Placeholder="UserID" x:Name = "usernameEntry" Image="user" Style="{StaticResource entryStyle}" />
-        <controls:CustomEntry Placeholder="Password" IsPassword="True" x:Name = "passwordEntry" Image="pass" Style="{StaticResource entryStyle}" />
+        <controls:CustomEntry Placeholder="UserID" x:Name = "usernameEntry" Image="user" Style="{StaticResource entryStyle}" >
+                  <controls:CustomEntry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="10"/>
+                </controls:CustomEntry.Behaviors>
+         </controls:CustomEntry>
+        <controls:CustomEntry Placeholder="Password" IsPassword="True" x:Name = "passwordEntry" Image="pass" Style="{StaticResource entryStyle}">
+                 <controls:CustomEntry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="10"/>
+                </controls:CustomEntry.Behaviors>
+         </controls:CustomEntry>
 
         <StackLayout Orientation="Horizontal" >
             <controls:CustomEntry Placeholder="Equipment"  x:Name = "equipmentEntry" Image="logintruck" Style="{StaticResource entryStyle}" HorizontalOptions="FillAndExpand" />

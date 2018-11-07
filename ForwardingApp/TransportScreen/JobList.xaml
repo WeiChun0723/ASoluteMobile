@@ -8,7 +8,7 @@
             <ListView x:Name="jobList"  ItemTapped="selectJob" IsPullToRefreshEnabled="True" Refreshing="pendingJobRefresh" SeparatorColor="White" >
                <ListView.ItemTemplate>
                 <DataTemplate>
-                     <ViewCell >
+                     <ViewCell>
                             
                      <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding BackColor}">
                        <StackLayout BackgroundColor="{Binding BackColor}">
@@ -20,11 +20,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
          </ListView>
-          <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="70" HorizontalOptions="End"  x:Name="scan_icon">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="BarCodeScan"/>
-                </Image.GestureRecognizers>
-            </Image>
+          
             <ActivityIndicator x:Name="loading" IsEnabled="True" IsVisible="true" HorizontalOptions="FillAndExpand" IsRunning="True"/>
         </StackLayout>
 </ContentPage>

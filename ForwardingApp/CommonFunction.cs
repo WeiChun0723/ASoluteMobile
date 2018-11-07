@@ -163,7 +163,8 @@ namespace ASolute_Mobile.Utils
 
         public static void CreateToolBarItem(ContentPage contentPage)
         {
-            pages.ToolbarItems.Clear();
+            pages = contentPage;
+            contentPage.ToolbarItems.Clear();
 
             if (contentPage.ToolbarItems.Count == 0)
             {
@@ -187,6 +188,7 @@ namespace ASolute_Mobile.Utils
         {
 
             Ultis.Settings.NewJob = "No";
+            pages.ToolbarItems.Clear();
             await pages.Navigation.PushAsync(new HaulageScreen.JobList());
 
         }

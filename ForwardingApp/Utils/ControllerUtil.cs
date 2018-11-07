@@ -211,12 +211,6 @@ namespace ASolute_Mobile.Utils
             return String.Format("Trip/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-
-
-
-        
-       
-
         public static String postFowardJobURL(JobItems jobItem)
         {
             String remarks = jobItem.Remark;
@@ -239,7 +233,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
         {
-            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", "", ownerID, userID, password, ICNo);
+            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", 0, ownerID, userID, password, ICNo);
         }
 
         public static String getLoginURL(string encryptedUserId, string encryptedPassword)
@@ -319,7 +313,6 @@ namespace ASolute_Mobile.Utils
             return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
         }
 
-       
         public static String getUploadedImageURL(string Id)
         {
             return String.Format("File/List?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),Id);
@@ -349,9 +342,6 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Inquiry/EQ?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), eqID);
         }
-
-
-
 
         public static String getPositionAsync()
         {

@@ -30,9 +30,9 @@ namespace ASolute_Mobile
         double imageWidth;
         clsResponse json_reponse = new clsResponse();
         clsFuelCostNew fuelCostNew = new clsFuelCostNew();         
-        string newFuelID, focusField;
-        int station_choice, payment_choice;
-        string mandatory;
+        string newFuelID;
+        int station_choice = 0, payment_choice;
+       
       
 
         public RefuelEntry ()
@@ -104,26 +104,17 @@ namespace ASolute_Mobile
             }
         }
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+        }
+
         public async void CaptureImage(object sender, EventArgs e)
         {
             await CommonFunction.StoreImages(newFuelID, this);
             DisplayImage();
-        }
-
-
-        public void FuelEntryFocus(object sender, FocusEventArgs e)
-        {
-            focusField = "fuel";
-        }
-
-        public void VoucherEntryFocus(object sender, FocusEventArgs e)
-        {
-            focusField = "voucher";
-        }
-
-        public void OtherEntryFocus(object sender, FocusEventArgs e)
-        {
-            focusField = "other";
         }
 
         public async void ConfirmRefuel(object sender, EventArgs e)
@@ -244,7 +235,7 @@ namespace ASolute_Mobile
 
 
                                 }
-                                catch (Exception exception)
+                                catch
                                 {
                                     await DisplayAlert("Error", "Please key in all mandatory field.", "OK");
                                 }
@@ -320,14 +311,14 @@ namespace ASolute_Mobile
                     //voucher.BackgroundColor = Color.FromHex("#FFFFE0");
                     voucher.LineColor = Color.FromHex("#FFFF33");
                     fuelCard.LineColor = Color.Transparent;
-                    mandatory = "voucher";
+
                 }
 
                 if (paymentPicker.SelectedIndex == 1)
                 {
                     voucher.LineColor = Color.Transparent;
                     fuelCard.LineColor = Color.FromHex("#FFFF33");
-                    mandatory = "fuel_card";
+
                 }
             }
         }
@@ -380,7 +371,7 @@ namespace ASolute_Mobile
             catch
             {
                 //DisplayAlert("Error", "Please try again", "OK");
-                string test = "";
+              
             }
            
         }
@@ -559,7 +550,7 @@ namespace ASolute_Mobile
                     }
 
                     paymentPicker.SelectedIndex = 1;
-                    mandatory = "fuel_card";
+
                 }
                 catch (HttpRequestException)
                 {

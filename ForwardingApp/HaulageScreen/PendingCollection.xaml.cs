@@ -41,6 +41,12 @@ namespace ASolute_Mobile.HaulageScreen
                 Title = "Pending Collection";
             }
 
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -54,7 +60,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                 try
                 {
-
                     CommonFunction.NewJobNotification(this);
                 }
                 catch (Exception e)
@@ -63,6 +68,14 @@ namespace ASolute_Mobile.HaulageScreen
                 }
             });
         }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+        }
+
 
         protected void pendingCollectionRefresh(object sender, EventArgs e)
         {

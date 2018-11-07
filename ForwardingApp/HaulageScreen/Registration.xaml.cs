@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -21,8 +20,8 @@ namespace ASolute_Mobile.HaulageScreen
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Registration : ContentPage
 	{
-        bool success = false;
-        public string encryptedUserId, encryptedPassword;
+      
+        public string encryptedUserId, encryptedPassword, baseURL;
 
 
         public Registration ()
@@ -60,7 +59,7 @@ namespace ASolute_Mobile.HaulageScreen
             enterpriseEntry.Text = Ultis.Settings.AppEnterpriseName;
         }
 
-        public void enterTextChange(object sender, TextChangedEventArgs e)
+        public void enterpriseTextChange(object sender, TextChangedEventArgs e)
         {
             string _enterprisetext = enterpriseEntry.Text.ToUpper();
 
@@ -73,20 +72,6 @@ namespace ASolute_Mobile.HaulageScreen
 
             userIDEntry.Text = _usertext;
         }
-
-        public void iCTextChange(object sender, TextChangedEventArgs e)
-        {
-            string _ICtext = icEntry.Text;
-
-            //Get Current Text
-            if (_ICtext.Length > 20)
-            {
-                _ICtext = _ICtext.Remove(_ICtext.Length - 1);
-                icEntry.Text = _ICtext;
-            }
-                
-        }
-
 
         public async void Register_Clicked(object sender, System.EventArgs e)
         {
@@ -118,13 +103,8 @@ namespace ASolute_Mobile.HaulageScreen
 
         public async void GetBasedURL()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://api.asolute.com/");
-            var uri = ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper());
-            var response = await client.GetAsync(uri);
-            var content = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(content);
 
+            var content = await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper()));
             clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (json_response.IsGood)
@@ -142,22 +122,31 @@ namespace ASolute_Mobile.HaulageScreen
 
         public async void RegisterUser()
         {
-        
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text));
-            clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
-           
-            if (register_response.IsGood)
+            try
             {
-                await DisplayAlert("Success", "Registration successfully", "OK");
-                Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
-                DownloadLogo();
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text));
+                clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
+                if (register_response.IsGood)
+                {
+                    await DisplayAlert("Success", "Registration successfully", "OK");
+                    Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
+                    DownloadLogo();
+
+                }
+                else
+                {
+                    await DisplayAlert("Failed", register_response.Message, "OK");
+                    activityIndicator.IsRunning = false;
+                }
             }
-            else
+            catch
             {
-                await DisplayAlert("Failed", register_response.Message, "OK");
-                activityIndicator.IsRunning = false;
+                await DisplayAlert("Error", "The baseURL for enterprise " + enterpriseEntry.Text.ToUpper() + " ("
+                                   + Ultis.Settings.SessionBaseURI + ") " + "cannot be use.", "OK");
             }
+
+            activityIndicator.IsRunning = false;
         }
 
         public async void DownloadLogo()
@@ -168,10 +157,8 @@ namespace ASolute_Mobile.HaulageScreen
                 encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
                 encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
 
-                // string uri;
                 var client = new HttpClient();
-                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                //equipment.Text                              
+                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);                             
                  var uri = ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword);                
                 var response = await client.GetAsync(uri);
                 var content = await response.Content.ReadAsStringAsync();
@@ -184,8 +171,6 @@ namespace ASolute_Mobile.HaulageScreen
                     //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
 
                     var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-
-                 
 
                     foreach (clsDataRow contextMenu in login_user.ContextMenu)
                     {

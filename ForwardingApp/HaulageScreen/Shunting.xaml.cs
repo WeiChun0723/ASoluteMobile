@@ -27,6 +27,13 @@ namespace ASolute_Mobile.HaulageScreen
             Title = title;
             Ultis.Settings.App = "Haulage";
 
+      
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -40,7 +47,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                 try
                 {
-
                     CommonFunction.NewJobNotification(this);
                 }
                 catch (Exception e)
@@ -48,6 +54,13 @@ namespace ASolute_Mobile.HaulageScreen
                     DisplayAlert("Notification error", e.Message, "OK");
                 }
             });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
         public async void Confirm(object sender, EventArgs e)

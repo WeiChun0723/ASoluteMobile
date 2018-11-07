@@ -72,7 +72,7 @@ namespace ASolute_Mobile.CustomerTracking
                 }
                 else
                 {
-                    await LoadProviderList();
+                     LoadProviderList();
                 }
 
             }
@@ -125,7 +125,7 @@ namespace ASolute_Mobile.CustomerTracking
                     App.Database.SaveProvider(available_provider);
                 }
                
-                await LoadProviderList();
+                 LoadProviderList();
             }
             else
             {
@@ -133,7 +133,7 @@ namespace ASolute_Mobile.CustomerTracking
             }
         }
 
-        public async Task LoadProviderList()
+        public void LoadProviderList()
         {
             Ultis.Settings.ListType = "provider_List";
             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("ProviderList"));

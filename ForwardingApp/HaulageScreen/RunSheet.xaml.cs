@@ -18,9 +18,15 @@ using Xamarin.Forms.Xaml;
 namespace ASolute_Mobile.HaulageScreen
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class RunSheet : ContentPage
+    public partial class RunSheet : CarouselPage
 	{
+        bool firstLoad = true, changePage = false;
         string selectDate,option = "none";
+        DatePicker datePicker;
+        ListView runSheetHistory;
+        Image previous_icon, next_icon, noData;
+        ActivityIndicator activityIndicator;
+        DateTime currentDate;
 
 		public RunSheet ()
 		{
@@ -35,16 +41,56 @@ namespace ASolute_Mobile.HaulageScreen
                 Title = "Borang Perjalanan";
             }
             Ultis.Settings.App = "Haulage";
+
+            PageContent();
+
+            downloadRunSheet(DateTime.Now.ToString("yyyy MM dd"));
+
+            SelectedItem = Children[1];
+        }
+
+      protected override void OnCurrentPageChanged()
+        {
+            base.OnCurrentPageChanged();
+
+            int index = Children.IndexOf(CurrentPage);
+           
+           // string date = datePicker.Date.ToString();
+            if (!firstLoad)
+            {
+
+                if (index == 0)
+                {
+
+                    currentDate = datePicker.Date.AddDays(-1);
+                    // currentDate = currentDate.AddDays(-1);
+                    changePage = true;
+                    downloadRunSheet(currentDate.ToString("yyyy MM dd"));
+
+                }
+                else if (index == 2)
+                {
+            
+                    //currentDate = currentDate.AddDays(1);
+                    currentDate = datePicker.Date.AddDays(1);
+                    downloadRunSheet(currentDate.ToString("yyyy MM dd"));
+                    changePage = true;
+                }
+                else
+                {
+                    PageContent();
+                }
+               
+            }
+
         }
 
         protected override void OnAppearing()
         {
-
-            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
-
+           
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
-                CommonFunction.CreateToolBarItem(this);
+                CommonFunction.CreateToolBarItem(CurrentPage);
             }
             else
             {
@@ -56,7 +102,7 @@ namespace ASolute_Mobile.HaulageScreen
                 try
                 {
 
-                    CommonFunction.NewJobNotification(this);
+                    CommonFunction.NewJobNotification(CurrentPage);
                 }
                 catch (Exception e)
                 {
@@ -65,27 +111,145 @@ namespace ASolute_Mobile.HaulageScreen
             });
         }
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+        }
+
         public void recordDate(object sender, DateChangedEventArgs e)
         {
             if(option == "none")
             {
-                selectDate = e.NewDate.ToString("yyyy MMMMM dd");
-
+                selectDate = e.NewDate.ToString("yyyy MM dd");
 
                 downloadRunSheet(selectDate);
             }
 
         }
 
+        public void PageContent()
+        {
+            StackLayout mainLayout = new StackLayout
+            {
+                Padding = new Thickness(10, 10, 10, 10)
+            };
+
+            mainLayout.Children.Clear();
+
+            noData = new Image
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Source = "nodatafound.png",
+                IsVisible = false
+            };
+
+
+            activityIndicator = new ActivityIndicator
+            {
+                IsRunning = true,
+                IsVisible = true
+            };
+
+            StackLayout optionStack = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 15,
+                Padding = new Thickness(15, 15, 15, 15)
+            };
+
+            Label label = new Label
+            {
+                Text = "Date",
+                FontAttributes = FontAttributes.Bold,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 20
+            };
+
+            datePicker = new DatePicker
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.LightYellow,
+                Scale = 1.0
+            };
+
+            datePicker.DateSelected += recordDate;
+
+            StackLayout optionImageStack = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 5,
+
+            };
+
+            previous_icon = new Image
+            {
+                Source = "angleLeft.png",
+                WidthRequest=40,
+                HeightRequest=40
+            };
+
+            var previous = new TapGestureRecognizer();
+            previous.Tapped += PreviousDate;
+            previous_icon.GestureRecognizers.Add(previous);
+
+            next_icon = new Image
+            {
+                Source = "angleRight.png",
+                WidthRequest = 40,
+                HeightRequest = 40
+            };
+
+            var right = new TapGestureRecognizer();
+            right.Tapped += NextDate;
+            next_icon.GestureRecognizers.Add(right);
+
+            optionImageStack.Children.Add(previous_icon);
+            optionImageStack.Children.Add(next_icon);
+
+            optionStack.Children.Add(label);
+            optionStack.Children.Add(datePicker);
+            optionStack.Children.Add(optionImageStack);
+
+            runSheetHistory = new ListView
+            {
+                IsPullToRefreshEnabled = true,
+                SeparatorColor = Color.White,
+                BackgroundColor = Color.White,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                IsVisible = false
+            };
+
+            runSheetHistory.Refreshing += runSheetRefresh;
+
+            mainLayout.Children.Add(optionStack);
+            mainLayout.Children.Add(runSheetHistory);
+            mainLayout.Children.Add(noData);
+            mainLayout.Children.Add(activityIndicator);
+
+            CurrentPage.Content = mainLayout;
+
+            if(changePage)
+            {
+                datePicker.Date = currentDate;
+            }
+            else
+            {
+                datePicker.Date = DateTime.Now;
+            }
+
+        }
+
         public void PreviousDate(object sender, EventArgs e)
         {
-
-           
+        
             previous_icon.IsEnabled = false;
             next_icon.IsEnabled = false;
             option = "previous";
-            downloadRunSheet(datePicker.Date.AddDays(-1).ToString("yyyy MMMMM dd"));
-
+           
+            downloadRunSheet(datePicker.Date.AddDays(-1).ToString("yyyy MM dd"));
         }
 
         public void NextDate(object sender, EventArgs e)
@@ -94,13 +258,14 @@ namespace ASolute_Mobile.HaulageScreen
             previous_icon.IsEnabled = false;
             next_icon.IsEnabled = false;
             option = "next";
-            downloadRunSheet(datePicker.Date.AddDays(1).ToString("yyyy MMMMM dd"));
+            
+            downloadRunSheet(datePicker.Date.AddDays(1).ToString("yyyy MM dd"));
         }
 
 
         protected void runSheetRefresh(object sender, EventArgs e)
         {
-            downloadRunSheet(datePicker.Date.ToString("yyyy MMMMM dd"));
+            downloadRunSheet(datePicker.Date.ToString("yyyy MM dd"));
 
             runSheetHistory.IsRefreshing = false;
         }
@@ -110,9 +275,10 @@ namespace ASolute_Mobile.HaulageScreen
             try
             {
                 activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
-                runSheetHistory.IsVisible = false;
-                noData.IsVisible = false;
+                firstLoad = false;
+                CurrentPage = Children[1];
+
+
 
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
@@ -128,10 +294,10 @@ namespace ASolute_Mobile.HaulageScreen
                     switch (option)
                     {
                         case "previous":
-                            datePicker.Date = datePicker.Date.AddDays(-1);
+							 datePicker.Date = datePicker.Date.AddDays(-1);
                             break;
                         case "next":
-                            datePicker.Date = datePicker.Date.AddDays(1);
+                           datePicker.Date = datePicker.Date.AddDays(1);
                             break;
                         case "none":
                             break;
@@ -203,6 +369,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                     option = "none";
                     refreshRunSheetHistory();
+
                 }
                 else
                 {

@@ -74,10 +74,9 @@ namespace ASolute_Mobile
             mainLayout.Children.Add(loading);
             mainLayout.Children.Add(scanBarCode);
 
-            Content = new ScrollView
-            {
-                Content = mainLayout
-            };
+
+            Content = mainLayout;
+           
         }
     }
   

@@ -298,6 +298,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml.cs">
       <DependentUpon>DriverRFC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)MainMenuItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

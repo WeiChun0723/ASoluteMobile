@@ -15,19 +15,19 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-
+using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainMenu : ContentPage
     {
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string previousLocation = "";
         string chklocation = "0";
-        string firebaseID,testing;
-        int count = 0;
+        string firebaseID;
+       
 
         public MainMenu()
         {
@@ -36,7 +36,7 @@ namespace ASolute_Mobile
             Task.Run(async () => { await StartListening(); });
 
             OneSignal.Current.IdsAvailable(IdsAvailable);
-
+           
         }
 
         public async Task StartListening()
@@ -113,17 +113,19 @@ namespace ASolute_Mobile
                 this.ToolbarItems.Clear();
             }
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing",(sender) => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
 
                 try
                 {
+
                     CommonFunction.NewJobNotification(this);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     DisplayAlert("Notification error", e.Message, "OK");
                 }
             });
+
 
             Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
 
@@ -145,8 +147,7 @@ namespace ASolute_Mobile
         {
             base.OnDisappearing();
 
-            //this.ToolbarItems.Clear();
-
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
 
@@ -156,7 +157,8 @@ namespace ASolute_Mobile
            if (doubleBackToExitPressedOnce)
            {
               base.OnBackButtonPressed();
-              CloseApp();
+                MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+                CloseApp();
            }
 
             doubleBackToExitPressedOnce = true;           
@@ -171,8 +173,7 @@ namespace ASolute_Mobile
                 doubleBackToExitPressedOnce = false;
             }
             );
-
-           
+                    
             return true;
         }
     
@@ -503,7 +504,6 @@ namespace ASolute_Mobile
                         }
 
                     }
-
 
                 }
 

@@ -22,7 +22,7 @@ namespace ASolute_Mobile.InputValidation
         private void bindable_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (e.NewTextValue.Length >= MaxLength)
-                ((Entry)sender).Text = e.NewTextValue.Substring(0, MaxLength).ToUpper();
+                ((Entry)sender).Text = e.NewTextValue.Substring(0, MaxLength);
 
         }
 

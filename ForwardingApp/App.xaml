@@ -30,7 +30,7 @@
                 <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
                 <Setter Property="PlaceholderColor" Value="#ffffff" />
                 <Setter Property="HeightRequest" Value="{StaticResource EntryHeightRequest}" />
-                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
             <Style x:Key="buttonStyle" TargetType="Button">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />

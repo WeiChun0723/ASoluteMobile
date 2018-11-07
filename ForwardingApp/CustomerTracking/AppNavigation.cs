@@ -48,23 +48,6 @@ namespace ASolute_Mobile.CustomerTracking
 
             };
 
-            loading = new ActivityIndicator();
-
-
-            AbsoluteLayout.SetLayoutFlags(splashImage, AbsoluteLayoutFlags.PositionProportional);
-            AbsoluteLayout.SetLayoutBounds(splashImage, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-
-            sub.Children.Add(splashImage);
-
-            ScrollView scroll = new ScrollView();
-
-            StackLayout layout = new StackLayout
-            {
-                Spacing = 20,
-                Padding = new Thickness(15, 10),
-                VerticalOptions = LayoutOptions.Center
-            };
-
             entry = new CustomEntry
             {
                 Style = (Style)App.Current.Resources["entryStyle"],
@@ -86,6 +69,24 @@ namespace ASolute_Mobile.CustomerTracking
                 IsVisible = false
             };
 
+            loading = new ActivityIndicator();
+
+
+            AbsoluteLayout.SetLayoutFlags(splashImage, AbsoluteLayoutFlags.PositionProportional);
+            AbsoluteLayout.SetLayoutBounds(splashImage, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+
+            sub.Children.Add(splashImage);
+
+            ScrollView scroll = new ScrollView();
+
+            StackLayout layout = new StackLayout
+            {
+                Spacing = 20,
+                Padding = new Thickness(15, 10),
+                VerticalOptions = LayoutOptions.Center
+            };
+
+
             StackLayout gap = new StackLayout
             {
                 Spacing = 20,
@@ -99,7 +100,6 @@ namespace ASolute_Mobile.CustomerTracking
             layout.Children.Add(entry);
             layout.Children.Add(submit);
             layout.Children.Add(loading);
-
 
             scroll.Content = layout;
             this.BackgroundColor = Color.FromHex("#ffffff");

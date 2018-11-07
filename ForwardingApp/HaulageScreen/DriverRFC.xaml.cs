@@ -15,6 +15,13 @@ namespace ASolute_Mobile.HaulageScreen
 
             Title = "Collection Request";
 
+         
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -35,6 +42,13 @@ namespace ASolute_Mobile.HaulageScreen
                     DisplayAlert("Notification error", e.Message, "OK");
                 }
             });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
         public void ContPreChange(object sender, TextChangedEventArgs e)

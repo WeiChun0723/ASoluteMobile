@@ -37,7 +37,7 @@
     <AndroidSupportedAbis />
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 <AndroidTlsProvider>btls</AndroidTlsProvider>
-<AndroidKeyStore>True</AndroidKeyStore>
+<AndroidKeyStore></AndroidKeyStore>
 <AndroidSigningKeyStore>/Users/asolute/Library/Developer/Xamarin/Keystore/asolute/asolute.keystore</AndroidSigningKeyStore>
 <AndroidSigningStorePass>723996</AndroidSigningStorePass>
 <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>

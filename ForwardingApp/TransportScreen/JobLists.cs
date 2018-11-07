@@ -42,6 +42,8 @@ namespace ASolute_Mobile.TransportScreen
 
         protected async void GetJobList()
         {
+       
+
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL());
             clsResponse job_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -100,6 +102,7 @@ namespace ASolute_Mobile.TransportScreen
             {
                 await DisplayAlert("JsonError", job_response.Message, "OK");
             }
+
         }
 
         public void loadJobList()

@@ -12,11 +12,13 @@ namespace ASolute_Mobile
 {
     public class SplashScreen : ContentPage
     {
-        readonly Image splashImage,splashDeviceImage;
-        readonly CustomEntry entry;
-        readonly CustomButton submit;
-        readonly Label title;
-        readonly StackLayout layout;
+        Image splashImage,splashDeviceImage;
+        CustomEntry enterpriseEntry;
+        CustomButton submit;
+        Label title;
+        StackLayout layout;
+        ActivityIndicator loading = new ActivityIndicator();
+
         ScrollView ScrollView;
 
         public SplashScreen()
@@ -58,7 +60,7 @@ namespace ASolute_Mobile
                 FontSize = 15
             };
 
-            entry = new CustomEntry
+            enterpriseEntry = new CustomEntry
             {
                 Style = (Style)App.Current.Resources["entryStyle"],
                 TextColor = Color.White,
@@ -66,7 +68,7 @@ namespace ASolute_Mobile
                 Placeholder = "Enterprise name",
                 HorizontalTextAlignment = TextAlignment.Center,
                 IsVisible = false,
-                HorizontalOptions = LayoutOptions.Fill,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 Image = "organization"
                 
             };
@@ -79,23 +81,21 @@ namespace ASolute_Mobile
                 HorizontalOptions = LayoutOptions.Fill,
             };
 
-
             AbsoluteLayout.SetLayoutFlags(splashImage, AbsoluteLayoutFlags.PositionProportional);
             AbsoluteLayout.SetLayoutBounds(splashImage, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
           
             sub.Children.Add(splashImage);
-           
+
+            ScrollView = new ScrollView();
 
             layout = new StackLayout
             {
                 Spacing = 20,
                 Padding = new Thickness(15, 10),
-                HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             };
 
-            ScrollView = new ScrollView();
-
+          
             StackLayout gap = new StackLayout
             {
                 Spacing = 20,
@@ -107,9 +107,10 @@ namespace ASolute_Mobile
             layout.Children.Add(splashDeviceImage);
             layout.Children.Add(welcome);
             layout.Children.Add(title);
-            layout.Children.Add(entry);
+            layout.Children.Add(enterpriseEntry);
             layout.Children.Add(gap);
             layout.Children.Add(submit);
+            layout.Children.Add(loading);
 
             ScrollView.Content = layout;
             this.BackgroundColor = Color.FromHex("#ffffff");
@@ -120,7 +121,7 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
           
-            uint duration = 5 * 1000;
+            uint duration = 3 * 1000;
 
             await Task.WhenAll(
               
@@ -130,7 +131,7 @@ namespace ASolute_Mobile
             if(Ultis.Settings.AppFirstInstall == "First")
             {
                 title.IsVisible = true;
-                entry.IsVisible = true;
+                enterpriseEntry.IsVisible = true;
                 submit.IsVisible = true;
                 splashDeviceImage.IsVisible = true;
                 splashImage.IsVisible = false;
@@ -139,30 +140,38 @@ namespace ASolute_Mobile
             else
             {
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
-                //CustomerTracking.Action.AppAction();
             }
 
 
             submit.Clicked += async (sender, e)  => 
             {
-                Ultis.Settings.AppFirstInstall = "Second";                       
+                loading.IsRunning = true;
 
-                clsResponse json_response = JsonConvert.DeserializeObject <clsResponse>(await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(entry.Text.ToUpper())));
-
-                if (json_response.IsGood)
+                if(!String.IsNullOrEmpty(enterpriseEntry.Text))
                 {
-                    Ultis.Settings.AppEnterpriseName = entry.Text.ToUpper();
-                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    Ultis.Settings.AppFirstInstall = "Second";
+
+                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper())));
+
+                    if (json_response.IsGood)
+                    {
+                        Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text.ToUpper();
+                        Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    }
+                    else
+                    {
+                        await DisplayAlert("Json Error", json_response.Message, "OK");
+                    }
+
+                    Application.Current.MainPage = new NavigationPage(new LoginPage());
+
                 }
                 else
                 {
-                    await DisplayAlert("Json Error", json_response.Message, "OK");
+                    await DisplayAlert("Missing field", "Please fill in all field.", "OK");
                 }
 
-               
-               
-                Application.Current.MainPage = new NavigationPage(new LoginPage());
-
+                loading.IsRunning = false;
             };
         }
 

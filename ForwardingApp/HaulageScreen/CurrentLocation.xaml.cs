@@ -31,6 +31,13 @@ namespace ASolute_Mobile.HaulageScreen
             }
             Ultis.Settings.App = "Haulage";
 
+  
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -52,6 +59,14 @@ namespace ASolute_Mobile.HaulageScreen
                 }
             });
         }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+        }
+
 
         public void editorTextChanged(object sender, TextChangedEventArgs e)
         {

@@ -22,12 +22,23 @@ namespace ASolute_Mobile.HaulageScreen
         public JobList ()
 		{
 			InitializeComponent ();
+
+
         }
 
         protected async override void OnAppearing()
         {
             try
             {
+
+                if (Ultis.Settings.NewJob.Equals("Yes"))
+                {
+                    CommonFunction.CreateToolBarItem(this);
+                }
+                else
+                {
+                    this.ToolbarItems.Clear();
+                }
 
                 MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
 
@@ -41,15 +52,6 @@ namespace ASolute_Mobile.HaulageScreen
                         DisplayAlert("Notification error", e.Message, "OK");
                     }
                 });
-
-                if (Ultis.Settings.NewJob.Equals("Yes"))
-                {
-                    CommonFunction.CreateToolBarItem(this);
-                }
-                else
-                {
-                    this.ToolbarItems.Clear();
-                }
 
                 Title = (Ultis.Settings.Language.Equals("English")) ? "Job List" : "Senarai Kerja";
 
@@ -74,9 +76,17 @@ namespace ASolute_Mobile.HaulageScreen
 
         }
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+        }
+
         protected void CallWebService()
         {
-            Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
+            Task.Run(async () => { await  BackgroundTask.DownloadLatestRecord(this);}).Wait();
+
             loadJobList();
         }
 

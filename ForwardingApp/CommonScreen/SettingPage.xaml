@@ -2,14 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.SettingPage" BackgroundColor="#9A2116">
     <ContentPage.Content>
         <StackLayout Padding="20, 100, 20, 100">
-            <Image x:Name="logoImageHolder" Source="icon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" />
+            <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" />
             <StackLayout Padding="0, 10">
             </StackLayout>
             <Label TextColor="#ffffff" FontSize="20" Text="Change Enterprise Name" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
             <StackLayout Padding="0, 40">
             </StackLayout>
-            <Entry x:Name="nameEntry" Placeholder="Enterprise name" PlaceholderColor="#B48F93" TextColor="#FFFFFF" TextChanged="EnterpriseName"/>
-            <Button x:Name="SubmitButton" Text="Submit" Clicked="Url_Clicked" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" FontSize="16" BackgroundColor="#ED1C24" TextColor="#FFFFFF" FontAttributes="Bold" />
+            <Entry x:Name="nameEntry" Style="{StaticResource entryStyle}" TextChanged="EnterpriseName"/>
+            <Button x:Name="submitButton" Text="Submit" Clicked="Url_Clicked" Style="{StaticResource buttonStyle}"/>
             <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
     </ContentPage.Content>

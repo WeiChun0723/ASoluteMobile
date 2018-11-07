@@ -98,6 +98,15 @@ namespace ASolute_Mobile
             }
         }
 
+      
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+        }
+
         public async void reasonSelected(object sender, SelectedPositionChangedEventArgs e)
         {
             if (ReasonPicker.SelectedIndex == -1)

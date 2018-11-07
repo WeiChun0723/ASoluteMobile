@@ -33,10 +33,10 @@ namespace ASolute_Mobile
         List<AppImage> images = new List<AppImage>();
         Grid imageGrid, confirmGrid, trailerContainerGrid;
         double imageWidth;        
-        bool first_appear = true, collectSealStatus = false, uploaded = false;
+        bool collectSealStatus = false, uploaded = false;
         Image savedSignature,map, phone, futile, camera, confirm;
         string jobNo, actionID, actionMessage, containerNumber,savedTrailer,savedContPre,savedNumber,savedSealNo,savedMGW,savedTare,savedRemark;
-        StackLayout mapPhoneStackLayout,remarksStackLayout, signatureStackLayout, imageButtonStackLayout, containerShow;
+        StackLayout mapPhoneStackLayout,remarksStackLayout, signatureStackLayout, imageButtonStackLayout;
         CustomEntry contPrefix, contNumber, sealEntry, mgwEntry, tareEntry, trailerEntry;       
         clsHaulageModel haulageJob = new clsHaulageModel();
         static byte[] scaledImageByte;
@@ -60,6 +60,18 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
+            PageContent();
+            Action();
+
+           
+            Ultis.Settings.MenuAction = "Job_List";
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -82,19 +94,15 @@ namespace ASolute_Mobile
                 }
             });
 
-            PageContent();
-            Action();
-
-           
-            Ultis.Settings.MenuAction = "Job_List";
         }
 
-        protected override void OnAppearing()
+        protected override void OnDisappearing()
         {
-            base.OnAppearing();
+            base.OnDisappearing();
 
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
-      
+
         public static Label CreateLabel(string labelText)
         {
             var label = new Label

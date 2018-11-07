@@ -37,8 +37,8 @@ namespace ASolute_Mobile
 
         async void Url_Clicked(object sender, EventArgs e)
         {
-
-                this.activityIndicator.IsRunning = true;
+            submitButton.IsEnabled = false;    
+            this.activityIndicator.IsRunning = true;
 
                 var content = await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text.ToUpper()));
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -65,7 +65,7 @@ namespace ASolute_Mobile
                 }   
 
                 this.activityIndicator.IsRunning = false;
-                
+                submitButton.IsEnabled = true;
         }
     }
 }

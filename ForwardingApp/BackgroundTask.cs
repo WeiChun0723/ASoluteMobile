@@ -29,10 +29,75 @@ namespace ASolute_Mobile
         static int uploadedImage = 0;
         static string history;
         static string previousLocation = "";
+        static string chklocation = "0";
 
         public BackgroundTask()
         {
         }
+
+        public static async Task StartListening()
+        {
+            if (CrossGeolocator.Current.IsListening)
+                return;
+
+            await CrossGeolocator.Current.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
+            {
+                ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
+                AllowBackgroundUpdates = true,
+                DeferLocationUpdates = true,
+                DeferralDistanceMeters = 1,
+                DeferralTime = TimeSpan.FromSeconds(1),
+                ListenForSignificantChanges = true,
+                PauseLocationUpdatesAutomatically = false,
+
+            });
+
+            CrossGeolocator.Current.PositionChanged += Current_PositionChanged;
+        }
+
+        public static async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
+        {
+            var position = e.Position;
+            chklocation = Math.Round(position.Latitude, 2) + "," + Math.Round(position.Longitude, 2);
+
+            if (chklocation != previousLocation)
+            {
+                try
+                {
+                    previousLocation = Math.Round(position.Latitude, 2) + "," + Math.Round(position.Longitude, 2);
+                    var locator = CrossGeolocator.Current;
+                    var getAddress = await locator.GetAddressesForPositionAsync(position);
+                    var addressDetail = getAddress.FirstOrDefault();
+
+                    string address = addressDetail.Thoroughfare + "," + addressDetail.PostalCode + "," + addressDetail.Locality + "," + addressDetail.AdminArea + "," + addressDetail.CountryName;
+
+                    string location = position.Latitude + "," + position.Longitude;
+
+                    var client = new HttpClient();
+                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                    var uri = ControllerUtil.getGPSTracking(location, address);
+                    var response = await client.GetAsync(uri);
+                    var content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(content);
+                    clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (gps_response.IsGood)
+                    {
+                        previousLocation = location;
+
+                        App.gpsLocationLat = position.Latitude;
+                        App.gpsLocationLong = position.Longitude;
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string error = ex.Message;
+                }
+
+            }
+        }
+
 
         public static async Task UploadLatestRecord(ContentPage page)
         {

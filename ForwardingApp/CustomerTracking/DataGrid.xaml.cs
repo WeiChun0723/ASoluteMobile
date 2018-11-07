@@ -39,6 +39,8 @@ namespace ASolute_Mobile.CustomerTracking
         {
             base.OnCurrentPageChanged();
 
+          
+
             int index = Children.IndexOf(CurrentPage);
             if(!firstLoad)
             {

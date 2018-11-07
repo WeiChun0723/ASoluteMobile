@@ -11,8 +11,6 @@ using ASolute.Mobile.Models;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using ASolute_Mobile.Ultis;
-using XLabs.Forms.Behaviors;
-using XLabs.Forms.Controls;
 
 namespace ASolute_Mobile
 {
@@ -24,10 +22,16 @@ namespace ASolute_Mobile
         public LoginPage()
         {
             InitializeComponent();
+
+            //hide the navigation bar
             NavigationPage.SetHasNavigationBar(this, false);
+
+            //search for any company icon that stored in file and display it
             if(File.Exists(Ultis.Settings.GetAppLogoFileLocation())){
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
+
+            //decide the app login screen name
             Ultis.Settings.App = "Haulage";
             if (Ultis.Settings.App.Equals("Transport"))
             {
@@ -52,7 +56,6 @@ namespace ASolute_Mobile
             usernameEntry.Text = Ultis.Settings.SessionUserId;
 
             // display the equipment that input by user before an load into list for user to choose when they type similar eq id (autocomplete)
-
             equipmentID = new List<AutoComplete>(App.Database.GetAutoCompleteValues("Equipment"));
 
             foreach(AutoComplete equipment in equipmentID)
@@ -66,28 +69,12 @@ namespace ASolute_Mobile
                 Eqsuggestion.Add(equipmentID[i].Value);
             }
 
-          
             //set username entry maximum to 10 chars
-            usernameEntry.TextChanged += (sender, args) =>
+          usernameEntry.TextChanged += (sender, args) =>
             {
-                string _text = usernameEntry.Text.ToUpper(); ;      
-                if (_text.Length > 10)       
-                {
-                    _text = _text.Remove(_text.Length - 1);  
-                          
-                }
-                usernameEntry.Text = _text;
-            };
+                string _text = usernameEntry.Text.ToUpper(); 
 
-            //set password entry maximum to 10 chars
-            passwordEntry.TextChanged += (sender, args) =>
-            {
-                string _text = passwordEntry.Text;      
-                if (_text.Length > 10)      
-                {
-                    _text = _text.Remove(_text.Length - 1);  
-                    passwordEntry.Text = _text;        
-                }
+                usernameEntry.Text = _text;
             };
 
             usernameEntry.Completed += (s, e) =>
@@ -128,7 +115,6 @@ namespace ASolute_Mobile
             }          
         }
 
-        
         public async void Update_URL_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new SettingPage());            
@@ -154,7 +140,6 @@ namespace ASolute_Mobile
             Ultis.Settings.GeneratedAppID = randomString;                    
         }
        
-
         public async void Login_Clicked(object sender, System.EventArgs e)
         {
             this.activityIndicator.IsRunning = true;
@@ -167,23 +152,8 @@ namespace ASolute_Mobile
                
                 try
                 {
-                   // string uri;
-                    var client = new HttpClient();
 
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    //equipment.Text
-                    string uri;
-                    if (!(String.IsNullOrEmpty(equipmentEntry.Text)))
-                    {
-                         uri = ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword, equipmentEntry.Text);
-                    }
-                    else
-                    {
-                         uri = ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword);
-                    }                                   
-                    var response = await client.GetAsync(uri);
-                    var content = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(content);                  
+                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
                     clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
@@ -247,8 +217,7 @@ namespace ASolute_Mobile
                         Ultis.Settings.SessionUserItem = userObject;                       
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
                         Ultis.Settings.SessionSettingKey = System.Net.WebUtility.UrlEncode(login_user.SessionId);
-                        
-     
+
                         if (login_user.Language == 0)
                         {
                             Ultis.Settings.Language = "English";
@@ -260,6 +229,8 @@ namespace ASolute_Mobile
 
                         if (login_user.GetLogo || !File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
                         {
+                            var client = new HttpClient();
+                            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
                             var downloadLogoURI = ControllerUtil.getDownloadLogoURL();
                             var logo = await client.GetAsync(downloadLogoURI);
                             var logo_byte = await logo.Content.ReadAsStringAsync();

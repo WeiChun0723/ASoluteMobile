@@ -71,7 +71,7 @@
                 </StackLayout>
            
             <StackLayout Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="fuelCard" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  LineColor="LightYellow"  Focused="FuelEntryFocus" />
+                    <controls:CustomEntry x:Name="fuelCard" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  LineColor="LightYellow"  />
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Fuelscan"/>
@@ -86,7 +86,7 @@
                 </StackLayout>
             
             <StackLayout Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="voucher" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="WhiteSmoke" TextChanged="VoucherText" Focused="VoucherEntryFocus"/>
+                    <controls:CustomEntry x:Name="voucher" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="WhiteSmoke" TextChanged="VoucherText" />
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"   >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Voucherscan"/>
@@ -100,7 +100,7 @@
                 </StackLayout>
             
             <StackLayout Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="other" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  TextChanged="OtherText" LineColor="LightYellow" Focused="OtherEntryFocus"/>
+                    <controls:CustomEntry x:Name="other" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  TextChanged="OtherText" LineColor="LightYellow" />
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"  >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Otherscan"/>

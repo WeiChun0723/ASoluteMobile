@@ -52,6 +52,13 @@ namespace ASolute_Mobile
                 chgPassTitle.Text = "ASolute Courier";
             }
 
+        }
+
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -65,7 +72,6 @@ namespace ASolute_Mobile
 
                 try
                 {
-
                     CommonFunction.NewJobNotification(this);
                 }
                 catch (Exception e)
@@ -73,6 +79,13 @@ namespace ASolute_Mobile
                     DisplayAlert("Notification error", e.Message, "OK");
                 }
             });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
         protected override bool OnBackButtonPressed()
