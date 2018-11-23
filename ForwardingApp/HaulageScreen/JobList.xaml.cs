@@ -19,10 +19,11 @@ namespace ASolute_Mobile.HaulageScreen
 	{
         int doneStatus = 0;
 
-        public JobList ()
+        public JobList (string title)
 		{
 			InitializeComponent ();
 
+            Title = title;
 
         }
 
@@ -60,8 +61,9 @@ namespace ASolute_Mobile.HaulageScreen
                     scan_icon.IsEnabled = false;
                 }
 
-                if (NetworkCheck.IsInternet())
+                if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("RefreshJobList"))
                 {
+                    Ultis.Settings.UpdatedRecord = "No";
                     CallWebService();
                 }
                 else
@@ -120,8 +122,9 @@ namespace ASolute_Mobile.HaulageScreen
 
                         if (jsonResponse.IsGood)
                         {
+                            Ultis.Settings.RefreshMenuItem = "Yes";
+                            Ultis.Settings.UpdatedRecord = "RefreshJobList";
                             CallWebService();
-                            //Ultis.Settings.UpdatedRecord = "Yes";
                             displayToast("Job added to job list.");                           
                             scanPage.ResumeAnalysis();
                         }

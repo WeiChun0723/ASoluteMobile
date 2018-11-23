@@ -14,7 +14,7 @@ namespace ASolute_Mobile.TransportScreen
 {
     public partial class JobDetails : ContentPage
     {
-        string jobID, telNo, location;
+        string jobID, telNo, location,action;
         bool reqSign = false;
         long eventRecordID;
         double imageWidth;
@@ -29,6 +29,7 @@ namespace ASolute_Mobile.TransportScreen
 
             jobID = record.RecordId;
             eventRecordID = record.EventRecordId;
+            action = record.Action;
 
             if(!(String.IsNullOrEmpty(record.TelNo)))
             {
@@ -233,13 +234,14 @@ namespace ASolute_Mobile.TransportScreen
                     truck.Remarks = " ";
                 }
 
-                var content = await CommonFunction.PostRequest(truck, Ultis.Settings.SessionBaseURI, ControllerUtil.postJobDetailURL());
+                var content = await CommonFunction.PostRequest(truck, Ultis.Settings.SessionBaseURI, ControllerUtil.postJobDetailURL(action));
                 clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(update_response.IsGood)
                 {
                     Ultis.Settings.CargoReturn = jobID + "," + eventRecordID + "," + reqSign;
-                    //await Navigation.PopAsync();
+                    await DisplayAlert("Success", "Job updated.", "OK");
+                    await Navigation.PopAsync();
                 }
                 else
                 {

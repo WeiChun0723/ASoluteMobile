@@ -23,8 +23,8 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-         //Master = masterPage;
-            //Detail = new NavigationPage(new DataGrid());
+        /* Master = masterPage;
+            Detail = new NavigationPage(new MyProviders());*/
 
             masterPage.ListView.ItemSelected += OnItemSelected;
             MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
@@ -58,18 +58,16 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var client = new HttpClient();
-                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                                var uri = ControllerUtil.getAutoScan();
-                                var response = await client.GetAsync(uri);
-                                var content = await response.Content.ReadAsStringAsync();
-                                Debug.WriteLine(content);
-                                clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                
+                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                                clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
                                 if (autoScan_response.IsGood)
                                 {
                                     await DisplayAlert("Success", autoScan_response.Result, "OK");
+                                    Ultis.Settings.AppFirstInstall = "Refresh";
                                     Application.Current.MainPage = new MainPage();
+
                                 }
                                 else
                                 {
@@ -100,7 +98,6 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-
                                 var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL());
                                 clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (panic_response.IsGood == true)
@@ -108,7 +105,7 @@ namespace ASolute_Mobile
                                     string reply = "";
                                     if (Ultis.Settings.Language.Equals("English"))
                                     {
-                                        reply = "Your request has been attended";
+                                        reply = "Message sent successfully.";
                                     }
                                     else
                                     {
@@ -212,15 +209,13 @@ namespace ASolute_Mobile
 
                             try
                             {
-                                var client = new HttpClient();
-                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);                                
-                                var response = await client.GetAsync(uri);
-                                var content = await response.Content.ReadAsStringAsync();
-                                Debug.WriteLine(content);
+
+                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, uri);
                                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
                                 if (json_response.IsGood == true)
                                 {
-                                    Ultis.Settings.UpdatedRecord = "Yes";
+                                    Ultis.Settings.RefreshMenuItem = "Yes";
                                     string reply = "";
                                     if (Ultis.Settings.Language.Equals("English"))
                                     {
@@ -268,13 +263,8 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var client = new HttpClient();
-                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                                var uri = ControllerUtil.getLogOutURL();
-                                var response = await client.GetAsync(uri);
-                                var content = await response.Content.ReadAsStringAsync();
-                                Debug.WriteLine(content);
-
+                              
+                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL());
                                 clsResponse logoutResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (logoutResponse.IsGood == true)
@@ -296,7 +286,6 @@ namespace ASolute_Mobile
                     }
                     else
                     {
-                        
                         Detail = new CustomNavigationPage((Page)Activator.CreateInstance(item.TargetType));
                         masterPage.ListView.SelectedItem = null;
                         IsPresented = false;
@@ -310,15 +299,9 @@ namespace ASolute_Mobile
             throw new NotImplementedException();
         }
 
-       
         public async void refreshMainPage()
         {
-            var context_client = new HttpClient();
-            context_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-            var context_uri = ControllerUtil.getDownloadMenuURL(Ultis.Settings.FireID);
-            var context_response = await context_client.GetAsync(context_uri);
-            var context_content = await context_response.Content.ReadAsStringAsync();
-
+            var context_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(Ultis.Settings.FireID));
             clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
 
             var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();

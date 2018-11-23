@@ -24,7 +24,7 @@ namespace ASolute_Mobile.Utils
 
         public static String postNewRecordURL()
         {
-            return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
+            return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String postCheckList(bool status, string remark, int odo)
@@ -140,42 +140,42 @@ namespace ASolute_Mobile.Utils
         #region Trucking url
         public static String getPendingReceivingURL()
         {
-            return String.Format("Cargo/InboundList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Cargo/InboundList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getSubJobURL(string masterID)
         {
-            return String.Format("Cargo/InboundList?SessionId={0}&GeoLoc={1}&MasterJobId={2}", Ultis.Settings.SessionSettingKey, "0", masterID);
+            return String.Format("Cargo/InboundList?SessionId={0}&GeoLoc={1}&MasterJobId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), masterID);
         }
 
         public static String getPendingLoadURL()
         {
-            return String.Format("Cargo/OutboundList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Cargo/OutboundList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String getTruckListURL()
+        public static String getTruckListURL(string action)
         {
-            return String.Format("Trucking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format(action + "?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String UploadImageURL(string LinkId)
         {
-            return String.Format("File/Upload?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, "0", LinkId);
+            return String.Format("File/Upload?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), LinkId);
         }
 
-        public static String postJobDetailURL()
+        public static String postJobDetailURL(string action)
         {
-            return String.Format("Trucking/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey,"0");
+            return String.Format(action + "?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey,getPositionAsync());
         }
 
         public static String getReasonListURL()
         {
-            return String.Format("Trucking/ReasonList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Trucking/ReasonList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String postFutileTripURL()
         {
-            return String.Format("Trucking/Futile?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "0");
+            return String.Format("Trucking/Futile?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getUOMListURL()
@@ -185,12 +185,12 @@ namespace ASolute_Mobile.Utils
 
         public static String postCargoListURL()
         {
-            return String.Format("Cargo/Add?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey,"0");
+            return String.Format("Cargo/Add?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey,getPositionAsync());
         }
 
         public static String postNewCargoRecordURL(string recordID)
         {
-            return String.Format("Cargo/Save?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, "0", recordID);
+            return String.Format("Cargo/Save?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), recordID);
         }
         #endregion
 
@@ -201,7 +201,7 @@ namespace ASolute_Mobile.Utils
 
         public static String postDriverRFCURL(string containerNum)
         {
-            return String.Format("Haulage/DriverRFC?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, "", containerNum);
+            return String.Format("Haulage/DriverRFC?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNum);
         }
         #endregion
 
@@ -233,7 +233,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
         {
-            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", 0, ownerID, userID, password, ICNo);
+            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", getPositionAsync(), ownerID, userID, password, ICNo);
         }
 
         public static String getLoginURL(string encryptedUserId, string encryptedPassword)
@@ -264,7 +264,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadRefuelHistoryURL()
         {
-            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
+            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
 
@@ -275,27 +275,27 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadHaulageListURL()
         {
-            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
+            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getDownloadHaulageHistoryURL(string date)
         {
-            return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, "",date);
+            return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),date);
         }
 
         public static String postContainerNumberURL(string containerNumber)
         {
-            return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, "", containerNumber);
+            return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNumber);
         }
 
         public static String getPendingCollectionURL()
         {
-            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
+            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String postHaulageURL()
         {
-            return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
+            return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String addJobURL(string container)
@@ -310,7 +310,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getNewFuelCostURL()
         {
-            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, "");
+            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getUploadedImageURL(string Id)
@@ -356,20 +356,19 @@ namespace ASolute_Mobile.Utils
                         {
                             try
                             {
-                            Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(5));});
+                                Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(15));});
                                 latestPosition = true;
                             }
                             catch (TaskCanceledException exception)
                             {
                                 Debug.WriteLine(exception);
-                               
                             }
                         }
 
-                        if (position == null && !latestPosition)
+                        if (position == null )
                         {
-                            //Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
-                            return "";
+                            Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
+                            
                         }
 
                         if (position != null)
@@ -377,6 +376,7 @@ namespace ASolute_Mobile.Utils
                             App.gpsLocationLat = position.Latitude;
                             App.gpsLocationLong = position.Longitude;
                         }
+                     
                     }
 
                     return App.gpsLocationLat.ToString() + "," + App.gpsLocationLong.ToString();

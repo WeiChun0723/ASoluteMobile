@@ -107,7 +107,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                     if (json_response.IsGood)
                     {
-                        await DisplayAlert("Success", "Location name uploaded", "OK");
+                        await DisplayAlert("Success", "Message sent successfully.", "OK");
                     }
                     else
                     {

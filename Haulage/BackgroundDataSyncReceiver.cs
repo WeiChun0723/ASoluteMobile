@@ -14,10 +14,10 @@ namespace ASolute_Mobile.Droid
             using (PowerManager.WakeLock wakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "BackgroundDataSyncReceiver"))
             {
                 wakeLock.Acquire();
-
-               // Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(null);}).Wait();
+                //Task.Run(async () => { await BackgroundTask.BackgroundUploadImage(); });
+                // Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(null);}).Wait();
                 //Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); });
-                //Task.Run(async () => { await BackgroundTask.RetrieveLocation(); });
+              
                 wakeLock.Release();
             }
         } 

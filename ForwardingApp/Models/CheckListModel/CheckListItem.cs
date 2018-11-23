@@ -1,4 +1,4 @@
-﻿using ASolute_Mobile.Models.CheckListModel;
+﻿using ASolute_Mobile.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

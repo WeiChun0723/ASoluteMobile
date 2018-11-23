@@ -7,6 +7,8 @@ using ASolute_Mobile.CustomRenderer;
 using ASolute_Mobile.Utils;
 using ASolute.Mobile.Models;
 using Newtonsoft.Json;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 
 namespace ASolute_Mobile
 {
@@ -141,7 +143,6 @@ namespace ASolute_Mobile
             {
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
             }
-
 
             submit.Clicked += async (sender, e)  => 
             {

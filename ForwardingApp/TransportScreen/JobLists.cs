@@ -8,17 +8,18 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
-using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.TransportScreen
 {
     public class JobLists : ListViewCommonScreen
     {
         ObservableCollection<TruckModel> records = new ObservableCollection<TruckModel>();
-
-        public JobLists()
+        string webServiceAction;
+        public JobLists(string action, string name)
         {
-            Title = "Job List";
+            Title = name;
+
+            webServiceAction = action;
 
             listView.ItemTapped += async (sender, e) =>
             {
@@ -42,9 +43,8 @@ namespace ASolute_Mobile.TransportScreen
 
         protected async void GetJobList()
         {
-       
-
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL());
+      
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL(webServiceAction));
             clsResponse job_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (job_response.IsGood)

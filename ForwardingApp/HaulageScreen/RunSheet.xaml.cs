@@ -9,9 +9,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -28,23 +25,18 @@ namespace ASolute_Mobile.HaulageScreen
         ActivityIndicator activityIndicator;
         DateTime currentDate;
 
-		public RunSheet ()
+		public RunSheet (string title)
 		{
 			InitializeComponent ();
 
-            if (Ultis.Settings.Language.Equals("English"))
-            {
-                Title = "Run Sheet";
-            }
-            else
-            {
-                Title = "Borang Perjalanan";
-            }
+            Title = title;
+
             Ultis.Settings.App = "Haulage";
 
             PageContent();
 
             downloadRunSheet(DateTime.Now.ToString("yyyy MM dd"));
+
 
             SelectedItem = Children[1];
         }
@@ -73,8 +65,9 @@ namespace ASolute_Mobile.HaulageScreen
             
                     //currentDate = currentDate.AddDays(1);
                     currentDate = datePicker.Date.AddDays(1);
-                    downloadRunSheet(currentDate.ToString("yyyy MM dd"));
                     changePage = true;
+                    downloadRunSheet(currentDate.ToString("yyyy MM dd"));
+
                 }
                 else
                 {
@@ -87,7 +80,6 @@ namespace ASolute_Mobile.HaulageScreen
 
         protected override void OnAppearing()
         {
-           
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(CurrentPage);

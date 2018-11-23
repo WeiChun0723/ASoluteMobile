@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace ASolute_Mobile.Models.CheckListModel
+namespace ASolute_Mobile.Models
 {
     public class PropertyChange : INotifyPropertyChanged
     {

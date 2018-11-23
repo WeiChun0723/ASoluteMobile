@@ -4,6 +4,7 @@
              x:Class="ASolute_Mobile.TransportScreen.JobList">
    
     <StackLayout Padding="15,15,15,15">
+         <SearchBar TextChanged="SearchJob" HeightRequest="50" x:Name="searchBar"/>
             <Image Source="nodatafound.png"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>    
             <ListView x:Name="jobList"  ItemTapped="selectJob" IsPullToRefreshEnabled="True" Refreshing="pendingJobRefresh" SeparatorColor="White" >
                <ListView.ItemTemplate>

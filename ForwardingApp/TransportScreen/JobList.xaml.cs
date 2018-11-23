@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net.Http;
+using System.Linq;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
@@ -17,21 +16,26 @@ namespace ASolute_Mobile.TransportScreen
     public partial class JobList : ContentPage
     {
 
-        ObservableCollection<TruckModel> records = new ObservableCollection<TruckModel>();
+        List<TruckModel> records = new List<TruckModel>();
+        string webServiceAction;
 
-        public JobList()
+        public JobList(string action, string name)
         {
             InitializeComponent();
 
-            Title = "Job List";
+            Title = name;
 
+            webServiceAction = action;
+
+           
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            GetJobList();
+          GetJobList(); 
+
         }
 
         public async void selectJob(object sender, ItemTappedEventArgs e)
@@ -43,6 +47,38 @@ namespace ASolute_Mobile.TransportScreen
         {
             GetJobList();
             jobList.IsRefreshing = false;
+        }
+
+        private async void SearchJob(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                string searchKey = e.NewTextValue.ToUpper();
+
+                if (string.IsNullOrEmpty(searchKey))
+                {
+                    loadJobList();
+                }
+
+                else
+                {
+                    try
+                    {
+                        List<TruckModel> Item = new List<TruckModel>(App.Database.GetPendingRecord());
+                        jobList.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
+
+                    }
+                    catch
+                    {
+                        await DisplayAlert("Error", "Please try again", "OK");
+                    }
+                }
+            }
+            catch
+            {
+                await DisplayAlert("Error", "Please try again", "OK");
+            }
+
         }
 
         public async void BarCodeScan(object sender, EventArgs e)
@@ -103,13 +139,15 @@ namespace ASolute_Mobile.TransportScreen
 
         protected async void GetJobList()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL());
+
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL(webServiceAction));
             clsResponse job_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(job_response.IsGood)
             {
                 records.Clear();
 
+                App.Database.DeleteTruckModel();
                 App.Database.DeleteTruckModeDetail();
 
                 List<clsTruckingModel> trucks = JObject.Parse(content)["Result"].ToObject<List<clsTruckingModel>>();
@@ -122,6 +160,7 @@ namespace ASolute_Mobile.TransportScreen
 
                     record.TruckId = truck.TruckId;
                     record.RecordId = truck.Id;
+                    record.Action = truck.Action;
 
                     if (!(String.IsNullOrEmpty(truck.BackColor)))
                     {
@@ -153,7 +192,7 @@ namespace ASolute_Mobile.TransportScreen
 
                     record.Summary = summary;
 
-                    records.Add(record);
+                    App.Database.SaveTruckModelAsync(record);
 
                 }
                 loadJobList();
@@ -166,17 +205,19 @@ namespace ASolute_Mobile.TransportScreen
 
         public void loadJobList()
         {
-            jobList.ItemsSource = records;
+            List<TruckModel> Item = new List<TruckModel>(App.Database.GetPendingRecord());
+            jobList.ItemsSource = Item;
             jobList.HasUnevenRows = true;
 
             loading.IsRunning = false;
             loading.IsVisible = false;
             loading.IsEnabled = false;
 
-            if (records.Count == 0)
+            if (Item.Count == 0)
             {
                 jobList.IsVisible = true;
                 noData.IsVisible = true;
+                searchBar.IsVisible = false;
             }
             else
             {

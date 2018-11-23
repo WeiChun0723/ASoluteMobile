@@ -37,7 +37,7 @@
     <AndroidSupportedAbis />
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 <AndroidTlsProvider>btls</AndroidTlsProvider>
-<AndroidKeyStore></AndroidKeyStore>
+<AndroidKeyStore>True</AndroidKeyStore>
 <AndroidSigningKeyStore>/Users/asolute/Library/Developer/Xamarin/Keystore/asolute/asolute.keystore</AndroidSigningKeyStore>
 <AndroidSigningStorePass>723996</AndroidSigningStorePass>
 <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>
@@ -278,9 +278,6 @@
     <Reference Include="Syncfusion.SfDataGrid.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfDataGrid.XForms.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Acr.UserDialogs">
       <HintPath>..\packages\Acr.UserDialogs.7.0.1\lib\monoandroid80\Acr.UserDialogs.dll</HintPath>
     </Reference>
@@ -382,6 +379,9 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Maps">
       <HintPath>..\packages\Xamarin.Forms.Maps.3.3.0.912540\lib\MonoAndroid10\Xamarin.Forms.Maps.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\..\..\Downloads\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

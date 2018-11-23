@@ -44,7 +44,7 @@ namespace ASolute_Mobile
             StackLayout frameLayout = new StackLayout();
 
             label.FontAttributes = FontAttributes.Bold;
-            label.SetBinding(Label.TextProperty, "Summary");
+            label.SetBinding(Label.TextProperty, "summary");
 
             frameLayout.Children.Add(label);
             frameLayout.SetBinding(BackgroundColorProperty, "BackColor");

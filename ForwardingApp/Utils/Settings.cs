@@ -41,6 +41,7 @@ namespace ASolute_Mobile.Ultis
         private const string previousOdo = "";
         private const string contextMenuTitle = "";
         private const string UpdateRecord = "Yes";
+        private const string RefreshMenu = "refresh_menu";
         private const string DeviceID = "testing";
         private const string FirebaseID = "firebase";
         private const string UserEmail = "";
@@ -115,13 +116,26 @@ namespace ASolute_Mobile.Ultis
         {
             get
             {
-                return AppSettings.GetValueOrDefault(UpdateRecord, "Yes");
+                return AppSettings.GetValueOrDefault(UpdateRecord, "RefreshJobList");
             }
             set
             {
                 AppSettings.AddOrUpdateValue(UpdateRecord, value);
             }
         }
+
+        public static string RefreshMenuItem
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(RefreshMenu, "Yes");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(RefreshMenu, value);
+            }
+        }
+
 
         public static string AppFirstInstall
         {

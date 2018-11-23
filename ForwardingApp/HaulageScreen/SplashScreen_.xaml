@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.HaulageScreen.SplashScreen_"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
+             BackgroundColor="#ffffff">
+   
+    <ScrollView>
+    <StackLayout Padding="15,15,15,15" VerticalOptions="CenterAndExpand" Spacing="50">
+        
+        <Image Source="appIcon.png" HeightRequest="100" WidthRequest="100" x:Name="appIcon"/>
+        
+        <Label Text="Please enter enterprise name" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="Medium"/>
+        
+        <controls:CustomEntry Image="organization" TextColor="White" LineColor="CornflowerBlue" Placeholder="Enterprise name" HorizontalTextAlignment="Center" 
+                              HorizontalOptions="FillAndExpand" Text="{Binding EnterpriseName}">
+                
+                <controls:CustomEntry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="15"/>
+                </controls:CustomEntry.Behaviors>
+        </controls:CustomEntry>
+        
+        <controls:CustomButton Text="Submit" TextColor="White" HorizontalOptions="Fill" Command="{Binding GetBasedURL}"/>
+        
+        <ActivityIndicator IsRunning="{Binding IsBusy}"/>
+            
+    </StackLayout>
+    </ScrollView>
+    
+    
+</ContentPage>

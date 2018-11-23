@@ -23,7 +23,6 @@ namespace ASolute_Mobile.Utils
         public static async Task<string> GetWebService(string baseAdd,string callUri)
         {
             var client = new HttpClient();
-          
             client.BaseAddress = new Uri(baseAdd);
             var uri = callUri;
             var response = await client.GetAsync(uri);
@@ -45,6 +44,30 @@ namespace ASolute_Mobile.Utils
             Debug.WriteLine(reply);
 
             return reply;
+        }
+
+        public static async Task<string> CallWebService(string method,object data, string baseAdd, string calllUri)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(baseAdd);
+            var uri = calllUri;
+            var reply_content = "";
+
+            if (method.Equals("Get"))
+            {
+                var response = await client.GetAsync(uri);
+                reply_content = await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                var objectContent = JsonConvert.SerializeObject(data);
+                var httpContent = new StringContent(objectContent, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(uri, httpContent);
+                reply_content = await response.Content.ReadAsStringAsync();
+            }
+
+            Debug.WriteLine(reply_content);
+            return reply_content;
         }
 
         //capture image and store local path in db function
@@ -141,6 +164,7 @@ namespace ASolute_Mobile.Utils
             
         }
 
+        //prompt notification when receive new job notification
         public static void NewJobNotification(ContentPage page)
         {
             try
@@ -161,6 +185,8 @@ namespace ASolute_Mobile.Utils
             }
         }
 
+
+        //create notification icon in the bavigation bar
         public static void CreateToolBarItem(ContentPage contentPage)
         {
             pages = contentPage;
@@ -170,26 +196,21 @@ namespace ASolute_Mobile.Utils
             {
                 var item = new ToolbarItem
                 {
-                    Text = "Item1",
                     Icon = "new_job.png",
                     Priority = 0,
                     Order = ToolbarItemOrder.Primary,
 
                 };
 
-                item.Clicked += Handle_Clicked;
+                item.Clicked += async (sender, e) =>
+                {
+                    Ultis.Settings.NewJob = "No";
+                    pages.ToolbarItems.Clear();
+                    await pages.Navigation.PushAsync(new HaulageScreen.JobList("Job List"));
+                };
 
                 contentPage.ToolbarItems.Add(item);
             }
-
-        }
-
-        static async void Handle_Clicked(object sender, System.EventArgs e)
-        {
-
-            Ultis.Settings.NewJob = "No";
-            pages.ToolbarItems.Clear();
-            await pages.Navigation.PushAsync(new HaulageScreen.JobList());
 
         }
 

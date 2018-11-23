@@ -16,6 +16,7 @@ namespace ASolute_Mobile.Data
 		public Database(string dbPath)
 		{
             database = new SQLiteConnection(dbPath);
+            database.CreateTable<ChatRecord>();
             database.CreateTable<ProviderInfo>();
             database.CreateTable<UserItem>();
             database.CreateTable<UserDetail>();
@@ -40,6 +41,7 @@ namespace ASolute_Mobile.Data
 
 		public void DropDB()
 		{
+            database.DropTable<ChatRecord>();
             database.DropTable<UserItem>();
             database.DropTable<UserDetail>();
             database.DropTable<RefuelData>();
@@ -59,6 +61,40 @@ namespace ASolute_Mobile.Data
             database.DropTable<ProviderInfo>();
             database.DropTable<JobItems>();
         }
+
+        #region Common Query
+
+        public List<AppImage> GetPendingRecordImages( bool uploaded)
+        {
+            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [Uploaded] = ?", uploaded);
+        }
+        #endregion  
+
+
+        #region ChatApp
+
+        public int SaveChat(ChatRecord record)
+        {
+            record.owner = Ultis.Settings.SessionUserId;
+            if (record.tableID != 0)
+            {
+
+                return database.Update(record);
+            }
+            else
+            {
+
+                return database.Insert(record);
+            }
+        }
+
+        public List<ChatRecord> Chats()
+        {
+            return database.Query<ChatRecord>("SELECT * FROM [ChatRecord] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
+        }
+
+        #endregion
+
 
         #region Customer Tracking table function
 
@@ -120,7 +156,7 @@ namespace ASolute_Mobile.Data
 
         public List<TruckModel> GetPendingRecord()
         {
-            return database.Query<TruckModel>("SELECT * FROM [TruckModel]");
+            return database.Query<TruckModel>("SELECT * FROM [TruckModel] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }
 
         public void DeleteTruckModel()

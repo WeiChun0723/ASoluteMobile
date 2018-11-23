@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.ChatRoom">
+  
+    <StackLayout>
+        
+        
+        <ListView x:Name="chatList" SeparatorVisibility="None" HorizontalOptions="CenterAndExpand">
+             <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell >
+                            
+                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding BackgroundColor}">
+                       <StackLayout BackgroundColor="{Binding BackgroundColor}">
+                                <Label Text="{Binding Content}" FontAttributes="Bold" TextColor="Black"/>
+                                 <Label Text="{Binding updatedDate}" TextColor="Gray"/>
+                        </StackLayout>
+                    </Frame>
+                         
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+                
+        </ListView>
+        
+        <StackLayout Orientation="Horizontal">
+            <Entry x:Name="chatEntry" HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnSend" HorizontalOptions="End" Text="Send" Clicked="SendMessage"/>
+        </StackLayout>
+    </StackLayout>
+    
+</ContentPage>

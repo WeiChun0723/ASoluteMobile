@@ -76,6 +76,7 @@ namespace ASolute_Mobile.CustomerTracking
                     {
                         List<AppMenu> test = new List<AppMenu>(App.Database.GetMainMenuItems());
                         container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) || x.name.Contains(searchKey) || x.summary.Contains(searchKey));
+
                     }
                     catch
                     {

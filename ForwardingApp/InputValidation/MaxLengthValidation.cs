@@ -21,9 +21,15 @@ namespace ASolute_Mobile.InputValidation
 
         private void bindable_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (e.NewTextValue.Length >= MaxLength)
-                ((Entry)sender).Text = e.NewTextValue.Substring(0, MaxLength);
+            string value = e.NewTextValue;
 
+            if (e.NewTextValue.Length >= MaxLength)
+            {
+                 value = e.NewTextValue.Substring(0, MaxLength);
+                ((Entry)sender).Unfocus();
+            }
+
+            ((Entry)sender).Text = value.ToUpper();
         }
 
         protected override void OnDetachingFrom(Entry bindable)

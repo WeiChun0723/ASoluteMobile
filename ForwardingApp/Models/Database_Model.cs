@@ -16,6 +16,14 @@ namespace ASolute_Mobile.Models
         public DateTime? updatedDate { get; set; }      
     }
 
+    public class ChatRecord : Generic
+    {
+        public string Content { get; set; }
+        public string Sender { get; set; }
+        public string BackgroundColor { get; set; }
+    }
+
+
     public class ProviderInfo : Generic
     {
         public string Code { get; set; }
@@ -77,6 +85,7 @@ namespace ASolute_Mobile.Models
         public string category { get; set; }
         public string summary { get; set; }
         public string background { get; set; }
+        public string action { get; set; }
     }
 
     public class Log : Generic
@@ -140,6 +149,7 @@ namespace ASolute_Mobile.Models
         public string Summary { get; set; }
         public string JobNo { get; set; }
         public string BackColor { get; set; }
+        public string Action { get; set; }
     }
 
     public class pickerValue : Generic

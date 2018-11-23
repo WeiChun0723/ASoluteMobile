@@ -118,58 +118,64 @@ namespace ASolute_Mobile.CustomerTracking
 
             submit.Clicked += async (sender, e) =>
             {
-                try
+                if (!(String.IsNullOrEmpty(entry.Text)))
                 {
-                    if (!(String.IsNullOrEmpty(entry.Text)))
+                    Ultis.Settings.Email = entry.Text;
+
+                    try
                     {
-                        Ultis.Settings.Email = entry.Text;
+
+
+
+                        loading.IsRunning = true;
+                        loading.IsVisible = true;
+                        loading.IsEnabled = true;
+
+                       /* clsRegister register = new clsRegister
+                        {
+                            DeviceId = Ultis.Settings.DeviceUniqueID,
+                            UserName = "",
+                            Email = entry.Text,
+                            MobileNo = "",
+                            RegNo = "",
+                            CompanyName = "",
+                            FirebaseId = firebaseID,
+                            DeviceIdiom = CrossDeviceInfo.Current.Idiom.ToString(),
+                            DeviceMfg = CrossDeviceInfo.Current.Manufacturer,
+                            DeviceModel = CrossDeviceInfo.Current.Model,
+                            OSPlatform = CrossDeviceInfo.Current.Platform.ToString(),
+                            OSVer = CrossDeviceInfo.Current.VersionNumber.ToString(),
+                            AppVer = CrossDeviceInfo.Current.AppVersion,
+                            AppName = clsRegister.AppNameConst.Business
+                        };
+
+                        var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
+                        clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);*/
+                        var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
+                        clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (verify_response.IsGood)
+                        {
+                            loading.IsRunning = false;
+                            loading.IsVisible = false;
+                            loading.IsEnabled = false;
+
+                            await Navigation.PushAsync(new CustomerRegistration(content));
+                            //Application.Current.MainPage = new AccountActivation();
+                        }
+                        else
+                        {
+                            await DisplayAlert("JsonError", verify_response.Message, "OK");
+                        }
                     }
-
-
-                    loading.IsRunning = true;
-                    loading.IsVisible = true;
-                    loading.IsEnabled = true;
-
-                    clsRegister register = new clsRegister
+                    catch (Exception ex)
                     {
-                        DeviceId = Ultis.Settings.DeviceUniqueID,
-                        UserName = "",
-                        Email = entry.Text,
-                        MobileNo = "",
-                        RegNo = "",
-                        CompanyName = "",
-                        FirebaseId = firebaseID,
-                        DeviceIdiom = CrossDeviceInfo.Current.Idiom.ToString(),
-                        DeviceMfg = CrossDeviceInfo.Current.Manufacturer,
-                        DeviceModel = CrossDeviceInfo.Current.Model,
-                        OSPlatform = CrossDeviceInfo.Current.Platform.ToString(),
-                        OSVer = CrossDeviceInfo.Current.VersionNumber.ToString(),
-                        AppVer = CrossDeviceInfo.Current.AppVersion,
-                        AppName = clsRegister.AppNameConst.Business
-                    };
-
-                    var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
-                    clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
-                    /*var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
-                    clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);*/
-
-                    if (register_response.IsGood)
-                    {
-                        loading.IsRunning = false;
-                        loading.IsVisible = false;
-                        loading.IsEnabled = false;
-
-                        //await Navigation.PushAsync(new CustomerRegistration(content));
-                        Application.Current.MainPage = new AccountActivation();
-                    }
-                    else
-                    {
-                        await DisplayAlert("JsonError", register_response.Message, "OK");
+                        await DisplayAlert("Error", ex.Message, "OK");
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    await DisplayAlert("Error", ex.Message, "OK");
+                    await DisplayAlert("Missing Field", "Please key in all field", "OK");
                 }
 
             };

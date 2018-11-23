@@ -60,6 +60,7 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
+
             PageContent();
             Action();
 
@@ -317,7 +318,7 @@ namespace ASolute_Mobile
          
             if (Ultis.Settings.deleteImage == "Yes" || jobItem.Done == 1 || jobItem.Done == 2)
             {
-                displayImage();
+                DisplayImage();
                 Ultis.Settings.deleteImage = "No";
             }
 
@@ -549,14 +550,12 @@ namespace ASolute_Mobile
                 string _prefixtext = contPrefix.Text.ToUpper();
                 contPrefix.Text = _prefixtext;
                 //Get Current Text
-                if(String.IsNullOrEmpty(jobItem.ContainerNo))
+
+                if (_prefixtext.Length == 4)
                 {
-                    if (_prefixtext.Length == 4)
-                    {
-                        contNumber.Focus();
-                    }
+                    contNumber.Focus();
                 }
-               
+              
             };
 
             contNumber.TextChanged += (sender, e) =>
@@ -783,10 +782,11 @@ namespace ASolute_Mobile
                     checking = "false";
                 }
 
-                await CommonFunction.StoreImages(jobItem.Id, this);
-                displayImage();
-                UploadImage(jobItem.Id);
-                
+                await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this);
+                DisplayImage();
+                BackgroundTask.StartTimer();
+                //UploadImage(jobItem.EventRecordId.ToString());
+
             };
             camera.GestureRecognizers.Add(takeImage);
             imageButtonStackLayout.Children.Add(camera);
@@ -843,8 +843,9 @@ namespace ASolute_Mobile
 
                             if (signatureImage != null)
                             {
-                                await CommonFunction.StoreSignature(jobItem.Id, signatureImage, this);
+                            await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
                                 done = true;
+                            BackgroundTask.StartTimer();
                             }
                             else
                             {
@@ -883,6 +884,10 @@ namespace ASolute_Mobile
                                             {
                                                 contNumber.Text = String.Empty;
                                                 contPrefix.Text = String.Empty;
+                                                confirm.IsEnabled = true;
+                                                confirm.Source = "confirm.png";
+                                                futile.IsEnabled = true;
+                                                futile.Source = "futile.png";
                                             }
                                         }
                                     }
@@ -977,7 +982,8 @@ namespace ASolute_Mobile
             {
                 Content = mainStackLayout
             };
-          
+
+            DisplayImage();
         }
 
         public async void EmptyPickupObject()
@@ -1056,16 +1062,19 @@ namespace ASolute_Mobile
 
             if (json_response.IsGood == true)
             {
+
                 uploaded = true;
-                Ultis.Settings.UpdatedRecord = "Yes";
-                
-                if (signatureStackLayout.IsVisible)
+                Ultis.Settings.RefreshMenuItem = "Yes";
+                Ultis.Settings.UpdatedRecord = "RefreshJobList";
+
+                /*if (signatureStackLayout.IsVisible)
                 {
                     UploadImage(jobItem.Id);
-                }
+                }*/
 
                 if (Ultis.Settings.Language.Equals("English"))
                 {
+                
                     await DisplayAlert("Success", "Job updated", "OK");
                 }
                 else
@@ -1073,12 +1082,10 @@ namespace ASolute_Mobile
                     await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
                 }
 
-                App.Database.deleteAppImage();
-                await Navigation.PopAsync();
             }
             else
             {                         
-                await DisplayAlert("Upload Error", json_response.Message, "OK");               
+                await DisplayAlert("Upload Error", json_response.Message , "OK");               
                 confirm.IsEnabled = true;
                 confirm.Source = "confirm.png";
                 futile.IsEnabled = true;
@@ -1148,7 +1155,7 @@ namespace ASolute_Mobile
             imageGrid.Children.Add(image, colNo, rowNo);
         }
 
-        public async void displayImage()
+        public async void DisplayImage()
         {
             try
             {
@@ -1156,11 +1163,11 @@ namespace ASolute_Mobile
                 imageGrid.Children.Clear();
                 if(jobItem.Done == 0)
                 {
-                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.Id, "NormalImage");
+                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
                 }
                 else
                 {
-                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.Id, "NormalImage");
+                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
                 }
                 foreach (AppImage Image in images)
                 {

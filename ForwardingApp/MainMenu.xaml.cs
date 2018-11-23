@@ -104,7 +104,9 @@ namespace ASolute_Mobile
 
         protected override void OnAppearing()
         {
-            if(Ultis.Settings.NewJob.Equals("Yes"))
+            Ultis.Settings.UpdatedRecord = "RefreshJobList";
+
+            if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
             }
@@ -216,7 +218,7 @@ namespace ASolute_Mobile
                 case "JobList":
                     //await Navigation.PushAsync(new TransportScreen.JobLists());
                     //await Navigation.PushAsync(new TransportScreen.JobList());
-                    await Navigation.PushAsync(new HaulageScreen.JobList());
+                    //await Navigation.PushAsync(new HaulageScreen.JobList());
                     break;
 
                 case "CargoReturn":
@@ -234,7 +236,7 @@ namespace ASolute_Mobile
                     break;
 
                 case "RunSheet":
-                    await Navigation.PushAsync(new HaulageScreen.RunSheet());
+                  // await Navigation.PushAsync(new HaulageScreen.RunSheet());
                     break;
 
                 case "Shunting":
@@ -436,10 +438,8 @@ namespace ASolute_Mobile
         public void refreshMainMenu(object sender, EventArgs e)
         {
             getMainMenu();
-            MainMenuList.IsRefreshing = false;
-                    
+            MainMenuList.IsRefreshing = false;             
         }
-
 
         // load the item that stored in db to the list view by using custom view cell
         public void loadMainMenu()
@@ -476,7 +476,6 @@ namespace ASolute_Mobile
                             break;
                     }
                    
-
                     dashboard.Label = Items[i].name;
 
                     var showLabel = new TapGestureRecognizer();

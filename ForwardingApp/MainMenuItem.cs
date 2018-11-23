@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,19 +12,24 @@ using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
 {
 	public class MainMenuItem : ListViewCommonScreen
     {
+
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
+        string previousLocation = "";
+        string chklocation = "0";
         string firebaseID;
+
 
         public MainMenuItem()
         {
-            Task.Run(async () => { await BackgroundTask.StartListening(); });
+           
             Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
 
             listView.ItemTapped += async (sender, e) =>
@@ -38,7 +44,7 @@ namespace ASolute_Mobile
                         break;
 
                     case "FuelCost":
-                        RefuelHistory refuel = new RefuelHistory(menuAction);                
+                        RefuelHistory refuel = new RefuelHistory(((AppMenu)e.Item).name);                
                         await Navigation.PushAsync(refuel);
                         break;
 
@@ -60,11 +66,15 @@ namespace ASolute_Mobile
                         break;
 
                     case "JobList":
-                        //await Navigation.PushAsync(new TransportScreen.JobLists());
-                        //await Navigation.PushAsync(new TransportScreen.JobList());
-                        await Navigation.PushAsync(new HaulageScreen.JobList());
+                       //await Navigation.PushAsync(new TransportScreen.JobLists(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new HaulageScreen.JobList(((AppMenu)e.Item).name));
+                       // await Navigation.PushAsync(new ChatRoom());
                         break;
 
+                    case "MasterJobList":
+                        await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
+                        break;
                     case "CargoReturn":
                         string return_id = "test";
                         string return_eventID = "1000";
@@ -80,7 +90,7 @@ namespace ASolute_Mobile
                         break;
 
                     case "RunSheet":
-                        await Navigation.PushAsync(new HaulageScreen.RunSheet());
+                        await Navigation.PushAsync(new HaulageScreen.RunSheet(((AppMenu)e.Item).name));
                         break;
 
                     case "Shunting":
@@ -100,12 +110,92 @@ namespace ASolute_Mobile
             listView.Refreshing += (sender, e) =>
             {
                 GetMainMenu();
+                Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                Ultis.Settings.RefreshMenuItem = "NO";
                 listView.IsRefreshing = false;
             };
+
+        }
+
+        public async Task StartListening()
+        {
+            var locator = CrossGeolocator.Current;
+
+
+            if (!locator.IsListening)
+            {
+
+                //Start listening to location updates
+                await locator.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true,new Plugin.Geolocator.Abstractions.ListenerSettings
+                {
+                    ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
+                    AllowBackgroundUpdates = true,
+                    ListenForSignificantChanges = true,
+                    DeferLocationUpdates = true,
+                    DeferralDistanceMeters = 1,
+                    DeferralTime = TimeSpan.FromSeconds(1),
+                    PauseLocationUpdatesAutomatically = false
+                });
+
+                locator.PositionChanged += Current_PositionChanged;
+  
+            }
+        }
+
+
+        public async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
+        {
+            var position = e.Position;
+            var locator = CrossGeolocator.Current;
+
+
+            if(position == null)
+            {
+                Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
+            }
+
+            chklocation = Math.Round(position.Latitude, 4) + "," + Math.Round(position.Longitude, 4);
+
+            if (chklocation != previousLocation)
+            {
+                try
+                {
+                    previousLocation = Math.Round(position.Latitude, 4) + "," + Math.Round(position.Longitude, 4);
+
+                    var getAddress = await locator.GetAddressesForPositionAsync(position);
+                    var addressDetail = getAddress.FirstOrDefault();
+                    string address = addressDetail.Thoroughfare + "," + addressDetail.PostalCode + "," + addressDetail.Locality + "," + addressDetail.AdminArea + "," + addressDetail.CountryName;
+                    string location = position.Latitude + "," + position.Longitude;
+
+                    var client = new HttpClient();
+                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                    var uri = ControllerUtil.getGPSTracking(location, address);
+                    var response = await client.GetAsync(uri);
+                    var content = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(content);
+                    clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (gps_response.IsGood)
+                    {
+                       // await DisplayAlert("OK", chklocation, "OK");
+                        previousLocation = location;
+
+                        App.gpsLocationLat = position.Latitude;
+                        App.gpsLocationLong = position.Longitude;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string error = ex.Message;
+                }
+
+            }
         }
 
         protected override void OnAppearing()
         {
+            Task.Run(async () => { await StartListening(); });
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -119,7 +209,6 @@ namespace ASolute_Mobile
 
                 try
                 {
-
                     CommonFunction.NewJobNotification(this);
                 }
                 catch (Exception e)
@@ -128,10 +217,11 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("Yes"))
+            if (NetworkCheck.IsInternet() && Ultis.Settings.RefreshMenuItem.Equals("Yes"))
             {
                 GetMainMenu();
-                Ultis.Settings.UpdatedRecord = "No";
+                Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                Ultis.Settings.RefreshMenuItem = "NO";
             }
             else
             {
@@ -221,6 +311,7 @@ namespace ASolute_Mobile
                                 }
 
                                 existingRecord.menuId = mainMenu.Id;
+                                existingRecord.name = mainMenu.Caption;
 
 
                                 List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");

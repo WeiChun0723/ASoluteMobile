@@ -44,16 +44,16 @@ namespace ASolute_Mobile.Droid
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());
 
-            var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
+            /*var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
             var alarmManagerBackgroundDataSync = GetSystemService(AlarmService).JavaCast<AlarmManager>();
-            alarmManagerBackgroundDataSync.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), 60000, backgroundDataSyncPendingIntent);
+            alarmManagerBackgroundDataSync.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime() ,  5, backgroundDataSyncPendingIntent);
 
             var cleanUpPendingIntent = PendingIntent.GetBroadcast(this, 1, new Intent(this, typeof(BackgroundCleanUpReceiver)), PendingIntentFlags.UpdateCurrent);
             var alarmManagercleanUpPending = GetSystemService(AlarmService).JavaCast<AlarmManager>();
             DateTime midnightDateTime = DateTime.Today;
             TimeSpan ts = new TimeSpan(0, 0, 0);
             midnightDateTime = midnightDateTime.Date + ts;
-            alarmManagercleanUpPending.SetRepeating(AlarmType.RtcWakeup, midnightDateTime.Ticks, AlarmManager.IntervalDay, cleanUpPendingIntent);
+            alarmManagercleanUpPending.SetRepeating(AlarmType.RtcWakeup, midnightDateTime.Ticks, AlarmManager.IntervalDay, cleanUpPendingIntent);*/
 
             App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                       

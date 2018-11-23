@@ -11,6 +11,7 @@ using ASolute.Mobile.Models;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using ASolute_Mobile.Ultis;
+using ASolute_Mobile.CommonScreen;
 
 namespace ASolute_Mobile
 {
@@ -48,7 +49,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Haulage";
+                AppLabel.Text = "AILS Haulage V29";
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
@@ -117,7 +118,7 @@ namespace ASolute_Mobile
 
         public async void Update_URL_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new SettingPage());            
+            await Navigation.PushAsync(new ChangeEnterpriseName());            
         }
 
         public async void NewUser(object sender, System.EventArgs e)
@@ -159,7 +160,8 @@ namespace ASolute_Mobile
                     if (login_response.IsGood == true)
                     {
                         //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
-                        Ultis.Settings.UpdatedRecord = "Yes";
+                        Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                        Ultis.Settings.RefreshMenuItem = "Yes";
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
                         Ultis.Settings.SessionPassword = passwordEntry.Text;
 

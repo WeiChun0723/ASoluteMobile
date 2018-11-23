@@ -30,11 +30,13 @@ namespace ASolute_Mobile
         static string history;
         static string previousLocation = "";
         static string chklocation = "0";
+        static List<AppImage> recordImages = new List<AppImage>();
 
         public BackgroundTask()
         {
         }
 
+     
         public static async Task StartListening()
         {
             if (CrossGeolocator.Current.IsListening)
@@ -119,7 +121,7 @@ namespace ASolute_Mobile
                             {
                                 if(Ultis.Settings.App == "Fleet")
                                 {
-                                    uploadUri = ControllerUtil.postJobDetailURL();
+                                    uploadUri = ControllerUtil.postJobDetailURL(history);
                                     imageEventID = jobItem.EventRecordId.ToString();
                                 }
                                 else if (Ultis.Settings.App == "Courier")
@@ -187,7 +189,7 @@ namespace ASolute_Mobile
                                     imageEventID = json_response.Result["EventRecordId"];
                                 }
 
-                                await UploadImage(jobItem.Id);
+                                BackgroundUploadImage();
                               
                             }
                             else
@@ -245,7 +247,7 @@ namespace ASolute_Mobile
                             if (status.IsGood == true)
                             {
                                 imageEventID = status.Result["LinkId"];
-                                await UploadImage(refuelData.ID);
+                                BackgroundUploadImage();
                                 Ultis.Settings.UpdatedRecord = "Yes";
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
@@ -340,7 +342,7 @@ namespace ASolute_Mobile
                                 Log.Id = log_response.Result["Id"];
                                 App.Database.SaveLogRecordAsync(Log);
                                 imageEventID = log_response.Result["LinkId"];                                
-                                await UploadImage(Log.OfflineID);                                                                 
+                                BackgroundUploadImage();                                                                 
 
                                 if (Ultis.Settings.Language.Equals("English"))
                                 {
@@ -734,9 +736,33 @@ namespace ASolute_Mobile
             
         }
 
-        public static async Task UploadImage(string uploadID)
+        public static void StartTimer()
         {
-            List<AppImage> recordImages = App.Database.GetRecordImagesAsync(uploadID, false);
+            Device.StartTimer(TimeSpan.FromSeconds(5),  () =>
+            {
+
+                //Task.Run(async () => { await BackgroundUploadImage(); });
+
+                BackgroundUploadImage();
+
+                if (recordImages.Count != 0)
+                {
+
+                    return true; // True = Repeat again, False = Stop the timer
+                }
+                else
+                {
+                    return false;
+                }
+
+            });
+        }
+
+
+        public static async void BackgroundUploadImage()
+        {
+           
+            recordImages = App.Database.GetPendingRecordImages(false);
             foreach (AppImage recordImage in recordImages)
             {
                 clsFileObject image = new clsFileObject();
@@ -748,32 +774,23 @@ namespace ASolute_Mobile
                 else
                 {
                     byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100,false);
+                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
                     image.Content = scaledImageByte;
                 }
 
                 image.FileName = recordImage.photoFileName;
 
-                var image_client = new HttpClient();
-                image_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var image_uri = ControllerUtil.UploadImageURL(imageEventID);
-                var imagecontent = JsonConvert.SerializeObject(image);
-                var image_httpContent = new StringContent(imagecontent, Encoding.UTF8, "application/json");
+                var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(recordImage.id));
+                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                HttpResponseMessage image_response = await image_client.PostAsync(image_uri, image_httpContent);
-                var Imagereply = await image_response.Content.ReadAsStringAsync();
-                Debug.WriteLine(Imagereply);
-                clsResponse Imageresult = JsonConvert.DeserializeObject<clsResponse>(Imagereply);
-
-                if (Imageresult.IsGood == true)
+                if (response.IsGood == true)
                 {
                     uploadedImage++;
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);
-                   
+
                 }
             }
-        
         }
     }
 

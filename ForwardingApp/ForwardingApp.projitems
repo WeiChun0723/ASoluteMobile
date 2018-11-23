@@ -16,9 +16,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MasterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\ChangePasswordPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -119,14 +116,33 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\ChangePasswordPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\CurrentLocation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ChatRoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen_.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\ChangeEnterpriseName.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\RegisterUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\CurrentLocation.xaml.cs">
-      <DependentUpon>CurrentLocation.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobList.xaml.cs">
       <DependentUpon>JobList.xaml</DependentUpon>
@@ -200,9 +216,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UploadFileDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ControllerUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\ChangePasswordPage.xaml.cs">
-      <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml.cs">
       <DependentUpon>CustomerRegistration.xaml</DependentUpon>
     </Compile>
@@ -224,7 +237,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\CheckListViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\CheckListModel\PropertyChange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
@@ -299,6 +311,30 @@
       <DependentUpon>DriverRFC.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainMenuItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\ChangePasswordPage.xaml.cs">
+      <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CurrentLocation.xaml.cs">
+      <DependentUpon>CurrentLocation.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ChatRoom.xaml.cs">
+      <DependentUpon>ChatRoom.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ChatRoomObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\GetBaseURLViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen_.xaml.cs">
+      <DependentUpon>SplashScreen_.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PropertyChange.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\ChangeEnterpriseName.xaml.cs">
+      <DependentUpon>ChangeEnterpriseName.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\RegisterUser.xaml.cs">
+      <DependentUpon>RegisterUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\Register.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\RegisterUserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -307,6 +343,8 @@
     <Folder Include="$(MSBuildThisFileDirectory)CustomerTracking\" />
     <Folder Include="$(MSBuildThisFileDirectory)InputValidation\" />
     <Folder Include="$(MSBuildThisFileDirectory)CommonScreen\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainMenu.xaml">
@@ -358,12 +396,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\PendingCollection.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\CurrentLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

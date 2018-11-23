@@ -46,15 +46,24 @@ namespace ASolute_Mobile.CustomerTracking
                 double loc_latitude = Convert.ToDouble(latitude);
                 double loc_longtitude = Convert.ToDouble(longtitude);
 
-                GoogleMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(loc_latitude, loc_longtitude), Distance.FromMeters(100)));
-
-                var pin = new Pin
+                if(loc_latitude == 0.00 || loc_longtitude == 0.00)
                 {
-                    Position = new Position(loc_latitude, loc_longtitude),
-                    Label = ""
-                };
+                    GoogleMap.IsVisible = false;
+                    switchChange.IsVisible = false;
+                }
+                else
+                {
+                    GoogleMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(loc_latitude, loc_longtitude), Distance.FromMeters(100)));
 
-                GoogleMap.Pins.Add(pin);
+                    var pin = new Pin
+                    {
+                        Position = new Position(loc_latitude, loc_longtitude),
+                        Label = ""
+                    };
+
+                    GoogleMap.Pins.Add(pin);
+                }
+              
             }
             else
             {

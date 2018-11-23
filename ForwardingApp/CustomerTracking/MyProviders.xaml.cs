@@ -46,34 +46,44 @@ namespace ASolute_Mobile.CustomerTracking
 
         protected async override void OnAppearing()
         {
-            if (Ultis.Settings.AppFirstInstall == "First")
+            try
             {
-                await StartListening();
-                Ultis.Settings.AppFirstInstall = "Second";
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
-                clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                if(autoScan_response.IsGood)
+                if (Ultis.Settings.AppFirstInstall == "First")
                 {
-                    await DisplayAlert("Succeed", autoScan_response.Result, "OK");
-                    await getProviderList();
+
+                    Ultis.Settings.AppFirstInstall = "Second";
+                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                    clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (autoScan_response.IsGood)
+                    {
+                        await DisplayAlert("Succeed", autoScan_response.Result, "OK");
+                        await getProviderList();
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", autoScan_response.Message, "OK");
+                    }
+
+                    await StartListening();
                 }
                 else
                 {
-                    await DisplayAlert("Error", autoScan_response.Message, "OK");
+
+                    if (App.Database.GetMainMenu("ProviderList").Count == 0 || Ultis.Settings.AppFirstInstall == "Refresh")
+                    {
+                        await getProviderList();
+                        Ultis.Settings.AppFirstInstall = "No";
+                    }
+                    else
+                    {
+                        LoadProviderList();
+                    }
+
                 }
             }
-            else
+            catch
             {
-
-                if(App.Database.GetMainMenu("ProviderList").Count == 0)
-                {
-                    await getProviderList();
-                }
-                else
-                {
-                     LoadProviderList();
-                }
 
             }
                 
