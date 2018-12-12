@@ -139,6 +139,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TestingOCR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)OCRPopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -335,6 +343,13 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\Register.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\RegisterUserViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestingOCR.xaml.cs">
+      <DependentUpon>TestingOCR.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TestingClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OCRPopUp.xaml.cs">
+      <DependentUpon>OCRPopUp.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

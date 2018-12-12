@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;

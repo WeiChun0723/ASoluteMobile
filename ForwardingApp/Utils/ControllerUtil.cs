@@ -260,7 +260,10 @@ namespace ASolute_Mobile.Utils
             return String.Format("Session/Load?Id={0}&FirebaseId={1}", Ultis.Settings.SessionSettingKey,firebase);
         }
 
-        
+        public static String getDownloadMenuURL()
+        {
+            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
+        }
 
         public static String getDownloadRefuelHistoryURL()
         {

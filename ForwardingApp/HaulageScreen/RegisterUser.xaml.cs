@@ -12,7 +12,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             InitializeComponent();
 
-           /* if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
+            if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
             {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
@@ -37,9 +37,15 @@ namespace ASolute_Mobile.HaulageScreen
             icEntry.Completed += (s, e) =>
             {
                 icEntry.Unfocus();
-            };*/
+            };
+
 
             BindingContext = new RegisterUserViewModel();
+
+            if (!(String.IsNullOrWhiteSpace(Ultis.Settings.AppEnterpriseName)))
+            {
+                enterpriseEntry.Text = Ultis.Settings.AppEnterpriseName;
+            }
         }
     }
 }

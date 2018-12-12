@@ -31,11 +31,7 @@
                     <local:MaxLengthValidation MaxLength="10"/>
                 </controls:CustomEntry.Behaviors>
          </controls:CustomEntry>
-        <controls:CustomEntry Placeholder="Password" IsPassword="True" x:Name = "passwordEntry" Image="pass" Style="{StaticResource entryStyle}">
-                 <controls:CustomEntry.Behaviors>
-                    <local:MaxLengthValidation MaxLength="10"/>
-                </controls:CustomEntry.Behaviors>
-         </controls:CustomEntry>
+        <controls:CustomEntry Placeholder="Password" IsPassword="True" x:Name = "passwordEntry" Image="pass" Style="{StaticResource entryStyle}"/>
 
         <StackLayout Orientation="Horizontal" >
             <controls:CustomEntry Placeholder="Equipment"  x:Name = "equipmentEntry" Image="logintruck" Style="{StaticResource entryStyle}" HorizontalOptions="FillAndExpand" />

@@ -122,15 +122,18 @@ namespace ASolute_Mobile
 
         public async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(job_id, this);
+            await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this);
+
             displayImage();
-            UploadImage(job_id);
+            BackgroundTask.StartTimer();
         }    
 
         public async void uploadDetail(object sender, EventArgs e)
         {
             try
             {
+                Ultis.Settings.RefreshMenuItem = "Yes";
+                Ultis.Settings.UpdatedRecord = "RefreshJobList";
                 if (ReasonPicker.SelectedIndex != -1 )
                 {
                     try
@@ -166,8 +169,10 @@ namespace ASolute_Mobile
                             confirm_icon.Source = "confirmDisable.png";
                             await DisplayAlert("Success", "Job status uploaded", "OK");
                             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
-                            await Navigation.PopAsync();
+
                            
+                            //await Navigation.PopAsync();
+
                         }
                         else
                         {
@@ -239,7 +244,7 @@ namespace ASolute_Mobile
         {
             images.Clear();
             imageGrid.Children.Clear();
-            images = App.Database.GetUplodedRecordImagesAsync(job_id,"NormalImage");
+            images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(),"NormalImage");
             foreach (AppImage Image in images)
             {
                 IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);

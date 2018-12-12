@@ -28,36 +28,39 @@ namespace ASolute_Mobile
 
         public App()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDU4MTBAMzEzNjJlMzMyZTMwT1FtdENrWjVXVVZGN2dVQ0pxRHRmMkJ1aEpINzJIWklDdVdTdmEyU2I3VT0=");
 
             InitializeComponent();
 
-            if (sessionKey != "")
-            {
-                MainPage = new MainPage();
+           MainPage = new TestingOCR();
 
-            }
-            else 
-            {
-                if(Ultis.Settings.AppFirstInstall == "First")
-                {
-                    MainPage = new CustomNavigationPage(new SplashScreen());
-                }
-                else
-                {
-                    MainPage = new CustomNavigationPage(new LoginPage());
-                }
+            /* if (sessionKey != "")
+             {
+                 MainPage = new MainPage();
 
-               // MainPage = new CustomNavigationPage(new LoginPage());
-            }
-          
-            //MainPage = new CustomNavigationPage(new CustomerTracking.DataGrid());
-             /*Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-              MainPage = new CustomNavigationPage(new AppNavigation());*/
+             }
+             else 
+             {
+                 if(Ultis.Settings.AppFirstInstall == "First")
+                 {
+                     MainPage = new CustomNavigationPage(new SplashScreen());
+                 }
+                 else
+                 {
+                     MainPage = new CustomNavigationPage(new LoginPage());
+                 }
 
-             OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
-                        .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
-                        .HandleNotificationReceived(HandleNotificationReceived)
-                        .EndInit();
+                // MainPage = new CustomNavigationPage(new LoginPage());
+             }
+
+
+            Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+             MainPage = new CustomNavigationPage(new AppNavigation());
+
+            OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
+                         .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
+                         .HandleNotificationReceived(HandleNotificationReceived)
+                         .EndInit();*/
 
         }
 

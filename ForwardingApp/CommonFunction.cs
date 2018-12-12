@@ -19,17 +19,19 @@ namespace ASolute_Mobile.Utils
     {
         static ContentPage pages;
 
+
         //call when calling the web service to get response
         public static async Task<string> GetWebService(string baseAdd,string callUri)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(baseAdd);
-            var uri = callUri;
-            var response = await client.GetAsync(uri);
-            var content = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(content);
+           
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(baseAdd);
+                var uri = callUri;
+                var response = await client.GetAsync(uri);
+                var content = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine(content);
 
-            return content;
+                return content;
         }
 
         public static async Task<string> PostRequest(object data, string baseAdd, string calllUri)

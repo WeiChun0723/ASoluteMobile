@@ -1050,47 +1050,59 @@ namespace ASolute_Mobile
 
         public async void UpdateRecord()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-            var uri = ControllerUtil.postHaulageURL();
-            var content = JsonConvert.SerializeObject(haulageJob);
-            var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(uri, httpContent);
-            var reply = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(reply);
-            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
-
-            if (json_response.IsGood == true)
+            try
             {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                var uri = ControllerUtil.postHaulageURL();
+                var content = JsonConvert.SerializeObject(haulageJob);
+                var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(uri, httpContent);
+                var reply = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine(reply);
+                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
 
-                uploaded = true;
-                Ultis.Settings.RefreshMenuItem = "Yes";
-                Ultis.Settings.UpdatedRecord = "RefreshJobList";
-
-                /*if (signatureStackLayout.IsVisible)
+                if (json_response.IsGood == true)
                 {
-                    UploadImage(jobItem.Id);
-                }*/
 
-                if (Ultis.Settings.Language.Equals("English"))
-                {
-                
-                    await DisplayAlert("Success", "Job updated", "OK");
+                    uploaded = true;
+                    Ultis.Settings.RefreshMenuItem = "Yes";
+                    Ultis.Settings.UpdatedRecord = "RefreshJobList";
+
+                    /*if (signatureStackLayout.IsVisible)
+                    {
+                        UploadImage(jobItem.Id);
+                    }*/
+
+                    if (Ultis.Settings.Language.Equals("English"))
+                    {
+
+                        await DisplayAlert("Success", "Job updated", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
+                    }
+
                 }
                 else
                 {
-                    await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
+                    await DisplayAlert("Upload Error", json_response.Message, "OK");
+                    confirm.IsEnabled = true;
+                    confirm.Source = "confirm.png";
+                    futile.IsEnabled = true;
+                    futile.Source = "futile.png";
                 }
-
             }
-            else
-            {                         
-                await DisplayAlert("Upload Error", json_response.Message , "OK");               
+            catch
+            {
+                await DisplayAlert("Error", "No internet connection", "OK");
                 confirm.IsEnabled = true;
                 confirm.Source = "confirm.png";
                 futile.IsEnabled = true;
                 futile.Source = "futile.png";
             }
+
         }
 
         public async void UploadImage(string uploadID)

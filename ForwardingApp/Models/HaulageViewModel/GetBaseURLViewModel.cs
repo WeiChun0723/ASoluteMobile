@@ -23,14 +23,8 @@ namespace ASolute_Mobile.Models.HaulageViewModel
         {
             get
             {
-                if (!(String.IsNullOrWhiteSpace(Ultis.Settings.AppEnterpriseName)))
-                {
-                   return enterpriseName = Ultis.Settings.AppEnterpriseName;
-                }
-                else
-                {
                     return enterpriseName;
-                }
+               
                  
             }
             set

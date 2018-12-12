@@ -49,7 +49,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Haulage V29";
+                AppLabel.Text = "AILS Trucking";
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
@@ -123,7 +123,7 @@ namespace ASolute_Mobile
 
         public async void NewUser(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new HaulageScreen.Registration());
+            await Navigation.PushAsync(new HaulageScreen.RegisterUser());
         }
 
         //get app id for crash report by auto generate
@@ -153,7 +153,6 @@ namespace ASolute_Mobile
                
                 try
                 {
-
                     var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
                     clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 

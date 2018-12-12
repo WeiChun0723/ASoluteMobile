@@ -19,7 +19,14 @@ namespace ASolute_Mobile.CommonScreen
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
+
             BindingContext = new GetBaseURLViewModel();
+
+
+            if (!(String.IsNullOrWhiteSpace(Ultis.Settings.AppEnterpriseName)))
+            {
+                nameEntry.Text = Ultis.Settings.AppEnterpriseName;
+            }
 
         }
     }

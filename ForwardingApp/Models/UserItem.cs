@@ -17,7 +17,7 @@ namespace ASolute_Mobile.Ultis
         public string UserName { get; set; }
         public string ImageSize { get; set; }
         public string MaxUploadFile { get; set; }
-        public Boolean CaptureGPS { get; set; }
+        public Boolean GetGPS { get; set; }
         public bool GetSignature { get; set; }
         public string CompanyName { get; set; }
         public string UserId { get; set; }

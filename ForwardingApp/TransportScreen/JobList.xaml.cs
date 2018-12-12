@@ -34,7 +34,7 @@ namespace ASolute_Mobile.TransportScreen
         {
             base.OnAppearing();
 
-          GetJobList(); 
+            GetJobList(); 
 
         }
 
@@ -45,6 +45,9 @@ namespace ASolute_Mobile.TransportScreen
 
         protected void pendingJobRefresh(object sender, EventArgs e)
         {
+            loading.IsRunning = true;
+            loading.IsVisible = true;
+            loading.IsEnabled = true;
             GetJobList();
             jobList.IsRefreshing = false;
         }
@@ -156,11 +159,18 @@ namespace ASolute_Mobile.TransportScreen
                 {
 
                     string summary = "";
-                    TruckModel record = new TruckModel();
+                    TruckModel record = new TruckModel
+                    {
+                        TruckId = truck.TruckId,
+                        RecordId = truck.Id,
+                        Action = truck.Action,
+                        EventRecordId = truck.EventRecordId,
+                        Latitude = truck.Latitude,
+                        Longitude = truck.Longitude,
+                        TelNo = truck.TelNo,
+                        ReqSign = truck.ReqSign
+                    };
 
-                    record.TruckId = truck.TruckId;
-                    record.RecordId = truck.Id;
-                    record.Action = truck.Action;
 
                     if (!(String.IsNullOrEmpty(truck.BackColor)))
                     {

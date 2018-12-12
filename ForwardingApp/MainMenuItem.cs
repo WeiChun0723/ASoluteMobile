@@ -24,7 +24,7 @@ namespace ASolute_Mobile
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string previousLocation = "";
         string chklocation = "0";
-        string firebaseID;
+        string firebaseID = "firebase";
 
 
         public MainMenuItem()
@@ -67,8 +67,8 @@ namespace ASolute_Mobile
 
                     case "JobList":
                        //await Navigation.PushAsync(new TransportScreen.JobLists(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new HaulageScreen.JobList(((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new HaulageScreen.JobList(((AppMenu)e.Item).name));
                        // await Navigation.PushAsync(new ChatRoom());
                         break;
 
@@ -164,7 +164,30 @@ namespace ASolute_Mobile
 
                     var getAddress = await locator.GetAddressesForPositionAsync(position);
                     var addressDetail = getAddress.FirstOrDefault();
-                    string address = addressDetail.Thoroughfare + "," + addressDetail.PostalCode + "," + addressDetail.Locality + "," + addressDetail.AdminArea + "," + addressDetail.CountryName;
+                    string address = "";
+
+                    address = addressDetail.Thoroughfare ;
+
+                    if(!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
+                    {
+                        address += "," + addressDetail.Locality;
+                    }
+
+                    if(!String.IsNullOrEmpty(addressDetail.PostalCode)  && addressDetail.PostalCode != "????")
+                    {
+                        address += "," + addressDetail.PostalCode;
+                    }
+
+                    if (!String.IsNullOrEmpty(addressDetail.AdminArea) && addressDetail.AdminArea != "????")
+                    {
+                        address += "," + addressDetail.AdminArea;
+                    }
+
+                    if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
+                    {
+                        address += "," + addressDetail.CountryName;
+                    }
+
                     string location = position.Latitude + "," + position.Longitude;
 
                     var client = new HttpClient();
@@ -194,8 +217,12 @@ namespace ASolute_Mobile
 
         protected override void OnAppearing()
         {
-            Task.Run(async () => { await StartListening(); });
 
+            if(Ultis.Settings.SessionUserItem.GetGPS)
+            {
+                Task.Run(async () => { await StartListening(); });
+            }
+           
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -276,13 +303,13 @@ namespace ASolute_Mobile
             try
             {
               
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(firebaseID));
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (login_response.IsGood == true)
                 {
                     var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-
+         
                     //load value from the menu in json response "CheckList"
                     for (int check = 0; check < login_response.Result["Checklist"].Count; check++)
                     {
@@ -301,7 +328,7 @@ namespace ASolute_Mobile
                     {
                         AppMenu existingRecord = App.Database.GetMenuRecordAsync(mainMenu.Id);
 
-                        if (mainMenu.Id != "LogOff")
+                        if (mainMenu.Id != "LogOff" )
                         {
                             if (existingRecord == null || (!(existingRecord != null)))
                             {
@@ -312,7 +339,7 @@ namespace ASolute_Mobile
 
                                 existingRecord.menuId = mainMenu.Id;
                                 existingRecord.name = mainMenu.Caption;
-
+                                existingRecord.action = mainMenu.Action;
 
                                 List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
 

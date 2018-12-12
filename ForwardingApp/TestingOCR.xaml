@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ASolute_Mobile.TestingOCR"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
+    <ContentPage.Content>
+        <StackLayout Padding="10,10,10,10">
+         <inputLayout:SfTextInputLayout Hint="Name" 
+          ContainerType="Outlined"
+          EnablePasswordVisibilityToggle="true">
+        <Entry IsPassword="true"/>
+        </inputLayout:SfTextInputLayout>
+            
+            
+             <Button Text="MicrosoftOCR" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand"/>
+            <Button Text="GoogleOCR" Clicked="google_api" HorizontalOptions="FillAndExpand"/>
+            <Label x:Name="prefix" FontSize="Large"/>
+            <Label x:Name="resultField" FontSize="Large"/>
+            <ActivityIndicator IsRunning="false" x:Name="loading" />
+            
+            <SearchBar x:Name="filterText"
+          
+           IsVisible="true"
+           Placeholder="Search here to Filter"
+           TextChanged="OnFilterTextChanged" 
+                       HeightRequest="50"/>
+            
+            <syncfusion:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand" AutoGenerateColumns="true" GridTapped="Handle_GridTapped" SelectionMode="Single">
+                <syncfusion:SfDataGrid.Columns>
+                       <syncfusion:GridTextColumn MappingName="name" Width="100" >
+                           <syncfusion:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Entity" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </syncfusion:GridTextColumn.HeaderTemplate> 
+                        </syncfusion:GridTextColumn>
+                    </syncfusion:SfDataGrid.Columns>
+            
+            </syncfusion:SfDataGrid>
+            
+
+        </StackLayout>
+       
+    </ContentPage.Content>
+</ContentPage>

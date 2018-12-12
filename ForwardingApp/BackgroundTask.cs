@@ -762,35 +762,43 @@ namespace ASolute_Mobile
         public static async void BackgroundUploadImage()
         {
            
-            recordImages = App.Database.GetPendingRecordImages(false);
-            foreach (AppImage recordImage in recordImages)
+            try
             {
-                clsFileObject image = new clsFileObject();
-
-                if (recordImage.type == "signature")
+                recordImages = App.Database.GetPendingRecordImages(false);
+                foreach (AppImage recordImage in recordImages)
                 {
-                    image.Content = recordImage.imageData;
-                }
-                else
-                {
-                    byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
-                    image.Content = scaledImageByte;
-                }
+                    clsFileObject image = new clsFileObject();
 
-                image.FileName = recordImage.photoFileName;
+                    if (recordImage.type == "signature")
+                    {
+                        image.Content = recordImage.imageData;
+                    }
+                    else
+                    {
+                        byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
+                        scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                        image.Content = scaledImageByte;
+                    }
 
-                var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(recordImage.id));
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    image.FileName = recordImage.photoFileName;
 
-                if (response.IsGood == true)
-                {
-                    uploadedImage++;
-                    recordImage.Uploaded = true;
-                    App.Database.SaveRecordImageAsync(recordImage);
+                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
+                    if (response.IsGood == true)
+                    {
+                        uploadedImage++;
+                        recordImage.Uploaded = true;
+                        App.Database.SaveRecordImageAsync(recordImage);
+
+                    }
                 }
             }
+            catch
+            {
+
+            }
+           
         }
     }
 

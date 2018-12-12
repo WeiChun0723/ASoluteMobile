@@ -57,35 +57,37 @@ namespace ASolute_Mobile.TransportScreen
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            //DisplayImage();
         }
 
-        protected async override void OnAppearing()
+        async void DisplayImage()
         {
-            base.OnAppearing();
-
             images.Clear();
-            imageGrid.Children.Clear();
+           imageGrid.Children.Clear();
 
-            images = App.Database.GetUplodedRecordImagesAsync(jobID, "NormalImage");
+           images = App.Database.GetUplodedRecordImagesAsync(jobID, "NormalImage");
 
-            foreach (AppImage Image in images)
-            {
-                byte[] imageByte;
+           foreach (AppImage Image in images)
+           {
+               byte[] imageByte;
 
-                IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
-                Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
+               IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
+               Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
-                    stream.CopyTo(ms);  // was empty without stream.Position = 0;
-                    imageByte = ms.ToArray();
-                }
-                var image = new Image();
-                image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
-                AddThumbnailToImageGrid(image, Image);
-            }
+               using (MemoryStream ms = new MemoryStream())
+               {
+                   stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
+                   stream.CopyTo(ms);  // was empty without stream.Position = 0;
+                   imageByte = ms.ToArray();
+               }
+               var image = new Image();
+               image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
+               AddThumbnailToImageGrid(image, Image);
+           }
         }
+
+
 
         public void PageContent()
         {
@@ -165,7 +167,7 @@ namespace ASolute_Mobile.TransportScreen
             UploadImage(jobID);
             try
             {
-              
+       
                 images.Clear();
                 imageGrid.Children.Clear();
                
