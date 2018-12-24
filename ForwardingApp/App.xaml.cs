@@ -13,6 +13,7 @@ using Com.OneSignal.Abstractions;
 using System.Collections.Generic;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
+using ASolute_Mobile.CommonScreen;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ASolute_Mobile
@@ -28,39 +29,39 @@ namespace ASolute_Mobile
 
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDU4MTBAMzEzNjJlMzMyZTMwT1FtdENrWjVXVVZGN2dVQ0pxRHRmMkJ1aEpINzJIWklDdVdTdmEyU2I3VT0=");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTAwNjNAMzEzNjJlMzQyZTMwb1R4bXdyL0JFUUdSVmxqUnEyU0Nod2pOb0x6UHRCQjR6dzdMZVd2TTcwdz0=");
 
             InitializeComponent();
 
-           MainPage = new TestingOCR();
+          // MainPage = new TestingLogin();
 
-            /* if (sessionKey != "")
-             {
-                 MainPage = new MainPage();
+            if (sessionKey != "")
+           {
+               MainPage = new MainPage();
 
-             }
-             else 
-             {
-                 if(Ultis.Settings.AppFirstInstall == "First")
-                 {
-                     MainPage = new CustomNavigationPage(new SplashScreen());
-                 }
-                 else
-                 {
-                     MainPage = new CustomNavigationPage(new LoginPage());
-                 }
-
-                // MainPage = new CustomNavigationPage(new LoginPage());
-             }
+           }
+           else 
+           {
+               if(Ultis.Settings.AppFirstInstall == "First")
+               {
+                   MainPage = new CustomNavigationPage(new SplashScreen());
+               }
+               else
+               {
+                   MainPage = new CustomNavigationPage(new LoginPage());
+               }
 
 
-            Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-             MainPage = new CustomNavigationPage(new AppNavigation());
+           }
 
-            OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
-                         .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
-                         .HandleNotificationReceived(HandleNotificationReceived)
-                         .EndInit();*/
+
+            /*Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+           MainPage = new CustomNavigationPage(new AppNavigation());
+
+          OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
+                       .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
+                       .HandleNotificationReceived(HandleNotificationReceived)
+                       .EndInit();*/
 
         }
 

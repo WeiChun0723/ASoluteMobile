@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.Planner.EqCategory"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+             xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+             
+    
+    <refresh:SfPullToRefresh x:Name="pullToRefresh"
+                                    IsRefreshing="false" 
+                                    TransitionMode="SlideOnTop" 
+                                    ProgressBackgroundColor="#00AFF9"
+                                    ProgressStrokeWidth="5" 
+                                    ProgressStrokeColor="White"
+                                    PullingThershold="200"
+                                    RefreshContentHeight="50"
+                                    RefreshContentThreshold="50"
+                                    RefreshContentWidth="50"
+                                    Pulling="Handle_Pulling"
+                                    Refreshing="Handle_Refreshing"
+                                    Refreshed="Handle_Refreshed">
+        <refresh:SfPullToRefresh.PullableContent>
+            <StackLayout>
+           <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
+         <syncfusion:SfDataGrid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" x:Name="dataGrid" GridTapped="Handle_GridTapped" AutoGenerateColumns="true" SelectionMode="Single" BackgroundColor="Transparent" HeightRequest="500">
+                <syncfusion:SfDataGrid.Columns>
+                       <syncfusion:GridTextColumn MappingName="Caption" Width="150" >
+                           <syncfusion:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Category" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </syncfusion:GridTextColumn.HeaderTemplate> 
+                        </syncfusion:GridTextColumn>
+                
+                <syncfusion:GridTextColumn MappingName="Value" Width="150" >
+                           <syncfusion:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Quantity" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </syncfusion:GridTextColumn.HeaderTemplate> 
+                        </syncfusion:GridTextColumn>
+                
+                 <syncfusion:GridTextColumn MappingName="Display" Width="100" IsHidden="true" >
+
+                        </syncfusion:GridTextColumn>
+                    </syncfusion:SfDataGrid.Columns>
+
+            
+        </syncfusion:SfDataGrid>
+                </StackLayout>
+ </refresh:SfPullToRefresh.PullableContent>
+ </refresh:SfPullToRefresh>
+</ContentPage>

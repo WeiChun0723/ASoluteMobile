@@ -26,7 +26,7 @@ namespace ASolute_Mobile
         static byte[] scaledImageByte;
         static string uploadUri;
         static string imageEventID;
-        static int uploadedImage = 0;
+        static bool uploadedImage = true;
         static string history;
         static string previousLocation = "";
         static string chklocation = "0";
@@ -164,7 +164,7 @@ namespace ASolute_Mobile
                                                         
                             if (json_response.IsGood == true)
                             {
-                                uploadedImage = 0;
+                                //uploadedImage = 0;
                                 jobItem.Done = 2;
                                 App.Database.SaveJobsAsync(jobItem);
 
@@ -782,17 +782,27 @@ namespace ASolute_Mobile
 
                     image.FileName = recordImage.photoFileName;
 
-                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
+                    string eventID;
+
+                    if(!(String.IsNullOrEmpty(imageEventID)))
+                    {
+                        eventID = imageEventID;
+                    }
+                    else
+                    {
+                        eventID = recordImage.id;
+                    }
+
+                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID));
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                    if (response.IsGood == true)
-                    {
-                        uploadedImage++;
-                        recordImage.Uploaded = true;
-                        App.Database.SaveRecordImageAsync(recordImage);
-
-                    }
+                 
+                    recordImage.Uploaded = true;
+                    App.Database.SaveRecordImageAsync(recordImage);
                 }
+
+                //uploadedImage = false;
+                imageEventID = "";
             }
             catch
             {

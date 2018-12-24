@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Plugin.Media;
 using Xamarin.Forms;
 using Rg.Plugins.Popup;
+using Syncfusion.XForms.Buttons;
 using static ASolute_Mobile.TestingClass;
 
 namespace ASolute_Mobile
@@ -43,7 +44,7 @@ namespace ASolute_Mobile
             MessagingCenter.Subscribe<App, string>((App)Application.Current, "ResultReturn",  (sender, arg) => {
                 resultField.Text = arg ;
             });
-
+            
             ppl = new List<People>
             {
                 new People{name = "marry"},
@@ -51,6 +52,9 @@ namespace ASolute_Mobile
             };
 
             dataGrid.ItemsSource = ppl;
+
+            comboBox.ComboBoxSource = ShippingCode;
+
         }
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
@@ -68,9 +72,7 @@ namespace ASolute_Mobile
                 {
                     try
                     {
-
                         dataGrid.ItemsSource = ppl.Where(x => x.name.Contains(searchKey));
-
                     }
                     catch
                     {
@@ -80,7 +82,7 @@ namespace ASolute_Mobile
             }
             catch
             {
-                await DisplayAlert("Error", "Please try again", "OK");
+                await DisplayAlert("Error", "suoer boring dude when is my package will arrive", "OK");
             }
 
         }
@@ -97,6 +99,7 @@ namespace ASolute_Mobile
 
         async void google_api(object sender, System.EventArgs e)
         {
+
             try
             {
                 suggestions.Clear();
@@ -117,7 +120,6 @@ namespace ASolute_Mobile
 
                 if (file == null)
                     return;
-
 
                 byte[] imagesAsBytes;
                 using (var memoryStream = new MemoryStream())
@@ -152,7 +154,8 @@ namespace ASolute_Mobile
                 root.requests = new List<TestingClass.Request>();
                 root.requests.Add(request);
 
-                loading.IsRunning = true;
+                busyindicator.IsVisible = true;
+                //loading.IsRunning = true;
 
                 var client = new HttpClient();
 
@@ -185,7 +188,6 @@ namespace ASolute_Mobile
                     container = containerString2;
                 }
 
-
                 if (google_result != null)
                 {
                     bool chkPre = container.Substring(0, 4).Any(char.IsDigit);
@@ -203,7 +205,6 @@ namespace ASolute_Mobile
                         }
                         else
                         {
-
                             string possibleResult = "";
 
                                 clsCommonFunc tryCheck = new clsCommonFunc();
@@ -226,20 +227,15 @@ namespace ASolute_Mobile
                                         possibleResult = contPrefix + contNumber.Remove(6) + checkDigit;
                                     }
                                 }
-                     
-
 
                             OCRPopUp oCRPop = new OCRPopUp(possibleResult);
 
                             await PopupNavigation.Instance.PushAsync(oCRPop);
-
-                         
                         }
-                       
                     }
                    else
                     {
-                        resultField.Text = "Unknow container";
+                        resultField.Text = containerString2;
                     }
 
                 }
@@ -249,8 +245,8 @@ namespace ASolute_Mobile
                 }
 
                 loading.IsRunning = false;
-
-                // GoogleAPI(root);
+                busyindicator.IsVisible = false;
+              
 
             }
             catch(Exception ex)
@@ -260,7 +256,7 @@ namespace ASolute_Mobile
             }
         }
 
-        bool ContainerDigitCheck(string containerNum)
+        bool ContainerDigitCheck(string containerNum) 
         {
             clsCommonFunc check = new clsCommonFunc();
             bool checkResult = check.CheckContainerDigit(containerNum);
@@ -281,7 +277,6 @@ namespace ASolute_Mobile
             int fifth_Digit = Convert.ToInt16(containerNum.Substring(8, 1));
             int six_Digit = Convert.ToInt16(containerNum.Substring(9, 1));
 
-
             int totalSum = CharValue(first_Letter) + (CharValue(second_Letter) * 2) + (CharValue(third_Letter) * 4) + (CharValue(fourth_Letter) * 8) +
                            (first_Digit * 16) + (second_Digit * 32) + (third_Digit * 64) + (fourth_Digit * 128) + (fifth_Digit * 256) + (six_Digit * 512);
 
@@ -295,7 +290,6 @@ namespace ASolute_Mobile
             }
 
             return checkDigit;
-
         }
 
         int CharValue(string letter)
@@ -388,7 +382,6 @@ namespace ASolute_Mobile
                     value = 32;
                     break;
 
-
                 case "V":
                     value = 34;
                     break;
@@ -416,9 +409,9 @@ namespace ASolute_Mobile
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
-
+            await DisplayAlert("test", qwer.Text + comboBox.Text, "OK");
             
-            try
+           /* try
             {
                 await CrossMedia.Current.Initialize();
 
@@ -491,7 +484,25 @@ namespace ASolute_Mobile
             catch (Exception ex)
             {
                 await DisplayAlert("Reminder", ex.Message, "OK");
-            }
+            }*/
+        }
+
+        void Handle_Pulling(object sender, Syncfusion.SfPullToRefresh.XForms.PullingEventArgs args)
+        {
+            args.Cancel = false;
+            var prog = args.Progress;
+        }
+
+        async void Handle_Refreshing(object sender, System.EventArgs e)
+        {
+            await DisplayAlert("OK", "test success", "ok");
+            pullToRefresh.IsRefreshing = false;
+        }
+
+        void Handle_Refreshed(object sender, System.EventArgs e)
+        {
+           
+            pullToRefresh.IsRefreshing = false;
         }
     }
 }

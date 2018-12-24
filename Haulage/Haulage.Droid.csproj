@@ -218,18 +218,6 @@
     <Reference Include="ZXingNetMobile, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ZXing.Net.Mobile.2.3.2\lib\MonoAndroid403\ZXingNetMobile.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Licensing">
-      <HintPath>..\packages\Syncfusion.Licensing.16.3.0.21\lib\MonoAndroid10\Syncfusion.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfAutoComplete.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfAutoComplete.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfAutoComplete.XForms.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfAutoComplete.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.dll</HintPath>
-    </Reference>
     <Reference Include="Com.OneSignal.Abstractions">
       <HintPath>..\packages\Com.OneSignal.3.2.1\lib\MonoAndroid10\Com.OneSignal.Abstractions.dll</HintPath>
     </Reference>
@@ -244,39 +232,6 @@
     </Reference>
     <Reference Include="Plugin.DeviceInfo">
       <HintPath>..\packages\Xam.Plugin.DeviceInfo.4.0.0.13\lib\monoandroid71\Plugin.DeviceInfo.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Core.XForms.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.Core.16.3.0.21\lib\MonoAndroid10\Syncfusion.Core.XForms.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Core.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.Core.16.3.0.21\lib\MonoAndroid10\Syncfusion.Core.XForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfChart.XForms.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfChart.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfChart.XForms.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfChart.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfChart.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfChart.XForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.GridCommon.Portable">
-      <HintPath>..\packages\Syncfusion.Xamarin.GridCommon.16.3.0.21\lib\MonoAndroid10\Syncfusion.GridCommon.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfNumericTextBox.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericTextBox.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfNumericTextBox.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfNumericTextBox.XForms.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericTextBox.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfNumericTextBox.XForms.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfNumericTextBox.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericTextBox.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfNumericTextBox.XForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.Data.Portable">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.3.0.21\lib\MonoAndroid10\Syncfusion.Data.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfDataGrid.XForms.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfDataGrid.XForms.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Syncfusion.SfDataGrid.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.3.0.21\lib\MonoAndroid10\Syncfusion.SfDataGrid.XForms.dll</HintPath>
     </Reference>
     <Reference Include="Acr.UserDialogs">
       <HintPath>..\packages\Acr.UserDialogs.7.0.1\lib\monoandroid80\Acr.UserDialogs.dll</HintPath>
@@ -392,6 +347,87 @@
     <Reference Include="System.Runtime.Loader">
       <HintPath>..\packages\System.Runtime.Loader.4.0.0\lib\netstandard1.5\System.Runtime.Loader.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Licensing">
+      <HintPath>..\packages\Syncfusion.Licensing.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Core.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.Core.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.Core.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Core.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.Core.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.Core.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfNumericTextBox.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericTextBox.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfNumericTextBox.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfNumericTextBox.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericTextBox.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfNumericTextBox.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfNumericTextBox.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericTextBox.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfNumericTextBox.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfBusyIndicator.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfBusyIndicator.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfBusyIndicator.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfBusyIndicator.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfBusyIndicator.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfBusyIndicator.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfBusyIndicator.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfBusyIndicator.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfBusyIndicator.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfAutoComplete.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfAutoComplete.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfAutoComplete.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfAutoComplete.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Buttons.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.Buttons.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.Buttons.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Buttons.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.Buttons.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.Buttons.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfComboBox.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfComboBox.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfComboBox.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfComboBox.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfComboBox.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfComboBox.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.GridCommon.Portable">
+      <HintPath>..\packages\Syncfusion.Xamarin.GridCommon.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.GridCommon.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfChart.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfChart.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfChart.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfChart.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfChart.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfChart.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Data.Portable">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.Data.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataGrid.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfDataGrid.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataGrid.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfDataGrid.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfDataGrid.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfPullToRefresh.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfPullToRefresh.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfPullToRefresh.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfPullToRefresh.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfPullToRefresh.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfPullToRefresh.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.DataSource.Portable">
+      <HintPath>..\packages\Syncfusion.Xamarin.DataSource.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.DataSource.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfListView.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfListView.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfListView.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfListView.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfListView.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfListView.XForms.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseApplication.cs" />
@@ -444,6 +480,9 @@
     <AndroidResource Include="Resources\drawable\jobList.png" />
     <AndroidResource Include="Resources\values\dimens.xml" />
     <AndroidResource Include="Resources\drawable\new_job.png" />
+    <AndroidResource Include="Resources\drawable\test.png" />
+    <AndroidResource Include="Resources\drawable\container.png" />
+    <AndroidResource Include="Resources\drawable\Image1.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

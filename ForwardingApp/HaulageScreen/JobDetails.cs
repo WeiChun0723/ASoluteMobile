@@ -1177,10 +1177,7 @@ namespace ASolute_Mobile
                 {
                     images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
                 }
-                else
-                {
-                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
-                }
+
                 foreach (AppImage Image in images)
                 {
                     byte[] imageByte;

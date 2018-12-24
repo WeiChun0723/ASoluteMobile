@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.CommonScreen;
+using Plugin.DeviceInfo;
 
 namespace ASolute_Mobile
 {
@@ -49,7 +50,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Trucking";
+                AppLabel.Text = "AILS Haulage";
                 equipmentEntry.IsVisible = false;
                 eqPicker.IsVisible = false;
             }
@@ -97,7 +98,7 @@ namespace ASolute_Mobile
                 GetAppID();
             }
 
-            AppID.Text = "App ID : " + Ultis.Settings.GeneratedAppID;
+           
             Ultis.Settings.CrashInLoginPage = crash;                     
         }
 

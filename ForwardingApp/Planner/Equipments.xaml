@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.Planner.Equipments"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+             xmlns:local ="ASolute_Mobile.Planner.GridStyle"
+             xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+   
+   <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:GridStyle x:Key="style"/>
+            
+        </ResourceDictionary>
+</ContentPage.Resources>    
+    
+    
+    <refresh:SfPullToRefresh x:Name="pullToRefresh"
+                                    IsRefreshing="false" 
+                                    TransitionMode="SlideOnTop" 
+                                    ProgressBackgroundColor="#00AFF9"
+                                    ProgressStrokeWidth="5" 
+                                    ProgressStrokeColor="White"
+                                    PullingThershold="200"
+                                    RefreshContentHeight="50"
+                                    RefreshContentThreshold="50"
+                                    RefreshContentWidth="50"
+                                    Pulling="Handle_Pulling"
+                                    Refreshing="Handle_Refreshing"
+                                    Refreshed="Handle_Refreshed">
+        <refresh:SfPullToRefresh.PullableContent>
+        <StackLayout>
+                <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
+    <SearchBar x:Name="filterText"
+           IsVisible="true"
+           Placeholder="Search here to Filter"
+           TextChanged="OnFilterTextChanged" 
+           HeightRequest="50"/>
+         <syncfusion:SfDataGrid  GridStyle="{StaticResource style}" AutoExpandGroups="false"  GridTapped="Handle_GridTapped" AllowGroupExpandCollapse="true" x:Name="dataGrid" AutoGenerateColumns="true"  SelectionMode="Single" BackgroundColor="Transparent" HeightRequest="500"> 
+                <syncfusion:SfDataGrid.Columns>
+                       <syncfusion:GridTextColumn MappingName="Caption" Width="170" >
+                           <syncfusion:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Eq No" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </syncfusion:GridTextColumn.HeaderTemplate> 
+                        </syncfusion:GridTextColumn>
+                
+                <syncfusion:GridTextColumn MappingName="Value" Width="190" >
+                           <syncfusion:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Status" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </syncfusion:GridTextColumn.HeaderTemplate> 
+                        </syncfusion:GridTextColumn>
+                
+                 <syncfusion:GridTextColumn MappingName="Display" Width="100" IsHidden="true" >
+
+                        </syncfusion:GridTextColumn>
+                    </syncfusion:SfDataGrid.Columns>
+
+            <syncfusion:SfDataGrid.GroupColumnDescriptions >
+        <syncfusion:GroupColumnDescription ColumnName="Value"  />        
+    </syncfusion:SfDataGrid.GroupColumnDescriptions > 
+        </syncfusion:SfDataGrid>
+          </StackLayout>
+            
+             </refresh:SfPullToRefresh.PullableContent>
+ </refresh:SfPullToRefresh>
+</ContentPage>

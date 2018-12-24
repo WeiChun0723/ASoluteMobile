@@ -206,6 +206,23 @@ namespace ASolute_Mobile.Utils
         #endregion
 
 
+        #region planner url
+        public static String getEqCategory()
+        {
+            return String.Format("Equipment/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getEqList(string category)
+        {
+            return String.Format("Equipment/List?SessionId={0}&GeoLoc={1}&ViewType={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), category);
+        }
+
+        public static String getEqDetail(string equipment)
+        {
+            return String.Format("Equipment/Detail?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), equipment);
+        }
+        #endregion
+
         public static String postNewLogRecordURL()
         {
             return String.Format("Trip/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());

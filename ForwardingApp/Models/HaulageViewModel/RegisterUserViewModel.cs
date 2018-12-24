@@ -87,7 +87,7 @@ namespace ASolute_Mobile.Models.HaulageViewModel
 
                 if (json_response.IsGood)
                 {
-
+                    Ultis.Settings.RefreshMenuItem = "Yes";
                     Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                     Ultis.Settings.AppEnterpriseName = EnterpriseName;
                     RegisterUserUrl();

@@ -139,11 +139,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TestingOCR.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\TestingLogin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)OCRPopUp.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\TestingOCR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\OCRPopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\DesignedMainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\EqCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\Equipments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\EquipmentDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -343,13 +363,29 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\Register.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\RegisterUserViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TestingOCR.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\TestingLogin.xaml.cs">
+      <DependentUpon>TestingLogin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\TestingClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)testing\TestingOCR.xaml.cs">
       <DependentUpon>TestingOCR.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)TestingClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OCRPopUp.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)testing\OCRPopUp.xaml.cs">
       <DependentUpon>OCRPopUp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\DesignedMainMenu.xaml.cs">
+      <DependentUpon>DesignedMainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Planner\EqCategory.xaml.cs">
+      <DependentUpon>EqCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Planner\Equipments.xaml.cs">
+      <DependentUpon>Equipments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Planner\EquipmentDetails.xaml.cs">
+      <DependentUpon>EquipmentDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Planner\GridStyle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -360,6 +396,8 @@
     <Folder Include="$(MSBuildThisFileDirectory)CommonScreen\" />
     <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\" />
     <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\" />
+    <Folder Include="$(MSBuildThisFileDirectory)testing\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Planner\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainMenu.xaml">

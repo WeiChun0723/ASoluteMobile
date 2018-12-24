@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
+using ASolute_Mobile.Planner;
 using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
@@ -67,8 +68,8 @@ namespace ASolute_Mobile
 
                     case "JobList":
                        //await Navigation.PushAsync(new TransportScreen.JobLists(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        //await Navigation.PushAsync(new HaulageScreen.JobList(((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new HaulageScreen.JobList(((AppMenu)e.Item).name));
                        // await Navigation.PushAsync(new ChatRoom());
                         break;
 
@@ -102,6 +103,10 @@ namespace ASolute_Mobile
                     case "DriverRFC":
                         await Navigation.PushAsync(new HaulageScreen.DriverRFC());
                         break;
+                    case "EqList" :
+                        await Navigation.PushAsync(new Planner.EqCategory());
+                        break;
+
                 }
 
                 listView.SelectedItem = null;

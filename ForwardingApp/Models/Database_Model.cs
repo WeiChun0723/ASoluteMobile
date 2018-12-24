@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using Xamarin.Forms;
+using System.ComponentModel;
 
 namespace ASolute_Mobile.Models
 {
@@ -86,6 +88,7 @@ namespace ASolute_Mobile.Models
         public string summary { get; set; }
         public string background { get; set; }
         public string action { get; set; }
+
     }
 
     public class Log : Generic
