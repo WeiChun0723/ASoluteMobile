@@ -18,12 +18,10 @@ namespace ASolute_Mobile.Utils
     public class CommonFunction
     {
         static ContentPage pages;
-
-
+        
         //call when calling the web service to get response
         public static async Task<string> GetWebService(string baseAdd,string callUri)
         {
-           
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(baseAdd);
                 var uri = callUri;

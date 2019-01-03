@@ -335,9 +335,6 @@
     <Reference Include="Xamarin.Forms.Maps">
       <HintPath>..\packages\Xamarin.Forms.Maps.3.3.0.912540\lib\MonoAndroid10\Xamarin.Forms.Maps.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\..\..\Downloads\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="System.Interactive.Async">
       <HintPath>..\packages\System.Interactive.Async.3.1.1\lib\netstandard1.3\System.Interactive.Async.dll</HintPath>
     </Reference>
@@ -428,6 +425,24 @@
     <Reference Include="Syncfusion.SfListView.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfListView.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfListView.XForms.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.SfNumericUpDown.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericUpDown.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfNumericUpDown.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfNumericUpDown.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericUpDown.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfNumericUpDown.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfNumericUpDown.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfNumericUpDown.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfNumericUpDown.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataForm.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfDataForm.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfDataForm.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataForm.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfDataForm.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfDataForm.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseApplication.cs" />
@@ -451,6 +466,7 @@
     <Compile Include="Services\LocationServiceConnection.cs" />
     <Compile Include="Services\ServiceConnectedEventArgs.cs" />
     <Compile Include="Services\BackgroundCleanUpReceiver.cs" />
+    <Compile Include="Services\BluetoothService_test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -483,6 +499,7 @@
     <AndroidResource Include="Resources\drawable\test.png" />
     <AndroidResource Include="Resources\drawable\container.png" />
     <AndroidResource Include="Resources\drawable\Image1.png" />
+    <AndroidResource Include="Resources\drawable\printing.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

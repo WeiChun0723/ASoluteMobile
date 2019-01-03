@@ -123,10 +123,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ChatRoom.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen_.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -164,6 +160,26 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\EquipmentDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\ChatRoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\dataform.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -346,9 +362,6 @@
       <DependentUpon>CurrentLocation.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ChatRoom.xaml.cs">
-      <DependentUpon>ChatRoom.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatRoomObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\GetBaseURLViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen_.xaml.cs">
@@ -386,6 +399,26 @@
       <DependentUpon>EquipmentDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Planner\GridStyle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInList.xaml.cs">
+      <DependentUpon>TallyInList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\ChatRoom.xaml.cs">
+      <DependentUpon>ChatRoom.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\dataform.xaml.cs">
+      <DependentUpon>dataform.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\ContactsInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)testing\ContactsInfoViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml.cs">
+      <DependentUpon>TallyInPalletEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInDetail.xaml.cs">
+      <DependentUpon>TallyInDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\Cmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\CustomQueue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\IBthService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -398,6 +431,9 @@
     <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\" />
     <Folder Include="$(MSBuildThisFileDirectory)testing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Planner\" />
+    <Folder Include="$(MSBuildThisFileDirectory)WMS_Screen\" />
+    <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\" />
+    <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainMenu.xaml">

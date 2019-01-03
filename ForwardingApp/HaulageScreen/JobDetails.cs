@@ -3,6 +3,9 @@ using ASolute_Mobile.CustomRenderer;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
+using ASolute_Mobile.WoosimPrinterService;
+using ASolute_Mobile.WoosimPrinterService.library.Cmds;
+using Syncfusion.SfBusyIndicator.XForms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PCLStorage;
@@ -17,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
+using System.Text.RegularExpressions;
 
 namespace ASolute_Mobile
 {
@@ -33,7 +37,7 @@ namespace ASolute_Mobile
         List<AppImage> images = new List<AppImage>();
         Grid imageGrid, confirmGrid, trailerContainerGrid;
         double imageWidth;        
-        bool collectSealStatus = false, uploaded = false;
+        bool collectSealStatus = false, uploaded = false, connectedPrinter = false;
         Image savedSignature,map, phone, futile, camera, confirm;
         string jobNo, actionID, actionMessage, containerNumber,savedTrailer,savedContPre,savedNumber,savedSealNo,savedMGW,savedTare,savedRemark;
         StackLayout mapPhoneStackLayout,remarksStackLayout, signatureStackLayout, imageButtonStackLayout;
@@ -43,6 +47,7 @@ namespace ASolute_Mobile
         static int uploadedImage = 0;
         CheckBox check1, check2;
         string checking="";
+        SfBusyIndicator print;
 
         public JobDetails(string ID, string Message)
         {
@@ -654,7 +659,6 @@ namespace ASolute_Mobile
                 }
             };
 
-                        
             confirmGrid.Children.Add(collectSeal, 0, 0);
             confirmGrid.Children.Add(Checked, 1, 0);          
             confirmGrid.Children.Add(mgw, 0, 1);
@@ -696,6 +700,50 @@ namespace ASolute_Mobile
             };
             phone.GestureRecognizers.Add(callTelNo);
             mapPhoneStackLayout.Children.Add(phone);
+
+            Image printer = new Image
+            {
+                Source = "printing.png",
+                WidthRequest = 50,
+                HeightRequest = 50,
+                VerticalOptions = LayoutOptions.Center
+            };
+            var printing = new TapGestureRecognizer();
+            printing.Tapped += async (sender, e) =>
+            {
+                savedTrailer = trailerEntry.Text;
+                savedContPre = contPrefix.Text;
+                savedNumber = contNumber.Text;
+                savedSealNo = sealEntry.Text;
+                savedMGW = mgwEntry.Text;
+                savedTare = tareEntry.Text;
+                savedRemark = remarkTextEditor.Text;
+                if (check1.Checked)
+                {
+                    collectSealStatus = true;
+                    checking = "true";
+                }
+                else
+                {
+                    collectSealStatus = false;
+                    checking = "false";
+                }
+
+                PrintConsigmentNote();
+
+            };
+            printer.GestureRecognizers.Add(printing);
+            mapPhoneStackLayout.Children.Add(printer);
+
+            print = new SfBusyIndicator()
+            {
+                AnimationType = AnimationTypes.Print,
+                Title = "Printing",
+                TextColor = Color.Red,
+                IsVisible = false,
+                BackgroundColor = Color.Transparent
+            };
+
 
             if (!string.IsNullOrEmpty(jobItem.Latitude))
             {
@@ -791,6 +839,8 @@ namespace ASolute_Mobile
             camera.GestureRecognizers.Add(takeImage);
             imageButtonStackLayout.Children.Add(camera);
 
+           
+
             if (!(String.IsNullOrEmpty(savedTrailer)) || !(String.IsNullOrEmpty(savedContPre)) || !(String.IsNullOrEmpty(checking)) || !(String.IsNullOrEmpty(checking)))
             {
                 trailerEntry.Text = savedTrailer;
@@ -830,8 +880,7 @@ namespace ASolute_Mobile
             confirmJob.Tapped += async (sender, e) =>
             {               
                 try
-                {
-                                       
+                {             
                         activity.IsRunning = true;
                         activity.IsVisible = true;
 
@@ -843,9 +892,9 @@ namespace ASolute_Mobile
 
                             if (signatureImage != null)
                             {
-                            await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
+                                await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
                                 done = true;
-                            BackgroundTask.StartTimer();
+                                BackgroundTask.StartTimer();
                             }
                             else
                             {
@@ -971,6 +1020,7 @@ namespace ASolute_Mobile
 
             mainStackLayout.Children.Add(jobDetailsStackLayout);
             mainStackLayout.Children.Add(mapPhoneStackLayout);
+            mainStackLayout.Children.Add(print);
             mainStackLayout.Children.Add(trailerContainerGrid);
             mainStackLayout.Children.Add(confirmGrid); 
             mainStackLayout.Children.Add(remarksStackLayout);
@@ -1202,5 +1252,101 @@ namespace ASolute_Mobile
             }
 
         }
+
+        async void PrintConsigmentNote()
+        {
+            print.IsVisible = true;
+
+            var content = await CommonFunction.CallWebService("Get",null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNote(currentJobId));
+            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if(response.IsGood)
+            {
+                if(response.Result.Count != 0)
+                {
+                    try
+                    {
+                        if(connectedPrinter == false)
+                        {
+
+                            bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+
+
+                            if (!x)
+                            {
+                                Device.BeginInvokeOnMainThread(async () =>
+                                {
+                                    await DisplayAlert("Error", "Unable connect", "OK");
+                                });
+                            }
+                            else
+                            {
+                                connectedPrinter = true;
+                            }
+                        }
+
+                        System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
+                        string detail = "";
+                        int detailCount = 0;
+                        foreach(string details in response.Result)
+                        {
+                            detailCount++;
+
+                            if (details.Contains("<H>"))
+                            {
+                                detail = details.Replace("<H>", "");
+                                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                            }
+                            else if(details.Contains("<B>"))
+                            {
+                                detail = details.Replace("<B>", "");
+                                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                            }
+                            else
+                            {
+                                detail = details;
+                                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, false, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                            }
+
+
+                            if(detailCount  == response.Result.Count)
+                            {
+                                detail = detail + "\r\n\r\n";
+                            }
+                            else
+                            {
+                                detail = detail + "\r\n";
+                            }
+                           
+
+                            WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(detail));
+
+                        }
+
+                        WriteMemoryStream(buffer, WoosimPageMode.print());
+
+                        DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
+                    }
+                    catch (Exception error)
+                    {
+                        await DisplayAlert("Error", error.Message, "OK");
+                    }
+                }
+
+
+            }
+            else
+            {
+                await DisplayAlert("Json Error", response.Message, "OK");
+            }
+
+            print.IsVisible = false;
+        }
+
+        async private void WriteMemoryStream(System.IO.MemoryStream stream, byte[] data)
+        {
+            await stream.WriteAsync(data, 0, data.Length);
+        }
+
     }
 }

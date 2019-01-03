@@ -35,6 +35,9 @@ namespace ASolute_Mobile
 
             listView.ItemTapped += async (sender, e) =>
             {
+                loading.IsVisible = true;
+                loading.IsRunning = true;
+
                 string menuAction = ((AppMenu)e.Item).menuId;
 
                 switch (menuAction)
@@ -105,6 +108,9 @@ namespace ASolute_Mobile
                         break;
                     case "EqList" :
                         await Navigation.PushAsync(new Planner.EqCategory());
+                        break;
+                    case "TallyIn" :
+                       await  Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
                         break;
 
                 }

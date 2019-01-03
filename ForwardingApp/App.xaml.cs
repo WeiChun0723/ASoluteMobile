@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.CommonScreen;
+using ASolute_Mobile.testing;
+using ASolute_Mobile.WMS_Screen;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ASolute_Mobile
@@ -33,9 +35,9 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-          // MainPage = new TestingLogin();
+            //MainPage = new TallyInPalletEntry();
 
-            if (sessionKey != "")
+                 if (sessionKey != "")
            {
                MainPage = new MainPage();
 
@@ -55,7 +57,7 @@ namespace ASolute_Mobile
            }
 
 
-            /*Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+            /*   Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
            MainPage = new CustomNavigationPage(new AppNavigation());
 
           OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")

@@ -199,6 +199,12 @@ namespace ASolute_Mobile.Utils
 
         #region haulage url
 
+        public static String getConsigmentNote(string jobID)
+        {
+            return String.Format("Haulage/Print?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobID);
+        }
+
+
         public static String postDriverRFCURL(string containerNum)
         {
             return String.Format("Haulage/DriverRFC?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNum);
@@ -222,6 +228,30 @@ namespace ASolute_Mobile.Utils
             return String.Format("Equipment/Detail?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), equipment);
         }
         #endregion
+
+        #region warehouse url
+        public static String getTallyInList()
+        {
+            return String.Format("Wms/TallyIn/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadTallyInDetail(string tallyID)
+        {
+            return String.Format("Wms/TallyIn/Load?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),tallyID);
+        }
+
+        public static String loadNewPallet(string tallyID)
+        {
+            return String.Format("Wms/TallyIn/NewPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
+        }
+
+        public static String postNewPallet(string tallyID)
+        {
+            return String.Format("Wms/TallyIn/AddPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
+        }
+
+        #endregion
+
 
         public static String postNewLogRecordURL()
         {

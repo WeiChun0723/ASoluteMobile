@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.WMS_Screen.TallyInList"
+             xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+             xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             xmlns:local ="ASolute_Mobile.Planner.GridStyle">
+    
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:GridStyle x:Key="style"/>
+            
+        </ResourceDictionary>
+</ContentPage.Resources>    
+    
+    
+    <refresh:SfPullToRefresh x:Name="pullToRefresh"
+                                    IsRefreshing="false" 
+                                    TransitionMode="SlideOnTop" 
+                                    ProgressBackgroundColor="#00AFF9"
+                                    ProgressStrokeWidth="5" 
+                                    ProgressStrokeColor="White"
+                                    PullingThershold="200"
+                                    RefreshContentHeight="50"
+                                    RefreshContentThreshold="50"
+                                    RefreshContentWidth="50"
+                                    Pulling="Handle_Pulling"
+                                    Refreshing="Handle_Refreshing"
+                                    Refreshed="Handle_Refreshed">
+        <refresh:SfPullToRefresh.PullableContent>
+    <StackLayout>
+    <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
+    <SearchBar x:Name="filterText"
+           IsVisible="true"
+           Placeholder="Search here to Filter"
+           TextChanged="OnFilterTextChanged" 
+           HeightRequest="50"/>            
+    <datagrid:SfDataGrid  x:Name="dataGrid" AutoGenerateColumns="true" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" HeightRequest="500">
+                <datagrid:SfDataGrid.Columns  >
+                       <datagrid:GridTextColumn MappingName="DocumentNo"  Width="120" >
+                           <datagrid:GridTextColumn.HeaderTemplate > 
+                <DataTemplate> 
+                    <Label Text="Tally In No." FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                        
+                 <datagrid:GridTextColumn MappingName="ContainerId" IsHidden="true" />
+                  
+                
+                <datagrid:GridTextColumn MappingName="ContainerNo" Width="120">
+                           <datagrid:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Equipment No." FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                        
+                         <datagrid:GridTextColumn MappingName="TypeSize" IsHidden="true"  />
+                
+                 <datagrid:GridTextColumn MappingName="Principal" Width="120" >
+                  <datagrid:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Principal" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                   
+                    
+                    <datagrid:GridTextColumn MappingName="Items" IsHidden="true"/>
+                  
+                    <datagrid:GridTextColumn MappingName="Id" IsHidden="true"/>
+                    <datagrid:GridTextColumn MappingName="Caption" IsHidden="true"/>
+                    <datagrid:GridTextColumn MappingName="Action" IsHidden="true"/> 
+                    <datagrid:GridTextColumn MappingName="BackColor" IsHidden="true"/>
+                    <datagrid:GridTextColumn MappingName="Summary" IsHidden="true"/>
+                    <datagrid:GridTextColumn MappingName="Details" IsHidden="true"/>
+                    </datagrid:SfDataGrid.Columns>
+
+            
+        </datagrid:SfDataGrid>
+    
+      <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="55" HorizontalOptions="End"  x:Name="scan_icon">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BarCodeScan"/>
+                </Image.GestureRecognizers>
+            </Image>
+        
+        </StackLayout>
+             </refresh:SfPullToRefresh.PullableContent>
+ </refresh:SfPullToRefresh>
+</ContentPage>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.WMS_Screen.TallyInDetail"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms">
+
+    
+    
+    <refresh:SfPullToRefresh x:Name="pullToRefresh"
+                                    IsRefreshing="false" 
+                                    TransitionMode="SlideOnTop" 
+                                    ProgressBackgroundColor="#00AFF9"
+                                    ProgressStrokeWidth="5" 
+                                    ProgressStrokeColor="White"
+                                    PullingThershold="200"
+                                    RefreshContentHeight="50"
+                                    RefreshContentThreshold="50"
+                                    RefreshContentWidth="50"
+                                    Pulling="Handle_Pulling"
+                                    Refreshing="Handle_Refreshing"
+                                    Refreshed="Handle_Refreshed">
+        <refresh:SfPullToRefresh.PullableContent>
+ <ScrollView>
+    <StackLayout Padding="15,15,15,0">
+        <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/>
+        
+        <inputLayout:SfTextInputLayout Hint="ASN #" 
+          ContainerType="Outlined"
+          EnableHintAnimation="true" 
+          x:Name="asnView">    
+        <Entry x:Name="asn" IsEnabled="false" FontSize="Medium" FontAttributes="Bold"/>
+         
+        </inputLayout:SfTextInputLayout>
+        
+        <inputLayout:SfTextInputLayout Hint="Equipment" 
+          ContainerType="Outlined"
+          EnableHintAnimation="true" 
+          x:Name="eqView"
+          >    
+        <Entry x:Name="equipment" IsEnabled="false" FontSize="Medium" FontAttributes="Bold"/>
+         
+        </inputLayout:SfTextInputLayout>
+        
+        <StackLayout HeightRequest="200">
+         <datagrid:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand"  AutoGenerateColumns="true" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" >
+                <datagrid:SfDataGrid.Columns  >
+                       <datagrid:GridTextColumn MappingName="ProductCode"  Width="100" >
+                           <datagrid:GridTextColumn.HeaderTemplate > 
+                <DataTemplate> 
+                    <Label Text="SKU" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                        
+                
+                <datagrid:GridTextColumn MappingName="OrderQty" Width="100">
+                           <datagrid:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Order" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                        
+                         
+                
+                 <datagrid:GridTextColumn MappingName="LoadQty" Width="100" >
+                  <datagrid:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Rec" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                   
+                    
+                    <datagrid:GridTextColumn MappingName="Description" IsHidden="true"/>
+                  
+                    </datagrid:SfDataGrid.Columns>
+
+            
+        </datagrid:SfDataGrid>
+        </StackLayout>
+       <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="CenterAndExpand">
+
+                <Image Source="camera.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" x:Name="futile_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="takeImage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="confirmTallyIn"/>
+                    </Image.GestureRecognizers>
+                </Image>
+        </StackLayout> 
+        
+        <Grid  x:Name="imageGrid" ></Grid>
+    </StackLayout>
+    </ScrollView>
+    </refresh:SfPullToRefresh.PullableContent>
+ </refresh:SfPullToRefresh>
+       
+</ContentPage>
