@@ -131,6 +131,7 @@ namespace ASolute_Mobile.HaulageScreen
                 {
                     await DisplayAlert("Success", "Registration successfully", "OK");
                     Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
+                    Ultis.Settings.RefreshMenuItem = "Yes";
                     DownloadLogo();
                 }
                 else

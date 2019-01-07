@@ -18,7 +18,7 @@ namespace ASolute_Mobile.Utils
     public class CommonFunction
     {
         static ContentPage pages;
-        
+
         //call when calling the web service to get response
         public static async Task<string> GetWebService(string baseAdd,string callUri)
         {
@@ -29,7 +29,21 @@ namespace ASolute_Mobile.Utils
                 var content = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine(content);
 
-                return content;
+            /*clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+         if(json_response.IsGood)
+         {
+             return content;
+         }
+         else
+         {
+             if(json_response.Message.Equals("Invalid Session !"))
+             {
+                 BackgroundTask.Logout(this);
+             }
+         }*/
+
+            return content;
         }
 
         public static async Task<string> PostRequest(object data, string baseAdd, string calllUri)

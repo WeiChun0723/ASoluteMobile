@@ -33,7 +33,7 @@
                 </controls:CustomEntry.Behaviors>
          </controls:CustomEntry>
             
-        <controls:CustomEntry Placeholder="IC"  x:Name = "icEntry" Image="user" Style="{StaticResource entryStyle}" >
+        <controls:CustomEntry Placeholder="IC"  x:Name = "icEntry" Image="user" Style="{StaticResource entryStyle}" Keyboard="Numeric">
                  <controls:CustomEntry.Behaviors>
                     <local:MaxLengthValidation MaxLength="20"/>
                 </controls:CustomEntry.Behaviors>

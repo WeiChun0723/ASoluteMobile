@@ -45,7 +45,6 @@ namespace ASolute_Mobile.WMS_Screen
 
             GetTallyInDetail();
 
-
         }
 
         async void GetTallyInDetail()
@@ -101,7 +100,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void confirmTallyIn(object sender, EventArgs e)
         {
-
+            await Navigation.PopAsync();
         }
 
         async void takeImage(object sender, EventArgs e)

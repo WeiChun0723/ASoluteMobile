@@ -18,6 +18,14 @@ namespace ASolute_Mobile.Models
         public DateTime? updatedDate { get; set; }      
     }
 
+    public class TallyIn
+    {
+        public string Id { get; set; }
+        public string DocumentNo { get; set; }
+        public string ContainerNo { get; set; }
+        public string Principal { get; set; }
+    }
+
     public class ChatRecord : Generic
     {
         public string Content { get; set; }

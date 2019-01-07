@@ -270,7 +270,7 @@ namespace ASolute_Mobile.Models.HaulageViewModel
             }
             catch
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please try again", "OK");
+                //await Application.Current.MainPage.DisplayAlert("Error", "Please try again", "OK");
             }
         }
 

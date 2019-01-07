@@ -124,7 +124,7 @@ namespace ASolute_Mobile
 
         public async void NewUser(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new HaulageScreen.RegisterUser());
+            await Navigation.PushAsync(new HaulageScreen.Registration());
         }
 
         //get app id for crash report by auto generate

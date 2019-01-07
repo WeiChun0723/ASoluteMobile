@@ -107,6 +107,8 @@ namespace ASolute_Mobile
             base.OnDisappearing();
 
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+
+           // DependencyService.Get<IBthService>().disconnBTDevice();
         }
 
         public static Label CreateLabel(string labelText)
@@ -313,574 +315,576 @@ namespace ASolute_Mobile
             }
         }
 
-        private void PageContent()
+        private async void PageContent()
         {
-            if (jobItem == null)
+            try
             {
-                jobItem = App.Database.GetItemAsync(currentJobId);               
-                jobDetails = App.Database.GetDetailsAsync(currentJobId);
-            }
-         
-            if (Ultis.Settings.deleteImage == "Yes" || jobItem.Done == 1 || jobItem.Done == 2)
-            {
-                DisplayImage();
-                Ultis.Settings.deleteImage = "No";
-            }
-
-            if (remarkTextEditor == null)
-            {
-                remarkTextEditor = new CustomEditor
+                if (jobItem == null)
                 {
-                    WidthRequest = 120,
-                    HeightRequest = 100,
-                    IsEnabled = (jobItem.Done == 0)
+                    jobItem = App.Database.GetItemAsync(currentJobId);
+                    jobDetails = App.Database.GetDetailsAsync(currentJobId);
+                }
+
+                if (Ultis.Settings.deleteImage == "Yes" || jobItem.Done == 1 || jobItem.Done == 2)
+                {
+                    DisplayImage();
+                    Ultis.Settings.deleteImage = "No";
+                }
+
+                if (remarkTextEditor == null)
+                {
+                    remarkTextEditor = new CustomEditor
+                    {
+                        WidthRequest = 120,
+                        HeightRequest = 100,
+                        IsEnabled = (jobItem.Done == 0)
+                    };
+                    remarkTextEditor.Text = jobItem.Remark;
+                    //remarkTextEditor.BackgroundColor = Color.White;
+                }
+
+                if (!(String.IsNullOrEmpty(jobItem.Title)))
+                {
+                    Title = jobItem.Title;
+                }
+                else
+                {
+                    Title = "Job";
+                }
+
+                StackLayout mainStackLayout = new StackLayout
+                {
+                    Spacing = 10,
+                    BackgroundColor = Color.FromHex("#e8e5e5"),
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand
                 };
-                remarkTextEditor.Text = jobItem.Remark;
-                //remarkTextEditor.BackgroundColor = Color.White;
-            }
 
-            if (!(String.IsNullOrEmpty(jobItem.Title)))
-            {
-                Title = jobItem.Title;
-            }
-            else
-            {
-                Title = "Job";
-            }
-            
-            StackLayout mainStackLayout = new StackLayout
-            {
-                Spacing = 10,
-                BackgroundColor = Color.FromHex("#e8e5e5"),
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand
-            };
-
-            StackLayout jobDetailsStackLayout = new StackLayout
-            {
-                Padding = new Thickness(15, 5, 0, 0),
-                BackgroundColor = Color.FromHex("#e8e5e5")
-            };
-
-             mapPhoneStackLayout = new StackLayout
-            {
-                Padding = new Thickness(15, 0, 0, 25),
-                BackgroundColor = Color.FromHex("#e8e5e5"),
-                Orientation = StackOrientation.Horizontal
-            };
-
-             remarksStackLayout = new StackLayout
-            {
-                Spacing = 0,
-                Padding = new Thickness(15, 10, 15, 10),
-                HeightRequest = 100,
-                IsVisible = false
-            };
-
-            signatureStackLayout = new StackLayout
-            {
-                Spacing = 0,
-                Padding = new Thickness(15, 10, 15, 10),
-                HeightRequest = 150,
-                IsVisible = false
-            };
-
-             imageButtonStackLayout = new StackLayout
-            {
-                Spacing = 30,
-                HorizontalOptions = LayoutOptions.Center,
-                Orientation = StackOrientation.Horizontal,
-                IsVisible = false
-            };
-            
-            StackLayout container = new StackLayout
-            {
-                Spacing = 5,
-                Orientation = StackOrientation.Horizontal
-            };
-
-            StackLayout Checked = new StackLayout
-            {
-                Spacing = 5,
-                Orientation = StackOrientation.Horizontal
-            };
-
-            
-            confirmGrid = new Grid
-            {
-                Padding = new Thickness(15, 0, 15, 0)
-            };            
-           
-            confirmGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            confirmGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            confirmGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });           
-            confirmGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-            confirmGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            confirmGrid.IsVisible = false;
-
-            trailerContainerGrid = new Grid
-            {
-                Padding = new Thickness(15,0,15,0)
-            };
-            trailerContainerGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            trailerContainerGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            trailerContainerGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            trailerContainerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-            trailerContainerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            trailerContainerGrid.IsVisible = false;
-          
-            foreach (DetailItems detailItem in jobDetails)
-            {
-                Label label = new Label();
-
-                if (detailItem.Caption == "Pickup" || detailItem.Caption == "Drop-off")
+                StackLayout jobDetailsStackLayout = new StackLayout
                 {
-                    label.Text = detailItem.Caption + ":  " + detailItem.Value;
-                    jobNo = detailItem.Caption + " :  " + detailItem.Value;
-                    label.FontAttributes = FontAttributes.Bold;
+                    Padding = new Thickness(15, 5, 0, 0),
+                    BackgroundColor = Color.FromHex("#e8e5e5")
+                };
+
+                mapPhoneStackLayout = new StackLayout
+                {
+                    Padding = new Thickness(15, 0, 0, 25),
+                    BackgroundColor = Color.FromHex("#e8e5e5"),
+                    Orientation = StackOrientation.Horizontal
+                };
+
+                remarksStackLayout = new StackLayout
+                {
+                    Spacing = 0,
+                    Padding = new Thickness(15, 10, 15, 10),
+                    HeightRequest = 100,
+                    IsVisible = false
+                };
+
+                signatureStackLayout = new StackLayout
+                {
+                    Spacing = 0,
+                    Padding = new Thickness(15, 10, 15, 10),
+                    HeightRequest = 150,
+                    IsVisible = false
+                };
+
+                imageButtonStackLayout = new StackLayout
+                {
+                    Spacing = 30,
+                    HorizontalOptions = LayoutOptions.Center,
+                    Orientation = StackOrientation.Horizontal,
+                    IsVisible = false
+                };
+
+                StackLayout container = new StackLayout
+                {
+                    Spacing = 5,
+                    Orientation = StackOrientation.Horizontal
+                };
+
+                StackLayout Checked = new StackLayout
+                {
+                    Spacing = 5,
+                    Orientation = StackOrientation.Horizontal
+                };
+
+
+                confirmGrid = new Grid
+                {
+                    Padding = new Thickness(15, 0, 15, 0)
+                };
+
+                confirmGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                confirmGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                confirmGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                confirmGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
+                confirmGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                confirmGrid.IsVisible = false;
+
+                trailerContainerGrid = new Grid
+                {
+                    Padding = new Thickness(15, 0, 15, 0)
+                };
+                trailerContainerGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                trailerContainerGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                trailerContainerGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                trailerContainerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
+                trailerContainerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                trailerContainerGrid.IsVisible = false;
+
+                foreach (DetailItems detailItem in jobDetails)
+                {
+                    Label label = new Label();
+
+                    if (detailItem.Caption == "Pickup" || detailItem.Caption == "Drop-off")
+                    {
+                        label.Text = detailItem.Caption + ":  " + detailItem.Value;
+                        jobNo = detailItem.Caption + " :  " + detailItem.Value;
+                        label.FontAttributes = FontAttributes.Bold;
+                    }
+                    else if (detailItem.Caption == "")
+                    {
+                        label.Text = detailItem.Value;
+                        label.FontAttributes = FontAttributes.Bold;
+                    }
+                    else
+                    {
+                        label.Text = detailItem.Caption + ":  " + detailItem.Value;
+                        label.FontAttributes = FontAttributes.Bold;
+                    }
+
+                    StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 5, 0, 5) };
+                    stackLayout.Children.Add(label);
+                    jobDetailsStackLayout.Children.Add(stackLayout);
                 }
-                else if (detailItem.Caption == "")
+
+                var activity = new ActivityIndicator
                 {
-                    label.Text = detailItem.Value;
-                    label.FontAttributes = FontAttributes.Bold;
+                    IsEnabled = true,
+                    IsVisible = true,
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    IsRunning = true
+                };
+
+                Label trailerID = CreateLabel("Trailer Id");
+                Label containerNo = CreateLabel("Container No.");
+                Label collectSeal = CreateLabel("Collect Seal");
+                Label sealNo = CreateLabel("Seal No.");
+                Label mgw = CreateLabel("MGW(KG)");
+                Label tare = CreateLabel("Tare(KG)");
+
+                trailerEntry = CreateEntry(true, 0);
+
+                trailerEntry.TextChanged += (sender, e) =>
+                {
+                    string _trailertext = trailerEntry.Text.ToUpper();
+
+                    //Get Current Text
+                    if (_trailertext.Length > 10)
+                    {
+                        _trailertext = _trailertext.Remove(_trailertext.Length - 1);
+
+                        trailerEntry.Unfocus();
+                    }
+
+                    trailerEntry.Text = _trailertext;
+                };
+
+                trailerEntry.Text = jobItem.TrailerId;
+                if (!(String.IsNullOrEmpty(jobItem.TrailerId)))
+                {
+                    trailerEntry.IsEnabled = false;
                 }
                 else
                 {
-                    label.Text = detailItem.Caption + ":  " + detailItem.Value;
-                    label.FontAttributes = FontAttributes.Bold;
+                    trailerEntry.IsEnabled = true;
                 }
 
-                StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 5, 0, 5) };
-                stackLayout.Children.Add(label);
-                jobDetailsStackLayout.Children.Add(stackLayout);
-            }
-
-            var activity = new ActivityIndicator
-            {
-                IsEnabled = true,
-                IsVisible = true,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                IsRunning = true
-            };
-
-            Label trailerID = CreateLabel("Trailer Id");
-            Label containerNo = CreateLabel("Container No.");
-            Label collectSeal = CreateLabel("Collect Seal");
-            Label sealNo = CreateLabel("Seal No.");
-            Label mgw = CreateLabel("MGW(KG)");
-            Label tare = CreateLabel("Tare(KG)");
-
-            trailerEntry = CreateEntry( true,0);
-           
-            trailerEntry.TextChanged += (sender, e) =>
-            {
-                string _trailertext = trailerEntry.Text.ToUpper();
-               
-                //Get Current Text
-                if (_trailertext.Length > 10)
-                {                    
-                    _trailertext = _trailertext.Remove(_trailertext.Length - 1);                    
-                    
-                    trailerEntry.Unfocus();
-                }
-
-                trailerEntry.Text = _trailertext;
-            };
-
-            trailerEntry.Text = jobItem.TrailerId;
-            if (!(String.IsNullOrEmpty(jobItem.TrailerId)))
-            {               
-                trailerEntry.IsEnabled = false;
-            }
-            else
-            {               
-                trailerEntry.IsEnabled = true;
-            }
-
-            sealEntry = CreateEntry(false,0);
-            sealEntry.TextChanged += (sender, e) =>
-            {
-                string _sealtext = sealEntry.Text.ToUpper();
-
-                //Get Current Text
-                if (_sealtext.Length > 20)
+                sealEntry = CreateEntry(false, 0);
+                sealEntry.TextChanged += (sender, e) =>
                 {
-                    _sealtext = _sealtext.Remove(_sealtext.Length - 1);
-                    sealEntry.Unfocus();
+                    string _sealtext = sealEntry.Text.ToUpper();
+
+                    //Get Current Text
+                    if (_sealtext.Length > 20)
+                    {
+                        _sealtext = _sealtext.Remove(_sealtext.Length - 1);
+                        sealEntry.Unfocus();
+                    }
+
+                    sealEntry.Text = _sealtext;
+                };
+
+                sealEntry.Text = jobItem.SealNo;
+                if ((Ultis.Settings.ActionID.Equals("Point1_Chk") || Ultis.Settings.ActionID.Equals("Point2_Chk")))
+                {
+                    if (jobItem.SealMode.Equals("R"))
+                    {
+                        sealEntry.IsEnabled = false;
+                    }
+                    else if (jobItem.SealMode.Equals("O"))
+                    {
+                        sealEntry.IsEnabled = true;
+
+                    }
+                    else if (jobItem.SealMode.Equals("M"))
+                    {
+                        sealEntry.IsEnabled = true;
+                        sealEntry.LineColor = Color.LightYellow;
+                    }
+                    else if (jobItem.SealMode.Equals("H"))
+                    {
+                        sealNo.IsVisible = false;
+                        sealEntry.IsVisible = false;
+                    }
+
                 }
 
-                sealEntry.Text = _sealtext;
-            };
+                contPrefix = CreateEntry(true, 0);
+                contNumber = CreateEntry(true, 0);
+                contNumber.Keyboard = Keyboard.Numeric;
+                container.Children.Add(contPrefix);
+                container.Children.Add(contNumber);
 
-            sealEntry.Text = jobItem.SealNo;
-            if ((Ultis.Settings.ActionID.Equals("Point1_Chk") || Ultis.Settings.ActionID.Equals("Point2_Chk")))
-            {
-                if (jobItem.SealMode.Equals("R"))
+                trailerContainerGrid.Children.Add(trailerID, 0, 0);
+                trailerContainerGrid.Children.Add(trailerEntry, 1, 0);
+                trailerContainerGrid.Children.Add(containerNo, 0, 1);
+                trailerContainerGrid.Children.Add(container, 1, 1);
+                trailerContainerGrid.Children.Add(sealNo, 0, 2);
+                trailerContainerGrid.Children.Add(sealEntry, 1, 2);
+
+                contPrefix.TextChanged += (sender, e) =>
                 {
-                    sealEntry.IsEnabled = false;
-                }
-                else if(jobItem.SealMode.Equals("O"))
+                    string _prefixtext = contPrefix.Text.ToUpper();
+                    contPrefix.Text = _prefixtext;
+                    //Get Current Text
+
+                    if (_prefixtext.Length == 4)
+                    {
+                        contNumber.Focus();
+                    }
+
+                };
+
+                contNumber.TextChanged += (sender, e) =>
                 {
-                    sealEntry.IsEnabled = true;
-                  
-                }
-                else if (jobItem.SealMode.Equals("M"))
+                    string _numbertext = contNumber.Text;
+
+                    //Get Current Text
+                    if (_numbertext.Length > 7)
+                    {
+                        _numbertext = _numbertext.Remove(_numbertext.Length - 1);
+                        contNumber.Text = _numbertext;
+                    }
+                    else if (_numbertext.Length == 7)
+                    {
+                        contNumber.Unfocus();
+                    }
+                };
+
+
+
+                check1 = new CheckBox
                 {
-                    sealEntry.IsEnabled = true;
-                    sealEntry.LineColor = Color.LightYellow;
-                }
-                else if (jobItem.SealMode.Equals("H"))
+                    HorizontalOptions = LayoutOptions.StartAndExpand,
+                    Scale = 1.5,
+                    DefaultText = "Yes"
+                };
+
+                check2 = new CheckBox
                 {
-                    sealNo.IsVisible = false;
-                    sealEntry.IsVisible = false;
-                }
-               
-            }            
+                    HorizontalOptions = LayoutOptions.StartAndExpand,
+                    Scale = 1.5,
+                    DefaultText = "No"
+                };
 
-            contPrefix = CreateEntry( true,0);           
-            contNumber = CreateEntry( true,0);
-            contNumber.Keyboard = Keyboard.Numeric;
-            container.Children.Add(contPrefix);
-            container.Children.Add(contNumber);
+                Checked.Children.Add(check1);
+                Checked.Children.Add(check2);
 
-            trailerContainerGrid.Children.Add(trailerID, 0, 0);
-            trailerContainerGrid.Children.Add(trailerEntry, 1, 0);
-            trailerContainerGrid.Children.Add(containerNo, 0, 1);
-            trailerContainerGrid.Children.Add(container, 1, 1);
-            trailerContainerGrid.Children.Add(sealNo, 0, 2);
-            trailerContainerGrid.Children.Add(sealEntry, 1, 2);
-
-            contPrefix.TextChanged += (sender, e) =>
-            {
-                string _prefixtext = contPrefix.Text.ToUpper();
-                contPrefix.Text = _prefixtext;
-                //Get Current Text
-
-                if (_prefixtext.Length == 4)
+                check1.CheckedChanged += (sender, e) =>
                 {
-                    contNumber.Focus();
-                }
-              
-            };
+                    if (check2.Checked && check1.Checked)
+                    {
+                        check2.Checked = false;
 
-            contNumber.TextChanged += (sender, e) =>
-            {
-                string _numbertext = contNumber.Text;
-              
-                //Get Current Text
-                if (_numbertext.Length > 7)
-                {
-                    _numbertext = _numbertext.Remove(_numbertext.Length - 1);
-                    contNumber.Text = _numbertext;
-                }
-                else if(_numbertext.Length == 7)
-                {
-                    contNumber.Unfocus();
-                }
-            };
-
-           
-
-            check1 = new CheckBox
-            {
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                Scale = 1.5,
-                DefaultText = "Yes"
-            };
-
-            check2 = new CheckBox
-            {
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                Scale = 1.5,
-                DefaultText = "No"
-            };
-
-            Checked.Children.Add(check1);
-            Checked.Children.Add(check2);
-
-            check1.CheckedChanged += (sender, e) =>
-            {
-                if (check2.Checked && check1.Checked)
-                {
-                    check2.Checked = false;
-                   
-                }
-                if (!(String.IsNullOrEmpty(sealEntry.Text)))
-                {
-                    mgwEntry.Focus();
-                }
-                collectSealStatus = true;                
-            };
-
-            check2.CheckedChanged += (sender, e) =>
-            {
-                if (check1.Checked && check2.Checked)
-                {
-                    check1.Checked = false;
-              
-                }
-              
-                collectSealStatus = false;
-            };
-
-           
-
-            mgwEntry = CreateEntry( false,1);
-            tareEntry = CreateEntry( false,1);
-
-            mgwEntry.Keyboard = Keyboard.Numeric;
-            tareEntry.Keyboard = Keyboard.Numeric;
-            
-            mgwEntry.TextChanged += (sender, e) =>
-            {
-                string _mgwtext = mgwEntry.Text;
-              
-                //Get Current Text
-                if (_mgwtext.Length > 5)
-                {
-                    _mgwtext = _mgwtext.Remove(_mgwtext.Length - 1);
-                    mgwEntry.Text = _mgwtext;
-                }
-                else if(_mgwtext.Length == 5)
-                {
-                    tareEntry.Focus(); 
-                }
-            };
-
-            tareEntry.TextChanged += (sender, e) =>
-            {
-                string _taretext = tareEntry.Text;
-
-                //Get Current Text
-                if (_taretext.Length > 4)
-                {
-                    _taretext = _taretext.Remove(_taretext.Length - 1);
-                    tareEntry.Text = _taretext;
-                }
-            };
-
-            confirmGrid.Children.Add(collectSeal, 0, 0);
-            confirmGrid.Children.Add(Checked, 1, 0);          
-            confirmGrid.Children.Add(mgw, 0, 1);
-            confirmGrid.Children.Add(mgwEntry, 1, 1);
-            confirmGrid.Children.Add(tare, 0, 2);
-            confirmGrid.Children.Add(tareEntry, 1, 2);                      
-           
-            map = new Image
-            {
-                Source = "map.png",
-                WidthRequest = 50,
-                HeightRequest = 50,
-                VerticalOptions = LayoutOptions.Center,
-                IsVisible = false,
-            };
-            var navigateToDest = new TapGestureRecognizer();
-            navigateToDest.Tapped += (sender, e) =>
-            {
-                string POI = jobItem.Latitude + "," + jobItem.Longitude;
-                Device.OpenUri(new Uri(String.Format("geo:{0}", POI)));
-            };
-            map.GestureRecognizers.Add(navigateToDest);
-            mapPhoneStackLayout.Children.Add(map);
-
-            phone = new Image
-            {
-                Source = "phone.png",
-                WidthRequest = 50,
-                HeightRequest = 50,
-                VerticalOptions = LayoutOptions.Center,
-                IsVisible = false,
-                IsEnabled = true
-            };
-            var callTelNo = new TapGestureRecognizer();
-            callTelNo.Tapped += (sender, e) =>
-            {
-                string number = jobItem.telNo;
-                Device.OpenUri(new Uri(String.Format("tel:{0}", number)));
-            };
-            phone.GestureRecognizers.Add(callTelNo);
-            mapPhoneStackLayout.Children.Add(phone);
-
-            Image printer = new Image
-            {
-                Source = "printing.png",
-                WidthRequest = 50,
-                HeightRequest = 50,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var printing = new TapGestureRecognizer();
-            printing.Tapped += async (sender, e) =>
-            {
-                savedTrailer = trailerEntry.Text;
-                savedContPre = contPrefix.Text;
-                savedNumber = contNumber.Text;
-                savedSealNo = sealEntry.Text;
-                savedMGW = mgwEntry.Text;
-                savedTare = tareEntry.Text;
-                savedRemark = remarkTextEditor.Text;
-                if (check1.Checked)
-                {
+                    }
+                    if (!(String.IsNullOrEmpty(sealEntry.Text)))
+                    {
+                        mgwEntry.Focus();
+                    }
                     collectSealStatus = true;
-                    checking = "true";
-                }
-                else
+                };
+
+                check2.CheckedChanged += (sender, e) =>
                 {
+                    if (check1.Checked && check2.Checked)
+                    {
+                        check1.Checked = false;
+
+                    }
+
                     collectSealStatus = false;
-                    checking = "false";
+                };
+
+
+
+                mgwEntry = CreateEntry(false, 1);
+                tareEntry = CreateEntry(false, 1);
+
+                mgwEntry.Keyboard = Keyboard.Numeric;
+                tareEntry.Keyboard = Keyboard.Numeric;
+
+                mgwEntry.TextChanged += (sender, e) =>
+                {
+                    string _mgwtext = mgwEntry.Text;
+
+                    //Get Current Text
+                    if (_mgwtext.Length > 5)
+                    {
+                        _mgwtext = _mgwtext.Remove(_mgwtext.Length - 1);
+                        mgwEntry.Text = _mgwtext;
+                    }
+                    else if (_mgwtext.Length == 5)
+                    {
+                        tareEntry.Focus();
+                    }
+                };
+
+                tareEntry.TextChanged += (sender, e) =>
+                {
+                    string _taretext = tareEntry.Text;
+
+                    //Get Current Text
+                    if (_taretext.Length > 4)
+                    {
+                        _taretext = _taretext.Remove(_taretext.Length - 1);
+                        tareEntry.Text = _taretext;
+                    }
+                };
+
+                confirmGrid.Children.Add(collectSeal, 0, 0);
+                confirmGrid.Children.Add(Checked, 1, 0);
+                confirmGrid.Children.Add(mgw, 0, 1);
+                confirmGrid.Children.Add(mgwEntry, 1, 1);
+                confirmGrid.Children.Add(tare, 0, 2);
+                confirmGrid.Children.Add(tareEntry, 1, 2);
+
+                map = new Image
+                {
+                    Source = "map.png",
+                    WidthRequest = 50,
+                    HeightRequest = 50,
+                    VerticalOptions = LayoutOptions.Center,
+                    IsVisible = false,
+                };
+                var navigateToDest = new TapGestureRecognizer();
+                navigateToDest.Tapped += (sender, e) =>
+                {
+                    string POI = jobItem.Latitude + "," + jobItem.Longitude;
+                    Device.OpenUri(new Uri(String.Format("geo:{0}", POI)));
+                };
+                map.GestureRecognizers.Add(navigateToDest);
+                mapPhoneStackLayout.Children.Add(map);
+
+                phone = new Image
+                {
+                    Source = "phone.png",
+                    WidthRequest = 50,
+                    HeightRequest = 50,
+                    VerticalOptions = LayoutOptions.Center,
+                    IsVisible = false,
+                    IsEnabled = true
+                };
+                var callTelNo = new TapGestureRecognizer();
+                callTelNo.Tapped += (sender, e) =>
+                {
+                    string number = jobItem.telNo;
+                    Device.OpenUri(new Uri(String.Format("tel:{0}", number)));
+                };
+                phone.GestureRecognizers.Add(callTelNo);
+                mapPhoneStackLayout.Children.Add(phone);
+
+                Image printer = new Image
+                {
+                    Source = "printing.png",
+                    WidthRequest = 50,
+                    HeightRequest = 50,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var printing = new TapGestureRecognizer();
+                printing.Tapped += async (sender, e) =>
+                {
+                    savedTrailer = trailerEntry.Text;
+                    savedContPre = contPrefix.Text;
+                    savedNumber = contNumber.Text;
+                    savedSealNo = sealEntry.Text;
+                    savedMGW = mgwEntry.Text;
+                    savedTare = tareEntry.Text;
+                    savedRemark = remarkTextEditor.Text;
+                    if (check1.Checked)
+                    {
+                        collectSealStatus = true;
+                        checking = "true";
+                    }
+                    else
+                    {
+                        collectSealStatus = false;
+                        checking = "false";
+                    }
+
+                    PrintConsigmentNote();
+
+                };
+                printer.GestureRecognizers.Add(printing);
+                //mapPhoneStackLayout.Children.Add(printer);
+
+                print = new SfBusyIndicator()
+                {
+                    AnimationType = AnimationTypes.Print,
+                    Title = "Printing",
+                    TextColor = Color.Red,
+                    IsVisible = false,
+                    BackgroundColor = Color.Transparent
+                };
+
+
+                if (!string.IsNullOrEmpty(jobItem.Latitude))
+                {
+                    map.IsVisible = true;
+                }
+                if (!string.IsNullOrEmpty(jobItem.telNo))
+                {
+                    phone.IsVisible = true;
                 }
 
-                PrintConsigmentNote();
+                var editorLabel = new Label { Text = "Remarks", Style = (Style)App.Current.Resources["jobDetailCaptionStyle"] };
+                remarksStackLayout.Children.Add(editorLabel);
+                remarksStackLayout.Children.Add(remarkTextEditor);
 
-            };
-            printer.GestureRecognizers.Add(printing);
-            mapPhoneStackLayout.Children.Add(printer);
-
-            print = new SfBusyIndicator()
-            {
-                AnimationType = AnimationTypes.Print,
-                Title = "Printing",
-                TextColor = Color.Red,
-                IsVisible = false,
-                BackgroundColor = Color.Transparent
-            };
-
-
-            if (!string.IsNullOrEmpty(jobItem.Latitude))
-            {
-                map.IsVisible = true;
-            }
-            if (!string.IsNullOrEmpty(jobItem.telNo))
-            {
-                phone.IsVisible = true;
-            }
-
-            var editorLabel = new Label { Text = "Remarks", Style = (Style)App.Current.Resources["jobDetailCaptionStyle"] };
-            remarksStackLayout.Children.Add(editorLabel);
-            remarksStackLayout.Children.Add(remarkTextEditor);
-
-            var signatureLabel = new Label { Text = "Signature", Style = (Style)App.Current.Resources["jobDetailCaptionStyle"] };
-            var signature = new SignaturePadView
-            {
-                CaptionText = "",
-                StrokeColor = Color.Black,
-                BackgroundColor = Color.White,
-                StrokeWidth = 3,
-                WidthRequest = 120,
-                HeightRequest = 240,
-                SignatureLineColor = Color.White,
-                PromptText = ""
-            };
-            savedSignature = new Image
-            {
-
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                IsVisible = false
-            };
-            signatureStackLayout.Children.Add(signatureLabel);
-            signatureStackLayout.Children.Add(signature);
-            signatureStackLayout.Children.Add(savedSignature);
-
-            if (jobItem.ReqSign)
-            {
-                signatureStackLayout.IsVisible = true;
-            }           
-
-            futile = new Image
-            {
-                Source = "futile.png",
-                WidthRequest = 60,
-                HeightRequest = 60,
-                VerticalOptions = LayoutOptions.Center
-
-            };
-            var futileTrip = new TapGestureRecognizer();
-            futileTrip.Tapped += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new FutileTrip_CargoReturn());
-            };
-            futile.GestureRecognizers.Add(futileTrip);
-            imageButtonStackLayout.Children.Add(futile);
-
-            camera = new Image
-            {
-                Source = "camera.png",
-                WidthRequest = 60,
-                HeightRequest = 60,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var takeImage = new TapGestureRecognizer();
-            takeImage.Tapped += async (sender, e) =>
-            {
-                savedTrailer = trailerEntry.Text;
-                savedContPre = contPrefix.Text;
-                savedNumber = contNumber.Text;
-                savedSealNo = sealEntry.Text;
-                savedMGW = mgwEntry.Text;
-                savedTare = tareEntry.Text;
-                savedRemark = remarkTextEditor.Text;
-                if (check1.Checked)
+                var signatureLabel = new Label { Text = "Signature", Style = (Style)App.Current.Resources["jobDetailCaptionStyle"] };
+                var signature = new SignaturePadView
                 {
-                    collectSealStatus = true;
-                    checking = "true";
-                }
-                else
+                    CaptionText = "",
+                    StrokeColor = Color.Black,
+                    BackgroundColor = Color.White,
+                    StrokeWidth = 3,
+                    WidthRequest = 120,
+                    HeightRequest = 240,
+                    SignatureLineColor = Color.White,
+                    PromptText = ""
+                };
+                savedSignature = new Image
                 {
-                    collectSealStatus = false;
-                    checking = "false";
+
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    IsVisible = false
+                };
+                signatureStackLayout.Children.Add(signatureLabel);
+                signatureStackLayout.Children.Add(signature);
+                signatureStackLayout.Children.Add(savedSignature);
+
+                if (jobItem.ReqSign)
+                {
+                    signatureStackLayout.IsVisible = true;
                 }
 
-                await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this);
-                DisplayImage();
-                BackgroundTask.StartTimer();
-                //UploadImage(jobItem.EventRecordId.ToString());
-
-            };
-            camera.GestureRecognizers.Add(takeImage);
-            imageButtonStackLayout.Children.Add(camera);
-
-           
-
-            if (!(String.IsNullOrEmpty(savedTrailer)) || !(String.IsNullOrEmpty(savedContPre)) || !(String.IsNullOrEmpty(checking)) || !(String.IsNullOrEmpty(checking)))
-            {
-                trailerEntry.Text = savedTrailer;
-                contPrefix.Text = savedContPre;
-                contNumber.Text = savedNumber;
-                sealEntry.Text = savedSealNo;
-                mgwEntry.Text = savedMGW;
-                tareEntry.Text = savedTare;
-                remarkTextEditor.Text = savedRemark;
-                if(checking.Equals("true"))
+                futile = new Image
                 {
-                    check1.Checked = true;
+                    Source = "futile.png",
+                    WidthRequest = 60,
+                    HeightRequest = 60,
+                    VerticalOptions = LayoutOptions.Center
+
+                };
+                var futileTrip = new TapGestureRecognizer();
+                futileTrip.Tapped += async (sender, e) =>
+                {
+                    await Navigation.PushAsync(new FutileTrip_CargoReturn());
+                };
+                futile.GestureRecognizers.Add(futileTrip);
+                imageButtonStackLayout.Children.Add(futile);
+
+                camera = new Image
+                {
+                    Source = "camera.png",
+                    WidthRequest = 60,
+                    HeightRequest = 60,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var takeImage = new TapGestureRecognizer();
+                takeImage.Tapped += async (sender, e) =>
+                {
+                    savedTrailer = trailerEntry.Text;
+                    savedContPre = contPrefix.Text;
+                    savedNumber = contNumber.Text;
+                    savedSealNo = sealEntry.Text;
+                    savedMGW = mgwEntry.Text;
+                    savedTare = tareEntry.Text;
+                    savedRemark = remarkTextEditor.Text;
+                    if (check1.Checked)
+                    {
+                        collectSealStatus = true;
+                        checking = "true";
+                    }
+                    else
+                    {
+                        collectSealStatus = false;
+                        checking = "false";
+                    }
+
+                    await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this);
+                    DisplayImage();
+                    BackgroundTask.StartTimer();
+                    //UploadImage(jobItem.EventRecordId.ToString());
+
+                };
+                camera.GestureRecognizers.Add(takeImage);
+                imageButtonStackLayout.Children.Add(camera);
+
+
+
+                if (!(String.IsNullOrEmpty(savedTrailer)) || !(String.IsNullOrEmpty(savedContPre)) || !(String.IsNullOrEmpty(checking)) || !(String.IsNullOrEmpty(checking)))
+                {
+                    trailerEntry.Text = savedTrailer;
+                    contPrefix.Text = savedContPre;
+                    contNumber.Text = savedNumber;
+                    sealEntry.Text = savedSealNo;
+                    mgwEntry.Text = savedMGW;
+                    tareEntry.Text = savedTare;
+                    remarkTextEditor.Text = savedRemark;
+                    if (checking.Equals("true"))
+                    {
+                        check1.Checked = true;
+                    }
+                    else if (checking.Equals("false"))
+                    {
+                        check2.Checked = true;
+                    }
+
                 }
-                else if(checking.Equals("false"))
+
+                if (uploaded)
                 {
-                    check2.Checked = true;
-                }                             
-               
-            }
+                    confirm.IsEnabled = false;
+                    confirm.Source = "confirmDisable.png";
+                    futile.IsEnabled = false;
+                    futile.Source = "futileDisable.png";
+                }
 
-            if (uploaded)
-            {
-                confirm.IsEnabled = false;
-                confirm.Source = "confirmDisable.png";
-                futile.IsEnabled = false;
-                futile.Source = "futileDisable.png";
-            }
-
-            confirm = new Image
-            {
-                Source = "confirm.png",
-                WidthRequest = 70,
-                HeightRequest = 70,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var confirmJob = new TapGestureRecognizer();
-            confirmJob.Tapped += async (sender, e) =>
-            {               
-                try
-                {             
+                confirm = new Image
+                {
+                    Source = "confirm.png",
+                    WidthRequest = 70,
+                    HeightRequest = 70,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var confirmJob = new TapGestureRecognizer();
+                confirmJob.Tapped += async (sender, e) =>
+                {
+                    try
+                    {
                         activity.IsRunning = true;
                         activity.IsVisible = true;
 
@@ -961,79 +965,86 @@ namespace ASolute_Mobile
                             else if (Ultis.Settings.ActionID.Equals("Point1_Chk") || Ultis.Settings.ActionID.Equals("Point2_Chk"))
                             {
 
-                            if ((!(String.IsNullOrEmpty(sealEntry.Text))&&sealEntry.IsVisible) || sealEntry.IsVisible == false || (jobItem.SealMode.Equals("O") && sealEntry.IsVisible) || (jobItem.SealMode.Equals("R") && sealEntry.IsVisible))
-                            {
-                                haulageJob.Id = Ultis.Settings.SessionCurrentJobId;
-                                if (Ultis.Settings.ActionID.Equals("Point1_Chk"))
+                                if ((!(String.IsNullOrEmpty(sealEntry.Text)) && sealEntry.IsVisible) || sealEntry.IsVisible == false || (jobItem.SealMode.Equals("O") && sealEntry.IsVisible) || (jobItem.SealMode.Equals("R") && sealEntry.IsVisible))
                                 {
-                                    haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.Point1_Chk;
+                                    haulageJob.Id = Ultis.Settings.SessionCurrentJobId;
+                                    if (Ultis.Settings.ActionID.Equals("Point1_Chk"))
+                                    {
+                                        haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.Point1_Chk;
+                                    }
+                                    else
+                                    {
+                                        haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.Point2_Chk;
+                                    }
+                                    if (!(String.IsNullOrEmpty(remarkTextEditor.Text)))
+                                    {
+                                        haulageJob.Remarks = remarkTextEditor.Text;
+                                    }
+                                    else
+                                    {
+                                        haulageJob.Remarks = "";
+                                    }
+                                    haulageJob.TrailerId = trailerEntry.Text;
+                                    haulageJob.ContainerNo = contPrefix.Text + contNumber.Text;
+                                    if (sealEntry.IsVisible == false || (String.IsNullOrEmpty(sealEntry.Text) && jobItem.SealMode.Equals("O")))
+                                    {
+                                        haulageJob.SealNo = "";
+                                    }
+                                    else
+                                    {
+                                        haulageJob.SealNo = sealEntry.Text;
+                                    }
+                                    UpdateRecord();
                                 }
                                 else
                                 {
-                                    haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.Point2_Chk;
+                                    await DisplayAlert("Error", "Please fill in the seal number", "OK");
+                                    confirm.IsEnabled = true;
+                                    confirm.Source = "confirm.png";
+                                    futile.IsEnabled = true;
+                                    futile.Source = "futile.png";
                                 }
-                                if (!(String.IsNullOrEmpty(remarkTextEditor.Text)))
-                                {
-                                    haulageJob.Remarks = remarkTextEditor.Text;
-                                }
-                                else
-                                {
-                                    haulageJob.Remarks = "";
-                                }
-                                haulageJob.TrailerId = trailerEntry.Text;
-                                haulageJob.ContainerNo = contPrefix.Text + contNumber.Text;
-                                if(sealEntry.IsVisible == false || (String.IsNullOrEmpty(sealEntry.Text) && jobItem.SealMode.Equals("O")))
-                                {
-                                    haulageJob.SealNo = "";
-                                }
-                                else
-                                {
-                                    haulageJob.SealNo = sealEntry.Text;
-                                }                               
-                                UpdateRecord();
                             }
-                            else
-                            {
-                                await DisplayAlert("Error", "Please fill in the seal number", "OK");
-                                confirm.IsEnabled = true;
-                                confirm.Source = "confirm.png";
-                                futile.IsEnabled = true;
-                                futile.Source = "futile.png";
-                            }
-                            }
-                               
+
                         }
 
                         activity.IsRunning = false;
                         activity.IsVisible = false;
-                    
-                   
-                   
-                }
-                catch (Exception)
+
+
+
+                    }
+                    catch (Exception)
+                    {
+                        await DisplayAlert("Reminder", "Please sign for the job.", "OK");
+                    }
+                };
+                confirm.GestureRecognizers.Add(confirmJob);
+                imageButtonStackLayout.Children.Add(confirm);
+
+                mainStackLayout.Children.Add(jobDetailsStackLayout);
+                mainStackLayout.Children.Add(mapPhoneStackLayout);
+                mainStackLayout.Children.Add(print);
+                mainStackLayout.Children.Add(trailerContainerGrid);
+                mainStackLayout.Children.Add(confirmGrid);
+                mainStackLayout.Children.Add(remarksStackLayout);
+                mainStackLayout.Children.Add(signatureStackLayout);
+                mainStackLayout.Children.Add(imageButtonStackLayout);
+                mainStackLayout.Children.Add(imageGrid);
+
+                Content = new ScrollView
                 {
-                    await DisplayAlert("Reminder", "Please sign for the job.", "OK");
-                }
-            };
-            confirm.GestureRecognizers.Add(confirmJob);
-            imageButtonStackLayout.Children.Add(confirm);
+                    Content = mainStackLayout
+                };
 
-            mainStackLayout.Children.Add(jobDetailsStackLayout);
-            mainStackLayout.Children.Add(mapPhoneStackLayout);
-            mainStackLayout.Children.Add(print);
-            mainStackLayout.Children.Add(trailerContainerGrid);
-            mainStackLayout.Children.Add(confirmGrid); 
-            mainStackLayout.Children.Add(remarksStackLayout);
-            mainStackLayout.Children.Add(signatureStackLayout);
-            mainStackLayout.Children.Add(imageButtonStackLayout);
-            mainStackLayout.Children.Add(imageGrid);
-
-            Content = new ScrollView
+                DisplayImage();
+            }
+            catch(Exception e)
             {
-                Content = mainStackLayout
-            };
+                await DisplayAlert("Error", e.Message, "OK");
+            }
 
-            DisplayImage();
+         
         }
 
         public async void EmptyPickupObject()

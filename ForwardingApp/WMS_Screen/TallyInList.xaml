@@ -37,9 +37,9 @@
            Placeholder="Search here to Filter"
            TextChanged="OnFilterTextChanged" 
            HeightRequest="50"/>            
-    <datagrid:SfDataGrid  x:Name="dataGrid" AutoGenerateColumns="true" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" HeightRequest="500">
+    <datagrid:SfDataGrid GridStyle="{StaticResource style}" AutoExpandGroups="false" AllowGroupExpandCollapse="true" VerticalOverScrollMode="None" ScrollingMode="Pixel" x:Name="dataGrid" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" HeightRequest="500">
                 <datagrid:SfDataGrid.Columns  >
-                       <datagrid:GridTextColumn MappingName="DocumentNo"  Width="120" >
+                       <datagrid:GridTextColumn MappingName="DocumentNo" Width="170">
                            <datagrid:GridTextColumn.HeaderTemplate > 
                 <DataTemplate> 
                     <Label Text="Tally In No." FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
@@ -50,17 +50,17 @@
                  <datagrid:GridTextColumn MappingName="ContainerId" IsHidden="true" />
                   
                 
-                <datagrid:GridTextColumn MappingName="ContainerNo" Width="120">
+                <datagrid:GridTextColumn MappingName="ContainerNo" Width="190">
                            <datagrid:GridTextColumn.HeaderTemplate> 
                 <DataTemplate> 
-                    <Label Text="Equipment No." FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                    <Label Text="Equipment" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
                 </DataTemplate> 
             </datagrid:GridTextColumn.HeaderTemplate> 
                         </datagrid:GridTextColumn>
                         
                          <datagrid:GridTextColumn MappingName="TypeSize" IsHidden="true"  />
                 
-                 <datagrid:GridTextColumn MappingName="Principal" Width="120" >
+                 <datagrid:GridTextColumn MappingName="Principal" IsHidden="true" >
                   <datagrid:GridTextColumn.HeaderTemplate> 
                 <DataTemplate> 
                     <Label Text="Principal" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
@@ -69,16 +69,20 @@
                         </datagrid:GridTextColumn>
                    
                     
-                    <datagrid:GridTextColumn MappingName="Items" IsHidden="true"/>
+                   
                   
                     <datagrid:GridTextColumn MappingName="Id" IsHidden="true"/>
-                    <datagrid:GridTextColumn MappingName="Caption" IsHidden="true"/>
+                  <datagrid:GridTextColumn MappingName="Items" IsHidden="true"/>
+                     <datagrid:GridTextColumn MappingName="Caption" IsHidden="true"/>
                     <datagrid:GridTextColumn MappingName="Action" IsHidden="true"/> 
                     <datagrid:GridTextColumn MappingName="BackColor" IsHidden="true"/>
                     <datagrid:GridTextColumn MappingName="Summary" IsHidden="true"/>
                     <datagrid:GridTextColumn MappingName="Details" IsHidden="true"/>
                     </datagrid:SfDataGrid.Columns>
-
+                    
+                      <datagrid:SfDataGrid.GroupColumnDescriptions >
+        <datagrid:GroupColumnDescription ColumnName="Principal"  />        
+    </datagrid:SfDataGrid.GroupColumnDescriptions > 
             
         </datagrid:SfDataGrid>
     

@@ -28,6 +28,9 @@ namespace ASolute_Mobile.WMS_Screen
             productPallet = product;
 
             Title = "Tally In # " + screenTitle;
+
+            datePicker.MinimumDate = DateTime.Now;
+
         }
 
         protected override void OnAppearing()
@@ -41,7 +44,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetNewPalletList()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id));
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id, productPallet.ProductLinkId));
             clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(newPallet_response.IsGood)
@@ -67,6 +70,20 @@ namespace ASolute_Mobile.WMS_Screen
                 unitBox.ComboBoxSource = unit;
                 statusBox.ComboBoxSource = status;
 
+                statusBox.Text = palletList.DefaultStockStatus;
+
+            }
+        }
+
+        void Size_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
+        {
+            foreach(clsKeyValue selectedSize in palletList.PalletSize)
+            {
+                if(sizeBox.Text.Equals(selectedSize.Key))
+                {
+                    palletTI.Text = selectedSize.Extra01;
+                    palletHI.Text = selectedSize.Extra02;
+                }
             }
         }
 
@@ -86,8 +103,19 @@ namespace ASolute_Mobile.WMS_Screen
         {
             fieldName = "ExpiryScan";
             BarCodeScan(fieldName);
+
         }
 
+        void DateEntry_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+        {
+            datePicker.Focus();
+            date.Unfocus();
+        }
+
+        void DatePicker_DateSelected(object sender, Xamarin.Forms.DateChangedEventArgs e)
+        {
+            date.Text = datePicker.Date.ToString("dd/MM/yyyy");
+        }
 
         async void BarCodeScan(string field)
         {
@@ -117,6 +145,7 @@ namespace ASolute_Mobile.WMS_Screen
                             DateTime enteredDate = DateTime.Parse(result.Text);
 
                             datePicker.Date = enteredDate;
+                          
                         }
                     });
                 };
@@ -127,44 +156,64 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
+      
+
         async void ConfirmAddPallet(object sender, EventArgs e)
         {
-
-            if(!(String.IsNullOrEmpty(palletNo.Text)) && !(String.IsNullOrEmpty(palletHI.Text)) && !(String.IsNullOrEmpty(palletTI.Text)) && !(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text)) 
-               && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)))
+            try
             {
-                clsPallet pallet = new clsPallet
+                if (!(String.IsNullOrEmpty(palletNo.Text)) && !(String.IsNullOrEmpty(palletHI.Text)) && !(String.IsNullOrEmpty(palletTI.Text)) && !(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
+             && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)))
                 {
-                    Id = id,
-                    ProductCode = productPallet.ProductCode,
-                    PalletId = palletNo.Text,
-                    PalletSize = sizeBox.Text,
-                    PalletTI = Convert.ToInt16(palletTI.Text),
-                    PalletHI = Convert.ToInt16(palletHI.Text),
-                    Qty = Convert.ToInt32(quantity.Text),
-                    Uom = unitBox.Text,
-                    StockStatus = statusBox.Text,
-                    String01 = (!(String.IsNullOrEmpty(batchNo.Text))) ?batchNo.Text : String.Empty,
-                    ExpiryDate = datePicker.Date.ToString()
-                };
+                    clsPallet pallet = new clsPallet
+                    {
+                        Id = id,
+                        ProductCode = productPallet.ProductCode,
+                        PalletId = palletNo.Text,
+                        PalletSize = sizeBox.Text,
+                        PalletTI = Convert.ToInt16(palletTI.Text),
+                        PalletHI = Convert.ToInt16(palletHI.Text),
+                        Qty = Convert.ToInt32(quantity.Text),
+                        Uom = unitBox.Text,
+                        StockStatus = statusBox.Text,
+                        String01 = (!(String.IsNullOrEmpty(batchNo.Text))) ? batchNo.Text : String.Empty,
+                      
+                    };
 
-                var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPallet(id));
-                clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    pallet.ExpiryDate = (datePicker.Date.ToString("yyyy-MM-dd") == DateTime.Now.Date.ToString("yyyy-MM-dd")) ? String.Empty : datePicker.Date.ToString("yyyy-MM-dd");
+  
+                    var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPallet(id));
+                    clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (upload_response.IsGood)
-                {
-                    await DisplayAlert("Success", "New pallet added.", "OK");
+                    if (upload_response.IsGood)
+                    {
+                        await DisplayAlert("Success", "New pallet added.", "OK");
+                        palletNo.Text = String.Empty;
+                        sizeBox.Text = String.Empty;
+                        palletTI.Text = String.Empty;
+                        palletHI.Text = String.Empty;
+                        quantity.Text = String.Empty;
+                        unitBox.Text = String.Empty;
+                        statusBox.Text = palletList.DefaultStockStatus; 
+                        batchNo.Text = String.Empty;
+                        //datePicker.Date = Convert.ToDateTime("");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", upload_response.Message, "OK");
+                    }
+
                 }
                 else
                 {
-                    await DisplayAlert("Error", upload_response.Message, "OK");
+                    await DisplayAlert("Missing field", "Please fill in all mandatory field.", "OK");
                 }
-
             }
-            else
+            catch(Exception error)
             {
-                await DisplayAlert("Missing field", "Please fill in all mandatory field.", "OK");
+                await DisplayAlert("Error", error.Message, "OK");
             }
+          
         }
     }
 }

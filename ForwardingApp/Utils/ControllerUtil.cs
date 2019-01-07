@@ -240,9 +240,9 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/TallyIn/Load?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),tallyID);
         }
 
-        public static String loadNewPallet(string tallyID)
+        public static String loadNewPallet(string tallyID,string productLinkId)
         {
-            return String.Format("Wms/TallyIn/NewPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
+            return String.Format("Wms/TallyIn/NewPallet?SessionId={0}&GeoLoc={1}&id={2}&ProductLinkId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID, productLinkId);
         }
 
         public static String postNewPallet(string tallyID)

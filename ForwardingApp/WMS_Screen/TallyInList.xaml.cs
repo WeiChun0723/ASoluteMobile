@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
+using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,12 +17,14 @@ namespace ASolute_Mobile.WMS_Screen
 
         List<clsWhsCommon> tallyInList;
 
+
         public TallyInList(string title)
         {
             InitializeComponent();
 
             Title = title;
 
+            
         }
 
         protected override void OnAppearing()
@@ -31,6 +34,8 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
 
             GetTallyInList();
+
+            
         }
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
@@ -38,7 +43,7 @@ namespace ASolute_Mobile.WMS_Screen
             try
             {
                 string searchKey = e.NewTextValue.ToUpper();
-
+                //dataGrid.ItemsSource = null;
                 if (string.IsNullOrEmpty(searchKey))
                 {
                     dataGrid.AutoExpandGroups = false;
@@ -50,11 +55,14 @@ namespace ASolute_Mobile.WMS_Screen
                     try
                     {
                         dataGrid.AutoExpandGroups = true;
+                       
                         dataGrid.ItemsSource = tallyInList.Where(x => x.DocumentNo.Contains(searchKey) || x.ContainerNo.Contains(searchKey) || x.Principal.Contains(searchKey));
+       
+
                     }
-                    catch
+                    catch(Exception error)
                     {
-                        await DisplayAlert("Error", "Please try again", "OK");
+                        await DisplayAlert("Error", error.Message, "OK");
                     }
                 }
             }
@@ -80,7 +88,6 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = false;
         }
 
-
         public async void BarCodeScan(object sender, EventArgs e)
         {
             try
@@ -92,7 +99,27 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        await Navigation.PushAsync(new TallyInDetail(result.Text));
+                        await Navigation.PopAsync();
+
+                        filterText.Text = result.Text;
+
+                        /*string recordID = "";
+                        foreach(clsWhsCommon tallyIn in tallyInList)
+                        {
+                            if(tallyIn.DocumentNo.Equals(result.Text))
+                            {
+                                recordID = tallyIn.Id;
+                            }
+                        }
+
+                        if(recordID != "")
+                        {
+                            await Navigation.PushAsync(new TallyInDetail(recordID));
+                        }
+                        else
+                        {
+                            await DisplayAlert("Not found", "No such id.", "OK");
+                        }*/
 
                     });
                 };
@@ -105,12 +132,19 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void Handle_GridTapped(object sender, Syncfusion.SfDataGrid.XForms.GridTappedEventArgs e)
         {
-            clsWhsCommon tallyIn = new clsWhsCommon();
-            tallyIn = ((clsWhsCommon)e.RowData);
-
-            if (tallyIn != null)
+            try
             {
-                await Navigation.PushAsync(new TallyInDetail(tallyIn.Id));
+                clsWhsCommon tallyIn = new clsWhsCommon();
+                tallyIn = ((clsWhsCommon)e.RowData);
+
+                if (tallyIn != null)
+                {
+                    await Navigation.PushAsync(new TallyInDetail(tallyIn.Id));
+                }
+            }
+            catch
+            {
+
             }
         }
 

@@ -4,7 +4,8 @@
              x:Class="ASolute_Mobile.WMS_Screen.TallyInPalletEntry"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
-              BackgroundColor="#e8e5e5">
+             BackgroundColor="#e8e5e5"
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation">
     
     <ScrollView>
         
@@ -30,7 +31,11 @@
                 </StackLayout>
 
                 <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="palletNo" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="LightYellow"/>
+                    <controls:CustomEntry x:Name="palletNo" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="LightYellow">
+                        <controls:CustomEntry.Behaviors>
+                            <local:MaxLengthValidation MaxLength="20"/>
+                        </controls:CustomEntry.Behaviors>   
+                    </controls:CustomEntry>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"   >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="PalletScan"/>
@@ -44,9 +49,9 @@
                 </StackLayout>
             
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow"/>
-                    <controls:CustomEntry x:Name="palletTI" HeightRequest="30" WidthRequest="70" HorizontalOptions="Fill"  LineColor="LightYellow" Keyboard="Numeric"/>
-                    <controls:CustomEntry x:Name="palletHI" HeightRequest="30" WidthRequest="70" HorizontalOptions="Fill"  LineColor="LightYellow" Keyboard="Numeric"/>
+                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="Size_SelectionChanged"/>
+                    <controls:CustomEntry x:Name="palletTI" HeightRequest="30" WidthRequest="70" HorizontalOptions="Fill"  LineColor="LightYellow" IsEnabled="false"/>
+                    <controls:CustomEntry x:Name="palletHI" HeightRequest="30" WidthRequest="70" HorizontalOptions="Fill"  LineColor="LightYellow" IsEnabled="false"/>
             </StackLayout>
 
                 <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">
@@ -72,7 +77,11 @@
                 </StackLayout>
            
             <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="batchNo" HeightRequest="30" HorizontalOptions="Fill" LineColor="WhiteSmoke" WidthRequest="150"/>
+                    <controls:CustomEntry x:Name="batchNo" HeightRequest="30" HorizontalOptions="Fill" LineColor="WhiteSmoke" WidthRequest="150">
+                         <controls:CustomEntry.Behaviors>
+                            <local:MaxLengthValidation MaxLength="50"/>
+                        </controls:CustomEntry.Behaviors>   
+                    </controls:CustomEntry>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="BatchScan"/>
@@ -82,11 +91,12 @@
             </StackLayout>
 
                 <StackLayout Padding="0,10,0,0" Grid.Row="5" Grid.Column="0">
-                    <Label Text="Expiry Date" FontAttributes="Bold"  />
+                    <Label Text="Expiry Date" FontAttributes="Bold" />
                 </StackLayout>
             
             <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
-                    <DatePicker x:Name="datePicker" HorizontalOptions="Fill" WidthRequest="130" Format="dd/MM/yyyy"/>
+                    <Entry x:Name="date" Focused="DateEntry_Focused" HorizontalOptions="FillAndExpand" WidthRequest="130"/>
+                    <DatePicker x:Name="datePicker" HorizontalOptions="Fill" WidthRequest="130" Format="dd/MM/yyyy" IsVisible="false" DateSelected="DatePicker_DateSelected"/>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"   >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="ExpiryDateScan"/>
