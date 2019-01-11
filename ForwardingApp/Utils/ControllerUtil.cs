@@ -195,6 +195,11 @@ namespace ASolute_Mobile.Utils
         #endregion
 
         #region fleet url
+        public static String postNewLogRecordURL()
+        {
+            return String.Format("Trip/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
         #endregion
 
         #region haulage url
@@ -250,13 +255,12 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/TallyIn/AddPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
         }
 
-        #endregion
-
-
-        public static String postNewLogRecordURL()
+        public static String getNewPalletTrx(string palletID)
         {
-            return String.Format("Trip/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Wms/Pallet/Get?SessionId={0}&GeoLoc={1}&PalletId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), palletID);
         }
+
+        #endregion
 
         public static String postFowardJobURL(JobItems jobItem)
         {
@@ -273,7 +277,7 @@ namespace ASolute_Mobile.Utils
             return String.Format("Trucking/CargoReturn?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String getLoginURL(string encryptedUserId, string encryptedPassword,string equipmentId)
+        public static String getFleetLoginURL(string encryptedUserId, string encryptedPassword,string equipmentId)
         {
             return String.Format("Session/Login?UserId={0}&Pwd={1}&Eq={2}", encryptedUserId, encryptedPassword,equipmentId);
         }
@@ -432,7 +436,7 @@ namespace ASolute_Mobile.Utils
                     return App.gpsLocationLat.ToString() + "," + App.gpsLocationLong.ToString();
                 }
             
-            return "0";
+            return "";
         }
 
         

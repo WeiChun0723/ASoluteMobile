@@ -36,7 +36,7 @@ namespace ASolute_Mobile
             foreach (SummaryItems item in contextMenu)
               {
                   string option;
-                  if (item.Display)
+                if (item.Display && item.Id != "CurrentLoc")
                   {
                       MasterPageItem pageItem = new MasterPageItem();
 

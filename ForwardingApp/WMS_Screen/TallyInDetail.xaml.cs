@@ -64,6 +64,10 @@ namespace ASolute_Mobile.WMS_Screen
                 dataGrid.ItemsSource = tallyInDetail.Items;
 
             }
+            else
+            {
+                await DisplayAlert("Error", tallyIn_response.Message, "OK");
+            }
 
             loading.IsVisible = false;
         }

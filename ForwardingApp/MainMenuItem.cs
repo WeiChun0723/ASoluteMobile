@@ -112,9 +112,13 @@ namespace ASolute_Mobile
                     case "TallyIn" :
                        await  Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
                         break;
-
+                    case "PalletTrx" :
+                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((AppMenu)e.Item).name));
+                        break;
                 }
 
+                loading.IsVisible = false;
+                loading.IsRunning = false;
                 listView.SelectedItem = null;
             };
 
@@ -255,7 +259,7 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (NetworkCheck.IsInternet() && Ultis.Settings.RefreshMenuItem.Equals("Yes"))
+            if (Ultis.Settings.RefreshMenuItem.Equals("Yes")) 
             {
                 GetMainMenu();
                 Ultis.Settings.UpdatedRecord = "RefreshJobList";
@@ -313,7 +317,6 @@ namespace ASolute_Mobile
             checkItems.Clear();
             try
             {
-              
                 var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -324,7 +327,6 @@ namespace ASolute_Mobile
                     //load value from the menu in json response "CheckList"
                     for (int check = 0; check < login_response.Result["Checklist"].Count; check++)
                     {
-
                         string itemKey = login_response.Result["Checklist"][check]["Key"];
                         string itemValue = login_response.Result["Checklist"][check]["Value"];
 

@@ -183,6 +183,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -419,6 +423,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\Cmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\CustomQueue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\IBthService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml.cs">
+      <DependentUpon>PalletMovement.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

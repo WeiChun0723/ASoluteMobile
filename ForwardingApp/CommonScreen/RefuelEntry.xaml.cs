@@ -30,10 +30,10 @@ namespace ASolute_Mobile
         double imageWidth;
         clsResponse json_reponse = new clsResponse();
         clsFuelCostNew fuelCostNew = new clsFuelCostNew();         
-        string newFuelID;
+        string newFuelID, imageEventID = "";
         int station_choice = 0, payment_choice;
-       
-      
+        List<AppImage> recordImages = new List<AppImage>();
+        byte[] scaledImageByte;
 
         public RefuelEntry ()
 		{
@@ -47,7 +47,7 @@ namespace ASolute_Mobile
             }
             else 
             {
-                Title = "Isi Minyak Entri";
+                Title = "Isi Minyak";
                 liter.Placeholder = "Maksimum 500 liter.";
             }        
             
@@ -115,6 +115,11 @@ namespace ASolute_Mobile
         {
             await CommonFunction.StoreImages(newFuelID, this);
             DisplayImage();
+
+            if(!(String.IsNullOrEmpty(imageEventID)))
+            {
+                UploadImage();
+            }
         }
 
         public async void ConfirmRefuel(object sender, EventArgs e)
@@ -147,48 +152,6 @@ namespace ASolute_Mobile
                                     refuel_Data.PaymentMode = paymentPicker.SelectedIndex;
                                     refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
                                     refuel_Data.Quantity = Convert.ToDouble(liter.Text);
-
-                                    /*if (mandatory == "voucher")
-                                    {
-                                        if (!(String.IsNullOrEmpty(fuelCard.Text)))
-                                        {
-                                            refuel_Data.FuelCardNo = fuelCard.Text.ToString();
-                                        }
-                                        else
-                                        {
-                                            refuel_Data.FuelCardNo = "";
-                                        }
-
-                                        if(!(String.IsNullOrEmpty(voucher.Text)))
-                                        {
-                                            refuel_Data.VoucherNo = voucher.Text;
-                                        }
-                                        else
-                                        {
-                                            refuel_Data.VoucherNo = " ";
-                                        }
-                                    }
-                                    else if (mandatory == "fuel_card" || fuelCard.Text != null)
-                                    {
-                                        refuel_Data.FuelCardNo = fuelCard.Text.ToString();
-                                    }
-
-                                    if (mandatory == "fuel_card")
-                                    {
-                                        if (!(String.IsNullOrEmpty(voucher.Text)))
-                                        {
-                                            refuel_Data.VoucherNo = voucher.Text.ToString();
-                                        }
-                                        else
-                                        {
-                                            refuel_Data.VoucherNo = "";
-                                        }
-                                    }
-                                    else if (mandatory == "voucher" && voucher.Text != null)
-                                    {
-                                        refuel_Data.VoucherNo = voucher.Text;
-                                    }*/
-
                                     if (String.IsNullOrEmpty(fuelCard.Text))
                                     {
                                         refuel_Data.FuelCardNo = "";
@@ -218,26 +181,47 @@ namespace ASolute_Mobile
 
                                     refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
                                     App.Database.SaveRecordAsync(refuel_Data);
-                                    await BackgroundTask.UploadLatestRecord(this);
-                                    /*confirm_icon.IsEnabled = false;
-                                    confirm_icon.Source = "confirmDisable.png";
+                                    //await BackgroundTask.UploadLatestRecord(this);
 
-                                    /*string status = "";
-                                    if (Ultis.Settings.Language.Equals("English"))
+                                    var content = await CommonFunction.CallWebService("POST", refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
+                                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                                    if(response.IsGood)
                                     {
-                                        status = "New fuel record added.";
+                                        imageEventID = response.Result["LinkId"];
+                                        if (Ultis.Settings.Language.Equals("English"))
+                                        {
+                                            //CommonFunction.AppActivity("Add refuel record", "Succeed", status.Message);
+                                            await DisplayAlert("Success", "Record added", "OK");
+                                        }
+                                        else
+                                        {
+                                            //CommonFunction.AppActivity("Isi minyak entri", "Berjaya", status.Message);
+                                            await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
+                                        }
+
+                                        confirm_icon.IsEnabled = false;
+                                        confirm_icon.Source = "confirmDisable.png";
+                                        UploadImage();
                                     }
                                     else
                                     {
-                                        status = "Record baru ditambah.";
+                                        await DisplayAlert("", response.Message, "OK");
                                     }
-                                    await DisplayAlert("", status, "OK");*/
-
 
                                 }
                                 catch
                                 {
-                                    await DisplayAlert("Error", "Please key in all mandatory field.", "OK");
+                                    string check = "";
+                                    if (Ultis.Settings.Language.Equals("English"))
+                                    {
+                                        check = "Please fill in all the field.";
+                                    }
+                                    else
+                                    {
+                                        check = "Sila isi semua data yang diperlukan.";
+                                    }
+                                    await DisplayAlert("Error", check, "OK");
                                 }
                             }
                             else
@@ -605,6 +589,35 @@ namespace ASolute_Mobile
                 }
                 image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
                 AddThumbnailToImageGrid(image, Image);
+            }
+        }
+
+        async void UploadImage()
+        {
+            try
+            {
+                recordImages = App.Database.GetPendingRecordImages(false);
+                foreach (AppImage recordImage in recordImages)
+                {
+                    clsFileObject image = new clsFileObject();
+
+                    byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
+                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                    image.Content = scaledImageByte;
+                    image.FileName = recordImage.photoFileName;
+
+                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+
+                    recordImage.Uploaded = true;
+                    App.Database.SaveRecordImageAsync(recordImage);
+                }
+
+            }
+            catch
+            {
+
             }
         }
     }

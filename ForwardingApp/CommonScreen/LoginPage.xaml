@@ -7,25 +7,27 @@
              xmlns:lb="clr-namespace:XLabs.Forms.Behaviors;assembly=XLabs.Forms"
              xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-             BackgroundImage="container">
+             BackgroundColor = "#9A2116"
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms">
              
-     <Frame BackgroundColor="#9BD4F5" Margin="10" HasShadow="true"  VerticalOptions="CenterAndExpand" CornerRadius="50">
+     
     <ScrollView>
-    <StackLayout Padding="15,0,15,0">
-
+    <StackLayout Padding="15,15,15,15">
+        <StackLayout Padding = "0, 5"></StackLayout>
         <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
         <StackLayout Padding = "0, 10"></StackLayout>
         <Label TextColor="Black" FontSize = "Medium" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold"/>
-       
+       <StackLayout Padding = "0, 15"></StackLayout>
         <StackLayout Orientation="Horizontal" >
           <inputLayout:SfTextInputLayout Hint="Enterprise name"                             
-          ContainerType="Outlined"
+          ContainerBackgroundColor="#8b0000"
+          FocusedColor="Black"
           EnableHintAnimation="true" 
           x:Name="enterpriseView"
           LeadingViewPosition="Inside"
-          UnfocusedColor="Black"
-          HorizontalOptions="FillAndExpand">    
-        <Entry  x:Name="organizationEntry" TextColor="Black" Placeholder="Enterprise name" PlaceholderColor="Black"/>
+          HorizontalOptions="FillAndExpand"
+          MinimumHeightRequest="15">    
+        <Entry  x:Name="organizationEntry" TextColor="Black" Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false"/>
             
          <inputLayout:SfTextInputLayout.LeadingView>
             <Image
@@ -41,7 +43,8 @@
         </StackLayout>
            
          <inputLayout:SfTextInputLayout Hint="User ID"                             
-          ContainerType="Outlined"
+          ContainerBackgroundColor="#8b0000"
+          FocusedColor="Black"
           EnableHintAnimation="true" 
           x:Name="userView"
           LeadingViewPosition="Inside"
@@ -60,12 +63,13 @@
         </inputLayout:SfTextInputLayout>    
             
             <inputLayout:SfTextInputLayout Hint="Password"                             
-          ContainerType="Outlined"
+          ContainerBackgroundColor="#8b0000"
+          FocusedColor="Black"
           EnableHintAnimation="true" 
-          x:Name="passwordView"
           LeadingViewPosition="Inside"
           EnablePasswordVisibilityToggle="true"
-          UnfocusedColor="Black">    
+          UnfocusedColor="Black"
+          >    
         <Entry IsPassword="true" x:Name="passwordEntry" TextColor="Black" />
 
          <inputLayout:SfTextInputLayout.LeadingView>
@@ -74,14 +78,28 @@
             </Image>
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout>
+            
+        <!--<StackLayout Orientation="Horizontal" >  
+            <inputLayout:SfTextInputLayout Hint="Equipment"                             
+          ContainerBackgroundColor="#8b0000"
+          FocusedColor="Black"
+          EnableHintAnimation="true"  
+          LeadingViewPosition="Inside"
+          UnfocusedColor="Black"
+          HorizontalOptions="FillAndExpand">    
+        <Entry  x:Name="equipmentEntry" TextColor="Black" />
 
-        <StackLayout Orientation="Horizontal" >
-            <controls:CustomEntry Placeholder="Equipment"  x:Name = "equipmentEntry" Image="logintruck" Style="{StaticResource entryStyle}" HorizontalOptions="FillAndExpand" />
-            <controls:CustomPicker HorizontalOptions="End"
+         <inputLayout:SfTextInputLayout.LeadingView>
+            <Image
+                Source="logintruck">     
+            </Image>
+        </inputLayout:SfTextInputLayout.LeadingView>
+        </inputLayout:SfTextInputLayout>-->
+           <!-- <controls:CustomPicker HorizontalOptions="End"
                      HeightRequest="40"
                      Image="ic_arrow_drop_down" x:Name="eqPicker" SelectedIndexChanged="eqSelected">
             </controls:CustomPicker>
-        </StackLayout>
+        </StackLayout>-->
 
             <Button Style="{StaticResource buttonStyle}" x:Name="loginButton" Text = "Login" Clicked="Login_Clicked" />
        
@@ -96,5 +114,5 @@
       
     </StackLayout>
     </ScrollView>
-    </Frame>
+
 </ContentPage>

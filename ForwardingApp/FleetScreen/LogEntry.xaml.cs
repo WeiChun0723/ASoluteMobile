@@ -22,11 +22,12 @@ namespace ASolute_Mobile
         List<AppImage> images = new List<AppImage>();
         clsResponse newLogResponse = new clsResponse();        
         clsTrip trip = new clsTrip();
-        string offlineLogID;
+        string offlineLogID, uri ;
         double imageWidth;             
-        public static string existingRecordId = "";
-        string uri;
-        public static int odo;
+         static string existingRecordId = "", imageLinkID = "";
+         static int odo;
+        List<AppImage> recordImages = new List<AppImage>();
+        byte[] scaledImageByte;
 
         public  LogEntry (string id)
 		{
@@ -40,7 +41,7 @@ namespace ASolute_Mobile
             }
             else 
             {
-                Title = "Buku Log Entri";
+                Title = "Buku Log";
             }
 
             existingRecordId = id;          
@@ -56,17 +57,7 @@ namespace ASolute_Mobile
                 DisplayAlert("Reminder", "You are currently offline", "OK");
             }
 
-            List<AutoComplete> locations = new List<AutoComplete>(App.Database.GetAutoCompleteValues("Location"));
-
-            List<string> locationSuggestion = new List<string>();
-            for (int i = 0; i < locations.Count; i++)
-            {
-                locationSuggestion.Add(locations[i].Value);
-            }
-
-            startLocation.DataSource = locationSuggestion;
-            endLocation.DataSource = locationSuggestion;
-            
+          
             imageGrid.RowSpacing = 0;
             imageGrid.ColumnSpacing = 0;
             imageWidth = App.DisplayScreenWidth / 3;
@@ -114,11 +105,91 @@ namespace ASolute_Mobile
         {
             await CommonFunction.StoreImages(offlineLogID, this);
             DisplayImage();
+
+            if(!(String.IsNullOrEmpty(imageLinkID)))
+            {
+                UploadImage();
+            }
         }
 
+
+
         public async void confirmLog(object sender, EventArgs e)
-        {            
-            List<LogBookData> pendingLog = App.Database.GetTripLog(0);
+        {
+            clsTrip newTrip = new clsTrip();
+
+            if (!(String.IsNullOrEmpty(startLocation.Text)) && !(String.IsNullOrEmpty(startOdometer.Text)))
+            {
+                string startDate_Time = startDate.Date.Year + "/" + startDate.Date.Month + "/" + startDate.Date.Day + "T" + startTime.Time.ToString();
+
+                newTrip.StartTime = Convert.ToDateTime(startDate_Time);
+                newTrip.StartOdometer = Convert.ToInt32(startOdometer.Text);
+                newTrip.StartLocationName = startLocation.Text.ToUpper();
+                newTrip.DriverId = Ultis.Settings.SessionUserItem.DriverId;
+                newTrip.TruckId = Ultis.Settings.SessionUserItem.TruckId;
+                newTrip.StartGeoLoc = ControllerUtil.getPositionAsync();
+
+              
+                if (endLogEntry.IsVisible == true)
+                {
+                    if (!(String.IsNullOrEmpty(startLocation.Text)) && !(String.IsNullOrEmpty(startOdometer.Text)))
+                    {
+                        if (Convert.ToInt32(startOdometer.Text) < Convert.ToInt32(endOdometer.Text))
+                        {
+
+                            string endDate_Time = endDate.Date.Year + "-" + endDate.Date.Month + "-" + endDate.Date.Day + "T" + endTime.Time.ToString();
+                            newTrip.EndTime = Convert.ToDateTime(endDate_Time);
+                            newTrip.EndOdometer = Convert.ToInt32(endOdometer.Text);
+                            newTrip.EndLocationName = endLocation.Text.ToUpper();
+                            newTrip.Id = trip.Id;
+                            newTrip.EndGeoLoc = ControllerUtil.getPositionAsync();
+                            newTrip.LinkId = "";
+                            UpdateLogBook(newTrip);
+                        }
+                        else
+                        {
+                            if (Ultis.Settings.Language.Equals("English"))
+                            {
+                                await DisplayAlert("Error", "End Odometer must more than start odometer.", "OK");
+                            }
+                            else
+                            {
+                                await DisplayAlert("Kesilapan", "Odometer untuk akhir perlu lebih daripada odometer untuk permulaan.", "OK");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Ultis.Settings.Language.Equals("English"))
+                        {
+                            await DisplayAlert("Error", "Please fill in all mandatory field.", "OK");
+                        }
+                        else
+                        {
+                            await DisplayAlert("Kesilapan", "Sila mengisikan semua data yang diperlukan oleh permulaan.", "OK");
+                        }
+                    }
+
+                }
+                else
+                {
+                    UpdateLogBook(newTrip);
+                }
+
+             
+            }
+            else
+            {
+                if (Ultis.Settings.Language.Equals("English"))
+                {
+                    await DisplayAlert("Error", "Please fill in all mandatory field.", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Kesilapan", "Sila mengisikan semua data yang diperlukan oleh permulaan.", "OK");
+                }
+            }
+            /*List<LogBookData> pendingLog = App.Database.GetTripLog(0);
          
             if (pendingLog.Count == 0 || pendingLog[0].OfflineID == offlineLogID || pendingLog[0].Id == trip.Id || !(String.IsNullOrEmpty(existingRecordId)))
             {
@@ -157,17 +228,7 @@ namespace ASolute_Mobile
                                     logData.LinkId = "";
                                     confirm_icon.IsEnabled = false;
                                     confirm_icon.Source = "confirmDisable.png";
-                                    
-                                    string status = "";
-                                    if (Ultis.Settings.Language.Equals("English"))
-                                    {
-                                        status = "Log record saved.";
-                                    }
-                                    else
-                                    {
-                                        status = "Rekod log disimpan.";
-                                    }
-                                    await DisplayAlert("", status, "OK");
+
                                     App.Database.SaveLogRecordAsync(logData);                                                        
                                 }
                                 else
@@ -197,6 +258,7 @@ namespace ASolute_Mobile
                         }
 
                         endLogEntry.IsVisible = true;
+                        await BackgroundTask.UploadLatestRecord(this);
                     }
                     catch (Exception exception)
                     {
@@ -225,8 +287,60 @@ namespace ASolute_Mobile
                 {
                     await DisplayAlert("Kesilapan", "Sila tutup semua log terbuka sebelum meneruskan", "OK");
                 }
-            }                              
+            }  */
         }
+
+        async void UpdateLogBook(clsTrip data)
+        {
+            var content = await CommonFunction.CallWebService("POST", data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
+            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if (response.IsGood)
+            {
+               
+               
+                if (endLogEntry.IsVisible == false)
+                {
+                    endLogEntry.IsVisible = true;
+                    if (Ultis.Settings.Language.Equals("English"))
+                    {
+                        await DisplayAlert("Success", "New log record added", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
+                    }
+                }
+                else
+                {
+                    if (Ultis.Settings.Language.Equals("English"))
+                    {
+                        await DisplayAlert("Success", "Log Book record updated.", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Berjaya", "Kemaskini data buku log.", "OK");
+                    }
+                }
+
+                imageLinkID = response.Result["LinkId"];
+                trip.Id = response.Result["Id"];
+                UploadImage();
+            }
+            else
+            {
+                //await DisplayAlert("Error", response.Message, "OK");
+                if (Ultis.Settings.Language.Equals("English"))
+                {
+                    await DisplayAlert("Error", response.Message, "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Failed", response.Message, "OK");
+                }
+            }
+        }
+
 
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)
         {
@@ -255,7 +369,7 @@ namespace ASolute_Mobile
             {
                 images.Clear();
                 imageGrid.Children.Clear();
-                images = App.Database.GetRecordImagesAsync(offlineLogID, false);
+                images = App.Database.GetUplodedRecordImagesAsync(offlineLogID, "NormalImage");
                 foreach (AppImage Image in images)
                 {
                     IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
@@ -275,6 +389,34 @@ namespace ASolute_Mobile
             catch
             {
                 await DisplayAlert("display", "Error on display", "ok");
+            }
+        }
+
+        async void UploadImage()
+        {
+            try
+            {
+                recordImages = App.Database.GetPendingRecordImages(false);
+                foreach (AppImage recordImage in recordImages)
+                {
+                    clsFileObject image = new clsFileObject();
+
+                    byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
+                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                    image.Content = scaledImageByte;
+                    image.FileName = recordImage.photoFileName;
+
+                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageLinkID));
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    recordImage.Uploaded = true;
+                    App.Database.SaveRecordImageAsync(recordImage);
+                }
+
+            }
+            catch
+            {
+
             }
         }
 
@@ -313,14 +455,17 @@ namespace ASolute_Mobile
                 int time_minute = Convert.ToInt16(start_split_time[1]);
                 TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);
                 startTime.Time = ts;
+                imageLinkID = trip.LinkId;
 
-                if(existingRecordId != "")
+                if (existingRecordId != "")
                 {
                     startOdometer.Text = trip.StartOdometer.ToString();
                     startLocation.Text = trip.StartLocationName;
 
                     endOdometer.Text = trip.EndOdometer.ToString();
                     endLocation.Text = trip.EndLocationName;
+
+
 
                     if (trip.EndTime != null)
                     {
@@ -381,6 +526,17 @@ namespace ASolute_Mobile
                         lblEndLocation.Text = language.Value;
                     }
                 }
+
+                List<AutoComplete> locations = new List<AutoComplete>(App.Database.GetAutoCompleteValues("Location"));
+
+                List<string> locationSuggestion = new List<string>();
+                for (int i = 0; i < locations.Count; i++)
+                {
+                    locationSuggestion.Add(locations[i].Value);
+                }
+
+                startLocation.DataSource = locationSuggestion;
+                endLocation.DataSource = locationSuggestion;
             }
             catch (HttpRequestException)
             {

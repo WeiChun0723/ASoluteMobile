@@ -108,7 +108,11 @@ namespace ASolute_Mobile
 
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
 
-           // DependencyService.Get<IBthService>().disconnBTDevice();
+            if(connectedPrinter == true)
+            {
+                DependencyService.Get<IBthService>().disconnBTDevice();
+            }
+
         }
 
         public static Label CreateLabel(string labelText)
@@ -409,7 +413,6 @@ namespace ASolute_Mobile
                     Orientation = StackOrientation.Horizontal
                 };
 
-
                 confirmGrid = new Grid
                 {
                     Padding = new Thickness(15, 0, 15, 0)
@@ -584,7 +587,6 @@ namespace ASolute_Mobile
                 };
 
 
-
                 check1 = new CheckBox
                 {
                     HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -737,7 +739,7 @@ namespace ASolute_Mobile
 
                 };
                 printer.GestureRecognizers.Add(printing);
-                //mapPhoneStackLayout.Children.Add(printer);
+                mapPhoneStackLayout.Children.Add(printer);
 
                 print = new SfBusyIndicator()
                 {
@@ -1148,7 +1150,7 @@ namespace ASolute_Mobile
                 }
                 else
                 {
-                    await DisplayAlert("Upload Error", json_response.Message, "OK");
+                    await DisplayAlert("Update Error", json_response.Message, "OK");
                     confirm.IsEnabled = true;
                     confirm.Source = "confirm.png";
                     futile.IsEnabled = true;
@@ -1343,7 +1345,6 @@ namespace ASolute_Mobile
                         await DisplayAlert("Error", error.Message, "OK");
                     }
                 }
-
 
             }
             else

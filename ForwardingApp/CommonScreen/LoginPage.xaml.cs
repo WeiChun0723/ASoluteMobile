@@ -50,9 +50,9 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS Haulage";
-                equipmentEntry.IsVisible = false;
-                eqPicker.IsVisible = false;
+                AppLabel.Text = "AILS WMS";
+                //equipmentEntry.IsVisible = false;
+               // eqPicker.IsVisible = false;
             }
 
             usernameEntry.Text = Ultis.Settings.SessionUserId;
@@ -62,7 +62,7 @@ namespace ASolute_Mobile
 
             foreach(AutoComplete equipment in equipmentID)
             {
-                eqPicker.Items.Add(equipment.Value);
+                //eqPicker.Items.Add(equipment.Value);
             }
 
             List<string> Eqsuggestion = new List<string>();
@@ -86,11 +86,11 @@ namespace ASolute_Mobile
 
             passwordEntry.Completed += (s, e) =>
             {
-                if(equipmentEntry.IsVisible && eqPicker.IsVisible)
-                {
-                    equipmentEntry.Text = "";
-                    equipmentEntry.Focus();
-                }
+                //if(equipmentEntry.IsVisible && eqPicker.IsVisible)
+               // {
+                 //   equipmentEntry.Text = "";
+                   // equipmentEntry.Focus();
+               // }//
             };
 
             if (Ultis.Settings.GeneratedAppID == "")
@@ -110,11 +110,11 @@ namespace ASolute_Mobile
 
         public  void eqSelected(object sender, SelectedPositionChangedEventArgs e)
         {                        
-            if(eqPicker.SelectedIndex != -1)
+           /* if(eqPicker.SelectedIndex != -1)
             {             
                 equipmentEntry.Text = equipmentID[eqPicker.SelectedIndex].Value;
                 eqPicker.SelectedIndex = -1;               
-            }          
+            } */         
         }
 
         public async void Update_URL_Clicked(object sender, System.EventArgs e)
@@ -151,10 +151,10 @@ namespace ASolute_Mobile
             {            
                 string encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(usernameEntry.Text));
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
-               
                 try
                 {
                     var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                    //var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                     clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
@@ -165,16 +165,16 @@ namespace ASolute_Mobile
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
                         Ultis.Settings.SessionPassword = passwordEntry.Text;
 
-                        AutoComplete existingEquipment = App.Database.GetAutoCompleteValue(equipmentEntry.Text);
+                        //AutoComplete existingEquipment = App.Database.GetAutoCompleteValue(equipmentEntry.Text);
 
-                          if(existingEquipment == null)
+                          /*if(existingEquipment == null)
                           {
                               existingEquipment = new AutoComplete();
-                          }
+                          }*/
 
-                          existingEquipment.Value = equipmentEntry.Text;
-                          existingEquipment.Type = "Equipment";
-                          App.Database.SaveAutoCompleteAsync(existingEquipment);
+                          //existingEquipment.Value = equipmentEntry.Text;
+                          //existingEquipment.Type = "Equipment";
+                          //App.Database.SaveAutoCompleteAsync(existingEquipment);
 
                         var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>(); 
                  

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
@@ -15,16 +16,15 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class TallyInList : ContentPage
     {
 
-        List<clsWhsCommon> tallyInList;
-
+        List<clsDataRow> tallyInList;
+        ObservableCollection<AppMenu> records = new ObservableCollection<AppMenu>();
 
         public TallyInList(string title)
         {
             InitializeComponent();
 
             Title = title;
-
-            
+    
         }
 
         protected override void OnAppearing()
@@ -32,6 +32,8 @@ namespace ASolute_Mobile.WMS_Screen
             base.OnAppearing();
 
             loading.IsVisible = true;
+
+            records.Clear();
 
             GetTallyInList();
 
@@ -43,22 +45,23 @@ namespace ASolute_Mobile.WMS_Screen
             try
             {
                 string searchKey = e.NewTextValue.ToUpper();
-                //dataGrid.ItemsSource = null;
+              
                 if (string.IsNullOrEmpty(searchKey))
                 {
-                    dataGrid.AutoExpandGroups = false;
-                    dataGrid.ItemsSource = tallyInList;
+                    //dataGrid.AutoExpandGroups = false;
+                    //dataGrid.ItemsSource = tallyInList;
+                    tallyList.ItemsSource = records;
                 }
 
                 else
                 {
                     try
                     {
-                        dataGrid.AutoExpandGroups = true;
-                       
-                        dataGrid.ItemsSource = tallyInList.Where(x => x.DocumentNo.Contains(searchKey) || x.ContainerNo.Contains(searchKey) || x.Principal.Contains(searchKey));
-       
+                        // dataGrid.AutoExpandGroups = true;
 
+                        // dataGrid.ItemsSource = tallyInList.Where(x => x.DocumentNo.Contains(searchKey) || x.ContainerNo.Contains(searchKey) || x.Principal.Contains(searchKey));
+
+                        tallyList.ItemsSource = records.Where(x => x.name.Contains(searchKey) || x.booking.Contains(searchKey) || x.customerRef.Contains(searchKey));
                     }
                     catch(Exception error)
                     {
@@ -76,16 +79,98 @@ namespace ASolute_Mobile.WMS_Screen
         public async void GetTallyInList()
         {
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyInList());
-            clsResponse equipment_response = JsonConvert.DeserializeObject<clsResponse>(content);
+            clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            if (equipment_response.IsGood)
+            if (tallyInList_response.IsGood)
             {
-                tallyInList = JObject.Parse(content)["Result"].ToObject<List<clsWhsCommon>>();
+                tallyInList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                dataGrid.ItemsSource = tallyInList;
+                foreach(clsDataRow data in tallyInList)
+                {
+                    string summary = "";
+                    AppMenu record = new AppMenu
+                    {
+                        menuId = data.Id
+                       
+                    };
+
+                    if (!(String.IsNullOrEmpty(data.BackColor)))
+                    {
+                        record.background = data.BackColor;
+                    }
+                    else
+                    {
+                        record.background = "#ffffff";
+                    }
+
+                    int count = 0;
+                    foreach (clsCaptionValue summaryItem in data.Summary)
+                    {
+
+                        count++;
+
+                        if (!(String.IsNullOrEmpty(summaryItem.Caption)))
+                        {
+                            if(count == data.Summary.Count)
+                            {
+                                summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine;
+                            }
+                            else
+                            {
+                                summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
+                            }
+
+                        }
+                     
+                        if(summaryItem.Caption.Equals(""))
+                        {
+                            record.name = summaryItem.Value;
+                        }
+
+                        else if (summaryItem.Caption.Equals("Equipment"))
+                        {
+                            record.booking = summaryItem.Value;
+                        }
+
+                        else if (summaryItem.Caption.Equals("Principal"))
+                        {
+                            record.customerRef = summaryItem.Value;
+                        }
+
+                       
+
+                    }
+
+                    record.summary = summary;
+                    records.Add(record);
+                }
+                loading.IsVisible = false;
+                loadTallyInList();
+            }
+            else
+            {
+                await DisplayAlert("Error", tallyInList_response.Message, "OK");
             }
 
-            loading.IsVisible = false;
+
+        }
+
+        public void loadTallyInList()
+        {
+            tallyList.ItemsSource = records;
+            tallyList.HasUnevenRows = true;
+
+            if (records.Count == 0)
+            {
+
+                noData.IsVisible = true;
+
+            }
+            else
+            {
+
+                noData.IsVisible = false;
+            }
         }
 
         public async void BarCodeScan(object sender, EventArgs e)
@@ -146,6 +231,13 @@ namespace ASolute_Mobile.WMS_Screen
             {
 
             }
+        }
+
+        public async void selectTallyIn(object sender, ItemTappedEventArgs e)
+        {
+
+            await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
+ 
         }
 
         void Handle_Pulling(object sender, Syncfusion.SfPullToRefresh.XForms.PullingEventArgs args)

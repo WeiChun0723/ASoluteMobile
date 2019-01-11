@@ -13,6 +13,7 @@
                             
                      <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding BackColor}">
                        <StackLayout BackgroundColor="{Binding BackColor}">
+                                
                                 <Label Text="{Binding Summary}" FontAttributes="Bold" />
                         </StackLayout>
                     </Frame>

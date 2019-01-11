@@ -181,6 +181,7 @@ namespace ASolute_Mobile
             RefuelEntry addNewRecord = new RefuelEntry();
             addNewRecord.previousPage = this;
             Navigation.PushAsync(addNewRecord);
+
         }
 
         protected void refreshRefuelHistory (object sender, EventArgs e)

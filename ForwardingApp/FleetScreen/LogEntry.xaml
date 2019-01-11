@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.LogEntry"  xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms">
     <ScrollView>
-    <StackLayout>
+    <StackLayout Padding="15,15,15,15">
         <Grid  x:Name="startLogEntry" RowSpacing="5" ColumnSpacing="0" >
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -15,18 +15,18 @@
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-            <Label Text="Start" FontAttributes="Bold" TextColor="Red" Grid.Row="0" Grid.Column="0"  HorizontalTextAlignment="Center" VerticalOptions="Center" x:Name="lblStart"/>
-            <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" x:Name="lblStartDateTime"/>
+            <Label Text="Start" FontAttributes="Bold" TextColor="Red" Grid.Row="0" Grid.Column="0"   VerticalOptions="Center" x:Name="lblStart"/>
+            <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" x:Name="lblStartDateTime"/>
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
             <DatePicker x:Name="startDate" HorizontalOptions="Fill" WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow"/>
-             <TimePicker x:Name="startTime" HorizontalOptions="Fill" WidthRequest="130" Format="HH:mm" BackgroundColor="LightYellow"/>
+             <TimePicker x:Name="startTime" HorizontalOptions="Fill" WidthRequest="100" Format="HH:mm" BackgroundColor="LightYellow"/>
             </StackLayout>
-            <Label Text="Odometer" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center"  WidthRequest="150"  x:Name="lblStartOdometer"/>
+            <Label Text="Odometer" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"  WidthRequest="150"  x:Name="lblStartOdometer"/>
             <Entry x:Name="startOdometer" BackgroundColor="LightYellow" Placeholder="Maximum 6 digit" Grid.Row="2" Grid.Column="1" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextChanged="startMeter"/>
-            <Label Text="From" FontAttributes="Bold" Grid.Row="3" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center"  x:Name="lblStartFrom"/>
+            <Label Text="From" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"  VerticalOptions="Center"  x:Name="lblStartFrom"/>
             <!--<Entry x:Name="startLocation"  BackgroundColor="LightYellow" Grid.Row="3" Grid.Column="1" HorizontalOptions="Fill" WidthRequest="150" HorizontalTextAlignment="Center"/>-->
             <autocomplete:SfAutoComplete x:Name="startLocation" HeightRequest="40" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
-                                     AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1" WidthRequest="150" BackgroundColor="LightYellow"/>
+                                     AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1" WidthRequest="150" BackgroundColor="LightYellow"  />
         </Grid>
 
         <Grid  x:Name="endLogEntry" RowSpacing="5" ColumnSpacing="0" IsVisible="False">
@@ -40,15 +40,15 @@
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Label Text="End" FontAttributes="Bold" TextColor="Red" Grid.Row="0" Grid.Column="0"  HorizontalTextAlignment="Center" VerticalOptions="Center"  x:Name="lblEnd"/>
-            <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" x:Name="lblEndDateTime"/>
+            <Label Text="End" FontAttributes="Bold" TextColor="Red" Grid.Row="0" Grid.Column="0"   VerticalOptions="Center"  x:Name="lblEnd"/>
+            <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"  VerticalOptions="Center" x:Name="lblEndDateTime"/>
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                 <DatePicker x:Name="endDate" HorizontalOptions="Fill" WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow"/>
-                <TimePicker x:Name="endTime" HorizontalOptions="Fill" WidthRequest="130" Format="HH:mm" BackgroundColor="LightYellow"/>
+                <TimePicker x:Name="endTime" HorizontalOptions="Fill" WidthRequest="100" Format="HH:mm" BackgroundColor="LightYellow"/>
             </StackLayout>
-             <Label Text="Odometer" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center"  WidthRequest="150" x:Name="lblEndOdometer"/>
+             <Label Text="Odometer" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"  VerticalOptions="Center"  WidthRequest="150" x:Name="lblEndOdometer"/>
             <Entry x:Name="endOdometer" BackgroundColor="LightYellow" Placeholder="Maximum 6 digit" Grid.Row="2" Grid.Column="1" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextChanged="endMeter"/>
-            <Label Text="Purpose" FontAttributes="Bold" Grid.Row="3" Grid.Column="0" HorizontalTextAlignment="Center" VerticalOptions="Center" x:Name="lblEndLocation"/>
+            <Label Text="Purpose" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"  VerticalOptions="Center" x:Name="lblEndLocation"/>
             <autocomplete:SfAutoComplete x:Name="endLocation" HeightRequest="40" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
                                       AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1"  WidthRequest="150" BackgroundColor="LightYellow"/> 
         </Grid>

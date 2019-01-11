@@ -173,24 +173,31 @@ namespace ASolute_Mobile
 
         public async void selectLog(object sender, ItemTappedEventArgs e)
         {
-            string logId = ((Log)e.Item).logId;
-            //&& logDate.Date.ToString("dd-MMMM-yyyy") == DateTime.Now.Date.ToString("dd-MMMM-yyyy")
-            if (logId != "" )
+            try
             {
-                try
+                string logId = ((Log)e.Item).logId;
+                //&& logDate.Date.ToString("dd-MMMM-yyyy") == DateTime.Now.Date.ToString("dd-MMMM-yyyy")
+                if (logId != "")
                 {
-                    LogEntry existLog = new LogEntry(logId);
-                    existLog.previousPage = this;
-                    await Navigation.PushAsync(existLog); 
+                    try
+                    {
+                        LogEntry existLog = new LogEntry(logId);
+                        existLog.previousPage = this;
+                        await Navigation.PushAsync(existLog);
+                    }
+                    catch (Exception exception)
+                    {
+                        await DisplayAlert("Error", exception.Message, "Ok");
+                    }
                 }
-                catch(Exception exception)
+                else
                 {
-                    await DisplayAlert("Error", exception.Message, "Ok");
-                }                              
+                    return;
+                }
             }
-            else
+            catch
             {
-                return;
+
             }
            
         }
@@ -203,6 +210,8 @@ namespace ASolute_Mobile
             logHistory.HasUnevenRows = true;
             logHistory.Style = (Style)App.Current.Resources["recordListStyle"];         
             logHistory.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+
+          
         }
 
     }
