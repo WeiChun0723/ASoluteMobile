@@ -4,13 +4,13 @@
              x:Class="ASolute_Mobile.WMS_Screen.TallyInPalletEntry"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
-             BackgroundColor="#e8e5e5"
-             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation">
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
+             BackgroundColor="#E5E5E5">
     
     <ScrollView>
         
-        <StackLayout Padding="15,15,15,15" Spacing="45">
-            <Label x:Name="palletDesc" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+        <StackLayout Padding="15,15,15,15" Spacing="30">
+            <StackLayout x:Name="palletDesc" BackgroundColor="#D4D4D4" ></StackLayout>
             
              <Grid RowSpacing="15" ColumnSpacing="0" >
             <Grid.RowDefinitions>

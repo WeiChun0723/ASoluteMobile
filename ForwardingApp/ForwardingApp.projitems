@@ -187,6 +187,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\Picking.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -238,10 +250,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)FleetScreen\LogHistory.xaml.cs">
       <DependentUpon>LogHistory.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MainMenu.xaml.cs">
-      <DependentUpon>MainMenu.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\ListObject.cs" />
@@ -426,6 +434,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml.cs">
       <DependentUpon>PalletMovement.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\testing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\Picking.xaml.cs">
+      <DependentUpon>Picking.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingDetail.xaml.cs">
+      <DependentUpon>PickingDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingEntry.xaml.cs">
+      <DependentUpon>PickingEntry.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -441,12 +459,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)WMS_Screen\" />
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\" />
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogHistory.xaml">

@@ -36,7 +36,6 @@ namespace ASolute_Mobile
             listView.ItemTapped += async (sender, e) =>
             {
                 loading.IsVisible = true;
-                loading.IsRunning = true;
 
                 string menuAction = ((AppMenu)e.Item).menuId;
 
@@ -115,10 +114,14 @@ namespace ASolute_Mobile
                     case "PalletTrx" :
                         await Navigation.PushAsync(new WMS_Screen.PalletMovement(((AppMenu)e.Item).name));
                         break;
+                    case "Picking" :
+                        await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new WMS_Screen.testing(((AppMenu)e.Item).name));
+                        break;
                 }
 
                 loading.IsVisible = false;
-                loading.IsRunning = false;
+
                 listView.SelectedItem = null;
             };
 
@@ -307,7 +310,7 @@ namespace ASolute_Mobile
 
         public async void GetMainMenu()
         {
-            loading.IsRunning = true;
+           
             loading.IsVisible = true;
 
             OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
@@ -482,7 +485,7 @@ namespace ASolute_Mobile
         // load the item that stored in db to the list view by using custom view cell
         public void LoadMainMenu()
         {
-            loading.IsRunning = false;
+
             loading.IsVisible = false;
 
             Ultis.Settings.ListType = "Main_Menu";

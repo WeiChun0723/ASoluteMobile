@@ -793,7 +793,7 @@ namespace ASolute_Mobile
                         eventID = recordImage.id;
                     }
 
-                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID));
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID));
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                  

@@ -16,7 +16,7 @@ namespace ASolute_Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CheckList : ContentPage
     {
-        public MainMenu previousPage;
+
         string chkid;
         
         List<clsKeyValue> checkingList = new List<clsKeyValue>();

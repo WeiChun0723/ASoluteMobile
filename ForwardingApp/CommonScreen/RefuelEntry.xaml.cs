@@ -183,7 +183,7 @@ namespace ASolute_Mobile
                                     App.Database.SaveRecordAsync(refuel_Data);
                                     //await BackgroundTask.UploadLatestRecord(this);
 
-                                    var content = await CommonFunction.CallWebService("POST", refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
+                                    var content = await CommonFunction.CallWebService(1, refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                     if(response.IsGood)
@@ -606,7 +606,7 @@ namespace ASolute_Mobile
                     image.Content = scaledImageByte;
                     image.FileName = recordImage.photoFileName;
 
-                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
 

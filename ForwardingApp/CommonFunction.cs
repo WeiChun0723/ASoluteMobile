@@ -61,19 +61,20 @@ namespace ASolute_Mobile.Utils
             return reply;
         }
 
-        public static async Task<string> CallWebService(string method,object data, string baseAdd, string calllUri)
+        //Get = 0 , Post = 1
+        public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(baseAdd);
             var uri = calllUri;
             var reply_content = "";
 
-            if (method.Equals("Get"))
+            if (method == 0)
             {
                 var response = await client.GetAsync(uri);
                 reply_content = await response.Content.ReadAsStringAsync();
             }
-            else
+            else if(method == 1)
             {
                 var objectContent = JsonConvert.SerializeObject(data);
                 var httpContent = new StringContent(objectContent, Encoding.UTF8, "application/json");

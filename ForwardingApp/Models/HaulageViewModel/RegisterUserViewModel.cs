@@ -139,7 +139,7 @@ namespace ASolute_Mobile.Models.HaulageViewModel
         {
             try
             {
-                clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService("Get", null, Ultis.Settings.SessionBaseURI,
+                clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI,
                                                                                        ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword)));
 
 
@@ -204,7 +204,7 @@ namespace ASolute_Mobile.Models.HaulageViewModel
 
                     if (login_user.GetLogo || !File.Exists(Ultis.Settings.GetAppLogoFileLocation(UserID)))
                     {
-                        clsResponse logo_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService("Get", null, Ultis.Settings.SessionBaseURI,
+                        clsResponse logo_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI,
                                                                                        ControllerUtil.getDownloadLogoURL()));
 
 

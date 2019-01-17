@@ -19,7 +19,7 @@ namespace ASolute_Mobile
 	
 	public partial class RefuelHistory : ContentPage
 	{
-        public MainMenu previousPage;
+
            
         public RefuelHistory (string title)
 		{

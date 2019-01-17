@@ -21,7 +21,7 @@ namespace ASolute_Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LogHistory : ContentPage
 	{
-        public MainMenu previousPage;
+
         public string date;
         public LogHistory ()
 		{

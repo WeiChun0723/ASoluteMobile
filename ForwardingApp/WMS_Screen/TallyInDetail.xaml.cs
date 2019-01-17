@@ -16,7 +16,7 @@ namespace ASolute_Mobile.WMS_Screen
 {
     public partial class TallyInDetail : ContentPage
     {
-        clsWhsCommon tallyInDetail;
+        clsWhsHeader tallyInDetail;
         double imageWidth;
         List<AppImage> images = new List<AppImage>();
         string id;
@@ -27,7 +27,6 @@ namespace ASolute_Mobile.WMS_Screen
 
             id = tallyInID;
         
-
             imageGrid.RowSpacing = 0;
             imageGrid.ColumnSpacing = 0;
             imageWidth = App.DisplayScreenWidth / 3;
@@ -49,17 +48,45 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetTallyInDetail()
         {
+            tallyInDesc.Children.Clear();
+
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyInDetail(id));
             clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyIn_response.IsGood)
             {
-                tallyInDetail = JObject.Parse(content)["Result"].ToObject<clsWhsCommon>();
+                tallyInDetail = JObject.Parse(content)["Result"].ToObject<clsWhsHeader>();
 
-                Title = "Tally In # " + tallyInDetail.DocumentNo;
 
-                asn.Text = tallyInDetail.ContainerId;
-                equipment.Text = tallyInDetail.ContainerNo;
+                Label topBlank = new Label();
+                tallyInDesc.Children.Add(topBlank);
+
+                foreach (clsCaptionValue desc in tallyInDetail.Summary)
+                {
+                    Label caption = new Label();
+
+
+                    if (desc.Caption.Equals(""))
+                    {
+                        caption.Text = "      " + desc.Value;
+                        caption.FontAttributes = FontAttributes.Bold;
+                    }
+                    else
+                    {
+                        caption.Text = "      " + desc.Caption + ": " + desc.Value;
+                    }
+
+                    if (desc.Caption.Equals(""))
+                    {
+
+                        Title = "Picking # " + desc.Value;
+                    }
+
+                    tallyInDesc.Children.Add(caption);
+                }
+
+                Label bottomBlank = new Label();
+                tallyInDesc.Children.Add(bottomBlank);
 
                 dataGrid.ItemsSource = tallyInDetail.Items;
 
@@ -74,12 +101,12 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void Handle_GridTapped(object sender, Syncfusion.SfDataGrid.XForms.GridTappedEventArgs e)
         {
-            clsWhsSummary product = new clsWhsSummary();
-            product = ((clsWhsSummary)e.RowData);
+            clsWhsItem product = new clsWhsItem();
+            product = ((clsWhsItem)e.RowData);
 
             if (product != null)
             {
-                await Navigation.PushAsync(new TallyInPalletEntry(product, id, tallyInDetail.DocumentNo));
+                await Navigation.PushAsync(new TallyInPalletEntry(product, id));
             }
         }
 

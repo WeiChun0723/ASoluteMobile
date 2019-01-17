@@ -110,7 +110,7 @@ namespace ASolute_Mobile.TransportScreen
             listView.ItemsSource = records;
             listView.HasUnevenRows = true;
 
-            loading.IsRunning = false;
+
             loading.IsVisible = false;
             loading.IsEnabled = false;
 

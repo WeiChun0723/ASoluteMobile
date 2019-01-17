@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Syncfusion.SfBusyIndicator.XForms;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -8,8 +8,9 @@ namespace ASolute_Mobile
     {
         public ListView listView = new ListView();
         public Image image, scanBarCode;
-        public ActivityIndicator loading ;
-        public Label label = new Label();
+        //public Label label = new Label();
+        public SfBusyIndicator loading;
+     
 
         public ListViewCommonScreen()
         {
@@ -29,11 +30,11 @@ namespace ASolute_Mobile
                 IsVisible = false
             };
 
-            loading = new ActivityIndicator
+            loading = new SfBusyIndicator
             {
                 IsVisible = true,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                IsRunning = true
+
             };
 
             StackLayout mainLayout = new StackLayout
@@ -41,16 +42,17 @@ namespace ASolute_Mobile
                 Padding = new Thickness(15,15,15,15)
             };
 
-            StackLayout frameLayout = new StackLayout();
+            listView.IsPullToRefreshEnabled = true;
+            listView.SeparatorColor = Color.White;
+            /*StackLayout frameLayout = new StackLayout();
+            frameLayout.SetBinding(BackgroundColorProperty, "background");
 
             label.FontAttributes = FontAttributes.Bold;
             label.SetBinding(Label.TextProperty, "summary");
 
             frameLayout.Children.Add(label);
-            frameLayout.SetBinding(BackgroundColorProperty, "BackColor");
 
-            listView.IsPullToRefreshEnabled = true;
-            listView.SeparatorColor = Color.White;
+
             listView.ItemTemplate = new DataTemplate(() =>
             {
                 ViewCell viewCell = new ViewCell();
@@ -62,16 +64,15 @@ namespace ASolute_Mobile
                     Margin = 5,
                 };
 
-                frame.SetBinding(BackgroundColorProperty, "BackColor");
-
+                frame.SetBinding(BackgroundColorProperty, "background");
                 viewCell.View = frame;
 
                 return viewCell;
-            });
-            
+            });*/
+
+            mainLayout.Children.Add(loading);
             mainLayout.Children.Add(image);
             mainLayout.Children.Add(listView);
-            mainLayout.Children.Add(loading);
             mainLayout.Children.Add(scanBarCode);
 
 

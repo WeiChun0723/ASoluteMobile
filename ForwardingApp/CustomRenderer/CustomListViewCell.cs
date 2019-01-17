@@ -200,8 +200,8 @@ namespace ASolute_Mobile
                     this.ContextActions.Add(menuItem);
                 }
  
-                View = new Frame
-                {
+                 View = new Frame
+                 {
                     Content = cellWrapper,
                     HasShadow = true,
                     Margin = 5

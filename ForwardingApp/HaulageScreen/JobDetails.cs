@@ -1270,7 +1270,7 @@ namespace ASolute_Mobile
         {
             print.IsVisible = true;
 
-            var content = await CommonFunction.CallWebService("Get",null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNote(currentJobId));
+            var content = await CommonFunction.CallWebService(0,null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNote(currentJobId));
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(response.IsGood)

@@ -23,7 +23,7 @@ namespace ASolute_Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FutileTrip_CargoReturn : ContentPage
 	{
-        public MainMenu menuPreviousPage;
+
         //public JobDetails jobPreviousPage;
         public string uploadUri = "";
         List<AppImage> images = new List<AppImage>();

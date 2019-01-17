@@ -13,6 +13,7 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class PalletMovement : ContentPage
     {
         string fieldName;
+        clsPalletTrx pallet;
 
         public PalletMovement(string screenTitle)
         {
@@ -23,8 +24,9 @@ namespace ASolute_Mobile.WMS_Screen
 
         void PalletIDScan(object sender, EventArgs e)
         {
-            fieldName = "PalletIDScan";
-            BarCodeScan(fieldName);
+            GetPalletTrx(pdEntry.Text);
+            //fieldName = "PalletIDScan";
+            //BarCodeScan(fieldName);
         }
 
         void ConfirmScan(object sender, EventArgs e)
@@ -33,9 +35,54 @@ namespace ASolute_Mobile.WMS_Screen
             BarCodeScan(fieldName);
         }
 
-        void ConfirmAddPallet(object sender, EventArgs e)
+        void PickUpPallet(object sender, System.EventArgs e)
         {
-           GetPalletTrx(pdEntry.Text);
+            PalletUpdate();
+        }
+
+        void DropUpPallet(object sender, EventArgs e)
+        {
+
+            PalletUpdate();
+        }
+
+        async void PalletUpdate()
+        {
+            loading.IsVisible = true;
+            try
+            {
+                if (!(String.IsNullOrEmpty(pdEntry.Text)))
+                {
+                    pallet.NewLocation = !(String.IsNullOrEmpty(confirmEntry.Text)) ? confirmEntry.Text : "";
+                    if (!(String.IsNullOrEmpty(checkDigitEntry.Text)))
+                    {
+                        pallet.CheckDigit = Convert.ToInt32(checkDigitEntry.Text);
+                    }
+
+                    var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrx());
+                    clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (update_response.IsGood)
+                    {
+                        await DisplayAlert("Success", "Putaway updated.", "OK");
+                    }
+                    else
+                    {
+
+                        await DisplayAlert("Error", update_response.Message, "OK");
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Missing field", "Please key in all mandatory field.", "OK");
+                }
+
+                loading.IsVisible = false;
+            }
+            catch(Exception e)
+            {
+                await DisplayAlert("Error", e.Message, "OK");
+            }
         }
 
         async void BarCodeScan(string field)
@@ -72,56 +119,72 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetPalletTrx(string palletID)
         {
+            loading.IsVisible = true;
             try
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getNewPalletTrx(palletID));
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiry(palletID));
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(newPallet_response.IsGood)
                 {
-                    clsPalletTrx pallet = JObject.Parse(content)["Result"].ToObject<clsPalletTrx>();
+                    pallet = JObject.Parse(content)["Result"].ToObject<clsPalletTrx>();
 
-                    if(String.IsNullOrEmpty(pallet.NewLocation))
+                    palletDesc.IsVisible = true;
+                    Title = "Putaway";
+
+                    if(pallet.Action.Equals("Pickup"))
                     {
-                        //palletDesc.IsVisible = false;
-                        confirm_icon.IsVisible = false;
-                        //reasonBox.IsVisible = false;
-                        suggestView.IsVisible = false;
-                        confirmView.IsVisible = false;
-                        checkDigitView.IsVisible = false;
+                        btnPickUp.IsVisible = true;
+                    }
+                    else if (pallet.Action.Equals("Dropoff"))
+                    {
+                        if(!String.IsNullOrEmpty(pallet.NewLocation))
+                        {
+                            btnDropOff.IsVisible = true;
+                            suggestView.IsVisible = true;
+                            confirmView.IsVisible = true;
+                            checkDigitView.IsVisible = true;
+                            suggestedEntry.Text = pallet.NewLocation;
+                        } 
                     }
 
+                    palletDesc.Children.Clear();
 
-                    suggestedEntry.Text = pallet.OldLocation;
-
-                    string palletDesciptions = "";
-                    int count = 0;
-                    foreach(clsCaptionValue desc in pallet.Summary)
+                    Label blank = new Label
                     {
-                        count++;
+                        Text = ""
+                    };
+                    palletDesc.Children.Add(blank);
+                    foreach (clsCaptionValue desc in pallet.Summary)
+                    {
                         if(desc.Caption != "")
                         {
-                            if(count == pallet.Summary.Count)
+                            Label caption = new Label
                             {
-                                palletDesciptions += "\r\n" + "      " + desc.Caption + " : " + desc.Value + "\r\n";
-                            }
-                            else
-                            {
-                                palletDesciptions += "\r\n" + "      " + desc.Caption + " : " + desc.Value;
-                            }
+                                FontSize = 13,
+                                FontAttributes = FontAttributes.Bold,
 
+                                
+                            };
+
+                            caption.Text =  "      " + desc.Caption + ": " + desc.Value;
+                        
+                            palletDesc.Children.Add(caption);
                         }
-
-
                     }
+                    Label btmblank = new Label
+                    {
+                        Text = ""
+                    };
+                    palletDesc.Children.Add(btmblank);
 
-                    palletDesc.Text = palletDesciptions;
                 }
                 else
                 {
                     await DisplayAlert("Error", newPallet_response.Message, "OK");
                 }
 
+                loading.IsVisible = false;
             }
             catch
             {

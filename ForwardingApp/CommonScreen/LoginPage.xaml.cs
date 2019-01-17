@@ -50,7 +50,7 @@ namespace ASolute_Mobile
             }
             else if (Ultis.Settings.App.Equals("Haulage"))
             {
-                AppLabel.Text = "AILS WMS";
+                AppLabel.Text = "ASOLUTE FLEET";
                 //equipmentEntry.IsVisible = false;
                // eqPicker.IsVisible = false;
             }
@@ -154,7 +154,7 @@ namespace ASolute_Mobile
                 try
                 {
                     var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
-                    //var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                   // var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                     clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)

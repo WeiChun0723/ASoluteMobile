@@ -79,8 +79,8 @@
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout>
             
-        <!--<StackLayout Orientation="Horizontal" >  
-            <inputLayout:SfTextInputLayout Hint="Equipment"                             
+       <!--  <StackLayout Orientation="Horizontal" >  
+           <inputLayout:SfTextInputLayout Hint="Equipment"                             
           ContainerBackgroundColor="#8b0000"
           FocusedColor="Black"
           EnableHintAnimation="true"  
@@ -94,8 +94,8 @@
                 Source="logintruck">     
             </Image>
         </inputLayout:SfTextInputLayout.LeadingView>
-        </inputLayout:SfTextInputLayout>-->
-           <!-- <controls:CustomPicker HorizontalOptions="End"
+        </inputLayout:SfTextInputLayout>
+            <controls:CustomPicker HorizontalOptions="End"
                      HeightRequest="40"
                      Image="ic_arrow_drop_down" x:Name="eqPicker" SelectedIndexChanged="eqSelected">
             </controls:CustomPicker>

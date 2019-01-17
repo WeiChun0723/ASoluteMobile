@@ -12,14 +12,14 @@ namespace ASolute_Mobile.WMS_Screen
 {
     public partial class TallyInPalletEntry : ContentPage
     {
-        clsWhsSummary productPallet = new clsWhsSummary();
+        clsWhsItem productPallet = new clsWhsItem();
         string id,fieldName;
         clsPalletNew palletList;
         List<string> size = new List<string>();
         List<string> unit = new List<string>();
         List<string> status = new List<string>();
 
-        public TallyInPalletEntry(clsWhsSummary product, string tallyInID, string screenTitle)
+        public TallyInPalletEntry(clsWhsItem product, string tallyInID)
         {
             InitializeComponent();
 
@@ -27,17 +27,42 @@ namespace ASolute_Mobile.WMS_Screen
 
             productPallet = product;
 
-            Title = "Tally In # " + screenTitle;
+            Title = "Tally In # " + product.ProductCode;
 
             datePicker.MinimumDate = DateTime.Now;
 
+            palletDesc.Children.Clear();
+
+            Label topBlank = new Label();
+            palletDesc.Children.Add(topBlank);
+
+            string[] descs = (product.Description.Replace("\r\n", "t")).Split('t');
+
+            foreach(string desc in descs)
+            {
+                Label caption = new Label();
+
+
+                if (desc.Equals(""))
+                {
+                    caption.Text = "      " + desc;
+                    caption.FontAttributes = FontAttributes.Bold;
+                }
+                else
+                {
+                    caption.Text = "      " + desc ;
+                }
+
+                palletDesc.Children.Add(caption);
+            }
+
+            Label bottomBlank = new Label();
+            palletDesc.Children.Add(bottomBlank);
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            palletDesc.Text = productPallet.Description;
 
             GetNewPalletList();
         }

@@ -20,7 +20,7 @@ namespace ASolute_Mobile
 	public partial class EquipmentInquiry : ContentPage
 	{
         clsResponse newEqResponse = new clsResponse();
-        public MainMenu previousPage;
+
         public EquipmentInquiry ()
 		{
 			InitializeComponent ();

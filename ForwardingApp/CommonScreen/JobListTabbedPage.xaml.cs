@@ -8,7 +8,6 @@ namespace ASolute_Mobile
 	public partial class JobListTabbedPage : TabbedPage
 	{
         public static bool fromJobDetailPage = false;
-        public MainMenu previousPage;
 
         public JobListTabbedPage ()
 		{

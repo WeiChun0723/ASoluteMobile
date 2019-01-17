@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ASolute.Mobile.Models;
-using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
@@ -13,31 +12,24 @@ using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.WMS_Screen
 {
-    public partial class TallyInList : ContentPage
+    public partial class Picking : ContentPage
     {
-
-        List<clsDataRow> tallyInList;
+        List<clsDataRow> picking;
         ObservableCollection<AppMenu> records = new ObservableCollection<AppMenu>();
 
-        public TallyInList(string title)
+        public Picking(string screenTitle)
         {
             InitializeComponent();
 
-            Title = title;
-    
+            Title = screenTitle;
+
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            loading.IsVisible = true;
-
-            records.Clear();
-
-            GetTallyInList();
-
-            
+            GetPickingList();
         }
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
@@ -45,25 +37,21 @@ namespace ASolute_Mobile.WMS_Screen
             try
             {
                 string searchKey = e.NewTextValue.ToUpper();
-              
+
                 if (string.IsNullOrEmpty(searchKey))
                 {
-                    //dataGrid.AutoExpandGroups = false;
-                    //dataGrid.ItemsSource = tallyInList;
-                    tallyList.ItemsSource = records;
+                   
+                    pickingList.ItemsSource = records;
                 }
 
                 else
                 {
                     try
                     {
-                        // dataGrid.AutoExpandGroups = true;
-
-                        // dataGrid.ItemsSource = tallyInList.Where(x => x.DocumentNo.Contains(searchKey) || x.ContainerNo.Contains(searchKey) || x.Principal.Contains(searchKey));
-
-                        tallyList.ItemsSource = records.Where(x => x.name.Contains(searchKey) || x.booking.Contains(searchKey) || x.customerRef.Contains(searchKey));
+                      
+                        pickingList.ItemsSource = records.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
                     }
-                    catch(Exception error)
+                    catch (Exception error)
                     {
                         await DisplayAlert("Error", error.Message, "OK");
                     }
@@ -76,22 +64,25 @@ namespace ASolute_Mobile.WMS_Screen
 
         }
 
-        public async void GetTallyInList()
+        public async void GetPickingList()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyInList());
+            loading.IsVisible = true;
+            records.Clear();
+
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPickingList());
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
             {
-                tallyInList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
+                picking = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                foreach(clsDataRow data in tallyInList)
+                foreach (clsDataRow data in picking)
                 {
                     string summary = "";
                     AppMenu record = new AppMenu
                     {
                         menuId = data.Id
-                       
+
                     };
 
                     if (!(String.IsNullOrEmpty(data.BackColor)))
@@ -111,41 +102,31 @@ namespace ASolute_Mobile.WMS_Screen
 
                         if (!(String.IsNullOrEmpty(summaryItem.Caption)))
                         {
-                            if(count == data.Summary.Count)
+
+
+                            if (count == data.Summary.Count)
                             {
                                 summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine;
                             }
                             else
                             {
-                                summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
+                                summary +=  summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
                             }
 
                         }
-                     
-                        if(summaryItem.Caption.Equals(""))
-                        {
-                            record.name = summaryItem.Value;
-                        }
 
-                        else if (summaryItem.Caption.Equals("Equipment"))
+                        if (summaryItem.Caption.Equals(""))
                         {
-                            record.booking = summaryItem.Value;
+                            record.name =  summaryItem.Value;
                         }
-
-                        else if (summaryItem.Caption.Equals("Principal"))
-                        {
-                            record.customerRef = summaryItem.Value;
-                        }
-
-                       
 
                     }
 
                     record.summary = summary;
                     records.Add(record);
                 }
-                loading.IsVisible = false;
-                loadTallyInList();
+
+                loadPickingList();
             }
             else
             {
@@ -153,24 +134,6 @@ namespace ASolute_Mobile.WMS_Screen
             }
 
 
-        }
-
-        public void loadTallyInList()
-        {
-            tallyList.ItemsSource = records;
-            tallyList.HasUnevenRows = true;
-
-            if (records.Count == 0)
-            {
-
-                noData.IsVisible = true;
-
-            }
-            else
-            {
-
-                noData.IsVisible = false;
-            }
         }
 
         public async void BarCodeScan(object sender, EventArgs e)
@@ -188,24 +151,6 @@ namespace ASolute_Mobile.WMS_Screen
 
                         filterText.Text = result.Text;
 
-                        /*string recordID = "";
-                        foreach(clsWhsCommon tallyIn in tallyInList)
-                        {
-                            if(tallyIn.DocumentNo.Equals(result.Text))
-                            {
-                                recordID = tallyIn.Id;
-                            }
-                        }
-
-                        if(recordID != "")
-                        {
-                            await Navigation.PushAsync(new TallyInDetail(recordID));
-                        }
-                        else
-                        {
-                            await DisplayAlert("Not found", "No such id.", "OK");
-                        }*/
-
                     });
                 };
             }
@@ -215,13 +160,30 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
+        void loadPickingList()
+        {
+            pickingList.ItemsSource = records;
+            pickingList.HasUnevenRows = true;
 
+            if (records.Count == 0)
+            {
 
-        public async void selectTallyIn(object sender, ItemTappedEventArgs e)
+                noData.IsVisible = true;
+
+            }
+            else
+            {
+
+                noData.IsVisible = false;
+            }
+            loading.IsVisible = false;
+        }
+
+        public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
- 
+            await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, ((AppMenu)e.Item).summary, ((AppMenu)e.Item).name));
+
         }
 
         void Handle_Pulling(object sender, Syncfusion.SfPullToRefresh.XForms.PullingEventArgs args)
@@ -232,9 +194,11 @@ namespace ASolute_Mobile.WMS_Screen
 
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
-            GetTallyInList();
+            GetPickingList();
             pullToRefresh.IsRefreshing = false;
         }
+
+
 
         void Handle_Refreshed(object sender, System.EventArgs e)
         {

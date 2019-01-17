@@ -255,10 +255,31 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/TallyIn/AddPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
         }
 
-        public static String getNewPalletTrx(string palletID)
+        public static String getPalletInquiry(string palletID)
         {
             return String.Format("Wms/Pallet/Get?SessionId={0}&GeoLoc={1}&PalletId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), palletID);
         }
+
+        public static String postNewPalletTrx()
+        {
+            return String.Format("Wms/Pallet/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getPickingList()
+        {
+            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadPickingDetail(string pickingID)
+        {
+            return String.Format("Wms/Picking/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),pickingID);
+        }
+
+        public static String postPickingDetail()
+        {
+            return String.Format("Wms/Picking/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
 
         #endregion
 

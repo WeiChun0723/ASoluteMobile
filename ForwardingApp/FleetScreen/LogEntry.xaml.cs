@@ -292,13 +292,12 @@ namespace ASolute_Mobile
 
         async void UpdateLogBook(clsTrip data)
         {
-            var content = await CommonFunction.CallWebService("POST", data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
+            var content = await CommonFunction.CallWebService(1, data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (response.IsGood)
             {
-               
-               
+
                 if (endLogEntry.IsVisible == false)
                 {
                     endLogEntry.IsVisible = true;
@@ -406,7 +405,7 @@ namespace ASolute_Mobile
                     image.Content = scaledImageByte;
                     image.FileName = recordImage.photoFileName;
 
-                    var content = await CommonFunction.CallWebService("POST", image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageLinkID));
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageLinkID));
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     recordImage.Uploaded = true;
