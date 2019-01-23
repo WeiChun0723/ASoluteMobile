@@ -90,21 +90,31 @@
                 ContainerBackgroundColor="LightYellow"
                 FocusedColor="Black" HorizontalOptions="FillAndExpand"
                 TrailingViewPosition="Inside"
-               >   
+                LeadingViewPosition="Inside"
+                MinimumHeightRequest="50">   
                 
-            <Entry x:Name="pdEntry" > 
+            <Entry x:Name="pdEntry" TextChanged="PdEntry_TextChanged"> 
             <Entry.Behaviors>
-                    <local:MaxLengthValidation MaxLength="30"/>
+                    <local:MaxLengthValidation MaxLength="30" />
                 </Entry.Behaviors>        
             </Entry>
          
-            <inputLayout:SfTextInputLayout.TrailingView >
-                      <Image Source="barCode.png" HeightRequest="100" VerticalOptions="Center">
+            <inputLayout:SfTextInputLayout.LeadingView >
+                      <Image Source="barCode.png" HeightRequest="100" VerticalOptions="Center" >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="PalletIDScan"/>
                         </Image.GestureRecognizers>
                      </Image>    
-            </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout.LeadingView>
+                
+            <inputLayout:SfTextInputLayout.TrailingView >
+                      <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="pdCancel">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ClearPdEntry"/>
+                        </Image.GestureRecognizers>
+                     </Image>    
+            </inputLayout:SfTextInputLayout.TrailingView>    
+                
             </inputLayout:SfTextInputLayout>
             
             
@@ -124,7 +134,7 @@
                 FocusedColor="Black" HorizontalOptions="FillAndExpand"
                 TrailingViewPosition="Inside" x:Name="confirmView" IsVisible="false" >   
                 
-            <Entry x:Name="confirmEntry">
+            <Entry x:Name="confirmEntry" TextChanged="ConfirmEntry_TextChanged">
                      <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="30"/>
                 </Entry.Behaviors>      
@@ -136,6 +146,14 @@
                         </Image.GestureRecognizers>
                      </Image>
             </inputLayout:SfTextInputLayout.TrailingView>
+                
+           <inputLayout:SfTextInputLayout.LeadingView >
+                      <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="confirmCancel">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ClearConfirmEntry"/>
+                        </Image.GestureRecognizers>
+                     </Image>    
+            </inputLayout:SfTextInputLayout.LeadingView>    
             </inputLayout:SfTextInputLayout>
                 
             

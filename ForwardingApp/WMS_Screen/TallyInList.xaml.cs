@@ -17,7 +17,7 @@ namespace ASolute_Mobile.WMS_Screen
     {
 
         List<clsDataRow> tallyInList;
-        ObservableCollection<AppMenu> records = new ObservableCollection<AppMenu>();
+        ObservableCollection<AppMenu> Item;
 
         public TallyInList(string title)
         {
@@ -33,7 +33,7 @@ namespace ASolute_Mobile.WMS_Screen
 
             loading.IsVisible = true;
 
-            records.Clear();
+          
 
             GetTallyInList();
 
@@ -50,7 +50,7 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     //dataGrid.AutoExpandGroups = false;
                     //dataGrid.ItemsSource = tallyInList;
-                    tallyList.ItemsSource = records;
+                    tallyList.ItemsSource = Item;
                 }
 
                 else
@@ -61,7 +61,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                         // dataGrid.ItemsSource = tallyInList.Where(x => x.DocumentNo.Contains(searchKey) || x.ContainerNo.Contains(searchKey) || x.Principal.Contains(searchKey));
 
-                        tallyList.ItemsSource = records.Where(x => x.name.Contains(searchKey) || x.booking.Contains(searchKey) || x.customerRef.Contains(searchKey));
+                        tallyList.ItemsSource = Item.Where(x => x.name.Contains(searchKey) || x.booking.Contains(searchKey) || x.customerRef.Contains(searchKey));
                     }
                     catch(Exception error)
                     {
@@ -78,6 +78,8 @@ namespace ASolute_Mobile.WMS_Screen
 
         public async void GetTallyInList()
         {
+            loading.IsVisible = true;
+
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyInList());
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -85,64 +87,62 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 tallyInList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                foreach(clsDataRow data in tallyInList)
+                App.Database.deleteMainMenuItem("TallyInList");
+                App.Database.deleteMenuItems("TallyInList");
+                foreach (clsDataRow data in tallyInList)
                 {
-                    string summary = "";
-                    AppMenu record = new AppMenu
-                    {
-                        menuId = data.Id
-                       
-                    };
-
-                    if (!(String.IsNullOrEmpty(data.BackColor)))
-                    {
-                        record.background = data.BackColor;
-                    }
-                    else
-                    {
-                        record.background = "#ffffff";
-                    }
-
-                    int count = 0;
-                    foreach (clsCaptionValue summaryItem in data.Summary)
-                    {
-
-                        count++;
-
-                        if (!(String.IsNullOrEmpty(summaryItem.Caption)))
+                        AppMenu record = new AppMenu
                         {
-                            if(count == data.Summary.Count)
+                            menuId = data.Id,
+                            background = data.BackColor,
+                            category = "TallyInList"
+                        };
+
+                        string summary = "";
+
+                        int count = 0;
+                        foreach (clsCaptionValue summaryItem in data.Summary)
+                        {
+
+                            count++;
+
+                            if (!(String.IsNullOrEmpty(summaryItem.Caption)))
                             {
-                                summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine;
-                            }
-                            else
-                            {
-                                summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
+                                if (count == data.Summary.Count)
+                                {
+                                    summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine;
+                                }
+                                else
+                                {
+                                    summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
+                                }
+
                             }
 
+                            if (summaryItem.Caption.Equals(""))
+                            {
+                                record.name = summaryItem.Value;
+                            }
+
                         }
-                     
-                        if(summaryItem.Caption.Equals(""))
+
+                        record.summary = summary;
+
+                        App.Database.SaveMenuAsync(record);
+
+                        foreach (clsCaptionValue summaryList in data.Summary)
                         {
-                            record.name = summaryItem.Value;
+                            SummaryItems summaryItem = new SummaryItems();
+
+                            summaryItem.Id = data.Id;
+                            summaryItem.Caption = summaryList.Caption;
+                            summaryItem.Value = summaryList.Value;
+                            summaryItem.Display = summaryList.Display;
+                            summaryItem.Type = "TallyInList";
+                            summaryItem.BackColor = data.BackColor;
+                            App.Database.SaveSummarysAsync(summaryItem);
+
                         }
-
-                        else if (summaryItem.Caption.Equals("Equipment"))
-                        {
-                            record.booking = summaryItem.Value;
-                        }
-
-                        else if (summaryItem.Caption.Equals("Principal"))
-                        {
-                            record.customerRef = summaryItem.Value;
-                        }
-
-                       
-
-                    }
-
-                    record.summary = summary;
-                    records.Add(record);
                 }
                 loading.IsVisible = false;
                 loadTallyInList();
@@ -157,10 +157,14 @@ namespace ASolute_Mobile.WMS_Screen
 
         public void loadTallyInList()
         {
-            tallyList.ItemsSource = records;
+            Ultis.Settings.ListType = "TallyIn_List";
+            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("TallyInList"));
+            tallyList.ItemsSource = Item;
             tallyList.HasUnevenRows = true;
+            tallyList.Style = (Style)App.Current.Resources["recordListStyle"];
+            tallyList.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-            if (records.Count == 0)
+            if (Item.Count == 0)
             {
 
                 noData.IsVisible = true;

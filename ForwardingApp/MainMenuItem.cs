@@ -27,10 +27,8 @@ namespace ASolute_Mobile
         string chklocation = "0";
         string firebaseID = "firebase";
 
-
         public MainMenuItem()
         {
-           
             Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
 
             listView.ItemTapped += async (sender, e) =>
@@ -116,7 +114,12 @@ namespace ASolute_Mobile
                         break;
                     case "Picking" :
                         await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name));
-                        //await Navigation.PushAsync(new WMS_Screen.testing(((AppMenu)e.Item).name));
+                        break;
+                    case "Packing" :
+                        await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
+                        break;
+                    case "TallyOut":
+                        await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
                         break;
                 }
 
@@ -139,10 +142,8 @@ namespace ASolute_Mobile
         {
             var locator = CrossGeolocator.Current;
 
-
             if (!locator.IsListening)
             {
-
                 //Start listening to location updates
                 await locator.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true,new Plugin.Geolocator.Abstractions.ListenerSettings
                 {
@@ -160,12 +161,10 @@ namespace ASolute_Mobile
             }
         }
 
-
         public async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
         {
             var position = e.Position;
             var locator = CrossGeolocator.Current;
-
 
             if(position == null)
             {
@@ -250,7 +249,8 @@ namespace ASolute_Mobile
                 this.ToolbarItems.Clear();
             }
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => 
+            {
 
                 try
                 {
@@ -262,11 +262,11 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (Ultis.Settings.RefreshMenuItem.Equals("Yes")) 
+            if (NetworkCheck.IsInternet() && Ultis.Settings.RefreshMenuItem == "Yes") 
             {
                 GetMainMenu();
                 Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                Ultis.Settings.RefreshMenuItem = "NO";
+                Ultis.Settings.RefreshMenuItem = "No";
             }
             else
             {
@@ -337,7 +337,7 @@ namespace ASolute_Mobile
                     }
 
                     // clear the db before insert to it to prevent duplicate
-                    App.Database.deleteMainMenu();
+                    App.Database.deleteMainMenuItem("MainMenu");
                     App.Database.deleteMenuItems("MainMenu");
 
                     foreach (clsDataRow mainMenu in login_Menu.MainMenu)
@@ -356,6 +356,7 @@ namespace ASolute_Mobile
                                 existingRecord.menuId = mainMenu.Id;
                                 existingRecord.name = mainMenu.Caption;
                                 existingRecord.action = mainMenu.Action;
+                                existingRecord.category = "MainMenu";
 
                                 List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
 
@@ -485,11 +486,10 @@ namespace ASolute_Mobile
         // load the item that stored in db to the list view by using custom view cell
         public void LoadMainMenu()
         {
-
             loading.IsVisible = false;
 
             Ultis.Settings.ListType = "Main_Menu";
-            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
+            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("MainMenu"));
             listView.ItemsSource = Item;
             listView.HasUnevenRows = true;
             listView.Style = (Style)App.Current.Resources["recordListStyle"];

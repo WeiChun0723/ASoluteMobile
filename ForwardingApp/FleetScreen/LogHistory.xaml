@@ -5,6 +5,7 @@
  
         <StackLayout>
       
+        <ActivityIndicator x:Name="loading" IsVisible="false" IsRunning="true"/>
         <DatePicker x:Name="logDate"  HorizontalOptions="FillAndExpand" DateSelected="recordDate" BackgroundColor="LightYellow"/>
         
         <ListView x:Name="logHistory" IsPullToRefreshEnabled="True" Refreshing="logRefresh" ItemTapped="selectLog" SeparatorColor="White"></ListView>

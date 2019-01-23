@@ -49,9 +49,8 @@
                 </StackLayout>
             
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="Size_SelectionChanged"/>
-                    <controls:CustomEntry x:Name="palletTI" HeightRequest="30" WidthRequest="70" HorizontalOptions="Fill"  LineColor="LightYellow" IsEnabled="false"/>
-                    <controls:CustomEntry x:Name="palletHI" HeightRequest="30" WidthRequest="70" HorizontalOptions="Fill"  LineColor="LightYellow" IsEnabled="false"/>
+                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
+                    
             </StackLayout>
 
                 <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">

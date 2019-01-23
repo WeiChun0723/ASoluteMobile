@@ -1,0 +1,73 @@
+﻿using System;
+using System.Threading.Tasks;
+using ASolute.Mobile.Models;
+using ASolute_Mobile.Utils;
+using Newtonsoft.Json;
+using Xamarin.Forms;
+
+namespace ASolute_Mobile
+{
+    public partial class StartUpScreen : ContentPage
+    {
+        public StartUpScreen()
+        {
+            InitializeComponent();
+
+            NavigationPage.SetHasNavigationBar(this, false);
+        }
+
+        protected override async void OnAppearing()
+        {
+            uint duration = 3 * 1000;
+
+            await Task.WhenAll(
+
+              splashImage.RotateYTo(13 * 360, duration)
+            );
+
+            if (Ultis.Settings.AppFirstInstall == "First")
+            {
+                title.IsVisible = true;
+                enterpriseView.IsVisible = true;
+                submit.IsVisible = true;
+                splashDeviceImage.IsVisible = true;
+                splashImage.IsVisible = false;
+            }
+            else
+            {
+                Application.Current.MainPage = new NavigationPage(new LoginPage());
+            }
+        }
+
+        public async void GetBaseURL(object s, EventArgs e)
+        {
+            loading.IsVisible = true;
+
+            if (!String.IsNullOrEmpty(enterpriseEntry.Text))
+            {
+                Ultis.Settings.AppFirstInstall = "Second";
+
+                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text)));
+
+                if (json_response.IsGood)
+                {
+                    Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text.ToUpper();
+                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                }
+                else
+                {
+                    await DisplayAlert("Json Error", json_response.Message, "OK");
+                }
+
+                Application.Current.MainPage = new NavigationPage(new LoginPage());
+
+            }
+            else
+            {
+                await DisplayAlert("Missing field", "Please fill in all field.", "OK");
+            }
+
+            loading.IsVisible = false;
+        }
+    }
+}

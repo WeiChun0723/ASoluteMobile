@@ -50,7 +50,7 @@ namespace ASolute_Mobile
                 Title = "Isi Minyak";
                 liter.Placeholder = "Maksimum 500 liter.";
             }        
-            
+
             //generate id for the image to link with the record for offline sync 
             Guid fuelRecord = Guid.NewGuid();
             newFuelID = fuelRecord.ToString();
@@ -293,16 +293,7 @@ namespace ASolute_Mobile
                 if(paymentPicker.SelectedIndex == 0)
                 {
                     //voucher.BackgroundColor = Color.FromHex("#FFFFE0");
-                    voucher.LineColor = Color.FromHex("#FFFF33");
-                    fuelCard.LineColor = Color.Transparent;
-
-                }
-
-                if (paymentPicker.SelectedIndex == 1)
-                {
-                    voucher.LineColor = Color.Transparent;
-                    fuelCard.LineColor = Color.FromHex("#FFFF33");
-
+                    //voucher.LineColor = Color.LightYellow;
                 }
             }
         }
@@ -506,13 +497,13 @@ namespace ASolute_Mobile
                     }
 
                     //Split the date time in the json 
-                    string[] convert_date_time = fuelCostNew.RefuelDateTime.ToString().Split(' ');
+                    /*string[] convert_date_time = fuelCostNew.RefuelDateTime.ToString().Split(' ');
                     //convert and set the default time of the time picker from the json returned
                     string[] split_time = convert_date_time[1].Split(':');
                     int time_hour = Convert.ToInt16(split_time[0]);
                     int time_minute = Convert.ToInt16(split_time[1]);
-                    TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);
-                    timePicker.Time = ts;
+                    TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);*/
+                    timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
 
                     costPerLiter.Text = String.Format("{0:0.00}", fuelCostNew.CostRate);
                     odometer.Text = fuelCostNew.PreviousOdometer.ToString();
@@ -608,7 +599,6 @@ namespace ASolute_Mobile
 
                     var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
 
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);

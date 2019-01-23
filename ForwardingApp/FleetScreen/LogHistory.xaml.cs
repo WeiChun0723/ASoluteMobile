@@ -39,7 +39,6 @@ namespace ASolute_Mobile
 
         protected override async void OnAppearing()
         {
-
             if (NetworkCheck.IsInternet())
             {
                 downloadLogHistory("");
@@ -61,14 +60,15 @@ namespace ASolute_Mobile
 
         public void recordDate(object sender, DateChangedEventArgs e)
         {
-            date = e.NewDate.ToString("dd-MMMM-yyyy");
+            date = e.NewDate.ToString("yyyy-MM-dd");
 
             downloadLogHistory(date);
         }
 
 
         public async void downloadLogHistory(string date)
-        {           
+        {
+            loading.IsVisible = true;
             if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
             {             
                 try
@@ -79,7 +79,7 @@ namespace ASolute_Mobile
                     var uri = "";
                     if (date == "")
                     {
-                        uri = ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("dd-MMMM-yyyy"));
+                        uri = ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("yyyy-MM-dd"));
                     }
                     else
                     {
@@ -166,7 +166,7 @@ namespace ASolute_Mobile
 
         protected void logRefresh(object sender, EventArgs e)
         {
-            downloadLogHistory(logDate.Date.ToString("dd-MMMM-yyyy"));    
+            downloadLogHistory(logDate.Date.ToString("yyyy-MM-dd"));    
             logHistory.IsRefreshing = false;
             Task.Run(async () => { await BackgroundTask.UploadLatestRecord(this); }).Wait();
         }
@@ -204,14 +204,15 @@ namespace ASolute_Mobile
 
         public void refreshLogHistory()
         {
+
             Ultis.Settings.ListType = "Log_History";
             ObservableCollection<Log> Item = new ObservableCollection<Log>(App.Database.GetLogItems());           
             logHistory.ItemsSource = Item;
             logHistory.HasUnevenRows = true;
             logHistory.Style = (Style)App.Current.Resources["recordListStyle"];         
             logHistory.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+            loading.IsVisible = false;
 
-          
         }
 
     }

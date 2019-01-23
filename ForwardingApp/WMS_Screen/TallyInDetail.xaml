@@ -47,7 +47,7 @@
         </inputLayout:SfTextInputLayout>-->
         
         <StackLayout HeightRequest="200">
-         <datagrid:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand"  AutoGenerateColumns="true" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" >
+         <datagrid:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand"  AutoGenerateColumns="false" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" >
                 <datagrid:SfDataGrid.Columns  >
                        <datagrid:GridTextColumn MappingName="ProductCode"  Width="100" >
                            <datagrid:GridTextColumn.HeaderTemplate > 

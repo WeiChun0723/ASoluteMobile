@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.WMS_Screen.PackingEntry"
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms">
+   
+    <ScrollView>
+        <StackLayout Padding="15,15,15,15" Spacing="20">
+            <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/>
+                
+             <inputLayout:SfTextInputLayout 
+                Hint="SKU"
+                ContainerBackgroundColor="LightYellow"
+                FocusedColor="Black" HorizontalOptions="FillAndExpand"
+                TrailingViewPosition="Inside"
+                LeadingViewPosition="Inside" MinimumHeightRequest="50">   
+                
+            <Entry x:Name="SKUEntry" TextChanged="Handle_TextChanged">
+                     <Entry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="30"/>
+                </Entry.Behaviors>      
+            </Entry>
+            <inputLayout:SfTextInputLayout.LeadingView> 
+                    <Image Source="barCode.png"  VerticalOptions="Center">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ConfirmScan"/>
+                        </Image.GestureRecognizers>
+                     </Image>
+                    
+            </inputLayout:SfTextInputLayout.LeadingView>
+                
+            <inputLayout:SfTextInputLayout.TrailingView> 
+                    <Image Source="cancel.png"  VerticalOptions="Center" IsVisible="false" x:Name="cancel">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ClearEntry"/>
+                        </Image.GestureRecognizers>
+                     </Image>
+                    
+            </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout>
+            
+              <StackLayout Orientation="Horizontal">
+               <inputLayout:SfTextInputLayout 
+                Hint="Qty"
+                ContainerBackgroundColor="LightYellow"
+                FocusedColor="Black" HorizontalOptions="FillAndExpand">   
+                
+            <Entry x:Name="QtyEntry" Keyboard="Numeric"/>
+
+            </inputLayout:SfTextInputLayout>
+                
+            <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AddToGrid"/>
+                    </Image.GestureRecognizers>
+            </Image>
+            </StackLayout>
+        
+           
+        
+              <StackLayout MinimumHeightRequest="200">
+         <datagrid:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand" MinimumHeightRequest="200"  AutoGenerateColumns="false"  SelectionMode="Single" BackgroundColor="Transparent" AllowPullToRefresh="true"  ItemsSourceChanged="Handle_ItemsSourceChanged">
+                <datagrid:SfDataGrid.Columns  >
+                       <datagrid:GridTextColumn MappingName="ProductCode"  Width="200" >
+                           <datagrid:GridTextColumn.HeaderTemplate > 
+                <DataTemplate> 
+                    <Label Text="SKU" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+                        
+                
+                 <datagrid:GridTextColumn MappingName="LoadQty" Width="100" >
+                  <datagrid:GridTextColumn.HeaderTemplate> 
+                <DataTemplate> 
+                    <Label Text="Qty" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                </DataTemplate> 
+            </datagrid:GridTextColumn.HeaderTemplate> 
+                        </datagrid:GridTextColumn>
+
+                  
+                  
+                    </datagrid:SfDataGrid.Columns>
+            
+        </datagrid:SfDataGrid>
+          </StackLayout>     
+          
+            <StackLayout Padding="0,30"> 
+            <buttons:SfButton  Text="Generate Pallet" Clicked="GeneratePallet"  HorizontalOptions="CenterAndExpand"  BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="50" WidthRequest="150" FontAttributes="Bold"  />        
+            </StackLayout>
+             
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

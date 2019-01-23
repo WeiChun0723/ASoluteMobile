@@ -7,6 +7,9 @@
             <OnPlatform x:TypeArguments="Color" Android="#FFFFFF" iOS="#000000" WinPhone="#000000" x:Key="EntryTextColor" />
             <OnPlatform x:TypeArguments="x:Double" Android="40" iOS="40" WinPhone="40" x:Key="EntryHeightRequest" />
             
+           
+            
+            
             
             <Style x:Key="stackStyle" TargetType="StackLayout">
                 <Setter Property="Spacing" Value="10" />

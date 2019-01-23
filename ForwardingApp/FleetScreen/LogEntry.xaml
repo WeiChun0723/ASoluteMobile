@@ -19,7 +19,7 @@
             <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" x:Name="lblStartDateTime"/>
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
             <DatePicker x:Name="startDate" HorizontalOptions="Fill" WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow"/>
-             <TimePicker x:Name="startTime" HorizontalOptions="Fill" WidthRequest="100" Format="HH:mm" BackgroundColor="LightYellow"/>
+             <TimePicker x:Name="startTime" HorizontalOptions="Fill" WidthRequest="100" Format="HH:mm"  BackgroundColor="LightYellow"/>
             </StackLayout>
             <Label Text="Odometer" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"  WidthRequest="150"  x:Name="lblStartOdometer"/>
             <Entry x:Name="startOdometer" BackgroundColor="LightYellow" Placeholder="Maximum 6 digit" Grid.Row="2" Grid.Column="1" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextChanged="startMeter"/>

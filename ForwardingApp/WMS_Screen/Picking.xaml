@@ -28,7 +28,7 @@
            HeightRequest="50"/> 
      <Image Source="nodatafound.png"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>               
      <ListView x:Name="pickingList" ItemTapped="SelectPicking" SeparatorColor="White" >
-               <ListView.ItemTemplate>
+               <!--<ListView.ItemTemplate>
                 <DataTemplate>
                      <ViewCell >
                             
@@ -43,7 +43,7 @@
                          
                     </ViewCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
          </ListView>
                 <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="55" HorizontalOptions="End"  x:Name="scan_icon">
                 <Image.GestureRecognizers>

@@ -24,9 +24,9 @@ namespace ASolute_Mobile.WMS_Screen
 
         void PalletIDScan(object sender, EventArgs e)
         {
-            GetPalletTrx(pdEntry.Text);
-            //fieldName = "PalletIDScan";
-            //BarCodeScan(fieldName);
+
+            fieldName = "PalletIDScan";
+            BarCodeScan(fieldName);
         }
 
         void ConfirmScan(object sender, EventArgs e)
@@ -44,6 +44,40 @@ namespace ASolute_Mobile.WMS_Screen
         {
 
             PalletUpdate();
+        }
+
+        void ClearPdEntry(object sender, System.EventArgs e)
+        {
+            pdEntry.Text = "";
+        }
+
+        void PdEntry_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            if (!(String.IsNullOrEmpty(pdEntry.Text)))
+            {
+                pdCancel.IsVisible = true;
+            }
+            else
+            {
+                pdCancel.IsVisible = false;
+            }
+        }
+
+        void ClearConfirmEntry(object sender, System.EventArgs e)
+        {
+            confirmEntry.Text = "";
+        }
+
+        void ConfirmEntry_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            if (!(String.IsNullOrEmpty(pdEntry.Text)))
+            {
+                confirmCancel.IsVisible = true;
+            }
+            else
+            {
+                confirmCancel.IsVisible = false;
+            }
         }
 
         async void PalletUpdate()
@@ -68,7 +102,6 @@ namespace ASolute_Mobile.WMS_Screen
                     }
                     else
                     {
-
                         await DisplayAlert("Error", update_response.Message, "OK");
                     }
                 }
@@ -87,7 +120,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void BarCodeScan(string field)
         {
-            try
+            try 
             {
                 var scanPage = new ZXingScannerPage();
                 await Navigation.PushAsync(scanPage);
@@ -162,9 +195,7 @@ namespace ASolute_Mobile.WMS_Screen
                             Label caption = new Label
                             {
                                 FontSize = 13,
-                                FontAttributes = FontAttributes.Bold,
-
-                                
+                                FontAttributes = FontAttributes.Bold                                   
                             };
 
                             caption.Text =  "      " + desc.Caption + ": " + desc.Value;

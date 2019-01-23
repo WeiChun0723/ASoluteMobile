@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.WMS_Screen.PickingDetail"
+             x:Class="ASolute_Mobile.WMS_Screen.TallyOutDetail"
              xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
              xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms">
 
-    
-      <refresh:SfPullToRefresh x:Name="pullToRefresh"
+      
+    <refresh:SfPullToRefresh x:Name="pullToRefresh"
                                     IsRefreshing="false" 
                                     TransitionMode="SlideOnTop" 
                                     ProgressBackgroundColor="#00AFF9"
@@ -22,51 +22,58 @@
                                     Refreshed="Handle_Refreshed">
         <refresh:SfPullToRefresh.PullableContent>
  <ScrollView>
-    <StackLayout Padding="15,15,15,0" Spacing="50">
+    <StackLayout Padding="15,15,15,0" Spacing="30">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/>
         
-        <StackLayout x:Name="pickingDesc" BackgroundColor="#E5E5E5" ></StackLayout>     
+       <StackLayout x:Name="tallyInDesc" BackgroundColor="#E5E5E5" ></StackLayout>             
+       
+     
         
-        
-         <datagrid:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand"  AutoGenerateColumns="false" GridTapped="Handle_GridTapped" SelectionMode="Single" BackgroundColor="Transparent" >
+        <StackLayout MinimumHeightRequest="200">
+         <datagrid:SfDataGrid x:Name="dataGrid" HorizontalOptions="CenterAndExpand" MinimumHeightRequest="200" AutoGenerateColumns="false"  SelectionMode="Single" BackgroundColor="Transparent" >
                 <datagrid:SfDataGrid.Columns  >
-                       <datagrid:GridTextColumn MappingName="LocationId"  Width="100" >
+                       <datagrid:GridTextColumn MappingName="PalletId"  Width="200" >
                            <datagrid:GridTextColumn.HeaderTemplate > 
-                <DataTemplate> 
-                    <Label Text="Location" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
-                </DataTemplate> 
-            </datagrid:GridTextColumn.HeaderTemplate> 
-                        </datagrid:GridTextColumn>
-                        
-                
-                <datagrid:GridTextColumn MappingName="PalletId" Width="100">
-                           <datagrid:GridTextColumn.HeaderTemplate> 
                 <DataTemplate> 
                     <Label Text="Pallet Id" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
                 </DataTemplate> 
             </datagrid:GridTextColumn.HeaderTemplate> 
                         </datagrid:GridTextColumn>
                         
-                         
                 
-                 <datagrid:GridTextColumn MappingName="OrderQty" Width="100" >
-                  <datagrid:GridTextColumn.HeaderTemplate> 
+                <datagrid:GridTextColumn MappingName="Description" Width="100">
+                           <datagrid:GridTextColumn.HeaderTemplate> 
                 <DataTemplate> 
-                    <Label Text="Quantity" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
+                    <Label Text="Operator" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/> 
                 </DataTemplate> 
             </datagrid:GridTextColumn.HeaderTemplate> 
                         </datagrid:GridTextColumn>
-                   
-                    
-                    <datagrid:GridTextColumn MappingName="Description" IsHidden="true"/>
-                  
+                        
+
                     </datagrid:SfDataGrid.Columns>
 
             
         </datagrid:SfDataGrid>
-               
+        </StackLayout>
+       <StackLayout Orientation="Horizontal" Padding="0,30" HorizontalOptions="CenterAndExpand" Spacing="30">
+
+                <Image Source="camera.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" x:Name="futile_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="takeImage"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+              <Image Source="barCode.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
+                     <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="scanBarCode"/>
+                    </Image.GestureRecognizers>
+                </Image>
+        </StackLayout> 
+        
+        <Grid  x:Name="imageGrid" ></Grid>
     </StackLayout>
     </ScrollView>
     </refresh:SfPullToRefresh.PullableContent>
  </refresh:SfPullToRefresh>
+    
 </ContentPage>

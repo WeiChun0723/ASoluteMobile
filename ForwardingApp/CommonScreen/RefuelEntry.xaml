@@ -86,7 +86,7 @@
                 </StackLayout>
             
             <StackLayout Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="voucher" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="WhiteSmoke" TextChanged="VoucherText" />
+                    <controls:CustomEntry x:Name="voucher" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  TextChanged="VoucherText" LineColor="WhiteSmoke"/>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"   >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Voucherscan"/>
@@ -95,12 +95,12 @@
 
             </StackLayout>
 
-                <StackLayout Padding="0,10,0,0" Grid.Row="8" Grid.Column="0">
+                <StackLayout Padding="0,10,0,0" Grid.Row="8" Grid.Column="0" IsVisible="false">
                     <Label Text="Other Ref" FontAttributes="Bold"    x:Name="lblOtherRef"/>
                 </StackLayout>
             
-            <StackLayout Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="other" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  TextChanged="OtherText" LineColor="LightYellow" />
+            <StackLayout Grid.Row="8" Grid.Column="1" Orientation="Horizontal" IsVisible="false">
+                    <controls:CustomEntry x:Name="other" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  TextChanged="OtherText" LineColor="WhiteSmoke"/>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"  >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Otherscan"/>

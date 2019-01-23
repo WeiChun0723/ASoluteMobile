@@ -98,8 +98,28 @@ namespace ASolute_Mobile
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
                 }
+                if (Ultis.Settings.ListType == "Picking_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "PickingList");
+                }
+                if (Ultis.Settings.ListType == "Packing_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "PackingList");
+                }
+                if (Ultis.Settings.ListType == "TallyOut_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "TallyOutList");
+                }
+                if (Ultis.Settings.ListType == "TallyIn_List")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "TallyInList");
+                }
 
-              //  AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+                //  AbsoluteLayout absoluteLayout = new AbsoluteLayout();
 
                 StackLayout cellWrapper = new StackLayout()
                 {

@@ -129,7 +129,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                 if (register_response.IsGood)
                 {
-                    await DisplayAlert("Success", "Registration successfully", "OK");
+                    await DisplayAlert("Success", "Registration successfully wait a moment the app will auto login.", "OK");
                     Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
                     Ultis.Settings.RefreshMenuItem = "Yes";
                     DownloadLogo();
@@ -146,7 +146,7 @@ namespace ASolute_Mobile.HaulageScreen
                                    + Ultis.Settings.SessionBaseURI + ") " + "cannot be use.", "OK");
             }
 
-            activityIndicator.IsRunning = false;
+          
         }
 
         public async void DownloadLogo()
@@ -292,7 +292,10 @@ namespace ASolute_Mobile.HaulageScreen
             {
                 await DisplayAlert("Error", "Please try again", "OK");
             }
+
+            activityIndicator.IsRunning = false;
         }
+
 
     }
 }

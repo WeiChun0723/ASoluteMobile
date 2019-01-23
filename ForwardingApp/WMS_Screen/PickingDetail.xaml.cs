@@ -21,8 +21,6 @@ namespace ASolute_Mobile.WMS_Screen
 
             pickingID = id;
 
-           
-
             GetPickingDetails();
         }
 

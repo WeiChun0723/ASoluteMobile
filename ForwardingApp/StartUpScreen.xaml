@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.StartUpScreen"
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+    
+    <ScrollView>
+        
+        <StackLayout Padding="15,15,15,15" Spacing="20">
+            
+            <Image x:Name="splashImage" Source="appIcon" HeightRequest="100" WidthRequest="100" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+            <Image x:Name="splashDeviceImage" Source="splashScreenlogo" HeightRequest="300" WidthRequest="150" IsVisible="false" />
+            <Label HorizontalOptions="CenterAndExpand" Text="Please enter enterprise name." FontAttributes="Bold" FontSize="Medium" IsVisible="false" x:Name="title"/>
+            
+             <inputLayout:SfTextInputLayout 
+                Hint="Enterprise name" 
+                ContainerBackgroundColor="CornflowerBlue"
+                FocusedColor="Black" HorizontalOptions="FillAndExpand"
+                TrailingViewPosition="Inside" IsVisible="false" x:Name="enterpriseView">   
+                
+            <Entry x:Name="enterpriseEntry" TextColor="White" HorizontalTextAlignment="Center">
+                     <Entry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="50" />
+                </Entry.Behaviors>      
+            </Entry>
+            </inputLayout:SfTextInputLayout>
+            
+            <StackLayout Padding="0,15" />
+            
+             <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/>
+            
+            <buttons:SfButton x:Name="submit" Text="Submit" Clicked="GetBaseURL"  HorizontalOptions="FillAndExpand"  BackgroundColor="#6495ed" CornerRadius="20" HeightRequest="50" WidthRequest="150" FontAttributes="Bold" IsVisible="false"/>        
+            
+        </StackLayout>
+        
+    </ScrollView>
+    
+</ContentPage>

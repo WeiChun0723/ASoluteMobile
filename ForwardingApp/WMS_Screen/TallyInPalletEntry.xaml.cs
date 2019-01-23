@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Utils;
@@ -78,7 +79,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                 foreach(clsKeyValue sizes in palletList.PalletSize)
                 {
-                    size.Add(sizes.Key);
+                    size.Add(sizes.Value);
                 }
 
                 foreach (clsKeyValue units in palletList.ProductUom)
@@ -100,17 +101,7 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        void Size_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
-        {
-            foreach(clsKeyValue selectedSize in palletList.PalletSize)
-            {
-                if(sizeBox.Text.Equals(selectedSize.Key))
-                {
-                    palletTI.Text = selectedSize.Extra01;
-                    palletHI.Text = selectedSize.Extra02;
-                }
-            }
-        }
+       
 
         void PalletScan(object sender, EventArgs e)
         {
@@ -187,17 +178,22 @@ namespace ASolute_Mobile.WMS_Screen
         {
             try
             {
-                if (!(String.IsNullOrEmpty(palletNo.Text)) && !(String.IsNullOrEmpty(palletHI.Text)) && !(String.IsNullOrEmpty(palletTI.Text)) && !(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
+                if (!(String.IsNullOrEmpty(palletNo.Text))  && !(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
              && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)))
                 {
+
+                    string[] test = sizeBox.Text.Split('(');
+
+                    string[] numbers = Regex.Split(test[1], @"\D+");
+
                     clsPallet pallet = new clsPallet
                     {
                         Id = id,
                         ProductCode = productPallet.ProductCode,
                         PalletId = palletNo.Text,
                         PalletSize = sizeBox.Text,
-                        PalletTI = Convert.ToInt16(palletTI.Text),
-                        PalletHI = Convert.ToInt16(palletHI.Text),
+                        PalletTI = Convert.ToInt16(numbers[1]),
+                        PalletHI = Convert.ToInt16(numbers[2]),
                         Qty = Convert.ToInt32(quantity.Text),
                         Uom = unitBox.Text,
                         StockStatus = statusBox.Text,
@@ -215,12 +211,13 @@ namespace ASolute_Mobile.WMS_Screen
                         await DisplayAlert("Success", "New pallet added.", "OK");
                         palletNo.Text = String.Empty;
                         sizeBox.Text = String.Empty;
-                        palletTI.Text = String.Empty;
-                        palletHI.Text = String.Empty;
+                        //palletTI.Text = String.Empty;
+                        //palletHI.Text = String.Empty;
                         quantity.Text = String.Empty;
                         unitBox.Text = String.Empty;
                         statusBox.Text = palletList.DefaultStockStatus; 
                         batchNo.Text = String.Empty;
+                        date.Text = String.Empty;
                         //datePicker.Date = Convert.ToDateTime("");
                     }
                     else

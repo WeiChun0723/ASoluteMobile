@@ -113,7 +113,7 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 await DisplayAlert("Success", "Picking task updated", "OK");
 
-                Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 1]);
+                //Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 1]);
 
                 await Navigation.PopAsync();
             }

@@ -7,6 +7,7 @@ using PCLStorage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -116,79 +117,86 @@ namespace ASolute_Mobile
 
         public async void confirmLog(object sender, EventArgs e)
         {
-            clsTrip newTrip = new clsTrip();
-
-            if (!(String.IsNullOrEmpty(startLocation.Text)) && !(String.IsNullOrEmpty(startOdometer.Text)))
+            try
             {
-                string startDate_Time = startDate.Date.Year + "/" + startDate.Date.Month + "/" + startDate.Date.Day + "T" + startTime.Time.ToString();
+                clsTrip newTrip = new clsTrip();
 
-                newTrip.StartTime = Convert.ToDateTime(startDate_Time);
-                newTrip.StartOdometer = Convert.ToInt32(startOdometer.Text);
-                newTrip.StartLocationName = startLocation.Text.ToUpper();
-                newTrip.DriverId = Ultis.Settings.SessionUserItem.DriverId;
-                newTrip.TruckId = Ultis.Settings.SessionUserItem.TruckId;
-                newTrip.StartGeoLoc = ControllerUtil.getPositionAsync();
-
-              
-                if (endLogEntry.IsVisible == true)
+                if (!(String.IsNullOrEmpty(startLocation.Text)) && !(String.IsNullOrEmpty(startOdometer.Text)))
                 {
-                    if (!(String.IsNullOrEmpty(startLocation.Text)) && !(String.IsNullOrEmpty(startOdometer.Text)))
-                    {
-                        if (Convert.ToInt32(startOdometer.Text) < Convert.ToInt32(endOdometer.Text))
-                        {
+                    string startDate_Time = startDate.Date.ToString("yyyy-MM-dd") + "T" + startTime.Time.ToString();
 
-                            string endDate_Time = endDate.Date.Year + "-" + endDate.Date.Month + "-" + endDate.Date.Day + "T" + endTime.Time.ToString();
-                            newTrip.EndTime = Convert.ToDateTime(endDate_Time);
-                            newTrip.EndOdometer = Convert.ToInt32(endOdometer.Text);
-                            newTrip.EndLocationName = endLocation.Text.ToUpper();
-                            newTrip.Id = trip.Id;
-                            newTrip.EndGeoLoc = ControllerUtil.getPositionAsync();
-                            newTrip.LinkId = "";
-                            UpdateLogBook(newTrip);
+                    newTrip.StartTime = Convert.ToDateTime(startDate_Time);
+                    newTrip.StartOdometer = Convert.ToInt32(startOdometer.Text);
+                    newTrip.StartLocationName = startLocation.Text.ToUpper();
+                    newTrip.DriverId = Ultis.Settings.SessionUserItem.DriverId;
+                    newTrip.TruckId = Ultis.Settings.SessionUserItem.TruckId;
+                    newTrip.StartGeoLoc = ControllerUtil.getPositionAsync();
+
+
+                    if (endLogEntry.IsVisible == true)
+                    {
+                        if (!(String.IsNullOrEmpty(endLocation.Text)) && !(String.IsNullOrEmpty(endOdometer.Text)))
+                        {
+                            if (Convert.ToInt32(startOdometer.Text) < Convert.ToInt32(endOdometer.Text))
+                            {
+
+                                string endDate_Time = endDate.Date.Year + "-" + endDate.Date.Month + "-" + endDate.Date.Day + "T" + endTime.Time.ToString();
+                                newTrip.EndTime = Convert.ToDateTime(endDate_Time);
+                                newTrip.EndOdometer = Convert.ToInt32(endOdometer.Text);
+                                newTrip.EndLocationName = endLocation.Text.ToUpper();
+                                newTrip.Id = trip.Id;
+                                newTrip.EndGeoLoc = ControllerUtil.getPositionAsync();
+                                newTrip.LinkId = "";
+                                UpdateLogBook(newTrip);
+                            }
+                            else
+                            {
+                                if (Ultis.Settings.Language.Equals("English"))
+                                {
+                                    await DisplayAlert("Error", "End Odometer must more than start odometer.", "OK");
+                                }
+                                else
+                                {
+                                    await DisplayAlert("Kesilapan", "Odometer untuk akhir perlu lebih daripada odometer untuk permulaan.", "OK");
+                                }
+                            }
                         }
                         else
                         {
                             if (Ultis.Settings.Language.Equals("English"))
                             {
-                                await DisplayAlert("Error", "End Odometer must more than start odometer.", "OK");
+                                await DisplayAlert("Error", "Please fill in all mandatory field.", "OK");
                             }
                             else
                             {
-                                await DisplayAlert("Kesilapan", "Odometer untuk akhir perlu lebih daripada odometer untuk permulaan.", "OK");
+                                await DisplayAlert("Kesilapan", "Sila mengisikan semua data yang diperlukan oleh permulaan.", "OK");
                             }
                         }
+
                     }
                     else
                     {
-                        if (Ultis.Settings.Language.Equals("English"))
-                        {
-                            await DisplayAlert("Error", "Please fill in all mandatory field.", "OK");
-                        }
-                        else
-                        {
-                            await DisplayAlert("Kesilapan", "Sila mengisikan semua data yang diperlukan oleh permulaan.", "OK");
-                        }
+                        UpdateLogBook(newTrip);
                     }
 
                 }
                 else
                 {
-                    UpdateLogBook(newTrip);
+                    if (Ultis.Settings.Language.Equals("English"))
+                    {
+                        await DisplayAlert("Error", "Please fill in all mandatory field.", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Kesilapan", "Sila mengisikan semua data yang diperlukan oleh permulaan.", "OK");
+                    }
                 }
-
-             
             }
-            else
+            catch(Exception ex)
             {
-                if (Ultis.Settings.Language.Equals("English"))
-                {
-                    await DisplayAlert("Error", "Please fill in all mandatory field.", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Kesilapan", "Sila mengisikan semua data yang diperlukan oleh permulaan.", "OK");
-                }
+                await DisplayAlert("Error", ex.Message, "OK");
             }
+           
             /*List<LogBookData> pendingLog = App.Database.GetTripLog(0);
          
             if (pendingLog.Count == 0 || pendingLog[0].OfflineID == offlineLogID || pendingLog[0].Id == trip.Id || !(String.IsNullOrEmpty(existingRecordId)))
@@ -309,6 +317,8 @@ namespace ASolute_Mobile
                     {
                         await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
                     }
+
+                    endTime.Time = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, (Int16)00);
                 }
                 else
                 {
@@ -446,14 +456,17 @@ namespace ASolute_Mobile
 
                 trip = JObject.Parse(content)["Result"].ToObject<clsTrip>();
 
+           
                 //Split the date time in the json 
-                string[] start_Time = trip.StartTime.ToString().Split(' ');
+                //string[] start_Time = trip.StartTime.ToString().Split(' ');
+                /*string start_Time = ;
                 //convert and set the default time of the time picker from the json returned
                 string[] start_split_time = start_Time[1].Split(':');
                 int time_hour = Convert.ToInt16(start_split_time[0]);
                 int time_minute = Convert.ToInt16(start_split_time[1]);
-                TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);
-                startTime.Time = ts;
+                TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);*/
+                startTime.Time = trip.StartTime.TimeOfDay;
+
                 imageLinkID = trip.LinkId;
 
                 if (existingRecordId != "")
@@ -464,17 +477,20 @@ namespace ASolute_Mobile
                     endOdometer.Text = trip.EndOdometer.ToString();
                     endLocation.Text = trip.EndLocationName;
 
-
-
-                    if (trip.EndTime != null)
+                    if (!(String.IsNullOrEmpty(trip.EndTime.ToString())))
                     {
-                        string[] end_Time = trip.EndTime.ToString().Split(' ');
-                        //convert and set the default time of the time picker from the json returned
-                        string[] end_split_time = end_Time[1].Split(':');
-                        int end_time_hour = Convert.ToInt16(end_split_time[0]);
-                        int end_time_minute = Convert.ToInt16(end_split_time[1]);
-                        TimeSpan end_ts = new TimeSpan((Int16)end_time_hour, (Int16)end_time_minute, (Int16)00);
-                        endTime.Time = end_ts;
+                        /* string[] end_Time = trip.EndTime.ToString().Split(' ');
+                         //convert and set the default time of the time picker from the json returned
+                         string[] end_split_time = end_Time[1].Split(':');
+                         int end_time_hour = Convert.ToInt16(end_split_time[0]);
+                         int end_time_minute = Convert.ToInt16(end_split_time[1]);
+                         TimeSpan end_ts = new TimeSpan((Int16)end_time_hour, (Int16)end_time_minute, (Int16)00);*/
+                        //endTime.Time = trip.EndTime;
+                        endTime.Time = trip.EndTime.Value.TimeOfDay;
+                    }
+                    else
+                    {
+                        endTime.Time = DateTime.Now.TimeOfDay;
                     }
                 }
 

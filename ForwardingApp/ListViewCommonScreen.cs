@@ -1,5 +1,4 @@
-﻿using System;
-using Syncfusion.SfBusyIndicator.XForms;
+﻿using Syncfusion.SfBusyIndicator.XForms;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -34,7 +33,8 @@ namespace ASolute_Mobile
             {
                 IsVisible = true,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-
+                AnimationType = AnimationTypes.HorizontalPulsingBox,
+                TextColor = Color.Red
             };
 
             StackLayout mainLayout = new StackLayout
@@ -75,9 +75,7 @@ namespace ASolute_Mobile
             mainLayout.Children.Add(listView);
             mainLayout.Children.Add(scanBarCode);
 
-
             Content = mainLayout;
-           
         }
     }
   

@@ -12,23 +12,23 @@ using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.WMS_Screen
 {
-    public partial class Picking : ContentPage
+    public partial class Packing : ContentPage
     {
-        List<clsDataRow> picking;
+        List<clsDataRow> packing;
         ObservableCollection<AppMenu> Item;
-        public Picking(string screenTitle)
+
+        public Packing(string screenTitle)
         {
             InitializeComponent();
 
             Title = screenTitle;
-
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            GetPickingList();
+            GetPackingList();
         }
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
@@ -39,7 +39,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
-                   
+
                     pickingList.ItemsSource = Item;
                 }
 
@@ -47,7 +47,6 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     try
                     {
-                      
                         pickingList.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
                     }
                     catch (Exception error)
@@ -63,27 +62,26 @@ namespace ASolute_Mobile.WMS_Screen
 
         }
 
-        public async void GetPickingList()
+        public async void GetPackingList()
         {
             loading.IsVisible = true;
 
-
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPickingList());
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPackingList());
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
             {
-                picking = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
+                packing = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                App.Database.deleteMainMenuItem("PickingList");
-                App.Database.deleteMenuItems("PickingList");
-                foreach (clsDataRow data in picking)
+                App.Database.deleteMainMenuItem("PackingList");
+                App.Database.deleteMenuItems("PackingList");
+                foreach (clsDataRow data in packing)
                 {
                     AppMenu record = new AppMenu
                     {
                         menuId = data.Id,
                         background = data.BackColor,
-                        category = "PickingList"
+                        category = "PackingList"
                     };
 
                     string summary = "";
@@ -121,27 +119,25 @@ namespace ASolute_Mobile.WMS_Screen
                     foreach (clsCaptionValue summaryList in data.Summary)
                     {
                         SummaryItems summaryItem = new SummaryItems();
-                       
+
                         summaryItem.Id = data.Id;
                         summaryItem.Caption = summaryList.Caption;
                         summaryItem.Value = summaryList.Value;
                         summaryItem.Display = summaryList.Display;
-                        summaryItem.Type = "PickingList";
+                        summaryItem.Type = "PackingList";
                         summaryItem.BackColor = data.BackColor;
                         App.Database.SaveSummarysAsync(summaryItem);
 
                     }
 
-                   
                 }
 
-                loadPickingList();
+                loadPackingList();
             }
             else
             {
                 await DisplayAlert("Error", tallyInList_response.Message, "OK");
             }
-
 
         }
 
@@ -169,11 +165,10 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        void loadPickingList()
+        void loadPackingList()
         {
-
-            Ultis.Settings.ListType = "Picking_List";
-            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("PickingList"));
+            Ultis.Settings.ListType = "Packing_List";
+            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("PackingList"));
             pickingList.ItemsSource = Item;
             pickingList.HasUnevenRows = true;
             pickingList.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -196,7 +191,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, ((AppMenu)e.Item).summary, ((AppMenu)e.Item).name));
+            await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
 
         }
 
@@ -208,11 +203,9 @@ namespace ASolute_Mobile.WMS_Screen
 
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
-            GetPickingList();
+            GetPackingList();
             pullToRefresh.IsRefreshing = false;
         }
-
-
 
         void Handle_Refreshed(object sender, System.EventArgs e)
         {

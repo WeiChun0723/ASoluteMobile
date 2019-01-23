@@ -19,16 +19,17 @@ namespace ASolute_Mobile.Utils
     public class CommonFunction
     {
         static ContentPage pages;
+        static string returnResult;
 
         //call when calling the web service to get response
         public static async Task<string> GetWebService(string baseAdd,string callUri)
         {
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(baseAdd);
-                var uri = callUri;
-                var response = await client.GetAsync(uri);
-                var content = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine(content);
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(baseAdd);
+            var uri = callUri;
+            var response = await client.GetAsync(uri);
+            var content = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(content);
 
             /*clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -60,6 +61,31 @@ namespace ASolute_Mobile.Utils
 
             return reply;
         }
+
+        public static async Task<string> ScanBarCode(ContentPage contentPage)
+        {
+            try
+            {
+                var scanPage = new ZXingScannerPage();
+                await contentPage.Navigation.PushAsync(scanPage);
+
+                scanPage.OnScanResult += (result) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await contentPage.Navigation.PopAsync();
+                        returnResult = result.Text;
+                    });
+                };
+            }
+            catch (Exception e)
+            {
+                await contentPage.DisplayAlert("Error", e.Message, "OK");
+            }
+
+            return returnResult;
+        }
+
 
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri)

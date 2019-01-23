@@ -280,6 +280,35 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/Picking/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
+        public static String getPackingList()
+        {
+            return String.Format("Wms/Packing/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadPackingDetail(string packingID)
+        {
+            return String.Format("Wms/Packing/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), packingID);
+        }
+
+        public static String postPackingDetail()
+        {
+            return String.Format("Wms/Packing/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getTallyOutList()
+        {
+            return String.Format("Wms/TallyOut/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadTallyOutDetail(string tallyOutID)
+        {
+            return String.Format("Wms/TallyOut/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyOutID);
+        }
+
+        public static String postTallyOutDetail()
+        {
+            return String.Format("Wms/TallyOut/AddPallet?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
 
         #endregion
 
@@ -334,7 +363,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
+            return String.Format("Session/Load?Id={0}&AppName={1}", Ultis.Settings.SessionSettingKey, "Fleet");
         }
 
         public static String getDownloadRefuelHistoryURL()

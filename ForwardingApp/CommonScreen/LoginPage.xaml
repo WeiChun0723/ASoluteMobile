@@ -79,13 +79,13 @@
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout>
             
-       <!--  <StackLayout Orientation="Horizontal" >  
-           <inputLayout:SfTextInputLayout Hint="Equipment"                             
+       <StackLayout Orientation="Horizontal" >  
+         <!-- <inputLayout:SfTextInputLayout Hint="Equipment"                             
           ContainerBackgroundColor="#8b0000"
           FocusedColor="Black"
           EnableHintAnimation="true"  
           LeadingViewPosition="Inside"
-          UnfocusedColor="Black"
+           UnfocusedColor="Black"
           HorizontalOptions="FillAndExpand">    
         <Entry  x:Name="equipmentEntry" TextColor="Black" />
 
@@ -98,8 +98,8 @@
             <controls:CustomPicker HorizontalOptions="End"
                      HeightRequest="40"
                      Image="ic_arrow_drop_down" x:Name="eqPicker" SelectedIndexChanged="eqSelected">
-            </controls:CustomPicker>
-        </StackLayout>-->
+            </controls:CustomPicker>-->
+        </StackLayout>
 
             <Button Style="{StaticResource buttonStyle}" x:Name="loginButton" Text = "Login" Clicked="Login_Clicked" />
        

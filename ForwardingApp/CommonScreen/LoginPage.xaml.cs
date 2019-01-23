@@ -90,7 +90,7 @@ namespace ASolute_Mobile
                // {
                  //   equipmentEntry.Text = "";
                    // equipmentEntry.Focus();
-               // }//
+               // }
             };
 
             if (Ultis.Settings.GeneratedAppID == "")
@@ -153,9 +153,9 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
-                   // var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
-                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                   var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                  // var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                   clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
                     {
@@ -171,7 +171,6 @@ namespace ASolute_Mobile
                           {
                               existingEquipment = new AutoComplete();
                           }*/
-
                           //existingEquipment.Value = equipmentEntry.Text;
                           //existingEquipment.Type = "Equipment";
                           //App.Database.SaveAutoCompleteAsync(existingEquipment);

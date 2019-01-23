@@ -37,7 +37,7 @@ namespace ASolute_Mobile
 
             //MainPage = new TallyInPalletEntry();
 
-                 if (sessionKey != "")
+           if (sessionKey != "")
            {
                MainPage = new MainPage();
 
@@ -46,8 +46,9 @@ namespace ASolute_Mobile
            {
                if(Ultis.Settings.AppFirstInstall == "First")
                {
-                   MainPage = new CustomNavigationPage(new SplashScreen());
-               }
+                    MainPage = new CustomNavigationPage(new SplashScreen());
+                    //MainPage = new CustomNavigationPage(new StartUpScreen());
+                }
                else
                {
                    MainPage = new CustomNavigationPage(new LoginPage());
