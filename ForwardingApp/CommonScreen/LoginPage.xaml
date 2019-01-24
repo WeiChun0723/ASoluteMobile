@@ -80,7 +80,7 @@
         </inputLayout:SfTextInputLayout>
             
        <StackLayout Orientation="Horizontal" >  
-         <!-- <inputLayout:SfTextInputLayout Hint="Equipment"                             
+         <inputLayout:SfTextInputLayout Hint="Equipment"                             
           ContainerBackgroundColor="#8b0000"
           FocusedColor="Black"
           EnableHintAnimation="true"  
@@ -95,7 +95,7 @@
             </Image>
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout>
-            <controls:CustomPicker HorizontalOptions="End"
+           <!--  <controls:CustomPicker HorizontalOptions="End"
                      HeightRequest="40"
                      Image="ic_arrow_drop_down" x:Name="eqPicker" SelectedIndexChanged="eqSelected">
             </controls:CustomPicker>-->

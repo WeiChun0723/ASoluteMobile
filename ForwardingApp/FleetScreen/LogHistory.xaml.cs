@@ -23,9 +23,11 @@ namespace ASolute_Mobile
 	{
 
         public string date;
+
         public LogHistory ()
 		{
 			InitializeComponent ();
+
             if (Ultis.Settings.Language.Equals("English"))
             {
                 Title = "Log History";
@@ -34,20 +36,19 @@ namespace ASolute_Mobile
             {
                 Title = "Buku Log";
             }
-                   
         }
 
         protected override async void OnAppearing()
         {
             if (NetworkCheck.IsInternet())
             {
-                downloadLogHistory("");
+                downloadLogHistory(logDate.Date.ToString("yyyy-MM-dd"));
             }
             else
             {
                 refreshLogHistory();
                 await DisplayAlert("Offline Mode", "Cant connect to server", "Ok");
-            }            
+            }
         }
 
 

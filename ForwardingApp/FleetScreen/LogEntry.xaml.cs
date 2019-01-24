@@ -7,7 +7,6 @@ using PCLStorage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -25,8 +24,8 @@ namespace ASolute_Mobile
         clsTrip trip = new clsTrip();
         string offlineLogID, uri ;
         double imageWidth;             
-         static string existingRecordId = "", imageLinkID = "";
-         static int odo;
+        static string existingRecordId = "", imageLinkID = "";
+        static int odo;
         List<AppImage> recordImages = new List<AppImage>();
         byte[] scaledImageByte;
 
@@ -113,8 +112,6 @@ namespace ASolute_Mobile
             }
         }
 
-
-
         public async void confirmLog(object sender, EventArgs e)
         {
             try
@@ -137,7 +134,7 @@ namespace ASolute_Mobile
                     {
                         if (!(String.IsNullOrEmpty(endLocation.Text)) && !(String.IsNullOrEmpty(endOdometer.Text)))
                         {
-                            if (Convert.ToInt32(startOdometer.Text) < Convert.ToInt32(endOdometer.Text))
+                            if (Convert.ToInt32(startOdometer.Text) <= Convert.ToInt32(endOdometer.Text))
                             {
 
                                 string endDate_Time = endDate.Date.Year + "-" + endDate.Date.Month + "-" + endDate.Date.Day + "T" + endTime.Time.ToString();
@@ -456,17 +453,8 @@ namespace ASolute_Mobile
 
                 trip = JObject.Parse(content)["Result"].ToObject<clsTrip>();
 
-           
-                //Split the date time in the json 
-                //string[] start_Time = trip.StartTime.ToString().Split(' ');
-                /*string start_Time = ;
-                //convert and set the default time of the time picker from the json returned
-                string[] start_split_time = start_Time[1].Split(':');
-                int time_hour = Convert.ToInt16(start_split_time[0]);
-                int time_minute = Convert.ToInt16(start_split_time[1]);
-                TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);*/
+                startDate.Date = trip.StartTime.Date;
                 startTime.Time = trip.StartTime.TimeOfDay;
-
                 imageLinkID = trip.LinkId;
 
                 if (existingRecordId != "")
@@ -479,17 +467,12 @@ namespace ASolute_Mobile
 
                     if (!(String.IsNullOrEmpty(trip.EndTime.ToString())))
                     {
-                        /* string[] end_Time = trip.EndTime.ToString().Split(' ');
-                         //convert and set the default time of the time picker from the json returned
-                         string[] end_split_time = end_Time[1].Split(':');
-                         int end_time_hour = Convert.ToInt16(end_split_time[0]);
-                         int end_time_minute = Convert.ToInt16(end_split_time[1]);
-                         TimeSpan end_ts = new TimeSpan((Int16)end_time_hour, (Int16)end_time_minute, (Int16)00);*/
-                        //endTime.Time = trip.EndTime;
+                        endDate.Date = trip.EndTime.Value.Date;
                         endTime.Time = trip.EndTime.Value.TimeOfDay;
                     }
                     else
                     {
+                        endDate.Date = DateTime.Now.Date;
                         endTime.Time = DateTime.Now.TimeOfDay;
                     }
                 }

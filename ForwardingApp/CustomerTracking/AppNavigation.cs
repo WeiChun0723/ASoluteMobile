@@ -216,7 +216,6 @@ namespace ASolute_Mobile.CustomerTracking
                         switch (action)
                         {
                             case "Register":
-
                                 entry.IsVisible = true;
                                 submit.IsVisible = true;
 
