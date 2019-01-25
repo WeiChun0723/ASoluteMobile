@@ -25,7 +25,6 @@ namespace ASolute_Mobile
         string offlineLogID, uri ;
         double imageWidth;             
         static string existingRecordId = "", imageLinkID = "";
-        static int odo;
         List<AppImage> recordImages = new List<AppImage>();
         byte[] scaledImageByte;
 
@@ -329,6 +328,7 @@ namespace ASolute_Mobile
                     }
                 }
 
+                Ultis.Settings.RefreshMenuItem = "Yes";
                 imageLinkID = response.Result["LinkId"];
                 trip.Id = response.Result["Id"];
                 UploadImage();

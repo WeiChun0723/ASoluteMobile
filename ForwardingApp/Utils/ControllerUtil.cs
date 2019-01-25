@@ -471,7 +471,7 @@ namespace ASolute_Mobile.Utils
 
                         if (position == null )
                         {
-                            Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
+                            Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); });
                             
                         }
 

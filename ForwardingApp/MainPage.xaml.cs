@@ -280,7 +280,7 @@ namespace ASolute_Mobile
                             }
                             catch (Exception exception)
                             {
-                                await DisplayAlert("Error", exception.Message, "OK");
+                               // await DisplayAlert("Error", exception.Message, "OK");
                             }
                         }
                     }

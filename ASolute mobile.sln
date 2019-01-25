@@ -6,6 +6,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ASolute_Mobile", "Forwardin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haulage.Droid", "Haulage\Haulage.Droid.csproj", "{7EC21E7A-4B24-401A-8E7C-2B07150722DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASoluteMobile.iOS", "ASoluteMobile.iOS\ASoluteMobile.iOS.csproj", "{BB98A056-B377-44EA-BDEF-E73C483697FD}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ForwardingApp\ForwardingApp.projitems*{091a0e92-091e-4921-8422-226d4b273b14}*SharedItemsImports = 4
@@ -35,6 +37,18 @@ Global
 		{7EC21E7A-4B24-401A-8E7C-2B07150722DD}.Release|iPhone.Build.0 = Release|Any CPU
 		{7EC21E7A-4B24-401A-8E7C-2B07150722DD}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{7EC21E7A-4B24-401A-8E7C-2B07150722DD}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Debug|iPhone.Build.0 = Debug|iPhone
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Release|Any CPU.ActiveCfg = Release|iPhone
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Release|Any CPU.Build.0 = Release|iPhone
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Release|iPhone.ActiveCfg = Release|iPhone
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Release|iPhone.Build.0 = Release|iPhone
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{BB98A056-B377-44EA-BDEF-E73C483697FD}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

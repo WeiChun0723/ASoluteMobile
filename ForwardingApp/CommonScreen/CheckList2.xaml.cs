@@ -19,7 +19,6 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CheckList2 : ContentPage
 	{
         public CheckList previousPage;

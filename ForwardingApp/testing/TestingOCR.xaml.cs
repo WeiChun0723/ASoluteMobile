@@ -11,7 +11,6 @@ using Newtonsoft.Json;
 using Plugin.Media;
 using Xamarin.Forms;
 using Rg.Plugins.Popup;
-using Syncfusion.XForms.Buttons;
 using static ASolute_Mobile.TestingClass;
 
 namespace ASolute_Mobile

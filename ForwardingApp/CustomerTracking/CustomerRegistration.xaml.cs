@@ -11,7 +11,6 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CustomerRegistration : ContentPage
     {
        string firebaseID = "";

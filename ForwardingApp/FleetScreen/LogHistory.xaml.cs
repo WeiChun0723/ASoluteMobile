@@ -210,6 +210,10 @@ namespace ASolute_Mobile
             ObservableCollection<Log> Item = new ObservableCollection<Log>(App.Database.GetLogItems());           
             logHistory.ItemsSource = Item;
             logHistory.HasUnevenRows = true;
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                logHistory.RowHeight = 150;
+            }
             logHistory.Style = (Style)App.Current.Resources["recordListStyle"];         
             logHistory.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
             loading.IsVisible = false;

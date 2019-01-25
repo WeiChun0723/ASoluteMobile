@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+
     public partial class AccountActivation : ContentPage
     {
         string firebaseID = "business"; 

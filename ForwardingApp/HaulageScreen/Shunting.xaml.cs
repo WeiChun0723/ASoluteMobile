@@ -15,7 +15,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.HaulageScreen
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+
 	public partial class Shunting : ContentPage
 	{
         List<string> containerNumber = new List<string>();

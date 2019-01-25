@@ -17,7 +17,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.HaulageScreen
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+
 	public partial class Registration : ContentPage
 	{
       
@@ -33,7 +33,11 @@ namespace ASolute_Mobile.HaulageScreen
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
-            NavigationPage.SetHasNavigationBar(this, false);
+            if(!(Device.RuntimePlatform == Device.iOS))
+            {
+                NavigationPage.SetHasNavigationBar(this, false);
+            }
+
 
             enterpriseEntry.Completed += (s, e) =>
             {

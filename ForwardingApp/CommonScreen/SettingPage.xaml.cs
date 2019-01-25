@@ -18,7 +18,18 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
             nameEntry.Text = Ultis.Settings.AppEnterpriseName;
-            NavigationPage.SetHasNavigationBar(this, false);
+
+
+            if(!(Device.RuntimePlatform == Device.iOS))
+            {
+                NavigationPage.SetHasNavigationBar(this, false);
+            }
+            else
+            {
+                NavigationPage.SetHasNavigationBar(this, true);
+            }
+
+
         }
 
         void EnterpriseName(object sender, TextChangedEventArgs e)

@@ -52,6 +52,10 @@ namespace ASolute_Mobile
                 chgPassTitle.Text = "ASolute Courier";
             }
 
+            if (!(Device.RuntimePlatform == Device.iOS))
+            {
+                NavigationPage.SetHasNavigationBar(this, false);
+            }
         }
 
 

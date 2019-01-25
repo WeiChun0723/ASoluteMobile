@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Android;
-using Android.Support.V4.App;
-using Android.Telephony;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomRenderer;
 using ASolute_Mobile.Utils;

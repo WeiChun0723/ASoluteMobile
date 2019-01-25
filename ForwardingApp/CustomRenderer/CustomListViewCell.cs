@@ -147,6 +147,7 @@ namespace ASolute_Mobile
                     foreach (SummaryItems items in summaryRecord)
                     {
                         Label label = new Label();
+                        label.FontSize = 15;
 
                         if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.ListType.Equals("category_List"))
                         {

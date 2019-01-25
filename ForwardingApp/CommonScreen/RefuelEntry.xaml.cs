@@ -200,6 +200,7 @@ namespace ASolute_Mobile
                                             await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
                                         }
 
+                                        Ultis.Settings.RefreshMenuItem = "Yes";
                                         confirm_icon.IsEnabled = false;
                                         confirm_icon.Source = "confirmDisable.png";
                                         UploadImage();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Com.Syncfusion.Charts;
 using Syncfusion.SfChart.XForms;
 using Xamarin.Forms;
 

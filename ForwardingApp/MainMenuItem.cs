@@ -31,6 +31,8 @@ namespace ASolute_Mobile
         {
             Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
 
+
+
             listView.ItemTapped += async (sender, e) =>
             {
                 loading.IsVisible = true;
@@ -492,6 +494,10 @@ namespace ASolute_Mobile
             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("MainMenu"));
             listView.ItemsSource = Item;
             listView.HasUnevenRows = true;
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                listView.RowHeight = 150;
+            }
             listView.Style = (Style)App.Current.Resources["recordListStyle"];
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
         }

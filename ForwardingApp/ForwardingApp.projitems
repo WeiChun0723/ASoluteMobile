@@ -167,10 +167,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\dataform.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -363,7 +359,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\ImageViewer.xaml.cs">
       <DependentUpon>ImageViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IThumbnailHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelEntry.xaml.cs">
       <DependentUpon>RefuelEntry.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -434,9 +429,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)testing\ChatRoom.xaml.cs">
       <DependentUpon>ChatRoom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)testing\dataform.xaml.cs">
-      <DependentUpon>dataform.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)testing\ContactsInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)testing\ContactsInfoViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml.cs">
@@ -479,6 +471,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)StartUpScreen.xaml.cs">
       <DependentUpon>StartUpScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)IThumbnailHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

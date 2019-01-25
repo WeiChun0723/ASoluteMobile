@@ -12,8 +12,12 @@ namespace ASolute_Mobile.CommonScreen
         {
             InitializeComponent();
 
-            NavigationPage.SetHasNavigationBar(this, false);
+            if (!(Device.RuntimePlatform == Device.iOS))
+            {
+                NavigationPage.SetHasNavigationBar(this, false);
+            }
 
+          
             if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
             {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());

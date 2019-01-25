@@ -19,8 +19,6 @@ namespace ASolute_Mobile
 	
 	public partial class RefuelHistory : ContentPage
 	{
-
-           
         public RefuelHistory (string title)
 		{
 			InitializeComponent ();
@@ -72,8 +70,6 @@ namespace ASolute_Mobile
                 
         }
 
-    
-
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -84,11 +80,11 @@ namespace ASolute_Mobile
         //download record and display at each row of list
         public async void getRefuelHistory()
         {
-            try
+           try
           {
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
-                var client = new HttpClient();
+            activityIndicator.IsRunning = true;
+            activityIndicator.IsVisible = true;
+            var client = new HttpClient();
             client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
             var uri = ControllerUtil.getDownloadRefuelHistoryURL();
             var response = await client.GetAsync(uri);
@@ -197,6 +193,10 @@ namespace ASolute_Mobile
             Ultis.Settings.ListType = "refuel_List";
             refuel_history.ItemsSource = recordItems;
             refuel_history.HasUnevenRows = true;
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                refuel_history.RowHeight = 180;
+            }
             refuel_history.Style = (Style)App.Current.Resources["recordListStyle"];
             refuel_history.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 

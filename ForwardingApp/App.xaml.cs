@@ -17,7 +17,7 @@ using ASolute_Mobile.CommonScreen;
 using ASolute_Mobile.testing;
 using ASolute_Mobile.WMS_Screen;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+
 namespace ASolute_Mobile
 {
     public partial class App : Application
@@ -46,8 +46,8 @@ namespace ASolute_Mobile
            {
                if(Ultis.Settings.AppFirstInstall == "First")
                {
-                    MainPage = new CustomNavigationPage(new SplashScreen());
-                    //MainPage = new CustomNavigationPage(new StartUpScreen());
+                    //MainPage = new CustomNavigationPage(new SplashScreen());
+                    MainPage = new CustomNavigationPage(new StartUpScreen());
                 }
                else
                {
