@@ -26,70 +26,26 @@ namespace ASolute_Mobile
             if (Ultis.Settings.Language.Equals("English"))
             {
                 Title = "Change Password";
+                newPassView.Hint = "New Password";
+                confirmPassView.Hint = "New Password";
+                SubmitButton.Text = "Confirm";
+                BackButton.Text = "Back to Menu";
             }
             else
             {
                 Title = "Tukar kata laluan";
+                newPassView.Hint = "Kata laluan baru";
+                confirmPassView.Hint = "Kata laluan baru";
+                SubmitButton.Text = "Sahkan";
+                BackButton.Text = "Menu Utama";
             }
 
             newPasswordEntry.Completed += (s, e) =>
             {
-                //usernameEntry.Unfocus();
                 confirmPasswordEntry.Focus();
             };
 
-            if (Ultis.Settings.App == "Transport")
-            {
-                chgPassTitle.Text = "ASolute Transport";
-                
-            }
-            else if (Ultis.Settings.App == "Fleet")
-            {
-                chgPassTitle.Text = "ASolute Fleet";
-            }
-            else if (Ultis.Settings.App == "Courier")
-            {
-                chgPassTitle.Text = "ASolute Courier";
-            }
 
-            if (!(Device.RuntimePlatform == Device.iOS))
-            {
-                NavigationPage.SetHasNavigationBar(this, false);
-            }
-        }
-
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (Ultis.Settings.NewJob.Equals("Yes"))
-            {
-                CommonFunction.CreateToolBarItem(this);
-            }
-            else
-            {
-                this.ToolbarItems.Clear();
-            }
-
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
-
-                try
-                {
-                    CommonFunction.NewJobNotification(this);
-                }
-                catch (Exception e)
-                {
-                    DisplayAlert("Notification error", e.Message, "OK");
-                }
-            });
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
         protected override bool OnBackButtonPressed()
@@ -98,43 +54,54 @@ namespace ASolute_Mobile
             return true;
         }
 
+        void BackButton_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new MainPage();
+        }
+
         async void ChangePassword_Clicked(object sender, EventArgs e)
         {
-
-            if (!(string.IsNullOrEmpty(newPasswordEntry.Text) && string.IsNullOrEmpty(confirmPasswordEntry.Text)))
+            try
             {
-                if(newPasswordEntry.Text.Equals(confirmPasswordEntry.Text)){
-                             
-                    string encryptedNewPassword = clsCommonFunc.AES_Encrypt(newPasswordEntry.Text);
-
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var uri = ControllerUtil.getChangePasswordURL(encryptedNewPassword);
-                    var response = await client.GetAsync(uri);
-                    var reply = await response.Content.ReadAsStringAsync();
-                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
-
-                    if(json_response.IsGood == true)
+                if (!(string.IsNullOrEmpty(newPasswordEntry.Text) && string.IsNullOrEmpty(confirmPasswordEntry.Text)))
+                {
+                    if (newPasswordEntry.Text.Equals(confirmPasswordEntry.Text))
                     {
-                        await DisplayAlert("Change Password", "Change Password is Successful! Please login again.", "Okay");
-                        //BackgroundTask.Logout(this);
-                        Application.Current.MainPage = new MainPage();
+
+                        string encryptedNewPassword = clsCommonFunc.AES_Encrypt(newPasswordEntry.Text);
+
+                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getChangePasswordURL(encryptedNewPassword));
+                        clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (json_response.IsGood == true)
+                        {
+                            string response = (Ultis.Settings.Language.Equals("English")) ? "Change Password is Successful! Please login again." : "Berjaya ! Sila login semula.";
+
+                            await DisplayAlert("", response, "OK");
+
+                            BackgroundTask.Logout(this);
+
+                        }
+                        else
+                        {
+                            await DisplayAlert("Fail", json_response.Message, "OK");
+                        }
+
                     }
                     else
                     {
-                        await DisplayAlert("Fail", json_response.Message, "OK");
+                        await DisplayAlert("New Password Not Match", "Entered New Password and Confirm New Password must be the same.", "Okay");
                     }
-                   
+
                 }
                 else
                 {
-                    await DisplayAlert("New Password Not Match", "Entered New Password and Confirm New Password must be the same.", "Okay");
+                    await DisplayAlert("Field missing", "Entered all field before proceed.", "Okay");
                 }
-
             }
-            else
+            catch(Exception ex)
             {
-                await DisplayAlert("Field missing", "Entered all field before proceed.", "Okay");
+               
             }
         }
     }

@@ -20,7 +20,6 @@ namespace ASolute_Mobile
 {
 	public class MainMenuItem : ListViewCommonScreen
     {
-
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string previousLocation = "";
@@ -31,7 +30,12 @@ namespace ASolute_Mobile
         {
             Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
 
+            if(Ultis.Settings.Language.Equals("English/Default"))
+            {
+                var content = CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLanguageURL(1));
+                Ultis.Settings.Language = "Malay";
 
+            }
 
             listView.ItemTapped += async (sender, e) =>
             {
@@ -312,7 +316,6 @@ namespace ASolute_Mobile
 
         public async void GetMainMenu()
         {
-           
             loading.IsVisible = true;
 
             OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
@@ -462,19 +465,15 @@ namespace ASolute_Mobile
                     }
 
                 }
-
-              
             }
             catch (HttpRequestException)
             {
-                await DisplayAlert("Unable to connect", "Please try again later", "Ok");
+                await DisplayAlert("Unable to connect", "Please try again later.", "Ok");
             }
             catch (Exception exception)
             {
                 await DisplayAlert("Error", exception.Message, "Ok");
-            }
-
-           
+            } 
         }
 
         public void CloseApp()

@@ -56,7 +56,6 @@ namespace ASolute_Mobile
                 DisplayAlert("Reminder", "You are currently offline", "OK");
             }
 
-          
             imageGrid.RowSpacing = 0;
             imageGrid.ColumnSpacing = 0;
             imageWidth = App.DisplayScreenWidth / 3;
@@ -75,6 +74,16 @@ namespace ASolute_Mobile
                 DisplayImage();
                 Ultis.Settings.deleteImage = "No";
             }
+        }
+
+        void StartLocationChanged(object sender, Syncfusion.SfAutoComplete.XForms.ValueChangedEventArgs e)
+        {
+            startLocation.Text = e.Value.ToUpper();
+        }
+
+        void EndLocationChanged(object sender, Syncfusion.SfAutoComplete.XForms.ValueChangedEventArgs e)
+        {
+            endLocation.Text = e.Value.ToUpper();
         }
 
         public void startMeter(object sender, EventArgs e)
@@ -127,7 +136,6 @@ namespace ASolute_Mobile
                     newTrip.DriverId = Ultis.Settings.SessionUserItem.DriverId;
                     newTrip.TruckId = Ultis.Settings.SessionUserItem.TruckId;
                     newTrip.StartGeoLoc = ControllerUtil.getPositionAsync();
-
 
                     if (endLogEntry.IsVisible == true)
                     {
@@ -408,7 +416,7 @@ namespace ASolute_Mobile
                     clsFileObject image = new clsFileObject();
 
                     byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
                     image.Content = scaledImageByte;
                     image.FileName = recordImage.photoFileName;
 
@@ -418,7 +426,6 @@ namespace ASolute_Mobile
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);
                 }
-
             }
             catch
             {
@@ -485,7 +492,7 @@ namespace ASolute_Mobile
                     {
                         existingLocation = new AutoComplete();
                     }
-                    existingLocation.Value= location.Value.ToLower();
+                    existingLocation.Value= location.Value.ToUpper();
                     existingLocation.Type = "Location";
                     App.Database.SaveAutoCompleteAsync(existingLocation);
                 }

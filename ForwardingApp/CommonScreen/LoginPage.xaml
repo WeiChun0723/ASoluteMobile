@@ -10,7 +10,6 @@
              BackgroundColor = "#9A2116"
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms">
              
-     
     <ScrollView>
     <StackLayout Padding="15,15,15,15">
         <StackLayout Padding = "0, 5"></StackLayout>
@@ -27,7 +26,7 @@
           x:Name="enterpriseView"
           LeadingViewPosition="Inside"
           HorizontalOptions="FillAndExpand" 
-         > 
+          UnfocusedColor="White"> 
         <Entry  x:Name="organizationEntry" TextColor="Black" Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false" />
             
          <inputLayout:SfTextInputLayout.LeadingView>
@@ -50,9 +49,8 @@
           EnableHintAnimation="true" 
           x:Name="userView"
           LeadingViewPosition="Inside"
-          UnfocusedColor="Black"
-          
-         >    
+          UnfocusedColor="White"> 
+                
         <Entry x:Name="usernameEntry" TextColor="Black" >
                <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="10"/>
@@ -73,7 +71,7 @@
           EnableHintAnimation="true" 
           LeadingViewPosition="Inside"
           EnablePasswordVisibilityToggle="true"
-          UnfocusedColor="Black"
+          UnfocusedColor="White"
           >    
         <Entry IsPassword="true" x:Name="passwordEntry" TextColor="Black" />
 
@@ -91,10 +89,14 @@
           FocusedColor="Black"
           EnableHintAnimation="true"  
           LeadingViewPosition="Inside"
-          UnfocusedColor="Black"
+          UnfocusedColor="White"
           HorizontalOptions="FillAndExpand" 
           >    
-        <Entry  x:Name="equipmentEntry" TextColor="Black" />
+        <Entry  x:Name="equipmentEntry" TextColor="Black">
+             <Entry.Behaviors>
+                <local:MaxLengthValidation MaxLength="20"/>
+             </Entry.Behaviors>     
+         </Entry>
 
          <inputLayout:SfTextInputLayout.LeadingView>
             <Image

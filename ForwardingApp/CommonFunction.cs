@@ -3,6 +3,7 @@ using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Plugin.Media;
 using System;
 using System.Collections.Generic;
@@ -93,23 +94,26 @@ namespace ASolute_Mobile.Utils
             var client = new HttpClient();
             client.BaseAddress = new Uri(baseAdd);
             var uri = calllUri;
-            var reply_content = "";
+            var content = "";
 
             if (method == 0)
             {
                 var response = await client.GetAsync(uri);
-                reply_content = await response.Content.ReadAsStringAsync();
+                content = await response.Content.ReadAsStringAsync();
             }
             else if(method == 1)
             {
                 var objectContent = JsonConvert.SerializeObject(data);
                 var httpContent = new StringContent(objectContent, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(uri, httpContent);
-                reply_content = await response.Content.ReadAsStringAsync();
+                content = await response.Content.ReadAsStringAsync();
             }
 
-            Debug.WriteLine(reply_content);
-            return reply_content;
+            Debug.WriteLine(content);
+
+            var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+
+            return content;
         }
 
         //capture image and store local path in db function
@@ -149,7 +153,8 @@ namespace ASolute_Mobile.Utils
                 }
 
                 //resize the photo and store in different directory 
-                byte[] thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 256, 256, 100,false);
+
+                byte[] thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 256, 256, 100);
                 string thumbnailFolder = HelperUtil.GetThumbnailFolder(image.photoFileLocation);
                 if (!Directory.Exists(thumbnailFolder))
                 {

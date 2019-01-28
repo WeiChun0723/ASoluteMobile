@@ -271,7 +271,7 @@ namespace ASolute_Mobile.TransportScreen
                 else
                 {
                     byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
                     image.Content = scaledImageByte;
                 }
 

@@ -6,7 +6,7 @@
     <StackLayout>
        <!-- <SearchBar x:Name="historySearch" TextChanged="searchRefuel" Placeholder="Search" HeightRequest="30"/> -->
 
-
+       <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>
         <ListView x:Name="refuel_history" IsPullToRefreshEnabled="True" Refreshing="refreshRefuelHistory" SeparatorColor="White"></ListView>
@@ -16,7 +16,7 @@
                 <TapGestureRecognizer Tapped="addNewRecord"/>
             </Image.GestureRecognizers>
         </Image>
-        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
+        
         </StackLayout>
         
     </StackLayout>

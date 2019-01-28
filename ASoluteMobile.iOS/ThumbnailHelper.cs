@@ -8,7 +8,7 @@ using UIKit;
 using Xamarin.Forms;
 using ASolute_Mobile;
 
-[assembly: Dependency(typeof(IThumbnailHelper))]
+[assembly: Dependency(typeof(ThumbnailHelper))]
 namespace ASolute_Mobile.Droid
 {
     public class ThumbnailHelper : IThumbnailHelper

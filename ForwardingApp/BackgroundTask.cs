@@ -15,9 +15,6 @@ using ASolute_Mobile.Data;
 using ASolute.Mobile.Models;
 using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
-using System.Collections.ObjectModel;
-using Acr.UserDialogs;
-using System.Drawing;
 
 namespace ASolute_Mobile
 {
@@ -36,7 +33,6 @@ namespace ASolute_Mobile
         {
         }
 
-     
         public static async Task StartListening()
         {
             if (CrossGeolocator.Current.IsListening)
@@ -436,7 +432,7 @@ namespace ASolute_Mobile
             {
                 contentPage.IsBusy = true;
             }
-            //Ultis.Settings.SessionUserItem.UserId = "";
+
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";
             
@@ -623,7 +619,6 @@ namespace ASolute_Mobile
                         foreach (clsHaulageModel job in HaulageJobList)
                         {
                             //JobItems existingRecord = App.Database.GetPendingRecordAsync(job.Id);
-
                             
                             JobItems existingRecord = new JobItems();
                             
@@ -776,7 +771,7 @@ namespace ASolute_Mobile
                     else
                     {
                         byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                        scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                        scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
                         image.Content = scaledImageByte;
                     }
 

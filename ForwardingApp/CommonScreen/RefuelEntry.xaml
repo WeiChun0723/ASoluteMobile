@@ -17,7 +17,6 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
@@ -81,7 +80,7 @@
             </StackLayout>
 
                 <StackLayout Padding="0,10,0,0" Grid.Row="7" Grid.Column="0">
-                    <Label Text="Voucher" FontAttributes="Bold"    x:Name="lblVoucher"/>
+                    <Label Text="Voucher" FontAttributes="Bold"  x:Name="lblVoucher"/>
                 </StackLayout>
             
             <StackLayout Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
@@ -94,11 +93,11 @@
 
             </StackLayout>
 
-                <StackLayout Padding="0,10,0,0" Grid.Row="8" Grid.Column="0" IsVisible="false">
+                <StackLayout Padding="0,10,0,0" IsVisible="false">
                     <Label Text="Other Ref" FontAttributes="Bold"    x:Name="lblOtherRef"/>
                 </StackLayout>
             
-            <StackLayout Grid.Row="8" Grid.Column="1" Orientation="Horizontal" IsVisible="false">
+            <StackLayout  Orientation="Horizontal" IsVisible="false">
                     <Entry x:Name="other" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150"  TextChanged="OtherText" BackgroundColor="WhiteSmoke"/>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"  >
                         <Image.GestureRecognizers>

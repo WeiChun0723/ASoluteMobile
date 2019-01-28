@@ -346,7 +346,7 @@ namespace ASolute_Mobile
             }
             catch
             {
-                //DisplayAlert("Error", "Please try again", "OK");
+               
               
             }
            
@@ -490,20 +490,13 @@ namespace ASolute_Mobile
                                 lblOtherRef.Text = language.Value;
                             }
                         }
-                       
                     }
                     else
                     {
                         await DisplayAlert("Json Error", json_reponse.Message, "OK");
                     }
 
-                    //Split the date time in the json 
-                    /*string[] convert_date_time = fuelCostNew.RefuelDateTime.ToString().Split(' ');
-                    //convert and set the default time of the time picker from the json returned
-                    string[] split_time = convert_date_time[1].Split(':');
-                    int time_hour = Convert.ToInt16(split_time[0]);
-                    int time_minute = Convert.ToInt16(split_time[1]);
-                    TimeSpan ts = new TimeSpan((Int16)time_hour, (Int16)time_minute, (Int16)00);*/
+
                     timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
 
                     costPerLiter.Text = String.Format("{0:0.00}", fuelCostNew.CostRate);
@@ -526,6 +519,7 @@ namespace ASolute_Mobile
                     }
 
                     paymentPicker.SelectedIndex = 1;
+                    stationPicker.SelectedIndex = 0;
 
                 }
                 catch (HttpRequestException)
@@ -594,7 +588,7 @@ namespace ASolute_Mobile
                     clsFileObject image = new clsFileObject();
 
                     byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100, false);
+                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
                     image.Content = scaledImageByte;
                     image.FileName = recordImage.photoFileName;
 
@@ -603,8 +597,8 @@ namespace ASolute_Mobile
 
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);
-                }
 
+                }
             }
             catch
             {

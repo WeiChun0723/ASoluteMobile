@@ -128,7 +128,7 @@ namespace ASolute_Mobile
                 if (uploadImage.photoScaledFileLocation == null)
                 {
                     byte[] originalPhotoImageBytes = File.ReadAllBytes(uploadImage.photoFileLocation);
-                    byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100,false);
+                    byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
 
                     capturedImage.Content = scaledImageByte;
                     capturedImage.FileName = uploadImage.photoFileName;

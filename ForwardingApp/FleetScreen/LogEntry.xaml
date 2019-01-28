@@ -26,7 +26,7 @@
             <Label Text="From" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"  VerticalOptions="Center"  x:Name="lblStartFrom"/>
             <!--<Entry x:Name="startLocation"  BackgroundColor="LightYellow" Grid.Row="3" Grid.Column="1" HorizontalOptions="Fill" WidthRequest="150" HorizontalTextAlignment="Center"/>-->
             <autocomplete:SfAutoComplete x:Name="startLocation" HeightRequest="40" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
-                                     AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1" WidthRequest="150" BackgroundColor="LightYellow"  />
+                                     AutoCompleteMode="Suggest" Grid.Row="3" Grid.Column="1" WidthRequest="150" BackgroundColor="LightYellow" ValueChanged="StartLocationChanged"/>
         </Grid>
 
         <Grid  x:Name="endLogEntry" RowSpacing="5" ColumnSpacing="0" IsVisible="False">
@@ -50,7 +50,7 @@
             <Entry x:Name="endOdometer" BackgroundColor="LightYellow" Placeholder="Maximum 6 digit" Grid.Row="2" Grid.Column="1" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextChanged="endMeter"/>
             <Label Text="Purpose" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"  VerticalOptions="Center" x:Name="lblEndLocation"/>
             <autocomplete:SfAutoComplete x:Name="endLocation" HeightRequest="40" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
-                                      AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1"  WidthRequest="150" BackgroundColor="LightYellow"/> 
+                                      AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1"  WidthRequest="150" BackgroundColor="LightYellow" ValueChanged="EndLocationChanged"/> 
         </Grid>
 
 

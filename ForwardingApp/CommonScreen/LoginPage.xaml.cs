@@ -221,7 +221,7 @@ namespace ASolute_Mobile
 
                         if (login_user.Language == 0)
                         {
-                            Ultis.Settings.Language = "English";
+                            Ultis.Settings.Language = "English/Default";
                         }
                         else
                         {

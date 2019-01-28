@@ -149,8 +149,6 @@ namespace ASolute_Mobile.HaulageScreen
                 await DisplayAlert("Error", "The baseURL for enterprise " + enterpriseEntry.Text.ToUpper() + " ("
                                    + Ultis.Settings.SessionBaseURI + ") " + "cannot be use.", "OK");
             }
-
-          
         }
 
         public async void DownloadLogo()
