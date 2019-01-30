@@ -53,7 +53,7 @@ namespace ASolute_Mobile
         {
             actionID = ID;
             actionMessage = Message;
-            Ultis.Settings.ActionID = ID;
+            Ultis.Settings.Action = ID;
             Ultis.Settings.App = "Haulage";
 
             NavigationPage.SetHasNavigationBar(this, true);
@@ -70,7 +70,7 @@ namespace ASolute_Mobile
             Action();
 
            
-            Ultis.Settings.MenuAction = "Job_List";
+            Ultis.Settings.MenuRequireAction = "Job_List";
         }
 
         protected override void OnAppearing()
@@ -188,7 +188,7 @@ namespace ASolute_Mobile
                 {
                     if (job.Id.Equals(Ultis.Settings.SessionCurrentJobId))
                     {
-                        Ultis.Settings.ActionID = job.ActionId.ToString();
+                        Ultis.Settings.Action = job.ActionId.ToString();
                         containerNumber = job.ContainerNo;
                         actionMessage = job.ActionMessage;
                         await BackgroundTask.DownloadLatestRecord(this);
@@ -204,10 +204,10 @@ namespace ASolute_Mobile
         private async void Action()
         {
             // Check the action id and show th control depend on what the action id needed
-            if (!(String.IsNullOrEmpty(Ultis.Settings.ActionID)))
+            if (!(String.IsNullOrEmpty(Ultis.Settings.Action)))
             {                
 
-                if (Ultis.Settings.ActionID.Equals("EmptyPickup"))
+                if (Ultis.Settings.Action.Equals("EmptyPickup"))
                 {
                     trailerContainerGrid.IsVisible = true;
                     confirmGrid.IsVisible = true;
@@ -240,7 +240,7 @@ namespace ASolute_Mobile
                         }
                     }
                 }
-                else if (Ultis.Settings.ActionID.Equals("Point1_In") || Ultis.Settings.ActionID.Equals("Point2_In"))
+                else if (Ultis.Settings.Action.Equals("Point1_In") || Ultis.Settings.Action.Equals("Point2_In"))
                 {
 
                         try
@@ -284,7 +284,7 @@ namespace ASolute_Mobile
 
                     signatureStackLayout.IsVisible = false;
                 }
-                else if (Ultis.Settings.ActionID.Equals("Point1_Chk") || Ultis.Settings.ActionID.Equals("Point2_Chk"))
+                else if (Ultis.Settings.Action.Equals("Point1_Chk") || Ultis.Settings.Action.Equals("Point2_Chk"))
                 {
                     mapPhoneStackLayout.IsVisible = true;
                     remarksStackLayout.IsVisible = true;
@@ -329,10 +329,10 @@ namespace ASolute_Mobile
                     jobDetails = App.Database.GetDetailsAsync(currentJobId);
                 }
 
-                if (Ultis.Settings.deleteImage == "Yes" || jobItem.Done == 1 || jobItem.Done == 2)
+                if (Ultis.Settings.DeleteImage == "Yes" || jobItem.Done == 1 || jobItem.Done == 2)
                 {
                     DisplayImage();
-                    Ultis.Settings.deleteImage = "No";
+                    Ultis.Settings.DeleteImage = "No";
                 }
 
                 if (remarkTextEditor == null)
@@ -520,7 +520,7 @@ namespace ASolute_Mobile
                 };
 
                 sealEntry.Text = jobItem.SealNo;
-                if ((Ultis.Settings.ActionID.Equals("Point1_Chk") || Ultis.Settings.ActionID.Equals("Point2_Chk")))
+                if ((Ultis.Settings.Action.Equals("Point1_Chk") || Ultis.Settings.Action.Equals("Point2_Chk")))
                 {
                     if (jobItem.SealMode.Equals("R"))
                     {
@@ -915,7 +915,7 @@ namespace ASolute_Mobile
                             futile.IsEnabled = false;
                             futile.Source = "futileDisable.png";
 
-                            if (Ultis.Settings.ActionID.Equals("EmptyPickup"))
+                            if (Ultis.Settings.Action.Equals("EmptyPickup"))
                             {
                                 if (!(String.IsNullOrEmpty(trailerEntry.Text)))
                                 {
@@ -964,13 +964,13 @@ namespace ASolute_Mobile
                                     futile.Source = "futile.png";
                                 }
                             }
-                            else if (Ultis.Settings.ActionID.Equals("Point1_Chk") || Ultis.Settings.ActionID.Equals("Point2_Chk"))
+                            else if (Ultis.Settings.Action.Equals("Point1_Chk") || Ultis.Settings.Action.Equals("Point2_Chk"))
                             {
 
                                 if ((!(String.IsNullOrEmpty(sealEntry.Text)) && sealEntry.IsVisible) || sealEntry.IsVisible == false || (jobItem.SealMode.Equals("O") && sealEntry.IsVisible) || (jobItem.SealMode.Equals("R") && sealEntry.IsVisible))
                                 {
                                     haulageJob.Id = Ultis.Settings.SessionCurrentJobId;
-                                    if (Ultis.Settings.ActionID.Equals("Point1_Chk"))
+                                    if (Ultis.Settings.Action.Equals("Point1_Chk"))
                                     {
                                         haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.Point1_Chk;
                                     }
@@ -1012,8 +1012,6 @@ namespace ASolute_Mobile
 
                         activity.IsRunning = false;
                         activity.IsVisible = false;
-
-
 
                     }
                     catch (Exception)

@@ -45,7 +45,7 @@ namespace ASolute_Mobile
                 confirmPasswordEntry.Focus();
             };
 
-
+            NavigationPage.SetHasNavigationBar(this, false);
         }
 
         protected override bool OnBackButtonPressed()
@@ -99,7 +99,7 @@ namespace ASolute_Mobile
                     await DisplayAlert("Field missing", "Entered all field before proceed.", "Okay");
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                
             }

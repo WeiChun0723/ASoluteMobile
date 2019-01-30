@@ -190,7 +190,7 @@ namespace ASolute_Mobile
         public void loadRefuelHistory()
         {
             ObservableCollection<RefuelHistoryData> recordItems = new ObservableCollection<RefuelHistoryData>(App.Database.GetRecordItems());
-            Ultis.Settings.ListType = "refuel_List";
+            Ultis.Settings.List = "refuel_List";
             refuel_history.ItemsSource = recordItems;
             refuel_history.HasUnevenRows = true;
             if (Device.RuntimePlatform == Device.iOS)

@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.SettingPage" BackgroundColor="#9A2116">
-    
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.SettingPage" BackgroundColor="#9A2116" xmlns:local="clr-namespace:ASolute_Mobile.InputValidation" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <ContentPage.Content>
-        <StackLayout Padding="20, 100, 20, 100">
-            <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" />
-            <StackLayout Padding="0, 10">
+        <ScrollView>
+            <StackLayout Padding="20, 100, 20, 100">
+                <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" />
+                <StackLayout Padding="0, 10">
+                </StackLayout>
+                <Label TextColor="#ffffff" FontSize="20" Text="Change Enterprise Name" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
+                <StackLayout Padding="0, 40">
+                </StackLayout>
+                <inputLayout:SfTextInputLayout Hint="Enterprise name" x:Name="enterpriseView" Style="{StaticResource inputStyle}">
+                    <Entry x:Name="nameEntry" TextColor="White">
+                        <Entry.Behaviors>
+                            <local:MaxLengthValidation MaxLength="50" />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <inputLayout:SfTextInputLayout.LeadingView>
+                        <Image Source="organization" />
+                    </inputLayout:SfTextInputLayout.LeadingView>
+                </inputLayout:SfTextInputLayout>
+                <buttons:SfButton x:Name="submitButton" Text="Submit" Clicked="Url_Clicked" Style="{StaticResource buttonStyle}" />
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
             </StackLayout>
-            <Label TextColor="#ffffff" FontSize="20" Text="Change Enterprise Name" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
-            <StackLayout Padding="0, 40">
-            </StackLayout>
-            <Entry x:Name="nameEntry" Style="{StaticResource entryStyle}" TextChanged="EnterpriseName"/>
-            <Button x:Name="submitButton" Text="Submit" Clicked="Url_Clicked" Style="{StaticResource buttonStyle}"/>
-            <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
-        </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
-    
 </ContentPage>

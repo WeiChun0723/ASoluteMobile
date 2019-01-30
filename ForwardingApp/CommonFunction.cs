@@ -111,7 +111,21 @@ namespace ASolute_Mobile.Utils
 
             Debug.WriteLine(content);
 
-            var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+            //var checking = JObject.Parse(content)["Result"].ToObject<clsResponse>();
+
+            /*if (!(checking.IsGood))
+            {
+                if (checking.Message == "Invalid Session !")
+                {
+                    BackgroundTask.Logout(page);
+                    await page.DisplayAlert("Error", checking.Message, "Ok");
+                }
+                else
+                {
+                    await page.DisplayAlert("Error", checking.Message, "Ok");
+                }
+
+            }*/
 
             return content;
         }
@@ -261,27 +275,6 @@ namespace ASolute_Mobile.Utils
 
         }
 
-        public static void AppActivity(string update, string status, string message)
-        {
-            ActivityLog history = new ActivityLog();
-
-            if (Ultis.Settings.Language.Equals("English"))
-            {
-                history.activity = update;
-                history.status = "Status: " + status;
-                history.message = "Message: " + message;
-            }
-            else
-            {
-                history.activity = update;
-                history.status = "Status: " + status;
-                history.message = "Mesej: " + message;
-            }
-            
-            App.Database.SaveActivity(history);
-        }
-
-       
     }
 
 }

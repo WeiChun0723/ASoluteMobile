@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>ASOLUTE Fleet</string>
+	<string>ASolute Fleet</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.asolute.AILSTracking</string>
 	<key>LSRequiresIPhoneOS</key>

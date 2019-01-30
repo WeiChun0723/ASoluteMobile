@@ -178,7 +178,7 @@ namespace ASolute_Mobile
                                     history = jobItem.jobNo + " Futile updated";
                                 }
                                                                 
-                               CommonFunction.AppActivity(history, "Succeed", json_response.Message);                                                                                             
+                                                                                                               
 
                                 if (jobItem.UpdateType == "FutileUpdate" || jobItem.UpdateType == "CargoReturnUpdate")
                                 {
@@ -211,7 +211,7 @@ namespace ASolute_Mobile
                                     history = jobItem.jobNo + " Futile update";
                                 }
 
-                                CommonFunction.AppActivity(history, "Failed", json_response.Message);
+
                             }
                         }
                       
@@ -276,14 +276,7 @@ namespace ASolute_Mobile
                     }
                     catch(Exception exception)
                     {
-                        if (Ultis.Settings.Language.Equals("English"))
-                        {
-                            CommonFunction.AppActivity("Sync refuel record", "Failed ", exception.Message);
-                        }
-                        else
-                        {
-                            CommonFunction.AppActivity("Isi minyak entri", "Gagal", exception.Message);
-                        }
+                       
                     }
 
                     try
@@ -340,29 +333,13 @@ namespace ASolute_Mobile
                                 imageEventID = log_response.Result["LinkId"];                                
                                 BackgroundUploadImage();                                                                 
 
-                                if (Ultis.Settings.Language.Equals("English"))
-                                {
-                                    CommonFunction.AppActivity(history, "Succeed", log_response.Message);
-                                }
-                                else
-                                {
-                                    CommonFunction.AppActivity(history, "Berjaya", log_response.Message);
-                                }
+                               
                             }
                             else
                             {
-                                Log.Done = 1;
-                                if (Ultis.Settings.Language.Equals("English"))
-                                {
-                                    CommonFunction.AppActivity(history, "Failed", log_response.Message);
-                                }
-                                else
-                                {
-                                    CommonFunction.AppActivity(history, "Gagal", log_response.Message);
-                                }
+                              
                             }
 
-                            
                             App.Database.SaveLogRecordAsync(Log);
                         }
                     }
@@ -370,8 +347,7 @@ namespace ASolute_Mobile
                     {
 
                     }
-                  
-                  
+
                 }
                 
             }

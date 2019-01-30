@@ -145,7 +145,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public void LoadProviderList()
         {
-            Ultis.Settings.ListType = "provider_List";
+            Ultis.Settings.List = "provider_List";
             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("ProviderList"));
             provide_list.ItemsSource = Item;
             provide_list.HasUnevenRows = true;          

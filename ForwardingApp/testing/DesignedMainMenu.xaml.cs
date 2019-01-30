@@ -184,7 +184,7 @@ namespace ASolute_Mobile.testing
         public void LoadMainMenu()
         {
   
-            Ultis.Settings.ListType = "Main_Menu";
+            Ultis.Settings.List = "Main_Menu";
             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
             listView.ItemsSource = Item;
             listView.Style = (Style)App.Current.Resources["recordListStyle"];

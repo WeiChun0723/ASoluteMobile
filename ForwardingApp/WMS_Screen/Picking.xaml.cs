@@ -172,7 +172,7 @@ namespace ASolute_Mobile.WMS_Screen
         void loadPickingList()
         {
 
-            Ultis.Settings.ListType = "Picking_List";
+            Ultis.Settings.List = "Picking_List";
             Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("PickingList"));
             pickingList.ItemsSource = Item;
             pickingList.HasUnevenRows = true;

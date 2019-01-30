@@ -167,7 +167,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         void loadPackingList()
         {
-            Ultis.Settings.ListType = "Packing_List";
+            Ultis.Settings.List = "Packing_List";
             Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("PackingList"));
             pickingList.ItemsSource = Item;
             pickingList.HasUnevenRows = true;

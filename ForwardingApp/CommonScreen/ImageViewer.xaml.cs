@@ -54,7 +54,7 @@ namespace ASolute_Mobile
                 }               
                 actualImageFile.DeleteAsync();
                 App.Database.DeleteJobImage(appImage);
-                Ultis.Settings.deleteImage = "Yes";
+                Ultis.Settings.DeleteImage = "Yes";
                 Navigation.PopAsync();
             };
             Button backButton = new Button();

@@ -272,13 +272,9 @@ namespace ASolute_Mobile
                                     App.DropDatabase();
                                     App.Database.deleteLocationAutoComplete("Location");
                                     BackgroundTask.Logout(this);
-                                    if (Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.iOS)
-                                    {
-                                        DependencyService.Get<CloseApp>().close_app();
-                                    }
                                 }
                             }
-                            catch (Exception exception)
+                            catch (Exception)
                             {
                                // await DisplayAlert("Error", exception.Message, "OK");
                             }

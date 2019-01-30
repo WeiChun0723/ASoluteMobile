@@ -29,29 +29,15 @@ namespace ASolute_Mobile
                 NavigationPage.SetHasNavigationBar(this, true);
             }
 
-
         }
 
-        void EnterpriseName(object sender, TextChangedEventArgs e)
-        {
-            string _name = nameEntry.Text.ToUpper();
-
-            if (_name.Length > 15)
-            {
-                _name = _name.Remove(_name.Length - 1);
-
-                nameEntry.Unfocus();
-            }
-
-            nameEntry.Text = _name;
-        }
 
         async void Url_Clicked(object sender, EventArgs e)
         {
             submitButton.IsEnabled = false;    
             this.activityIndicator.IsRunning = true;
 
-                var content = await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text.ToUpper()));
+                var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text));
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood)

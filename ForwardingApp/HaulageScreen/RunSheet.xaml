@@ -21,7 +21,7 @@
         </StackLayout>
     </ContentPage>
     
-  <!--<StackLayout >
+  <!--<StackLayout>
         <StackLayout Orientation="Horizontal" Spacing="15" Padding="15,15,15,15">
             <Label Text="Date" FontAttributes="Bold" VerticalOptions="CenterAndExpand"  FontSize="Medium"/>
             <DatePicker x:Name="datePicker"  HorizontalOptions="FillAndExpand" BackgroundColor="LightYellow" Scale="1.0" DateSelected="recordDate"/>

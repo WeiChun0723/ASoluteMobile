@@ -97,10 +97,10 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (Ultis.Settings.deleteImage == "Yes")
+            if (Ultis.Settings.DeleteImage == "Yes")
             {
                 DisplayImage();
-                Ultis.Settings.deleteImage = "No";
+                Ultis.Settings.DeleteImage = "No";
             }
         }
 

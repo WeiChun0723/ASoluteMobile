@@ -14,7 +14,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.HaulageScreen
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+
     public partial class RunSheet : CarouselPage
 	{
         bool firstLoad = true, changePage = false;
@@ -37,7 +37,6 @@ namespace ASolute_Mobile.HaulageScreen
 
             downloadRunSheet(DateTime.Now.ToString("yyyy MM dd"));
 
-
             SelectedItem = Children[1];
         }
 
@@ -47,7 +46,7 @@ namespace ASolute_Mobile.HaulageScreen
 
             int index = Children.IndexOf(CurrentPage);
            
-           // string date = datePicker.Date.ToString();
+          
             if (!firstLoad)
             {
 
@@ -55,15 +54,13 @@ namespace ASolute_Mobile.HaulageScreen
                 {
 
                     currentDate = datePicker.Date.AddDays(-1);
-                    // currentDate = currentDate.AddDays(-1);
                     changePage = true;
                     downloadRunSheet(currentDate.ToString("yyyy MM dd"));
 
                 }
                 else if (index == 2)
                 {
-            
-                    //currentDate = currentDate.AddDays(1);
+                 
                     currentDate = datePicker.Date.AddDays(1);
                     changePage = true;
                     downloadRunSheet(currentDate.ToString("yyyy MM dd"));
@@ -236,21 +233,19 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void PreviousDate(object sender, EventArgs e)
         {
-        
+
             previous_icon.IsEnabled = false;
             next_icon.IsEnabled = false;
             option = "previous";
-           
             downloadRunSheet(datePicker.Date.AddDays(-1).ToString("yyyy MM dd"));
         }
 
         public void NextDate(object sender, EventArgs e)
         {
-           
+
             previous_icon.IsEnabled = false;
             next_icon.IsEnabled = false;
             option = "next";
-            
             downloadRunSheet(datePicker.Date.AddDays(1).ToString("yyyy MM dd"));
         }
 
@@ -270,15 +265,7 @@ namespace ASolute_Mobile.HaulageScreen
                 firstLoad = false;
                 CurrentPage = Children[1];
 
-
-
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var uri = ControllerUtil.getDownloadHaulageHistoryURL(date);
-                var response = await client.GetAsync(uri);
-                var content = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine(content);
-
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadHaulageHistoryURL(date));
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood == true)
@@ -386,8 +373,8 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void refreshRunSheetHistory()
         {
-            
-            Ultis.Settings.ListType = "Run_Sheet";
+
+            Ultis.Settings.List = "Run_Sheet";
             ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
             runSheetHistory.ItemsSource = Item;
             runSheetHistory.HasUnevenRows = true;

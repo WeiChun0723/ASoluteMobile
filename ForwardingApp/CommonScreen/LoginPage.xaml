@@ -1,127 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.LoginPage"             
-             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
-             xmlns:lc="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
-             xmlns:lb="clr-namespace:XLabs.Forms.Behaviors;assembly=XLabs.Forms"
-             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
-             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-             BackgroundColor = "#9A2116"
-             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms">
-             
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.LoginPage" 
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" 
+             xmlns:lc="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms" 
+             xmlns:lb="clr-namespace:XLabs.Forms.Behaviors;assembly=XLabs.Forms" 
+             xmlns:local="clr-namespace:ASolute_Mobile.InputValidation" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
+             BackgroundColor="#9A2116" 
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <ScrollView>
-    <StackLayout Padding="15,15,15,15">
-        <StackLayout Padding = "0, 5"></StackLayout>
-        <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
-        <StackLayout Padding = "0, 10"></StackLayout>
-        <Label TextColor="Black" FontSize = "Medium" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold"/>
-       <StackLayout Padding = "0, 15"></StackLayout>
-        <StackLayout Orientation="Horizontal" >
-          <inputLayout:SfTextInputLayout Hint="Enterprise name"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
-          x:Name="enterpriseView"
-          LeadingViewPosition="Inside"
-          HorizontalOptions="FillAndExpand" 
-          UnfocusedColor="White"> 
-        <Entry  x:Name="organizationEntry" TextColor="Black" Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false" />
-            
-         <inputLayout:SfTextInputLayout.LeadingView>
-            <Image
-                Source="organization">     
-            </Image>
-        </inputLayout:SfTextInputLayout.LeadingView>
-        </inputLayout:SfTextInputLayout>   
-                <Image Source="edit.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="End"  x:Name="edit_icon">
+        <StackLayout Padding="15,15,15,15">
+            <StackLayout Padding="0, 5">
+            </StackLayout>
+            <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100" />
+            <StackLayout Padding="0, 10">
+            </StackLayout>
+            <Label TextColor="Black" FontSize="Small" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
+            <StackLayout Padding="0, 15">
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <inputLayout:SfTextInputLayout Hint="Enterprise name" Style="{StaticResource inputStyle}" x:Name="enterpriseView">
+                    <Entry x:Name="organizationEntry" TextColor="White" Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false" />
+                    <inputLayout:SfTextInputLayout.LeadingView>
+                        <Image Source="organization" />
+                    </inputLayout:SfTextInputLayout.LeadingView>
+                </inputLayout:SfTextInputLayout>
+                <Image Source="edit.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="End" x:Name="edit_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Update_URL_Clicked"/>
+                        <TapGestureRecognizer Tapped="Update_URL_Clicked" />
                     </Image.GestureRecognizers>
                 </Image>
+            </StackLayout>
+            <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}">
+                <Entry x:Name="usernameEntry" TextColor="White">
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="10" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="user" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}">
+                <Entry IsPassword="true" x:Name="passwordEntry" TextColor="White" />
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="pass" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+                <Entry x:Name="equipmentEntry" TextColor="White">
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="20" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="logintruck" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="loginButton" Text="Login" Clicked="Login_Clicked" />
+            <StackLayout Orientation="Horizontal">
+                <Label x:Name="newUser" FontAttributes="Bold" TextColor="Black" Text="New User ?" HorizontalOptions="StartAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="NewUser" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+            <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
-           
-         <inputLayout:SfTextInputLayout Hint="User ID"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
-          x:Name="userView"
-          LeadingViewPosition="Inside"
-          UnfocusedColor="White"> 
-                
-        <Entry x:Name="usernameEntry" TextColor="Black" >
-               <Entry.Behaviors>
-                    <local:MaxLengthValidation MaxLength="10"/>
-                </Entry.Behaviors>     
-         </Entry>
-
-         <inputLayout:SfTextInputLayout.LeadingView>
-            <Image
-                Source="user" >     
-            </Image>
-        </inputLayout:SfTextInputLayout.LeadingView>
-        </inputLayout:SfTextInputLayout>    
-            
-          <inputLayout:SfTextInputLayout Hint="Password"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
-          LeadingViewPosition="Inside"
-          EnablePasswordVisibilityToggle="true"
-          UnfocusedColor="White"
-          >    
-        <Entry IsPassword="true" x:Name="passwordEntry" TextColor="Black" />
-
-         <inputLayout:SfTextInputLayout.LeadingView>
-            <Image
-                Source="pass" >     
-            </Image>
-        </inputLayout:SfTextInputLayout.LeadingView>
-        </inputLayout:SfTextInputLayout>
-            
-       <StackLayout Orientation="Horizontal" >  
-         <inputLayout:SfTextInputLayout Hint="Equipment"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true"  
-          LeadingViewPosition="Inside"
-          UnfocusedColor="White"
-          HorizontalOptions="FillAndExpand" 
-          >    
-        <Entry  x:Name="equipmentEntry" TextColor="Black">
-             <Entry.Behaviors>
-                <local:MaxLengthValidation MaxLength="20"/>
-             </Entry.Behaviors>     
-         </Entry>
-
-         <inputLayout:SfTextInputLayout.LeadingView>
-            <Image
-                Source="logintruck" >     
-            </Image>
-        </inputLayout:SfTextInputLayout.LeadingView>
-        </inputLayout:SfTextInputLayout>
-           <!--  <controls:CustomPicker HorizontalOptions="End"
-                     HeightRequest="40"
-                     Image="ic_arrow_drop_down" x:Name="eqPicker" SelectedIndexChanged="eqSelected">
-            </controls:CustomPicker>-->
-        </StackLayout>
-
-        <Button Style="{StaticResource buttonStyle}" x:Name="loginButton" Text = "Login" Clicked="Login_Clicked" />
-       
-        <StackLayout Orientation="Horizontal">
-            <Label x:Name="newUser" FontAttributes="Bold" TextColor="Black" Text="New User ?" HorizontalOptions="StartAndExpand" >
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="NewUser"/>
-                </Label.GestureRecognizers>
-            </Label>
-        </StackLayout>
-        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
-      
-    </StackLayout>
     </ScrollView>
-
 </ContentPage>

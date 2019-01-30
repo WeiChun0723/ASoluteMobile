@@ -20,7 +20,6 @@ namespace ASolute_Mobile.Ultis
         #region Setting Constants
    
         private static UserItem CurrentUserItem;
-
         private static readonly string SettingsDefault = string.Empty;
         private const string FirstInstall = "first";
         private const string EnterpriseName = "enterpriseName";
@@ -30,16 +29,13 @@ namespace ASolute_Mobile.Ultis
         private const string CurrentJobId = "job_id";
         private const string CurrentURI = "current_uri";        
         private const string SecretKey = "secret_key";
-        private const string AppID = "app_id";
-        private const string LoginCrash = "login_crash";
-        private const string menuAction = "menuAction";
-        private const string listType = "listType";
-        private const string actionID = "actionID";
-        private const string deleted = "No";  
-        private const string languageChose = "English";
-        private const string AppVersion = "";
-        private const string previousOdo = "";
-        private const string contextMenuTitle = "";
+        private const string MenuAction = "menuAction";
+        private const string ListType = "listType";
+        private const string ActionID = "actionID";
+        private const string Deleted = "No";  
+        private const string LanguageChose = "English";
+        private const string AppName = "app_Name";
+        private const string ContextMenuTitle = "";
         private const string UpdateRecord = "Yes";
         private const string RefreshMenu = "refresh_menu";
         private const string DeviceID = "testing";
@@ -229,11 +225,11 @@ namespace ASolute_Mobile.Ultis
         {
             get
             {
-                return AppSettings.GetValueOrDefault(AppVersion, "");
+                return AppSettings.GetValueOrDefault(AppName, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(AppVersion, value);
+                AppSettings.AddOrUpdateValue(AppName, value);
             }
         }
 
@@ -254,110 +250,73 @@ namespace ASolute_Mobile.Ultis
         {
             get
             {
-                return AppSettings.GetValueOrDefault(languageChose, SettingsDefault);
+                return AppSettings.GetValueOrDefault(LanguageChose, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(languageChose, value);
+                AppSettings.AddOrUpdateValue(LanguageChose, value);
 
             }
         }
 
 
-        public static string ActionID
+        public static string Action
         {
             get
             {
-                return AppSettings.GetValueOrDefault(actionID, SettingsDefault);
+                return AppSettings.GetValueOrDefault(ActionID, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(actionID, value);
+                AppSettings.AddOrUpdateValue(ActionID, value);
             }
         }
 
-        public static string ContextMenuTitle
+        public static string ContextMenu
         {
             get
             {
-                return AppSettings.GetValueOrDefault(contextMenuTitle, SettingsDefault);
+                return AppSettings.GetValueOrDefault(ContextMenuTitle, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(contextMenuTitle, value);
+                AppSettings.AddOrUpdateValue(ContextMenuTitle, value);
             }
         }
 
-        public static string logOdometer
+        public static string DeleteImage
         {
             get
             {
-                return AppSettings.GetValueOrDefault(previousOdo, "1");
+                return AppSettings.GetValueOrDefault(Deleted, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(previousOdo, value);
+                AppSettings.AddOrUpdateValue(Deleted, value);
             }
         }
 
-        public static string deleteImage
+        public static string MenuRequireAction
         {
             get
             {
-                return AppSettings.GetValueOrDefault(deleted, SettingsDefault);
+                return AppSettings.GetValueOrDefault(MenuAction, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(deleted, value);
-            }
-        }
-    
-
-        public static string GeneratedAppID
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(AppID, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(AppID, value);
+                AppSettings.AddOrUpdateValue(MenuAction, value);
             }
         }
 
-        public static string CrashInLoginPage
+        public static string List
         {
             get
             {
-                return AppSettings.GetValueOrDefault(LoginCrash, SettingsDefault);
+                return AppSettings.GetValueOrDefault(ListType, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(LoginCrash, value);
-            }
-        }
-
-        public static string MenuAction
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(menuAction, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(menuAction, value);
-            }
-        }
-
-        public static string ListType
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(listType, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(listType, value);
+                AppSettings.AddOrUpdateValue(ListType, value);
             }
         }
 

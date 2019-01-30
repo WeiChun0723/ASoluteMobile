@@ -32,7 +32,6 @@ namespace ASolute_Mobile
 
             var masterPageItems = new List<MasterPageItem>();
 
-
             foreach (SummaryItems item in contextMenu)
               {
                   string option;

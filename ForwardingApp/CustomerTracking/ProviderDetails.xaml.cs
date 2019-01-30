@@ -178,7 +178,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public void loadContainerList()
         {
-            Ultis.Settings.ListType = "container_List";
+            Ultis.Settings.List= "container_List";
             List<AppMenu> Item = new List<AppMenu>(App.Database.GetMainMenuItems());
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;

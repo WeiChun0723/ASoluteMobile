@@ -30,7 +30,6 @@ namespace ASolute_Mobile.Data
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
             database.CreateTable<TruckModel>();
-            database.CreateTable<ActivityLog>();
             database.CreateTable<pickerValue>();
             database.CreateTable<FuelCostNew> ();
             database.CreateTable<AutoComplete>();
@@ -54,7 +53,6 @@ namespace ASolute_Mobile.Data
             database.DropTable<AppImage>();               
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
-            database.DropTable<ActivityLog>();
             database.DropTable<pickerValue>();
             database.DropTable<FuelCostNew>();
             database.DropTable<ListObject>();
@@ -308,16 +306,10 @@ namespace ASolute_Mobile.Data
             return database.Query<LogBookData>("SELECT * FROM [LogBookData] WHERE [Done] = ?", doneStatus);
         }
 
-        public List<ActivityLog> GetActivitiesLog()
-        {
-            return database.Query<ActivityLog>("SELECT * FROM [ActivityLog] ORDER BY [tableID] DESC");
-        }  
-
         public List<RefuelHistoryData> GetRecordItems()
         {
             return database.Query<RefuelHistoryData>("SELECT * FROM [RefuelHistoryData] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }     
-
 
         public List<AppMenu> GetMainMenuItems()
         {
@@ -524,22 +516,6 @@ namespace ASolute_Mobile.Data
         {
             database.Query<AppImage>("DELETE FROM AppImage");
         }
-
-        public int SaveActivity(ActivityLog activity)
-        {
-           activity.owner = Ultis.Settings.SessionUserId;
-            if (activity.tableID != 0)
-            {
-                activity.updatedDate = DateTime.Now;
-                return database.Update(activity);
-            }
-            else
-            {
-                activity.updatedDate = DateTime.Now;
-                return database.Insert(activity);
-            }
-        }
-
 
         public int SaveFuelCostNew(FuelCostNew fuelCost)
         {

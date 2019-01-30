@@ -83,10 +83,10 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
 
-            if (Ultis.Settings.deleteImage == "Yes")
+            if (Ultis.Settings.DeleteImage == "Yes")
             {
                 displayImage();
-                Ultis.Settings.deleteImage = "No";                
+                Ultis.Settings.DeleteImage = "No";                
             }
            
         }

@@ -69,10 +69,10 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
 
-            if (Ultis.Settings.deleteImage == "Yes")
+            if (Ultis.Settings.DeleteImage == "Yes")
             {
                 DisplayImage();
-                Ultis.Settings.deleteImage = "No";
+                Ultis.Settings.DeleteImage = "No";
             }
         }
 
@@ -143,7 +143,6 @@ namespace ASolute_Mobile
                         {
                             if (Convert.ToInt32(startOdometer.Text) <= Convert.ToInt32(endOdometer.Text))
                             {
-
                                 string endDate_Time = endDate.Date.Year + "-" + endDate.Date.Month + "-" + endDate.Date.Day + "T" + endTime.Time.ToString();
                                 newTrip.EndTime = Convert.ToDateTime(endDate_Time);
                                 newTrip.EndOdometer = Convert.ToInt32(endOdometer.Text);
@@ -322,7 +321,7 @@ namespace ASolute_Mobile
                         await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
                     }
 
-                    endTime.Time = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, (Int16)00);
+                    endTime.Time = DateTime.Now.TimeOfDay;
                 }
                 else
                 {
@@ -340,6 +339,7 @@ namespace ASolute_Mobile
                 imageLinkID = response.Result["LinkId"];
                 trip.Id = response.Result["Id"];
                 UploadImage();
+                
             }
             else
             {
@@ -486,7 +486,7 @@ namespace ASolute_Mobile
 
                 foreach(clsKeyValue location in trip.LocationList)
                 {                  
-                    AutoComplete existingLocation = App.Database.GetAutoCompleteValue(location.Value.ToLower());
+                    AutoComplete existingLocation = App.Database.GetAutoCompleteValue(location.Value.ToUpper());
 
                     if (existingLocation == null)
                     {

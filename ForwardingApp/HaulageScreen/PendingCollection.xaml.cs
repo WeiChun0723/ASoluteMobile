@@ -85,7 +85,7 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void refreshPendingCollection()
         {
-            Ultis.Settings.ListType = "Pending_Collection";
+            Ultis.Settings.List = "Pending_Collection";
             ObservableCollection<ListObject> Item = new ObservableCollection<ListObject>(App.Database.GetPendingObject());
             pendingCollection.ItemsSource = Item;
             pendingCollection.HasUnevenRows = true;

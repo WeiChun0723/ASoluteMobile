@@ -13,15 +13,15 @@ namespace ASolute_Mobile
 		{
 			InitializeComponent ();
             this.BarBackgroundColor = Color.FromHex("#9A2116");
-            if (Ultis.Settings.MenuAction.Equals("pending_receiving"))
+            if (Ultis.Settings.MenuRequireAction.Equals("pending_receiving"))
             {
                 Title = "Pending Receiving";
             }
-            else if (Ultis.Settings.MenuAction.Equals("pending_loading"))
+            else if (Ultis.Settings.MenuRequireAction.Equals("pending_loading"))
             {
                 Title = "Pending Loading";
             }
-            else if (Ultis.Settings.MenuAction.Equals("Job_List"))
+            else if (Ultis.Settings.MenuRequireAction.Equals("Job_List"))
             {
                 Title = "Job List";
                 if (Ultis.Settings.Language.Equals("English"))

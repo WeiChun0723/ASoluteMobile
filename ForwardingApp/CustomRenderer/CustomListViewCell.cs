@@ -31,89 +31,89 @@ namespace ASolute_Mobile
             if(this.BindingContext != null)
             {
                 
-                if (Ultis.Settings.ListType == "Job_List")
+                if (Ultis.Settings.List == "Job_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
 
                 }
-                if(Ultis.Settings.ListType == "Job_List")
+                if(Ultis.Settings.List == "Job_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageJob");
                 }
-                if(Ultis.Settings.ListType == "Receiving_List")
+                if(Ultis.Settings.List == "Receiving_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingReceiving");
                 }
-                if(Ultis.Settings.ListType == "Loading_List")
+                if(Ultis.Settings.List == "Loading_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingLoad");
                 }
-                if (Ultis.Settings.ListType == "refuel_List")
+                if (Ultis.Settings.List== "refuel_List")
                 {
                     RefuelHistoryData model = (RefuelHistoryData)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.recordId,"Refuel");
                 }       
-                if(Ultis.Settings.ListType == "Main_Menu")
+                if(Ultis.Settings.List == "Main_Menu")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId,"MainMenu");
                 }
-                if (Ultis.Settings.ListType == "Log_History")
+                if (Ultis.Settings.List == "Log_History")
                 {
                     Log model = (Log)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.logId, "Log");
                 }
-                if (Ultis.Settings.ListType == "Run_Sheet")
+                if (Ultis.Settings.List == "Run_Sheet")
                 {
                     JobItems model = (JobItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageHistory");
                 }
-                if (Ultis.Settings.ListType == "Pending_Collection")
+                if (Ultis.Settings.List == "Pending_Collection")
                 {
                     ListObject model = (ListObject)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "pendingCollection");
                 }
-                if (Ultis.Settings.ListType == "provider_List")
+                if (Ultis.Settings.List == "provider_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     providers = App.Database.Providers(model.menuId);  
 
                 }
-                if (Ultis.Settings.ListType == "container_List")
+                if (Ultis.Settings.List == "container_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Container");
                 }
-                if (Ultis.Settings.ListType == "category_List")
+                if (Ultis.Settings.List == "category_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
                 }
-                if (Ultis.Settings.ListType == "Picking_List")
+                if (Ultis.Settings.List == "Picking_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "PickingList");
                 }
-                if (Ultis.Settings.ListType == "Packing_List")
+                if (Ultis.Settings.List== "Packing_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "PackingList");
                 }
-                if (Ultis.Settings.ListType == "TallyOut_List")
+                if (Ultis.Settings.List == "TallyOut_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "TallyOutList");
                 }
-                if (Ultis.Settings.ListType == "TallyIn_List")
+                if (Ultis.Settings.List == "TallyIn_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "TallyInList");
@@ -130,7 +130,7 @@ namespace ASolute_Mobile
 
                 bool firstSummaryLine = true;
 
-                if(Ultis.Settings.ListType == "provider_List" )
+                if(Ultis.Settings.List == "provider_List" )
                 {
                     foreach (ProviderInfo items in providers)
                     {
@@ -149,7 +149,7 @@ namespace ASolute_Mobile
                         Label label = new Label();
                         label.FontSize = 15;
 
-                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.ListType.Equals("category_List"))
+                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.List.Equals("category_List"))
                         {
                             label.Text = items.Value;
 
@@ -184,7 +184,7 @@ namespace ASolute_Mobile
                        
                // absoluteLayout.Children.Add(cellWrapper);
 
-                if(Ultis.Settings.ListType.Equals("provider_List"))
+                if(Ultis.Settings.List.Equals("provider_List"))
                 {
                     MenuItem menuItem = new MenuItem()
                     {

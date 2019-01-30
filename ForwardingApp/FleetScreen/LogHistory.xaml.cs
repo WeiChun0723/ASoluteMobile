@@ -206,7 +206,7 @@ namespace ASolute_Mobile
         public void refreshLogHistory()
         {
 
-            Ultis.Settings.ListType = "Log_History";
+            Ultis.Settings.List = "Log_History";
             ObservableCollection<Log> Item = new ObservableCollection<Log>(App.Database.GetLogItems());           
             logHistory.ItemsSource = Item;
             logHistory.HasUnevenRows = true;

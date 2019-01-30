@@ -14,7 +14,6 @@ using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.HaulageScreen
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class JobList : ContentPage
 	{
         int doneStatus = 0;
@@ -31,7 +30,6 @@ namespace ASolute_Mobile.HaulageScreen
         {
             try
             {
-
                 if (Ultis.Settings.NewJob.Equals("Yes"))
                 {
                     CommonFunction.CreateToolBarItem(this);
@@ -45,7 +43,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                     try
                     {
-
                         CommonFunction.NewJobNotification(this);
                     }
                     catch (Exception e)
@@ -53,8 +50,6 @@ namespace ASolute_Mobile.HaulageScreen
                         DisplayAlert("Notification error", e.Message, "OK");
                     }
                 });
-
-                Title = (Ultis.Settings.Language.Equals("English")) ? "Job List" : "Senarai Kerja";
 
                 if (Ultis.Settings.SessionUserItem.TruckId.Length == 0)
                 {
@@ -64,7 +59,7 @@ namespace ASolute_Mobile.HaulageScreen
                 if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("RefreshJobList"))
                 {
                     Ultis.Settings.UpdatedRecord = "No";
-                    CallWebService();
+                    GetJobList();
                 }
                 else
                 {
@@ -85,7 +80,7 @@ namespace ASolute_Mobile.HaulageScreen
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
-        protected void CallWebService()
+        protected void GetJobList()
         {
             Task.Run(async () => { await  BackgroundTask.DownloadLatestRecord(this);}).Wait();
 
@@ -96,7 +91,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             Ultis.Settings.SessionCurrentJobId = ((JobItems)e.Item).Id;
             JobDetails jobDetail = new JobDetails(((JobItems)e.Item).ActionId, ((JobItems)e.Item).ActionMessage);
-            Ultis.Settings.ActionID = ((JobItems)e.Item).ActionId;
+            Ultis.Settings.Action = ((JobItems)e.Item).ActionId;
             jobDetail.previousPage = this;
             await Navigation.PushAsync(jobDetail);
         }
@@ -124,7 +119,7 @@ namespace ASolute_Mobile.HaulageScreen
                         {
                             Ultis.Settings.RefreshMenuItem = "Yes";
                             Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                            CallWebService();
+                            GetJobList();
                             displayToast("Job added to job list.");                           
                             scanPage.ResumeAnalysis();
                         }
@@ -168,7 +163,7 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void loadJobList()
         {
-            Ultis.Settings.ListType = "Job_List";
+            Ultis.Settings.List = "Job_List";
             ObservableCollection<JobItems> jobs = new ObservableCollection<JobItems>(App.Database.GetJobItems(doneStatus, "HaulageJob"));
             jobList.ItemsSource = jobs;
             jobList.HasUnevenRows = true;

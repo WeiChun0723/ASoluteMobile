@@ -116,7 +116,7 @@ namespace ASolute_Mobile.CustomerTracking
         }
          public void loadCateogoryList()
          {
-             Ultis.Settings.ListType = "category_List";
+             Ultis.Settings.List = "category_List";
              ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
              category_list.ItemsSource = Item;
              category_list.HasUnevenRows = true;

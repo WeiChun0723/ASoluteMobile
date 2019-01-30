@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.App">
+             x:Class="ASolute_Mobile.App"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
 	
     <Application.Resources>
         
@@ -10,7 +12,28 @@
             <OnPlatform x:TypeArguments="Color" Android="#FFFFFF" iOS="#000000" WinPhone="#000000" x:Key="EntryTextColor" />
             <OnPlatform x:TypeArguments="x:Double" Android="40" iOS="40" WinPhone="40" x:Key="EntryHeightRequest" />
             
-   
+   <!-- NEW -->
+            <Style x:Key="inputStyle" TargetType="inputLayout:SfTextInputLayout">
+                <Setter Property="ContainerBackgroundColor" Value="Transparent" />
+                <Setter Property="ContainerType" Value="Outlined" />
+                <Setter Property="FocusedColor" Value="White" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+               <Setter Property="UnfocusedColor" Value="Black" />
+                <Setter Property="LeadingViewPosition" Value="Inside" />
+               
+            </Style>
+            
+            <Style x:Key="buttonStyle" TargetType="buttons:SfButton">
+                <Setter Property="BackgroundColor" Value="#ED1C24" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="TextColor" Value="#FFFFFF" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="WidthRequest" Value="150" />
+            </Style>
+    <!-- NEW -->      
+            
             <Style x:Key="stackStyle" TargetType="StackLayout">
                 <Setter Property="Spacing" Value="10" />
                 <Setter Property="BackgroundColor" Value="#e8e5e5" />
@@ -35,13 +58,7 @@
                 <Setter Property="HeightRequest" Value="{StaticResource EntryHeightRequest}" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
-            <Style x:Key="buttonStyle" TargetType="Button">
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="FontSize" Value="Large" />
-                <Setter Property="BackgroundColor" Value="#ED1C24" />
-                <Setter Property="TextColor" Value="#FFFFFF" />
-                <Setter Property="FontAttributes" Value="Bold" />
-            </Style>
+           
             <Style x:Key="recordListStyle" TargetType="ListView">
                 <Setter Property="SeparatorColor" Value="#ECECEC" />
             </Style>

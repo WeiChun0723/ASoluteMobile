@@ -41,13 +41,6 @@ namespace ASolute_Mobile.Models
         public string Url { get; set; }
     } 
 
-    public class ActivityLog : Generic
-    {
-        public string activity { get; set; }
-        public string status { get; set; }
-        public string message { get; set; }
-    }
-
     public class RefuelHistoryData : Generic
     {
         public string recordId { get; set; }

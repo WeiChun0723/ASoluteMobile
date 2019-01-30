@@ -157,7 +157,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         public void loadTallyInList()
         {
-            Ultis.Settings.ListType = "TallyIn_List";
+            Ultis.Settings.List = "TallyIn_List";
             Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("TallyInList"));
             tallyList.ItemsSource = Item;
             tallyList.HasUnevenRows = true;

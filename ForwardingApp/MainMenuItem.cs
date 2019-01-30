@@ -144,6 +144,7 @@ namespace ASolute_Mobile
 
         }
 
+        #region GetGps every minute
         public async Task StartListening()
         {
             var locator = CrossGeolocator.Current;
@@ -151,7 +152,7 @@ namespace ASolute_Mobile
             if (!locator.IsListening)
             {
                 //Start listening to location updates
-                await locator.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true,new Plugin.Geolocator.Abstractions.ListenerSettings
+                await locator.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
                 {
                     ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
                     AllowBackgroundUpdates = true,
@@ -163,7 +164,7 @@ namespace ASolute_Mobile
                 });
 
                 locator.PositionChanged += Current_PositionChanged;
-  
+
             }
         }
 
@@ -172,7 +173,7 @@ namespace ASolute_Mobile
             var position = e.Position;
             var locator = CrossGeolocator.Current;
 
-            if(position == null)
+            if (position == null)
             {
                 Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
             }
@@ -189,14 +190,14 @@ namespace ASolute_Mobile
                     var addressDetail = getAddress.FirstOrDefault();
                     string address = "";
 
-                    address = addressDetail.Thoroughfare ;
+                    address = addressDetail.Thoroughfare;
 
-                    if(!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
+                    if (!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
                     {
                         address += "," + addressDetail.Locality;
                     }
 
-                    if(!String.IsNullOrEmpty(addressDetail.PostalCode)  && addressDetail.PostalCode != "????")
+                    if (!String.IsNullOrEmpty(addressDetail.PostalCode) && addressDetail.PostalCode != "????")
                     {
                         address += "," + addressDetail.PostalCode;
                     }
@@ -213,17 +214,11 @@ namespace ASolute_Mobile
 
                     string location = position.Latitude + "," + position.Longitude;
 
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var uri = ControllerUtil.getGPSTracking(location, address);
-                    var response = await client.GetAsync(uri);
-                    var content = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(content);
-                    clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getGPSTracking(location, address)));
 
-                    if (gps_response.IsGood)
+                    if (json_response.IsGood)
                     {
-                       // await DisplayAlert("OK", chklocation, "OK");
+                        // await DisplayAlert("OK", chklocation, "OK");
                         previousLocation = location;
 
                         App.gpsLocationLat = position.Latitude;
@@ -237,6 +232,8 @@ namespace ASolute_Mobile
 
             }
         }
+        #endregion 
+
 
         protected override void OnAppearing()
         {
@@ -327,7 +324,7 @@ namespace ASolute_Mobile
             {
                 var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
+              
                 if (login_response.IsGood == true)
                 {
                     var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
@@ -443,7 +440,7 @@ namespace ASolute_Mobile
                     }
 
                     LoadMainMenu();
-                    //loadDashBoard();
+
                     // if the check list not empty then display the check list page
                     if (checkItems.Count != 0)
                     {
@@ -478,7 +475,7 @@ namespace ASolute_Mobile
 
         public void CloseApp()
         {
-            if (Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 DependencyService.Get<CloseApp>().close_app();
             }
@@ -489,10 +486,11 @@ namespace ASolute_Mobile
         {
             loading.IsVisible = false;
 
-            Ultis.Settings.ListType = "Main_Menu";
+            Ultis.Settings.List = "Main_Menu";
             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("MainMenu"));
             listView.ItemsSource = Item;
             listView.HasUnevenRows = true;
+            //IOS need to predefine the row height if not will truncated 
             if(Device.RuntimePlatform == Device.iOS)
             {
                 listView.RowHeight = 150;

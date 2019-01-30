@@ -91,10 +91,10 @@ namespace ASolute_Mobile
 
             Title = "Futile trip";
 
-            if (Ultis.Settings.deleteImage == "Yes")
+            if (Ultis.Settings.DeleteImage == "Yes")
             {
                 displayImage();
-                Ultis.Settings.deleteImage = "No";
+                Ultis.Settings.DeleteImage = "No";
             }
         }
 
@@ -204,14 +204,14 @@ namespace ASolute_Mobile
 
         public void pageContent()
         {
-            if (Ultis.Settings.MenuAction == "Cargo_Return" )
+            if (Ultis.Settings.MenuRequireAction == "Cargo_Return" )
             {
                 Title = "Cargo Return";
                 uploadUri = ControllerUtil.postCargoReturnURL();
                 ReferenceStack.IsVisible = true;
                               
             }
-            else if (Ultis.Settings.MenuAction == "FutileTrip")
+            else if (Ultis.Settings.MenuRequireAction == "FutileTrip")
             {
                 Title = "Futile Trip";                                    
             }
