@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.ASOLUTEFLEET" android:installLocation="auto" android:versionCode="37" android:versionName="37">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSWMS" android:installLocation="auto" android:versionCode="37" android:versionName="37">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -10,11 +10,11 @@
 	<uses-permission android:name="android.permission.FLASHLIGHT" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-	<permission android:name="asolute.Mobile.ASOLUTEFLEET.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<uses-permission android:name="asolute.Mobile.ASOLUTEFLEET.permission.C2D_MESSAGE" />
+	<permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-	<application android:name="ASOLUTE FLEET" android:theme="@style/MyTheme" android:label="ASOLUTEFLEET" android:icon="@drawable/appIcon">
+	<application android:name="AILS WMS" android:theme="@style/MyTheme" android:label="AILS WMS" android:icon="@drawable/appIcon">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
@@ -22,7 +22,7 @@
 		<receiver android:name="com.onesignal.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-				<category android:name="asolute.Mobile.ASOLUTEFLEET" />
+				<category android:name="asolute.Mobile.AILSWMS" />
 			</intent-filter>
 		</receiver>
 	</application>

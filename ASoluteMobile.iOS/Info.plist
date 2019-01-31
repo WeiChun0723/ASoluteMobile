@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>ASolute Fleet</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.asolute.AILSTracking</string>
+	<string>com.asolute.ASoluteFleet</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -45,11 +45,11 @@
 	<string>This app needs access to the GPS location.</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
 	<key>CFBundleName</key>
 	<string>ASolute Fleet</string>
+	<key>CFBundleShortVersionString</key>
+	<string>37</string>
+	<key>CFBundleVersion</key>
+	<string>37.2</string>
 </dict>
 </plist>

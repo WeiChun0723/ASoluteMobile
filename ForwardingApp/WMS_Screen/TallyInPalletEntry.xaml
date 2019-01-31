@@ -96,7 +96,7 @@
             <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
                     <Entry x:Name="date" Focused="DateEntry_Focused" HorizontalOptions="FillAndExpand" WidthRequest="130"/>
                     <DatePicker x:Name="datePicker" HorizontalOptions="Fill" WidthRequest="130" Format="dd/MM/yyyy" IsVisible="false" DateSelected="DatePicker_DateSelected"/>
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center"   >
+                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="scan_icon"  >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="ExpiryDateScan"/>
                         </Image.GestureRecognizers>

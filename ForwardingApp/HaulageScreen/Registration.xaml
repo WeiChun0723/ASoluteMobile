@@ -4,7 +4,8 @@
              x:Class="ASolute_Mobile.HaulageScreen.Registration"
              BackgroundColor = "#9A2116"       
              xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
-             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     
     <ScrollView>
     <StackLayout Padding = "20, 0, 20, 20" >
@@ -25,7 +26,7 @@
           LeadingViewPosition="Inside"
           HorizontalOptions="FillAndExpand" 
           UnfocusedColor="White"> 
-        <Entry  x:Name="enterpriseEntry"  >
+        <Entry x:Name="enterpriseEntry" >
              <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="100"/>
                 </Entry.Behaviors>     
@@ -46,7 +47,7 @@
           LeadingViewPosition="Inside"
           HorizontalOptions="FillAndExpand" 
           UnfocusedColor="White"> 
-        <Entry   x:Name = "userIDEntry">
+        <Entry  x:Name = "userIDEntry">
              <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="100"/>
                 </Entry.Behaviors>     
@@ -103,7 +104,7 @@
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout>  
 
-        <Button Style="{StaticResource buttonStyle}" x:Name="RegisterButton" Text = "Register" Clicked="Register_Clicked" />
+        <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="RegisterButton" Text = "Register" Clicked="Register_Clicked" />
 
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         

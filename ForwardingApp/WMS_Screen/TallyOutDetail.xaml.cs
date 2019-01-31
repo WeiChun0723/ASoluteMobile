@@ -22,7 +22,7 @@ namespace ASolute_Mobile.WMS_Screen
         List<AppImage> images = new List<AppImage>();
         List<clsPalletTrx> palletTrxs = new List<clsPalletTrx>();
         List<clsPalletTrx> testing = new List<clsPalletTrx>();
-
+        bool tapped = true;
 
         public TallyOutDetail(string id)
         {
@@ -70,16 +70,16 @@ namespace ASolute_Mobile.WMS_Screen
                 foreach (clsCaptionValue desc in tallyOutDetail.Summary)
                 {
                     Label caption = new Label();
-
+                    caption.FontSize = 13;
 
                     if (desc.Caption.Equals(""))
                     {
-                        caption.Text = "      " + desc.Value;
+                        caption.Text = "    " + desc.Value;
                         caption.FontAttributes = FontAttributes.Bold;
                     }
                     else
                     {
-                        caption.Text = "      " + desc.Caption + ": " + desc.Value;
+                        caption.Text = "    " + desc.Caption + ": " + desc.Value;
                     }
 
                     if (desc.Caption.Equals(""))
@@ -127,53 +127,61 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(tallyOutID, this);
+            await CommonFunction.StoreImages(tallyOutDetail.EventRecordId.ToString(), this);
             DisplayImage();
             BackgroundTask.StartTimer();
         }
 
         async void scanBarCode(object sender, EventArgs e)
         {
-            try
+            if(tapped)
             {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
+                tapped = false;
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
-
-                        loading.IsVisible = true;
-
-                        clsPalletTrx tallyOutPallet = new clsPalletTrx
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            LinkId = tallyOutID,
-                            Id = result.Text
-                        };
+                            await Navigation.PopAsync();
 
-                        var content = await CommonFunction.PostRequest(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
-                        clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                            loading.IsVisible = true;
 
-                        if(upload_response.IsGood)
-                        {
-                            await DisplayAlert("Success", "Tally out done.", "OK");
-                            //await Navigation.PopAsync();
-                        }
-                        else
-                        {
-                            await DisplayAlert("Error", upload_response.Message, "OK");
-                        }
+                            clsPalletTrx tallyOutPallet = new clsPalletTrx
+                            {
+                                LinkId = tallyOutID,
+                                Id = result.Text
+                            };
 
-                        loading.IsVisible = false;
-                    });
-                };
+                            var content = await CommonFunction.PostRequest(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
+                            clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if (upload_response.IsGood)
+                            {
+                                await DisplayAlert("Success", "Tally out done.", "OK");
+                                await Navigation.PopAsync();
+
+                            }
+                            else
+                            {
+                                await DisplayAlert("Error", upload_response.Message, "OK");
+                            }
+
+                            loading.IsVisible = false;
+                        });
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", ex.Message, "OK");
+                }
+
+                tapped = true;
             }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
+          
         }
 
         async void DisplayImage()

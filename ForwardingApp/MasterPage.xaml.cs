@@ -25,7 +25,8 @@ namespace ASolute_Mobile
                 LogoImage.Source = "user_icon.png";
 
             }
-            ownerName.Text = Ultis.Settings.SessionUserId;
+            ownerName.Text = Ultis.Settings.SessionUserItem.UserId;
+
             appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppVersion; 
 
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");

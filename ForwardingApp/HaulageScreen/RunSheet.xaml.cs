@@ -345,7 +345,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                     }
 
-
                     option = "none";
                     refreshRunSheetHistory();
 
@@ -373,7 +372,6 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void refreshRunSheetHistory()
         {
-
             Ultis.Settings.List = "Run_Sheet";
             ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
             runSheetHistory.ItemsSource = Item;

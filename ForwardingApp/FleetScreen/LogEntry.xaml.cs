@@ -11,11 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LogEntry : ContentPage
 	{
         public LogHistory previousPage;
@@ -539,7 +537,6 @@ namespace ASolute_Mobile
                 {
                     locationSuggestion.Add(locations[i].Value);
                 }
-
                 startLocation.DataSource = locationSuggestion;
                 endLocation.DataSource = locationSuggestion;
             }

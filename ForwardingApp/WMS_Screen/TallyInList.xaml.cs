@@ -18,6 +18,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         List<clsDataRow> tallyInList;
         ObservableCollection<AppMenu> Item;
+        bool tapped = true;
 
         public TallyInList(string title)
         {
@@ -33,11 +34,8 @@ namespace ASolute_Mobile.WMS_Screen
 
             loading.IsVisible = true;
 
-          
-
             GetTallyInList();
 
-            
         }
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
@@ -48,8 +46,7 @@ namespace ASolute_Mobile.WMS_Screen
               
                 if (string.IsNullOrEmpty(searchKey))
                 {
-                    //dataGrid.AutoExpandGroups = false;
-                    //dataGrid.ItemsSource = tallyInList;
+
                     tallyList.ItemsSource = Item;
                 }
 
@@ -57,11 +54,9 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     try
                     {
-                        // dataGrid.AutoExpandGroups = true;
+                       
 
-                        // dataGrid.ItemsSource = tallyInList.Where(x => x.DocumentNo.Contains(searchKey) || x.ContainerNo.Contains(searchKey) || x.Principal.Contains(searchKey));
-
-                        tallyList.ItemsSource = Item.Where(x => x.name.Contains(searchKey) || x.booking.Contains(searchKey) || x.customerRef.Contains(searchKey));
+                        tallyList.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
                     }
                     catch(Exception error)
                     {
@@ -179,44 +174,55 @@ namespace ASolute_Mobile.WMS_Screen
 
         public async void BarCodeScan(object sender, EventArgs e)
         {
-            try
+            if(tapped)
             {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
+                tapped = false;
 
-                scanPage.OnScanResult += (result) =>
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
-
-                        filterText.Text = result.Text;
-
-                        /*string recordID = "";
-                        foreach(clsWhsCommon tallyIn in tallyInList)
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            if(tallyIn.DocumentNo.Equals(result.Text))
+                            await Navigation.PopAsync();
+
+                            filterText.Text = result.Text;
+
+                            /*string recordID = "";
+                            foreach(clsWhsCommon tallyIn in tallyInList)
                             {
-                                recordID = tallyIn.Id;
+                                if(tallyIn.DocumentNo.Equals(result.Text))
+                                {
+                                    recordID = tallyIn.Id;
+                                }
                             }
-                        }
 
-                        if(recordID != "")
-                        {
-                            await Navigation.PushAsync(new TallyInDetail(recordID));
-                        }
-                        else
-                        {
-                            await DisplayAlert("Not found", "No such id.", "OK");
-                        }*/
+                            if(recordID != "")
+                            {
+                                await Navigation.PushAsync(new TallyInDetail(recordID));
+                            }
+                            else
+                            {
+                                await DisplayAlert("Not found", "No such id.", "OK");
+                            }*/
 
-                    });
-                };
+                        });
+                    };
+                }
+                catch
+                {
+
+                }
+
+                tapped = true;
             }
-            catch
-            {
 
-            }
+           
+
+
         }
 
 

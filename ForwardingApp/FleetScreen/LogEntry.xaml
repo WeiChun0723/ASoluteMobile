@@ -55,7 +55,7 @@
 
 
             <StackLayout Orientation="Horizontal" Spacing="6" HorizontalOptions="Center">
-                <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center"   x:Name="camera_icon" >
+              <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center"   x:Name="camera_icon" >
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="captureImage"/>
                     </Image.GestureRecognizers>
@@ -68,9 +68,7 @@
                 </Image>
              </StackLayout>
             
-        <!--<Button x:Name="btnTakeImage" Text="Take Image"   IsEnabled="False" Clicked="captureImage"/>
-    
-            <Button x:Name="btnconfirm" Text="Confirm" Clicked="confirmLog"/>-->
+      
          
             <Label x:Name="successUploaded" IsVisible="False"/>
             <Grid  x:Name="imageGrid">

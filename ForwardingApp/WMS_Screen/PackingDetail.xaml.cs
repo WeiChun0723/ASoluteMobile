@@ -46,16 +46,16 @@ namespace ASolute_Mobile.WMS_Screen
                 foreach (clsCaptionValue desc in packingDetails.Summary)
                 {
                     Label caption = new Label();
-
+                    caption.FontSize = 13;
                     if (desc.Caption.Equals(""))
                     {
-                        caption.Text = "      " + desc.Value;
+                        caption.Text = "    " + desc.Value;
                         caption.FontAttributes = FontAttributes.Bold;
                         Title = "Picking # " + desc.Value;
                     }
                     else
                     {
-                        caption.Text = "      " + desc.Caption + ": " + desc.Value;
+                        caption.Text = "    " + desc.Caption + ": " + desc.Value;
                     }
 
                     if (desc.Caption.Equals(""))

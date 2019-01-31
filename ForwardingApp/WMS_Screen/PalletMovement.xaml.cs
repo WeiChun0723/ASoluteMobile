@@ -14,6 +14,7 @@ namespace ASolute_Mobile.WMS_Screen
     {
         string fieldName;
         clsPalletTrx pallet;
+        bool tapped = true;
 
         public PalletMovement(string screenTitle)
         {
@@ -99,6 +100,7 @@ namespace ASolute_Mobile.WMS_Screen
                     if (update_response.IsGood)
                     {
                         await DisplayAlert("Success", "Putaway updated.", "OK");
+                        await Navigation.PopAsync();
                     }
                     else
                     {
@@ -120,34 +122,44 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void BarCodeScan(string field)
         {
-            try 
-            {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
 
-                scanPage.OnScanResult += (result) =>
+            if(tapped)
+            {
+                tapped = false;
+
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        await Navigation.PopAsync();
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
 
-                        if (field == "PalletIDScan")
+                    scanPage.OnScanResult += (result) =>
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            pdEntry.Text = result.Text;
-                            GetPalletTrx(result.Text);
-                        }
-                        else if (field == "ConfirmScan")
-                        {
-                            confirmEntry.Text = result.Text;
-                        }
-                      
-                    });
-                };
+                            await Navigation.PopAsync();
+
+                            if (field == "PalletIDScan")
+                            {
+                                pdEntry.Text = result.Text;
+                                GetPalletTrx(result.Text);
+                            }
+                            else if (field == "ConfirmScan")
+                            {
+                                confirmEntry.Text = result.Text;
+                            }
+
+                        });
+                    };
+
+                    tapped = true;
+                }
+                catch (Exception e)
+                {
+                    await DisplayAlert("Error", e.Message, "OK");
+                }
+
             }
-            catch (Exception e)
-            {
-                await DisplayAlert("Error", e.Message, "OK");
-            }
+
         }
 
         async void GetPalletTrx(string palletID)
@@ -195,10 +207,10 @@ namespace ASolute_Mobile.WMS_Screen
                             Label caption = new Label
                             {
                                 FontSize = 13,
-                                FontAttributes = FontAttributes.Bold                                   
+                                                            
                             };
 
-                            caption.Text =  "      " + desc.Caption + ": " + desc.Value;
+                            caption.Text =  "    " + desc.Caption + ": " + desc.Value;
                         
                             palletDesc.Children.Add(caption);
                         }

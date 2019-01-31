@@ -269,14 +269,15 @@ namespace ASolute_Mobile
 
                                 if (logoutResponse.IsGood == true)
                                 {
+                                  
                                     App.DropDatabase();
-                                    App.Database.deleteLocationAutoComplete("Location");
+
                                     BackgroundTask.Logout(this);
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception exception)
                             {
-                               // await DisplayAlert("Error", exception.Message, "OK");
+                                await DisplayAlert("Error", exception.Message, "OK");
                             }
                         }
                     }

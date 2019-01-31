@@ -19,6 +19,7 @@ namespace ASolute_Mobile.WMS_Screen
         List<string> size = new List<string>();
         List<string> unit = new List<string>();
         List<string> status = new List<string>();
+        bool tapped = true;
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID)
         {
@@ -46,12 +47,12 @@ namespace ASolute_Mobile.WMS_Screen
 
                 if (desc.Equals(""))
                 {
-                    caption.Text = "      " + desc;
+                    caption.Text = "    " + desc;
                     caption.FontAttributes = FontAttributes.Bold;
                 }
                 else
                 {
-                    caption.Text = "      " + desc ;
+                    caption.Text = "    " + desc ;
                 }
 
                 palletDesc.Children.Add(caption);
@@ -135,41 +136,51 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void BarCodeScan(string field)
         {
-            try
+            if(tapped)
             {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
+                tapped = false;
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
-
-                        if (field == "PalletScan")
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            palletNo.Text = result.Text;
+                            await Navigation.PopAsync();
 
-                        }
-                        else if (field == "BatchScan")
-                        {
+                            if (field == "PalletScan")
+                            {
+                                palletNo.Text = result.Text;
 
-                            batchNo.Text = result.Text;
-                        }
-                        else if (field == "ExpiryScan")
-                        {
-                            DateTime enteredDate = DateTime.Parse(result.Text);
+                            }
+                            else if (field == "BatchScan")
+                            {
 
-                            datePicker.Date = enteredDate;
-                          
-                        }
-                    });
-                };
+                                batchNo.Text = result.Text;
+                            }
+                            else if (field == "ExpiryScan")
+                            {
+                                DateTime enteredDate = DateTime.Parse(result.Text);
+
+                                datePicker.Date = enteredDate;
+
+                            }
+                        });
+                    };
+                }
+                catch (Exception e)
+                {
+                    await DisplayAlert("Error", e.Message, "OK");
+                }
+
+                tapped = true;
             }
-            catch(Exception e)
-            {
-                await DisplayAlert("Error", e.Message, "OK");
-            }
+
+
+           
+
         }
 
       
@@ -191,11 +202,11 @@ namespace ASolute_Mobile.WMS_Screen
                         Id = id,
                         ProductCode = productPallet.ProductCode,
                         PalletId = palletNo.Text,
-                        PalletSize = sizeBox.Text,
+                        PalletSize = palletList.PalletSize[sizeBox.SelectedIndex].Key,
                         PalletTI = Convert.ToInt16(numbers[1]),
                         PalletHI = Convert.ToInt16(numbers[2]),
                         Qty = Convert.ToInt32(quantity.Text),
-                        Uom = unitBox.Text,
+                        Uom = palletList.ProductUom[unitBox.SelectedIndex].Key,
                         StockStatus = statusBox.Text,
                         String01 = (!(String.IsNullOrEmpty(batchNo.Text))) ? batchNo.Text : String.Empty,
                       

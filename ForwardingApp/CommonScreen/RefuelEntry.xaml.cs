@@ -204,6 +204,8 @@ namespace ASolute_Mobile
                                         confirm_icon.IsEnabled = false;
                                         confirm_icon.Source = "confirmDisable.png";
                                         UploadImage();
+
+                                        await Navigation.PopAsync();
                                     }
                                     else
                                     {
@@ -277,8 +279,6 @@ namespace ASolute_Mobile
             {
                 await DisplayAlert("Error", "Odometer cannot contain decimal", "OK");
             }
-
-            
         }    
 
         public async void PaymentSelected(object sender, SelectedPositionChangedEventArgs e)
@@ -346,8 +346,7 @@ namespace ASolute_Mobile
             }
             catch
             {
-               
-              
+
             }
            
         }

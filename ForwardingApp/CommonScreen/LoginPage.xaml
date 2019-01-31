@@ -30,8 +30,8 @@
                     </Image.GestureRecognizers>
                 </Image>
             </StackLayout>
-            <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}">
-                <Entry x:Name="usernameEntry" TextColor="White">
+            <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}" >
+                <Entry x:Name="usernameEntry" TextColor="White" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="10" />
                     </Entry.Behaviors>
@@ -40,13 +40,13 @@
                     <Image Source="user" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-            <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}">
-                <Entry IsPassword="true" x:Name="passwordEntry" TextColor="White" />
+            <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}" EnablePasswordVisibilityToggle="true"  >
+                <Entry IsPassword="true" x:Name="passwordEntry" TextColor="White"  />
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="pass" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-            <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+            <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
                 <Entry x:Name="equipmentEntry" TextColor="White">
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />
@@ -55,7 +55,7 @@
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="logintruck" />
                 </inputLayout:SfTextInputLayout.LeadingView>
-            </inputLayout:SfTextInputLayout>
+            </inputLayout:SfTextInputLayout>-->
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="loginButton" Text="Login" Clicked="Login_Clicked" />
             <StackLayout Orientation="Horizontal">
                 <Label x:Name="newUser" FontAttributes="Bold" TextColor="Black" Text="New User ?" HorizontalOptions="StartAndExpand">

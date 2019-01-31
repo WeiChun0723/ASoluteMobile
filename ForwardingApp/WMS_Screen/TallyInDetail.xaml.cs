@@ -63,7 +63,7 @@ namespace ASolute_Mobile.WMS_Screen
                 foreach (clsCaptionValue desc in tallyInDetail.Summary)
                 {
                     Label caption = new Label();
-
+                    caption.FontSize = 13;
 
                     if (desc.Caption.Equals(""))
                     {
@@ -78,7 +78,7 @@ namespace ASolute_Mobile.WMS_Screen
                     if (desc.Caption.Equals(""))
                     {
 
-                        Title = "Picking # " + desc.Value;
+                        Title = "Tally In # " + desc.Value;
                     }
 
                     tallyInDesc.Children.Add(caption);
@@ -135,7 +135,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(id, this);
+            await CommonFunction.StoreImages(tallyInDetail.EventRecordId.ToString(), this);
             DisplayImage();
             BackgroundTask.StartTimer();
         }

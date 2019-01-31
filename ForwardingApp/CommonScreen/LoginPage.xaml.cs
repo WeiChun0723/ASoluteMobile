@@ -22,7 +22,7 @@ namespace ASolute_Mobile
         public LoginPage()
         {
             InitializeComponent();
-
+            clsLogin test = new clsLogin(); 
             //hide the navigation bar
             NavigationPage.SetHasNavigationBar(this, false);
 
@@ -31,7 +31,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "ASOLUTE FLEET";
+            AppLabel.Text = "AILS WMS";
 
             organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
             usernameEntry.Text = Ultis.Settings.SessionUserId;
@@ -44,13 +44,18 @@ namespace ASolute_Mobile
                 usernameEntry.Text = _text;
             };
 
+            usernameEntry.Focus();
+                
             usernameEntry.Completed += (s, e) =>
             {                
                 passwordEntry.Focus();
             };
-                
+    
         }
 
+
+
+       
         public async void Update_URL_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new SettingPage());            
@@ -72,8 +77,8 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                  // var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
-                   var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                   //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
@@ -125,12 +130,11 @@ namespace ASolute_Mobile
                         var userObject = JObject.Parse(content)["Result"].ToObject<UserItem>();
                         //Save user info to constant
                         Ultis.Settings.SessionUserItem = userObject;                       
-                        Ultis.Settings.SessionUserId = usernameEntry.Text;
                         Ultis.Settings.SessionSettingKey = System.Net.WebUtility.UrlEncode(login_user.SessionId);
 
                         if (login_user.Language == 0)
                         {
-                            Ultis.Settings.Language = "English/Default";
+                            Ultis.Settings.Language = "English";
                         }
                         else
                         {

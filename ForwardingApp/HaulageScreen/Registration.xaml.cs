@@ -27,7 +27,7 @@ namespace ASolute_Mobile.HaulageScreen
         public Registration ()
 		{
 			InitializeComponent ();
-
+            string test = "";
             if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
             {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
@@ -37,7 +37,6 @@ namespace ASolute_Mobile.HaulageScreen
             {
                 NavigationPage.SetHasNavigationBar(this, false);
             }
-
 
             enterpriseEntry.Completed += (s, e) =>
             {
@@ -59,7 +58,6 @@ namespace ASolute_Mobile.HaulageScreen
                 icEntry.Unfocus();
             };
 
-            
             enterpriseEntry.Text = Ultis.Settings.AppEnterpriseName;
         }
 

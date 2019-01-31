@@ -12,6 +12,7 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class PickingEntry : ContentPage
     {
         string fieldName, linkID;
+        bool tapped = true;
 
         public PickingEntry(clsWhsItem summary, string id)
         {
@@ -25,9 +26,12 @@ namespace ASolute_Mobile.WMS_Screen
             pickingDesc.Children.Add(topBlank);
 
 
+
+
             foreach (clsCaptionValue desc in summary.Summary)
             {
                 Label caption = new Label();
+                caption.FontSize = 13;
               
                 if(desc.Caption.Equals(""))
                 {
@@ -66,34 +70,42 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void BarCodeScan(string field)
         {
-            try
-            {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
 
-                scanPage.OnScanResult += (result) =>
+            if(tapped)
+            {
+                tapped = false;
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
-
-                        if (field == "PalletIDScan")
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            palletIDEntry.Text = result.Text;
+                            await Navigation.PopAsync();
 
-                        }
-                        else if (field == "ConfirmScan")
-                        {
-                            confirmEntry.Text = result.Text;
-                        }
+                            if (field == "PalletIDScan")
+                            {
+                                palletIDEntry.Text = result.Text;
 
-                    });
-                };
+                            }
+                            else if (field == "ConfirmScan")
+                            {
+                                confirmEntry.Text = result.Text;
+                            }
+
+                        });
+                    };
+
+                    tapped = true;
+                }
+                catch (Exception e)
+                {
+                    await DisplayAlert("Error", e.Message, "OK");
+                }
             }
-            catch (Exception e)
-            {
-                await DisplayAlert("Error", e.Message, "OK");
-            }
+
         }
 
         async void ConfirmPicking(object sender, EventArgs e)

@@ -24,7 +24,7 @@
                                     Refreshed="Handle_Refreshed">
         <refresh:SfPullToRefresh.PullableContent>
  <ScrollView>
-    <StackLayout Padding="15,15,15,0" Spacing="50">
+    <StackLayout Padding="15,15,15,0" Spacing="30">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/>
         
        <StackLayout x:Name="tallyInDesc" BackgroundColor="#E5E5E5" ></StackLayout>             

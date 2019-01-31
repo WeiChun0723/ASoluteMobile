@@ -17,6 +17,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         List<clsWhsItem> items = new List<clsWhsItem>();
         List<clsWhsItem> itemsTest = new List<clsWhsItem>();
+        bool tapped = true;
 
         public PackingEntry(string packingID, string screenTitle)
         {
@@ -51,26 +52,33 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void ConfirmScan(object sender, System.EventArgs e)
         {
-            try
+            if(tapped)
             {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
+                tapped = false;
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Navigation.PopAsync();
 
-                        SKUEntry.Text = result.Text;
+                            SKUEntry.Text = result.Text;
 
-                    });
-                };
+                        });
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", ex.Message, "OK");
+                }
+
+                tapped = true;
             }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
+      
         }
 
         async void AddToGrid(object sender, System.EventArgs e)
@@ -94,6 +102,9 @@ namespace ASolute_Mobile.WMS_Screen
 
                         dataGrid.ItemsSource = items;
                         dataGrid.ItemsSource = itemsTest;
+
+                        SKUEntry.Text = String.Empty;
+                        QtyEntry.Text = String.Empty;
                        
                         var toastConfig = new ToastConfig("Added to the list");
                         toastConfig.SetDuration(3000);

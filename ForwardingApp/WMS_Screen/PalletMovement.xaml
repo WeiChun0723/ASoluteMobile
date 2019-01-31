@@ -110,7 +110,7 @@
             <inputLayout:SfTextInputLayout.TrailingView >
                       <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="pdCancel">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ClearPdEntry"/>
+                            <TapGestureRecognizer Tapped="ClearPdEntry" NumberOfTapsRequired="1"/>
                         </Image.GestureRecognizers>
                      </Image>    
             </inputLayout:SfTextInputLayout.TrailingView>    
@@ -132,28 +132,28 @@
                 Hint="Confirmed"
                 ContainerBackgroundColor="LightYellow"
                 FocusedColor="Black" HorizontalOptions="FillAndExpand"
-                TrailingViewPosition="Inside" x:Name="confirmView" IsVisible="false" >   
+                TrailingViewPosition="Inside" LeadingViewPosition="Inside" x:Name="confirmView" IsVisible="false" >   
                 
             <Entry x:Name="confirmEntry" TextChanged="ConfirmEntry_TextChanged">
                      <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="30"/>
                 </Entry.Behaviors>      
             </Entry>
-            <inputLayout:SfTextInputLayout.TrailingView> 
+            <inputLayout:SfTextInputLayout.LeadingView> 
                     <Image Source="barCode.png"  VerticalOptions="Center">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="ConfirmScan"/>
                         </Image.GestureRecognizers>
                      </Image>
-            </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout.LeadingView>
                 
-           <inputLayout:SfTextInputLayout.LeadingView >
+           <inputLayout:SfTextInputLayout.TrailingView >
                       <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="confirmCancel">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="ClearConfirmEntry"/>
                         </Image.GestureRecognizers>
                      </Image>    
-            </inputLayout:SfTextInputLayout.LeadingView>    
+            </inputLayout:SfTextInputLayout.TrailingView>    
             </inputLayout:SfTextInputLayout>
                 
             

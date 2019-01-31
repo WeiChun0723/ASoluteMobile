@@ -17,6 +17,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         List<clsDataRow> tallyOutList;
         ObservableCollection<AppMenu> Item;
+        bool tapped = true;
 
         public TallyOut(string screenTitle)
         {
@@ -144,26 +145,34 @@ namespace ASolute_Mobile.WMS_Screen
 
         public async void BarCodeScan(object sender, EventArgs e)
         {
-            try
+            if(tapped)
             {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
+                tapped = false;
+                try
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Navigation.PopAsync();
 
-                        filterText.Text = result.Text;
+                            filterText.Text = result.Text;
 
-                    });
-                };
+                        });
+                    };
+                }
+                catch
+                {
+
+                }
+
+                tapped = true;
             }
-            catch
-            {
-
-            }
+          
+           
         }
 
         void loadPackingList()

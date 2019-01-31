@@ -22,6 +22,7 @@
                  TextColor="White"
                  HorizontalOptions="Center"
                    FontAttributes="Bold"/>
+
             <Label x:Name="appVersion"
                  FontSize="12"
                  VerticalOptions="CenterAndExpand"
