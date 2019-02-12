@@ -27,6 +27,8 @@ namespace ASolute_Mobile
 
             Title = "Check list";
             chkid = id;
+
+            checkList.RowHeight = 100;
             BindingContext = new CheckListViewModel(items);
         
         }

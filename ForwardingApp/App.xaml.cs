@@ -13,7 +13,6 @@ using Com.OneSignal.Abstractions;
 using System.Collections.Generic;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
-using ASolute_Mobile.CommonScreen;
 using ASolute_Mobile.testing;
 using ASolute_Mobile.WMS_Screen;
 
@@ -35,8 +34,6 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            //MainPage = new TallyInPalletEntry();
-
            if (sessionKey != "")
            {
                MainPage = new MainPage();
@@ -46,7 +43,7 @@ namespace ASolute_Mobile
            {
                if(Ultis.Settings.AppFirstInstall == "First")
                {
-                    //MainPage = new CustomNavigationPage(new SplashScreen());
+
                     MainPage = new CustomNavigationPage(new StartUpScreen());
                 }
                else
@@ -54,9 +51,7 @@ namespace ASolute_Mobile
                    MainPage = new CustomNavigationPage(new LoginPage());
                }
 
-
            }
-
 
             /*   Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
            MainPage = new CustomNavigationPage(new AppNavigation());

@@ -14,9 +14,9 @@
             
    <!-- NEW -->
             <Style x:Key="inputStyle" TargetType="inputLayout:SfTextInputLayout">
-                <Setter Property="ContainerBackgroundColor" Value="Transparent" />
-                <Setter Property="ContainerType" Value="Outlined" />
-                <Setter Property="FocusedColor" Value="White" />
+                <Setter Property="ContainerBackgroundColor" Value="WhiteSmoke" />
+                <Setter Property="ContainerType" Value="Filled" />
+                <Setter Property="FocusedColor" Value="Black" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                <Setter Property="UnfocusedColor" Value="Black" />
                 <Setter Property="LeadingViewPosition" Value="Inside" />

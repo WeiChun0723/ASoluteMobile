@@ -19,9 +19,9 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <inputLayout:SfTextInputLayout Hint="Enterprise name" Style="{StaticResource inputStyle}" x:Name="enterpriseView">
-                    <Entry x:Name="organizationEntry" TextColor="White" Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false" />
+                    <Entry x:Name="organizationEntry"  Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false" />
                     <inputLayout:SfTextInputLayout.LeadingView>
-                        <Image Source="organization" />
+                        <Image Source="enterprise" />
                     </inputLayout:SfTextInputLayout.LeadingView>
                 </inputLayout:SfTextInputLayout>
                 <Image Source="edit.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="End" x:Name="edit_icon">
@@ -31,7 +31,7 @@
                 </Image>
             </StackLayout>
             <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}" >
-                <Entry x:Name="usernameEntry" TextColor="White" >
+                <Entry x:Name="usernameEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="10" />
                     </Entry.Behaviors>
@@ -40,20 +40,20 @@
                     <Image Source="user" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-            <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}" EnablePasswordVisibilityToggle="true"  >
-                <Entry IsPassword="true" x:Name="passwordEntry" TextColor="White"  />
+            <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}" EnablePasswordVisibilityToggle="true"   >
+                <Entry IsPassword="true" x:Name="passwordEntry" />
                 <inputLayout:SfTextInputLayout.LeadingView>
-                    <Image Source="pass" />
+                    <Image Source="password" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-            <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
-                <Entry x:Name="equipmentEntry" TextColor="White">
+          <!-- <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+                <Entry x:Name="equipmentEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />
                     </Entry.Behaviors>
                 </Entry>
                 <inputLayout:SfTextInputLayout.LeadingView>
-                    <Image Source="logintruck" />
+                    <Image Source="truck" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>-->
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="loginButton" Text="Login" Clicked="Login_Clicked" />

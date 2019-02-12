@@ -10,13 +10,13 @@
                 <StackLayout Padding="0, 40">
                 </StackLayout>
                 <inputLayout:SfTextInputLayout Hint="Enterprise name" x:Name="enterpriseView" Style="{StaticResource inputStyle}">
-                    <Entry x:Name="nameEntry" TextColor="White">
+                    <Entry x:Name="nameEntry" >
                         <Entry.Behaviors>
                             <local:MaxLengthValidation MaxLength="50" />
                         </Entry.Behaviors>
                     </Entry>
                     <inputLayout:SfTextInputLayout.LeadingView>
-                        <Image Source="organization" />
+                        <Image Source="enterprise"/>
                     </inputLayout:SfTextInputLayout.LeadingView>
                 </inputLayout:SfTextInputLayout>
                 <buttons:SfButton x:Name="submitButton" Text="Submit" Clicked="Url_Clicked" Style="{StaticResource buttonStyle}" />

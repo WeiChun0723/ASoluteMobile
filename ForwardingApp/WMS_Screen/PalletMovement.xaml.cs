@@ -99,8 +99,27 @@ namespace ASolute_Mobile.WMS_Screen
 
                     if (update_response.IsGood)
                     {
-                        await DisplayAlert("Success", "Putaway updated.", "OK");
-                        await Navigation.PopAsync();
+
+                        if (pallet.Action.Equals("Pickup"))
+                        {
+                            GetPalletTrx(pdEntry.Text);
+                        }
+                        else if (pallet.Action.Equals("Dropoff"))
+                        {
+                            await DisplayAlert("Success", "Putaway updated.", "OK");
+
+                            btnPickUp.IsVisible = false;
+                            btnDropOff.IsVisible = false;
+                            suggestView.IsVisible = false;
+                            confirmView.IsVisible = false;
+                            checkDigitView.IsVisible = false;
+                            palletDesc.IsVisible = false;
+
+                            pdEntry.Text = String.Empty;
+                            confirmEntry.Text = String.Empty;
+                            checkDigitEntry.Text = String.Empty;
+                        }
+
                     }
                     else
                     {
@@ -180,11 +199,16 @@ namespace ASolute_Mobile.WMS_Screen
                     if(pallet.Action.Equals("Pickup"))
                     {
                         btnPickUp.IsVisible = true;
+                        btnDropOff.IsVisible = false;
+                        suggestView.IsVisible = false;
+                        confirmView.IsVisible = false;
+                        checkDigitView.IsVisible = false;
                     }
                     else if (pallet.Action.Equals("Dropoff"))
                     {
                         if(!String.IsNullOrEmpty(pallet.NewLocation))
                         {
+                            btnPickUp.IsVisible = false;
                             btnDropOff.IsVisible = true;
                             suggestView.IsVisible = true;
                             confirmView.IsVisible = true;

@@ -446,6 +446,8 @@
     <BundleResource Include="Resources\hamburger.png" />
     <BundleResource Include="Resources\nodatafound.png" />
     <BundleResource Include="Resources\edit.png" />
+    <BundleResource Include="Resources\angleLeft.png" />
+    <BundleResource Include="Resources\angleRight.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\refuel.png" />

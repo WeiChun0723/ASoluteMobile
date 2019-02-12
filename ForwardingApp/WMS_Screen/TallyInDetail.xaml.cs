@@ -56,7 +56,6 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 tallyInDetail = JObject.Parse(content)["Result"].ToObject<clsWhsHeader>();
 
-
                 Label topBlank = new Label();
                 tallyInDesc.Children.Add(topBlank);
 

@@ -24,10 +24,11 @@ namespace ASolute_Mobile.HaulageScreen
         public string encryptedUserId, encryptedPassword, baseURL;
 
 
+
         public Registration ()
 		{
 			InitializeComponent ();
-            string test = "";
+
             if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
             {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
@@ -87,14 +88,11 @@ namespace ASolute_Mobile.HaulageScreen
                     encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
                     encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                     GetBasedURL();
-                       
                 }
                 else
                 {
                     await DisplayAlert("Error", "Please fill in all the field.", "OK");
                 }
-
-               
             }
             catch(Exception exception)
             {
@@ -106,12 +104,11 @@ namespace ASolute_Mobile.HaulageScreen
         public async void GetBasedURL()
         {
 
-            var content = await CommonFunction.GetWebService("https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper()));
+            var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper()));
             clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (json_response.IsGood)
             {
-               
                 Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                 Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
                 RegisterUser();
@@ -126,7 +123,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             try
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text));
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text));
                 clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (register_response.IsGood)
@@ -153,7 +150,6 @@ namespace ASolute_Mobile.HaulageScreen
         {
             try
             {
-
                 encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(userIDEntry.Text));
                 encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
 
@@ -252,12 +248,12 @@ namespace ASolute_Mobile.HaulageScreen
                             }
                             else
                             {
-                                await DisplayAlert("Download Logo Error", "No image.", "Ok");
+                                await DisplayAlert("Download Logo Error", "No image.", "OK");
                             }
                         }
                         else
                         {
-                            await DisplayAlert("Download Logo Error", "No image.", "Ok");
+                            await DisplayAlert("Download Logo Error", "No image.", "OK");
                         }
                     }
                     else

@@ -18,14 +18,8 @@
         <StackLayout Padding = "0, 15"></StackLayout>
         
         <inputLayout:SfTextInputLayout Hint="Enterprise name"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
           x:Name="enterpriseView"
-          LeadingViewPosition="Inside"
-          HorizontalOptions="FillAndExpand" 
-          UnfocusedColor="White"> 
+         Style="{StaticResource inputStyle}"> 
         <Entry x:Name="enterpriseEntry" >
              <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="100"/>
@@ -33,20 +27,14 @@
          </Entry>
          <inputLayout:SfTextInputLayout.LeadingView>
             <Image
-                Source="organization">     
+                Source="enterprise">     
             </Image>
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout> 
         
         <inputLayout:SfTextInputLayout Hint="User ID"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
           x:Name="userIDView"
-          LeadingViewPosition="Inside"
-          HorizontalOptions="FillAndExpand" 
-          UnfocusedColor="White"> 
+          Style="{StaticResource inputStyle}"> 
         <Entry  x:Name = "userIDEntry">
              <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="100"/>
@@ -61,37 +49,25 @@
             
             
         <inputLayout:SfTextInputLayout Hint="Password"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
-          x:Name="passwordView"
-          LeadingViewPosition="Inside"
-          HorizontalOptions="FillAndExpand"
-          EnablePasswordVisibilityToggle="true"
-          UnfocusedColor="White"> 
-        <Entry IsPassword="True" x:Name = "passwordEntry">
+          Style="{StaticResource inputStyle}"
+          x:Name="passwordView" EnablePasswordVisibilityToggle="true"> 
+        <Entry IsPassword="True" x:Name = "passwordEntry" >
              <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="100"/>
                 </Entry.Behaviors>     
          </Entry>
          <inputLayout:SfTextInputLayout.LeadingView>
             <Image
-                Source="pass">     
+                Source="password">     
             </Image>
         </inputLayout:SfTextInputLayout.LeadingView>
         </inputLayout:SfTextInputLayout>  
             
 
          <inputLayout:SfTextInputLayout Hint="IC"                             
-          ContainerBackgroundColor="Transparent"
-          ContainerType="Outlined"
-          FocusedColor="Black"
-          EnableHintAnimation="true" 
+         Style="{StaticResource inputStyle}"
           x:Name="icView"
-          LeadingViewPosition="Inside"
-          HorizontalOptions="FillAndExpand" 
-          UnfocusedColor="White"> 
+          > 
         <Entry  x:Name = "icEntry">
              <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="20"/>

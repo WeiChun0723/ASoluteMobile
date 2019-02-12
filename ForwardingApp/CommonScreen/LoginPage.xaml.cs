@@ -11,7 +11,7 @@ using ASolute.Mobile.Models;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using ASolute_Mobile.Ultis;
-
+using Plugin.DeviceInfo;
 
 namespace ASolute_Mobile
 {
@@ -22,19 +22,18 @@ namespace ASolute_Mobile
         public LoginPage()
         {
             InitializeComponent();
-            clsLogin test = new clsLogin(); 
+           
             //hide the navigation bar
             NavigationPage.SetHasNavigationBar(this, false);
 
             //search for any company icon that stored in file and display it
-            if(File.Exists(Ultis.Settings.GetAppLogoFileLocation())){
+            if(File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
+            {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "AILS WMS";
+            AppLabel.Text = "ASolute Fleet";
 
-            organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
-            usernameEntry.Text = Ultis.Settings.SessionUserId;
 
             //set username entry maximum to 10 chars
             usernameEntry.TextChanged += (sender, args) =>
@@ -50,18 +49,22 @@ namespace ASolute_Mobile
             {                
                 passwordEntry.Focus();
             };
-    
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
 
-
-       
-        public async void Update_URL_Clicked(object sender, System.EventArgs e)
+            organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
+            usernameEntry.Text = Ultis.Settings.SessionUserId;
+        }
+      
+        async void Update_URL_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new SettingPage());            
         }
 
-        public async void NewUser(object sender, System.EventArgs e)
+        async void NewUser(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new HaulageScreen.Registration());
         }
@@ -77,7 +80,7 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                    var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
                    //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -139,7 +142,13 @@ namespace ASolute_Mobile
                         else
                         {
                             Ultis.Settings.Language = "Malay";
-                        }                        
+                        }
+
+                        if(Ultis.Settings.Language.Equals("Malay"))
+                        {
+                            await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLanguageURL(0));
+                            Ultis.Settings.Language = "English";
+                        }
 
                         if (login_user.GetLogo || !File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
                         {
@@ -214,9 +223,9 @@ namespace ASolute_Mobile
             else
             {
                 await DisplayAlert("Login Fail", "Please make sure all fields are complete", "Ok");
-                this.activityIndicator.IsRunning = false;
+               
             }
-
+            this.activityIndicator.IsRunning = false;
         }
 
     }   

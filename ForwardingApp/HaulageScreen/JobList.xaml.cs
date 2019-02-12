@@ -163,6 +163,11 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void loadJobList()
         {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                jobList.RowHeight = 200;
+            }
+
             Ultis.Settings.List = "Job_List";
             ObservableCollection<JobItems> jobs = new ObservableCollection<JobItems>(App.Database.GetJobItems(doneStatus, "HaulageJob"));
             jobList.ItemsSource = jobs;

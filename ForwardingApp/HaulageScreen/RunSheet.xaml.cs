@@ -361,6 +361,7 @@ namespace ASolute_Mobile.HaulageScreen
                         await DisplayAlert("Error", json_response.Message, "Ok");
                     }
 
+
                 }
             }
             catch(Exception exception)
@@ -372,6 +373,11 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void refreshRunSheetHistory()
         {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                runSheetHistory.RowHeight = 150;
+            }
+
             Ultis.Settings.List = "Run_Sheet";
             ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
             runSheetHistory.ItemsSource = Item;

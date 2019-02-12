@@ -178,12 +178,7 @@ namespace ASolute_Mobile.WMS_Screen
                 tapped = true;
             }
 
-
-           
-
         }
-
-      
 
         async void ConfirmAddPallet(object sender, EventArgs e)
         {

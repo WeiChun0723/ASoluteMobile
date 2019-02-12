@@ -11,6 +11,7 @@ using PCLStorage;
 using System.IO;
 using System.Linq;
 using ZXing.Net.Mobile.Forms;
+using Acr.UserDialogs;
 
 namespace ASolute_Mobile.WMS_Screen
 {
@@ -21,7 +22,8 @@ namespace ASolute_Mobile.WMS_Screen
         double imageWidth;
         List<AppImage> images = new List<AppImage>();
         List<clsPalletTrx> palletTrxs = new List<clsPalletTrx>();
-        List<clsPalletTrx> testing = new List<clsPalletTrx>();
+        List<clsWhsItem> tallyOutItems = new List<clsWhsItem>();
+
         bool tapped = true;
 
         public TallyOutDetail(string id)
@@ -39,71 +41,75 @@ namespace ASolute_Mobile.WMS_Screen
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
             GetTallyOutDetail();
-        }
 
-        void Handle_ItemsSourceChanged(object sender, Syncfusion.SfDataGrid.XForms.GridItemsSourceChangedEventArgs e)
-        {
-            dataGrid.ItemsSource = palletTrxs;
+            if(tallyOutItems.Count != 0)
+            {
+                dataGrid.IsVisible = true;
+                dataGrid.ItemsSource = tallyOutItems;
+            }
+
         }
 
         async void GetTallyOutDetail()
         {
-            loading.IsVisible = true;
 
-            tallyInDesc.Children.Clear();
-
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyOutDetail(tallyOutID));
-            clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            if (tallyIn_response.IsGood)
+            try
             {
-                tallyOutDetail = JObject.Parse(content)["Result"].ToObject<clsWhsHeader>();
+                loading.IsVisible = true;
 
-                Label topBlank = new Label();
-                tallyInDesc.Children.Add(topBlank);
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyOutDetail(tallyOutID));
+                clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                foreach (clsCaptionValue desc in tallyOutDetail.Summary)
+                if (tallyIn_response.IsGood)
                 {
-                    Label caption = new Label();
-                    caption.FontSize = 13;
+                    tallyInDesc.Children.Clear();
 
-                    if (desc.Caption.Equals(""))
+                    tallyOutDetail = JObject.Parse(content)["Result"].ToObject<clsWhsHeader>();
+
+                    Label topBlank = new Label();
+                    tallyInDesc.Children.Add(topBlank);
+
+                    foreach (clsCaptionValue desc in tallyOutDetail.Summary)
                     {
-                        caption.Text = "    " + desc.Value;
-                        caption.FontAttributes = FontAttributes.Bold;
-                    }
-                    else
-                    {
-                        caption.Text = "    " + desc.Caption + ": " + desc.Value;
+                        Label caption = new Label();
+                        caption.FontSize = 13;
+
+                        if (desc.Caption.Equals(""))
+                        {
+                            caption.Text = "    " + desc.Value;
+                            caption.FontAttributes = FontAttributes.Bold;
+                        }
+                        else
+                        {
+                            caption.Text = "    " + desc.Caption + ": " + desc.Value;
+                        }
+
+                        if (desc.Caption.Equals(""))
+                        {
+                            Title = "Tally Out # " + desc.Value;
+                        }
+
+                        tallyInDesc.Children.Add(caption);
                     }
 
-                    if (desc.Caption.Equals(""))
-                    {
+                    Label bottomBlank = new Label();
+                    tallyInDesc.Children.Add(bottomBlank);
 
-                        Title = "Tally Out # " + desc.Value;
-                    }
 
-                    tallyInDesc.Children.Add(caption);
                 }
 
-                Label bottomBlank = new Label();
-                tallyInDesc.Children.Add(bottomBlank);
-
-
-                dataGrid.ItemsSource = tallyOutDetail.Items;
-
+                loading.IsVisible = false;
             }
-            else
+            catch(Exception)
             {
-                await DisplayAlert("Error", tallyIn_response.Message, "OK");
+                await Navigation.PopAsync();
             }
 
-            loading.IsVisible = false;
         }
 
 
@@ -134,54 +140,67 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void scanBarCode(object sender, EventArgs e)
         {
-            if(tapped)
+            try
             {
-                tapped = false;
-                try
+                if (tapped)
                 {
-                    var scanPage = new ZXingScannerPage();
-                    await Navigation.PushAsync(scanPage);
-
-                    scanPage.OnScanResult += (result) =>
+                    tapped = false;
+                    try
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        dataGrid.IsVisible = false;
+                        dataGrid.ItemsSource = null;
+
+                        var scanPage = new ZXingScannerPage();
+                        await Navigation.PushAsync(scanPage);
+
+                        scanPage.OnScanResult += (result) =>
                         {
-                            await Navigation.PopAsync();
+                            scanPage.PauseAnalysis();
 
-                            loading.IsVisible = true;
-
-                            clsPalletTrx tallyOutPallet = new clsPalletTrx
+                            Device.BeginInvokeOnMainThread(async () =>
                             {
-                                LinkId = tallyOutID,
-                                Id = result.Text
-                            };
+                                clsPalletTrx tallyOutPallet = new clsPalletTrx
+                                {
+                                    LinkId = tallyOutID,
+                                    Id = result.Text
+                                };
 
-                            var content = await CommonFunction.PostRequest(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
-                            clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                                var content = await CommonFunction.PostRequest(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
+                                clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                            if (upload_response.IsGood)
-                            {
-                                await DisplayAlert("Success", "Tally out done.", "OK");
-                                await Navigation.PopAsync();
+                                if (upload_response.IsGood)
+                                {
+                                    displayToast("Success");
+                                    clsWhsItem item = new clsWhsItem
+                                    {
+                                        PalletId = result.Text,
+                                        Description = Ultis.Settings.SessionUserId
+                                    };
+                                    tallyOutItems.Add(item);
+                                    scanPage.ResumeAnalysis();
+                                }
+                                else
+                                {
+                                    displayToast("Invalid tally out");
+                                    scanPage.ResumeAnalysis();
+                                }
+                            });
 
-                            }
-                            else
-                            {
-                                await DisplayAlert("Error", upload_response.Message, "OK");
-                            }
+                        };
+                    }
+                    catch 
+                    {
+                       
+                    }
 
-                            loading.IsVisible = false;
-                        });
-                    };
+                    tapped = true;
                 }
-                catch (Exception ex)
-                {
-                    await DisplayAlert("Error", ex.Message, "OK");
-                }
-
-                tapped = true;
             }
-          
+            catch
+            {
+               
+            }
+           
         }
 
         async void DisplayImage()
@@ -229,6 +248,23 @@ namespace ASolute_Mobile.WMS_Screen
             int rowNo = noOfImages / noOfCols;
             int colNo = noOfImages - (rowNo * noOfCols);
             imageGrid.Children.Add(image, colNo, rowNo);
+        }
+
+        public void displayToast(string message)
+        {
+            var toastConfig = new ToastConfig(message);
+            toastConfig.SetDuration(2000);
+            toastConfig.Position = 0;
+            toastConfig.SetMessageTextColor(System.Drawing.Color.FromArgb(0, 0, 0));
+            if (message == "Success")
+            {
+                toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(0, 128, 0));
+            }
+            else if (message == "Invalid tally out")
+            {
+                toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(255, 0, 0));
+            }
+            UserDialogs.Instance.Toast(toastConfig);
         }
     }
 }

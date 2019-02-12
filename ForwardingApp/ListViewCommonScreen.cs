@@ -7,7 +7,6 @@ namespace ASolute_Mobile
     {
         public ListView listView = new ListView();
         public Image image, scanBarCode;
-        //public Label label = new Label();
         public SfBusyIndicator loading;
      
 

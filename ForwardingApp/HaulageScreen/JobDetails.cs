@@ -1259,7 +1259,7 @@ namespace ASolute_Mobile
             }
             catch
             {
-                await DisplayAlert("display", "Error on display", "ok");
+
             }
 
         }

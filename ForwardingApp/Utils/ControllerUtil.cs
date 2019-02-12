@@ -363,7 +363,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}", Ultis.Settings.SessionSettingKey, "Warehouse");
+            return String.Format("Session/Load?Id={0}&AppName={1}", Ultis.Settings.SessionSettingKey, "Haulage");
         }
 
         public static String getDownloadRefuelHistoryURL()

@@ -28,14 +28,8 @@ namespace ASolute_Mobile
 
         public MainMenuItem()
         {
+
             Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
-
-            /*if(Ultis.Settings.Language.Equals("English/Default"))
-            {
-                var content = CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLanguageURL(1));
-                Ultis.Settings.Language = "Malay";
-
-            }*/
 
             listView.ItemTapped += async (sender, e) =>
             {

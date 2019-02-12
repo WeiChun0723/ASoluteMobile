@@ -108,10 +108,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\Logout.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomRenderer\Dashboard_Template.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -120,18 +116,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\CurrentLocation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\ChangeEnterpriseName.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\RegisterUser.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\TestingLogin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -287,7 +271,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)BackgroundTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UploadFileDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ControllerUtil.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\SplashScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\CustomerRegistration.xaml.cs">
       <DependentUpon>CustomerRegistration.xaml</DependentUpon>
     </Compile>
@@ -375,9 +358,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ListViewCommonScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\JobLists.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\Dashboard_Template.xaml.cs">
-      <DependentUpon>Dashboard_Template.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml.cs">
       <DependentUpon>DriverRFC.xaml</DependentUpon>
     </Compile>
@@ -392,17 +372,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatRoomObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\GetBaseURLViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PropertyChange.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\ChangeEnterpriseName.xaml.cs">
-      <DependentUpon>ChangeEnterpriseName.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\RegisterUser.xaml.cs">
-      <DependentUpon>RegisterUser.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\Register.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\RegisterUserViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\TestingLogin.xaml.cs">
-      <DependentUpon>TestingLogin.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)testing\TestingClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)testing\TestingOCR.xaml.cs">
       <DependentUpon>TestingOCR.xaml</DependentUpon>
@@ -471,7 +442,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)StartUpScreen.xaml.cs">
       <DependentUpon>StartUpScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)IThumbnailHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IThumbnailHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
