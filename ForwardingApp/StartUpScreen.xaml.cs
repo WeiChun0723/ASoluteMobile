@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
+using Plugin.Geolocator;
+using Plugin.Media;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -14,10 +18,13 @@ namespace ASolute_Mobile
             InitializeComponent();
 
             NavigationPage.SetHasNavigationBar(this, false);
+
+            string test = Utils.ControllerUtil.getPositionAsync();
         }
 
         protected override async void OnAppearing()
         {
+
             uint duration = 3 * 1000;
 
             await Task.WhenAll(
@@ -69,5 +76,9 @@ namespace ASolute_Mobile
 
             loading.IsVisible = false;
         }
+
+       
+
+
     }
 }

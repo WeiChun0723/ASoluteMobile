@@ -29,7 +29,26 @@ namespace ASolute_Mobile.HaulageScreen
 		{
 			InitializeComponent ();
 
-            Title = title;
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SessionUserItem.DriverId + " , " + Ultis.Settings.SessionUserItem.CompanyName,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
 
             Ultis.Settings.App = "Haulage";
 

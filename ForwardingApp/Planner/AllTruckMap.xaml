@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.Planner.AllTruckMap" xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+    
+       <!-- <refresh:SfPullToRefresh x:Name="pullToRefresh"
+                                    IsRefreshing="false" 
+                                    TransitionMode="SlideOnTop" 
+                                    ProgressBackgroundColor="#00AFF9"
+                                    ProgressStrokeWidth="5" 
+                                    ProgressStrokeColor="White"
+                                    PullingThershold="200"
+                                    RefreshContentHeight="50"
+                                    RefreshContentThreshold="50"
+                                    RefreshContentWidth="50"
+                                    Pulling="Handle_Pulling"
+                                    Refreshing="Handle_Refreshing"
+                                    Refreshed="Handle_Refreshed"
+                                   >
+     
+        <refresh:SfPullToRefresh.PullableContent>
+            
+          
+        </refresh:SfPullToRefresh.PullableContent>
+         </refresh:SfPullToRefresh>  -->
+    <StackLayout>
+                <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
+                <maps:Map x:Name="GoogleMap" MapType="Street"  />
+     </StackLayout>
+</ContentPage>

@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using ASolute_Mobile.Ultis;
 using Plugin.DeviceInfo;
+using Plugin.Geolocator;
+using Plugin.Media;
 
 namespace ASolute_Mobile
 {
@@ -32,7 +34,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "ASolute Fleet";
+            AppLabel.Text = "AILS Haulage";
 
 
             //set username entry maximum to 10 chars
@@ -49,6 +51,8 @@ namespace ASolute_Mobile
             {                
                 passwordEntry.Focus();
             };
+
+           
         }
 
         protected override void OnAppearing()

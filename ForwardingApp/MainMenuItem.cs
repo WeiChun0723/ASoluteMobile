@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using Android.Locations;
 using ASolute.Mobile.Models;
+using ASolute_Mobile.Droid;
+using ASolute_Mobile.Droid.Services;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.Utils;
@@ -29,7 +32,26 @@ namespace ASolute_Mobile
         public MainMenuItem()
         {
 
-            Title = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SessionUserItem.DriverId +  " , " + Ultis.Settings.SessionUserItem.CompanyName,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this,main);
 
             listView.ItemTapped += async (sender, e) =>
             {
@@ -86,8 +108,8 @@ namespace ASolute_Mobile
                              return_eventID = info[1];
 
                          }*/
-                        long test = Convert.ToInt64(return_eventID);
-                        await Navigation.PushAsync(new TransportScreen.Futile_CargoReturn("CargoReturn", return_id, test));
+                        //long test = Convert.ToInt64(return_eventID);
+                        //await Navigation.PushAsync(new TransportScreen.Futile_CargoReturn("CargoReturn", return_id, test));
                         break;
 
                     case "RunSheet":
@@ -104,7 +126,8 @@ namespace ASolute_Mobile
                         await Navigation.PushAsync(new HaulageScreen.DriverRFC());
                         break;
                     case "EqList" :
-                        await Navigation.PushAsync(new Planner.EqCategory());
+                        //await Navigation.PushAsync(new Planner.EqCategory());
+                        await Navigation.PushAsync(new Planner.AllTruckMap(((AppMenu)e.Item).name));
                         break;
                     case "TallyIn" :
                        await  Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
@@ -157,10 +180,54 @@ namespace ASolute_Mobile
                     PauseLocationUpdatesAutomatically = false
                 });
 
-                locator.PositionChanged += Current_PositionChanged;
+                //locator.PositionChanged += Current_PositionChanged;
 
             }
         }
+
+        public async void GetGPS()
+        {
+
+            Plugin.Geolocator.Abstractions.Position position = null;
+            var locator = CrossGeolocator.Current;
+            position = await locator.GetPositionAsync(); 
+
+            if(position.Equals(null))
+            {
+                position = await locator.GetLastKnownLocationAsync();
+            }
+
+            var getAddress = await locator.GetAddressesForPositionAsync(position);
+            var addressDetail = getAddress.FirstOrDefault();
+            string address = "";
+
+            address = addressDetail.Thoroughfare;
+
+            if (!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
+            {
+                address += "," + addressDetail.Locality;
+            }
+
+            if (!String.IsNullOrEmpty(addressDetail.PostalCode) && addressDetail.PostalCode != "????")
+            {
+                address += "," + addressDetail.PostalCode;
+            }
+
+            if (!String.IsNullOrEmpty(addressDetail.AdminArea) && addressDetail.AdminArea != "????")
+            {
+                address += "," + addressDetail.AdminArea;
+            }
+
+            if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
+            {
+                address += "," + addressDetail.CountryName;
+            }
+
+            string location = (position.Latitude == null) ? "0,0" : position.Latitude + "," + position.Longitude;
+
+            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getGPSTracking(location, address)));
+        }
+
 
         public async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
         {
@@ -228,15 +295,35 @@ namespace ASolute_Mobile
         }
         #endregion 
 
-
-        protected override void OnAppearing()
+        public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
+            Android.Locations.Location location = e.Location;
+           // Log.Debug(logTag, "Foreground updating");
 
-            if(Ultis.Settings.SessionUserItem.GetGPS)
-            {
-                Task.Run(async () => { await StartListening(); });
-            }
+            App.gpsLocationLat = location.Latitude;
+            App.gpsLocationLong = location.Longitude;
+        }
+
+        public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)
+        {
+           // Log.Debug(logTag, "Location provider disabled event raised");
+        }
+
+        public void HandleProviderEnabled(object sender, ProviderEnabledEventArgs e)
+        {
+           // Log.Debug(logTag, "Location provider enabled event raised");
+        }
+
+        public void HandleStatusChanged(object sender, StatusChangedEventArgs e)
+        {
+           // Log.Debug(logTag, "Location status changed, event raised");
+        }
+
+        protected async override void OnAppearing()
+        {
            
+
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -259,7 +346,7 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (NetworkCheck.IsInternet() && Ultis.Settings.RefreshMenuItem == "Yes") 
+            if (NetworkCheck.IsInternet()) 
             {
                 GetMainMenu();
                 Ultis.Settings.UpdatedRecord = "RefreshJobList";
@@ -472,6 +559,7 @@ namespace ASolute_Mobile
         {
             if (Device.RuntimePlatform == Device.Android)
             {
+                LocationApp.StopLocationService();
                 DependencyService.Get<CloseApp>().close_app();
             }
         }

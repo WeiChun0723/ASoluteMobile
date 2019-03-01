@@ -23,8 +23,6 @@ namespace ASolute_Mobile.HaulageScreen
       
         public string encryptedUserId, encryptedPassword, baseURL;
 
-
-
         public Registration ()
 		{
 			InitializeComponent ();
@@ -291,7 +289,5 @@ namespace ASolute_Mobile.HaulageScreen
 
             activityIndicator.IsRunning = false;
         }
-
-
     }
 }

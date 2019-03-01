@@ -440,6 +440,17 @@
     <Reference Include="Syncfusion.SfDataForm.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfDataForm.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfDataForm.XForms.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Forms.GoogleMaps.Android">
+      <HintPath>..\packages\Xamarin.Forms.GoogleMaps.3.0.4\lib\MonoAndroid70\Xamarin.Forms.GoogleMaps.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.GoogleMaps">
+      <HintPath>..\packages\Xamarin.Forms.GoogleMaps.3.0.4\lib\MonoAndroid70\Xamarin.Forms.GoogleMaps.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.1.0.1\lib\monoandroid81\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
     <Reference Include="ASolute.Mobile.Models">
       <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
@@ -467,6 +478,7 @@
     <Compile Include="Services\ServiceConnectedEventArgs.cs" />
     <Compile Include="Services\BackgroundCleanUpReceiver.cs" />
     <Compile Include="Services\BluetoothService_test.cs" />
+    <Compile Include="Services\GPS_Service.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -496,7 +508,6 @@
     <AndroidResource Include="Resources\drawable\jobList.png" />
     <AndroidResource Include="Resources\values\dimens.xml" />
     <AndroidResource Include="Resources\drawable\new_job.png" />
-    <AndroidResource Include="Resources\drawable\test.png" />
     <AndroidResource Include="Resources\drawable\container.png" />
     <AndroidResource Include="Resources\drawable\Image1.png" />
     <AndroidResource Include="Resources\drawable\printing.png" />

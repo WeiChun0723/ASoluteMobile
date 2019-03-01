@@ -45,6 +45,19 @@ namespace ASolute_Mobile.Ultis
         private const string New_Job = "new_job";
         #endregion
 
+        public static string Permission
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(New_Job, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(New_Job, value);
+            }
+        }
+
+
 
         public static string NewJob
         {

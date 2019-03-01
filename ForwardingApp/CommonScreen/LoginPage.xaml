@@ -15,21 +15,6 @@
             <StackLayout Padding="0, 10">
             </StackLayout>
             <Label TextColor="Black" FontSize="Small" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
-            <StackLayout Padding="0, 15">
-            </StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <inputLayout:SfTextInputLayout Hint="Enterprise name" Style="{StaticResource inputStyle}" x:Name="enterpriseView">
-                    <Entry x:Name="organizationEntry"  Placeholder="Enterprise name" PlaceholderColor="Black" IsEnabled="false" />
-                    <inputLayout:SfTextInputLayout.LeadingView>
-                        <Image Source="enterprise" />
-                    </inputLayout:SfTextInputLayout.LeadingView>
-                </inputLayout:SfTextInputLayout>
-                <Image Source="edit.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="End" x:Name="edit_icon">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Update_URL_Clicked" />
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
             <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}" >
                 <Entry x:Name="usernameEntry" >
                     <Entry.Behaviors>
@@ -46,7 +31,7 @@
                     <Image Source="password" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-          <!-- <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+          <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
                 <Entry x:Name="equipmentEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />
@@ -57,13 +42,12 @@
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>-->
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="loginButton" Text="Login" Clicked="Login_Clicked" />
+            
             <StackLayout Orientation="Horizontal">
-                <Label x:Name="newUser" FontAttributes="Bold" TextColor="Black" Text="New User ?" HorizontalOptions="StartAndExpand">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="NewUser" />
-                    </Label.GestureRecognizers>
-                </Label>
+                <buttons:SfButton Style="{StaticResource buttonStyle}"  Text="Register User" Clicked="NewUser" HorizontalOptions="FillAndExpand"/>
+                <buttons:SfButton Style="{StaticResource buttonStyle}"  x:Name="organizationEntry" Clicked="Update_URL_Clicked" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
+
             <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
     </ScrollView>

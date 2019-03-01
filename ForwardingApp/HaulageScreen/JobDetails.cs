@@ -48,9 +48,31 @@ namespace ASolute_Mobile
         CheckBox check1, check2;
         string checking="";
         SfBusyIndicator print;
+        Label title1 = new Label();
 
         public JobDetails(string ID, string Message)
         {
+            StackLayout main = new StackLayout();
+
+
+            title1.FontSize = 15;
+
+            title1.TextColor = Color.White;
+           
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SessionUserItem.DriverId + " , " + Ultis.Settings.SessionUserItem.CompanyName,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
+
+
             actionID = ID;
             actionMessage = Message;
             Ultis.Settings.Action = ID;
@@ -349,7 +371,7 @@ namespace ASolute_Mobile
 
                 if (!(String.IsNullOrEmpty(jobItem.Title)))
                 {
-                    Title = jobItem.Title;
+                    title1.Text = jobItem.Title;
                 }
                 else
                 {

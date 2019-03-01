@@ -182,9 +182,7 @@ namespace ASolute_Mobile
 
         protected void refreshRefuelHistory (object sender, EventArgs e)
         {
-            getRefuelHistory();           
-            refuel_history.IsRefreshing = false;
-            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(this); }).Wait();
+            getRefuelHistory();  
         }
 
         public void loadRefuelHistory()
@@ -210,6 +208,8 @@ namespace ASolute_Mobile
                 refuel_history.IsVisible = true;
                 noData.IsVisible = false;
             }
+
+            refuel_history.IsRefreshing = false;
         }
     }
 }

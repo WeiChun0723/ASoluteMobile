@@ -15,6 +15,7 @@ using ASolute_Mobile.Data;
 using ASolute.Mobile.Models;
 using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
+using Xamarin.Essentials;
 
 namespace ASolute_Mobile
 {
@@ -23,79 +24,73 @@ namespace ASolute_Mobile
         static byte[] scaledImageByte;
         static string uploadUri;
         static string imageEventID;
-        static bool uploadedImage = true;
         static string history;
-        static string previousLocation = "";
-        static string chklocation = "0";
         static List<AppImage> recordImages = new List<AppImage>();
+        static Plugin.Geolocator.Abstractions.Position position = null;
+        static string address = "";
 
-        public BackgroundTask()
+        public static async Task GetGPS()
         {
-        }
+            //Getlocation();
 
-        public static async Task StartListening()
-        {
-            if (CrossGeolocator.Current.IsListening)
-                return;
+            string location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0) ) ? "0,0" : String.Format("{0:0.0000}", App.gpsLocationLat) + "," + String.Format("{0:0.0000}", App.gpsLocationLong) ;
 
-            await CrossGeolocator.Current.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
+            if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
             {
-                ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
-                AllowBackgroundUpdates = true,
-                DeferLocationUpdates = true,
-                DeferralDistanceMeters = 1,
-                DeferralTime = TimeSpan.FromSeconds(1),
-                ListenForSignificantChanges = true,
-                PauseLocationUpdatesAutomatically = false,
-
-            });
-
-            CrossGeolocator.Current.PositionChanged += Current_PositionChanged;
-        }
-
-        public static async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
-        {
-            var position = e.Position;
-            chklocation = Math.Round(position.Latitude, 2) + "," + Math.Round(position.Longitude, 2);
-
-            if (chklocation != previousLocation)
-            {
-                try
-                {
-                    previousLocation = Math.Round(position.Latitude, 2) + "," + Math.Round(position.Longitude, 2);
-                    var locator = CrossGeolocator.Current;
-                    var getAddress = await locator.GetAddressesForPositionAsync(position);
-                    var addressDetail = getAddress.FirstOrDefault();
-
-                    string address = addressDetail.Thoroughfare + "," + addressDetail.PostalCode + "," + addressDetail.Locality + "," + addressDetail.AdminArea + "," + addressDetail.CountryName;
-
-                    string location = position.Latitude + "," + position.Longitude;
-
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var uri = ControllerUtil.getGPSTracking(location, address);
-                    var response = await client.GetAsync(uri);
-                    var content = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(content);
-                    clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if (gps_response.IsGood)
-                    {
-                        previousLocation = location;
-
-                        App.gpsLocationLat = position.Latitude;
-                        App.gpsLocationLong = position.Longitude;
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string error = ex.Message;
-                }
-
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                var sendGPSURI = ControllerUtil.getGPSTracking(location, address);
+                var content = await client.GetAsync(sendGPSURI);
+                var response = await content.Content.ReadAsStringAsync();
+                clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(response);
+                Debug.WriteLine(response);
             }
         }
 
+        public static async Task Getlocation()
+        {
+            try
+            {
+                var locator = CrossGeolocator.Current;
+                position = await locator.GetPositionAsync();
+
+                if (position.Equals(null))
+                {
+                    //position = await locator.GetLastKnownLocationAsync();
+
+                    var getAddress = await locator.GetAddressesForPositionAsync(position);
+                    var addressDetail = getAddress.FirstOrDefault();
+
+
+                    address = addressDetail.Thoroughfare;
+
+                    if (!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
+                    {
+                        address += "," + addressDetail.Locality;
+                    }
+
+                    if (!String.IsNullOrEmpty(addressDetail.PostalCode) && addressDetail.PostalCode != "????")
+                    {
+                        address += "," + addressDetail.PostalCode;
+                    }
+
+                    if (!String.IsNullOrEmpty(addressDetail.AdminArea) && addressDetail.AdminArea != "????")
+                    {
+                        address += "," + addressDetail.AdminArea;
+                    }
+
+                    if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
+                    {
+                        address += "," + addressDetail.CountryName;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+            }
+        }
 
         public static async Task UploadLatestRecord(ContentPage page)
         {

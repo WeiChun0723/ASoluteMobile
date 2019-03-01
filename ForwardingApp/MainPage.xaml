@@ -5,12 +5,16 @@
                   x:Class="ASolute_Mobile.MainPage">
   
 
-
+  
+    
 <MasterDetailPage.Master>
     <local:MasterPage x:Name="masterPage"/>
   </MasterDetailPage.Master>
 
    <MasterDetailPage.Detail>
+       
+        
+        
         <NavigationPage BarBackgroundColor="#9A2116" x:Name="navigation">
             <x:Arguments>
                 <local:MainMenuItem />

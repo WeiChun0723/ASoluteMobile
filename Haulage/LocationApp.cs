@@ -6,7 +6,7 @@ using ASolute_Mobile.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    /* public class LocationApp
+     public class LocationApp
     {
         // events
        public event EventHandler<ServiceConnectedEventArgs> LocationServiceConnected = delegate { };
@@ -21,7 +21,7 @@ namespace ASolute_Mobile.Droid
         }
         private static LocationApp current;
 
-       /* public LocationService LocationService
+       public LocationService LocationService
         {
             get
             {
@@ -61,7 +61,15 @@ namespace ASolute_Mobile.Droid
 
                 // Start our main service
                 Log.Debug("App", "Calling StartService");
-                Android.App.Application.Context.StartService(new Intent(Android.App.Application.Context, typeof(LocationService)));
+                if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+                {
+                    Android.App.Application.Context.StartForegroundService(new Intent(Android.App.Application.Context, typeof(LocationService)));
+                }
+                else
+                {
+                    Android.App.Application.Context.StartService(new Intent(Android.App.Application.Context, typeof(LocationService)));
+                }
+               
 
                 // bind our service (Android goes and finds the running service by type, and puts a reference
                 // on the binder to that service)
@@ -92,10 +100,11 @@ namespace ASolute_Mobile.Droid
             if (Current.LocationService != null)
             {
                 Log.Debug("App", "Stopping the LocationService");
+                Current.LocationService.StopForeground(true);
                 Current.LocationService.StopSelf();
             }
         }
 
         #endregion
-    }*/
+    }
 }

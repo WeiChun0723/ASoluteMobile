@@ -12,6 +12,7 @@ namespace ASolute_Mobile
 
         public ListViewCommonScreen()
         {
+
            image = new Image
             {
                 Source = "nodatafound.png",

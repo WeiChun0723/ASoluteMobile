@@ -5,17 +5,25 @@ using Android.Util;
 using Android.Content;
 using Android.OS;
 using Android.Locations;
+using Xamarin.Forms;
+using System.Threading.Tasks;
+using Haulage.Droid;
+using System.Net.Http;
+using ASolute_Mobile.Utils;
+using Newtonsoft.Json;
+using ASolute.Mobile.Models;
+using Android.Runtime;
 
 namespace ASolute_Mobile.Droid.Services
 {
-   /* [Service]
+   [Service]
     public class LocationService : Service, ILocationListener
     {
         public event EventHandler<LocationChangedEventArgs> LocationChanged = delegate { };
         public event EventHandler<ProviderDisabledEventArgs> ProviderDisabled = delegate { };
         public event EventHandler<ProviderEnabledEventArgs> ProviderEnabled = delegate { };
         public event EventHandler<StatusChangedEventArgs> StatusChanged = delegate { };
-
+        public HandlerThread _handlerThreadSingle;
         public LocationService()
         {
         }
@@ -37,9 +45,48 @@ namespace ASolute_Mobile.Droid.Services
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             Log.Debug(logTag, "LocationService started");
+            string channelId = "";
+            Notification notification = null;
+            var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(MainActivity)), 0);
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
 
+                channelId = createNotificationChannel("my_channel", "my_background_service");
+                notification = new Notification.Builder(this, channelId)
+                .SetContentIntent(pendingIntent)
+                .SetContentTitle("GPS Tracking")
+                .SetContentText("Sending location.")
+                .SetSmallIcon(Resource.Drawable.appIcon)
+                .Build();
+            }
+            else
+            {
+               
+                notification = new Notification.Builder(this)
+                .SetContentIntent(pendingIntent)
+                .SetContentTitle("GPS Tracking")
+                .SetContentText("Sending location.")
+                .SetSmallIcon(Resource.Drawable.appIcon)
+                .Build();
+            }
+
+            StartForeground((int)NotificationFlags.ForegroundService, notification);
             return StartCommandResult.Sticky;
         }
+
+        
+
+        private string createNotificationChannel(string channel_id, string channel_name)
+        {
+            var chan = new NotificationChannel(channel_id, channel_name, NotificationImportance.None);
+            chan.LockscreenVisibility = NotificationVisibility.Private;
+            var service = GetSystemService(Context.NotificationService) as NotificationManager;
+            service.CreateNotificationChannel(chan);
+
+
+            return channel_id;
+        }
+
 
         // This gets called once, the first time any client bind to the Service
         // and returns an instance of the LocationServiceBinder. All future clients will
@@ -57,26 +104,41 @@ namespace ASolute_Mobile.Droid.Services
         {
             //we can set different location criteria based on requirements for our app -
             //for example, we might want to preserve power, or get extreme accuracy
-            var locationCriteria = new Criteria();
 
-            locationCriteria.Accuracy = Accuracy.NoRequirement;
-            locationCriteria.PowerRequirement = Power.NoRequirement;
 
-            // get provider: GPS, Network, etc.
-            var locationProvider = LocMgr.GetBestProvider(locationCriteria, true);
-            Log.Debug(logTag, string.Format("You are about to get location updates via {0}", locationProvider));
+            /* var locationCriteria = new Criteria();
+             var locationProviderTest = LocMgr.AllProviders;
+             string test = locationProviderTest[0];
+              locationCriteria.Accuracy = Accuracy.Medium;
+              locationCriteria.PowerRequirement = Power.Medium;
 
+              //get provider: GPS, Network, etc.
+             var locationProvider = LocMgr.GetBestProvider(locationCriteria, true);
+
+             Log.Debug(logTag, string.Format("You are about to get location updates via {0}", locationProvider));*/
+
+            var location = LocMgr.GetLastKnownLocation(LocationManager.GpsProvider);
+        
             // Get an initial fix on location
-            LocMgr.RequestLocationUpdates(locationProvider, 2000, 0, this);
+            LocMgr.RequestLocationUpdates(LocationManager.GpsProvider, 40000, 0, this);
+          
+            Device.StartTimer(TimeSpan.FromSeconds(60), ()  =>
+            {
+            Task.Run(async () => {
 
-            Log.Debug(logTag, "Now sending location updates");
+                await BackgroundTask.GetGPS();
+
+            });
+
+            return true;
+        });
+
         }
 
         public override void OnDestroy()
         {
             base.OnDestroy();
             Log.Debug(logTag, "Service has been terminated");
-
             // Stop getting updates from the location manager:
             LocMgr.RemoveUpdates(this);
         }
@@ -99,6 +161,7 @@ namespace ASolute_Mobile.Droid.Services
             Log.Debug(logTag, String.Format("Speed is {0}", location.Speed));
             Log.Debug(logTag, String.Format("Accuracy is {0}", location.Accuracy));
             Log.Debug(logTag, String.Format("Bearing is {0}", location.Bearing));
+
         }
 
         public void OnProviderDisabled(string provider)
@@ -118,5 +181,5 @@ namespace ASolute_Mobile.Droid.Services
 
         #endregion
 
-    }*/
+    }
 }

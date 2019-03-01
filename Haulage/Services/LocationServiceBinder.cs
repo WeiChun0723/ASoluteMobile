@@ -7,7 +7,7 @@ namespace ASolute_Mobile.Droid.Services
     //This is our Binder subclass, the LocationServiceBinder
     public class LocationServiceBinder : Binder
     {
-       /* public LocationService Service
+       public LocationService Service
         {
             get { return this.service; }
         } protected LocationService service;
@@ -18,6 +18,6 @@ namespace ASolute_Mobile.Droid.Services
         public LocationServiceBinder (LocationService service)
         {
             this.service = service;
-        }*/
+        }
     }
 }

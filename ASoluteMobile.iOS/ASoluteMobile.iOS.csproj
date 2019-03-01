@@ -306,9 +306,6 @@
     <Reference Include="Xamarin.Forms.Maps.iOS">
       <HintPath>..\packages\Xamarin.Forms.Maps.3.3.0.967583\lib\Xamarin.iOS10\Xamarin.Forms.Maps.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.Licensing">
       <HintPath>..\packages\Syncfusion.Licensing.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.Licensing.dll</HintPath>
     </Reference>
@@ -389,6 +386,9 @@
     </Reference>
     <Reference Include="Syncfusion.SfListView.XForms.iOS">
       <HintPath>..\packages\Syncfusion.Xamarin.SfListView.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.SfListView.XForms.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

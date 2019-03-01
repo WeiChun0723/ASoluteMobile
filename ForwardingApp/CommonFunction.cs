@@ -31,20 +31,7 @@ namespace ASolute_Mobile.Utils
             var response = await client.GetAsync(uri);
             var content = await response.Content.ReadAsStringAsync();
             Debug.WriteLine(content);
-
-            /*clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-         if(json_response.IsGood)
-         {
-             return content;
-         }
-         else
-         {
-             if(json_response.Message.Equals("Invalid Session !"))
-             {
-                 BackgroundTask.Logout(this);
-             }
-         }*/
+            
 
             return content;
         }
@@ -111,22 +98,7 @@ namespace ASolute_Mobile.Utils
 
             Debug.WriteLine(content);
 
-            //var checking = JObject.Parse(content)["Result"].ToObject<clsResponse>();
-
-            /*if (!(checking.IsGood))
-            {
-                if (checking.Message == "Invalid Session !")
-                {
-                    BackgroundTask.Logout(page);
-                    await page.DisplayAlert("Error", checking.Message, "Ok");
-                }
-                else
-                {
-                    await page.DisplayAlert("Error", checking.Message, "Ok");
-                }
-
-            }*/
-
+          
             return content;
         }
 

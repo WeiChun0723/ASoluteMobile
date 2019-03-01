@@ -232,6 +232,11 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Equipment/Detail?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), equipment);
         }
+
+        public static String getAllEq()
+        {
+            return String.Format("Equipment/ListAll?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
         #endregion
 
         #region warehouse url
@@ -363,14 +368,13 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}", Ultis.Settings.SessionSettingKey, "Haulage");
+            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
         }
-
+        //&AppName={1}
         public static String getDownloadRefuelHistoryURL()
         {
             return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
-
 
         public static String getLocationURL(string location)
         {
@@ -486,7 +490,7 @@ namespace ASolute_Mobile.Utils
                     return App.gpsLocationLat.ToString() + "," + App.gpsLocationLong.ToString();
                 }
             
-            return "";
+            return "0,0";
         }
 
         

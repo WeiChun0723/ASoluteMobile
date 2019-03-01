@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSWMS" android:installLocation="auto" android:versionCode="38" android:versionName="1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSHaulage" android:installLocation="auto" android:versionCode="38" android:versionName="1">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,11 +11,14 @@
 	<uses-permission android:name="android.permission.FLASHLIGHT" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-	<permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<uses-permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" />
+	<permission android:name="asolute.Mobile.AILSHaulage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="asolute.Mobile.AILSHaulage.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-	<application android:name="AILS WMS" android:theme="@style/MyTheme" android:label="AILS WMS" android:icon="@drawable/appIcon">
+	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+	<uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
+	<uses-permission android:name="android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND" />
+	<application android:name="AILS Haulage" android:theme="@style/MyTheme" android:label="AILS Haulage" android:icon="@drawable/appIcon">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
@@ -22,7 +26,7 @@
 		<receiver android:name="com.onesignal.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-				<category android:name="asolute.Mobile.AILSWMS" />
+				<category android:name="asolute.Mobile.AILSHaulage" />
 			</intent-filter>
 		</receiver>
 	</application>

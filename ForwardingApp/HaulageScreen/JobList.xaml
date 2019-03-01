@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.HaulageScreen.JobList">
     
+
+
         <StackLayout>
             <Image Source="nodatafound.png"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>    
             <ListView x:Name="jobList"  ItemTapped="selectJob" IsPullToRefreshEnabled="True" Refreshing="jobListRefresh" SeparatorColor="White" >

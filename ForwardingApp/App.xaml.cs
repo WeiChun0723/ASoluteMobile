@@ -15,7 +15,12 @@ using ASolute_Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.testing;
 using ASolute_Mobile.WMS_Screen;
-
+using System.Threading.Tasks;
+using Plugin.Geolocator;
+using ASolute_Mobile.Utils;
+using ASolute.Mobile.Models;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 
 namespace ASolute_Mobile
 {
@@ -34,7 +39,10 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-           if (sessionKey != "")
+
+
+
+            if (sessionKey != "")
            {
                MainPage = new MainPage();
 
@@ -89,6 +97,7 @@ namespace ASolute_Mobile
             MessagingCenter.Send<App>((App)Application.Current, "Testing");
         }
 
+
         public static Database Database
         {
             get
@@ -102,9 +111,9 @@ namespace ASolute_Mobile
             }
         }
 
-        protected override void OnStart()
+        protected  override void OnStart()
         {
-           
+
         }
 
         protected override void OnSleep()
