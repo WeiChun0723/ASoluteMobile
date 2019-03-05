@@ -19,9 +19,34 @@ namespace ASolute_Mobile
 	
 	public partial class RefuelHistory : ContentPage
 	{
-        public RefuelHistory (string title)
+        string screen_title;
+
+        public RefuelHistory (string title )
 		{
 			InitializeComponent ();
+
+            screen_title = title;
+
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
 
             if (Ultis.Settings.Language.Equals("English"))
             {
@@ -174,7 +199,7 @@ namespace ASolute_Mobile
 
         public void addNewRecord(object sender, EventArgs e)
         {
-            RefuelEntry addNewRecord = new RefuelEntry();
+            RefuelEntry addNewRecord = new RefuelEntry(screen_title);
             addNewRecord.previousPage = this;
             Navigation.PushAsync(addNewRecord);
 

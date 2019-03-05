@@ -16,35 +16,35 @@ using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.DeviceInfo;
 using Plugin.Geolocator;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
 {
-	public class MainMenuItem : ListViewCommonScreen
+    public class MainMenuItem : ListViewCommonScreen 
     {
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
-        string previousLocation = "";
-        string chklocation = "0";
         string firebaseID = "firebase";
-
+        Label title1, title2;
         public MainMenuItem()
         {
+       
 
             StackLayout main = new StackLayout();
 
-            Label title1 = new Label
+            title1 = new Label
             {
                 FontSize = 15,
                 Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
                 TextColor = Color.White
             };
 
-            Label title2 = new Label
+            title2 = new Label
             {
                 FontSize = 10,
-                Text = Ultis.Settings.SessionUserItem.DriverId +  " , " + Ultis.Settings.SessionUserItem.CompanyName,
+
                 TextColor = Color.White
             };
 
@@ -62,7 +62,7 @@ namespace ASolute_Mobile
                 switch (menuAction)
                 {
                     case "LogBook":
-                        LogHistory log = new LogHistory();
+                        LogHistory log = new LogHistory(((AppMenu)e.Item).name);
                         await Navigation.PushAsync(log);
                         break;
 
@@ -161,168 +161,8 @@ namespace ASolute_Mobile
 
         }
 
-        #region GetGps every minute
-        public async Task StartListening()
+        protected override void OnAppearing()
         {
-            var locator = CrossGeolocator.Current;
-
-            if (!locator.IsListening)
-            {
-                //Start listening to location updates
-                await locator.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
-                {
-                    ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
-                    AllowBackgroundUpdates = true,
-                    ListenForSignificantChanges = true,
-                    DeferLocationUpdates = true,
-                    DeferralDistanceMeters = 1,
-                    DeferralTime = TimeSpan.FromSeconds(1),
-                    PauseLocationUpdatesAutomatically = false
-                });
-
-                //locator.PositionChanged += Current_PositionChanged;
-
-            }
-        }
-
-        public async void GetGPS()
-        {
-
-            Plugin.Geolocator.Abstractions.Position position = null;
-            var locator = CrossGeolocator.Current;
-            position = await locator.GetPositionAsync(); 
-
-            if(position.Equals(null))
-            {
-                position = await locator.GetLastKnownLocationAsync();
-            }
-
-            var getAddress = await locator.GetAddressesForPositionAsync(position);
-            var addressDetail = getAddress.FirstOrDefault();
-            string address = "";
-
-            address = addressDetail.Thoroughfare;
-
-            if (!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
-            {
-                address += "," + addressDetail.Locality;
-            }
-
-            if (!String.IsNullOrEmpty(addressDetail.PostalCode) && addressDetail.PostalCode != "????")
-            {
-                address += "," + addressDetail.PostalCode;
-            }
-
-            if (!String.IsNullOrEmpty(addressDetail.AdminArea) && addressDetail.AdminArea != "????")
-            {
-                address += "," + addressDetail.AdminArea;
-            }
-
-            if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
-            {
-                address += "," + addressDetail.CountryName;
-            }
-
-            string location = (position.Latitude == null) ? "0,0" : position.Latitude + "," + position.Longitude;
-
-            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getGPSTracking(location, address)));
-        }
-
-
-        public async void Current_PositionChanged(object sender, Plugin.Geolocator.Abstractions.PositionEventArgs e)
-        {
-            var position = e.Position;
-            var locator = CrossGeolocator.Current;
-
-            if (position == null)
-            {
-                Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); }).Wait();
-            }
-
-            chklocation = Math.Round(position.Latitude, 4) + "," + Math.Round(position.Longitude, 4);
-
-            if (chklocation != previousLocation)
-            {
-                try
-                {
-                    previousLocation = Math.Round(position.Latitude, 4) + "," + Math.Round(position.Longitude, 4);
-
-                    var getAddress = await locator.GetAddressesForPositionAsync(position);
-                    var addressDetail = getAddress.FirstOrDefault();
-                    string address = "";
-
-                    address = addressDetail.Thoroughfare;
-
-                    if (!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
-                    {
-                        address += "," + addressDetail.Locality;
-                    }
-
-                    if (!String.IsNullOrEmpty(addressDetail.PostalCode) && addressDetail.PostalCode != "????")
-                    {
-                        address += "," + addressDetail.PostalCode;
-                    }
-
-                    if (!String.IsNullOrEmpty(addressDetail.AdminArea) && addressDetail.AdminArea != "????")
-                    {
-                        address += "," + addressDetail.AdminArea;
-                    }
-
-                    if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
-                    {
-                        address += "," + addressDetail.CountryName;
-                    }
-
-                    string location = position.Latitude + "," + position.Longitude;
-
-                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getGPSTracking(location, address)));
-
-                    if (json_response.IsGood)
-                    {
-                        // await DisplayAlert("OK", chklocation, "OK");
-                        previousLocation = location;
-
-                        App.gpsLocationLat = position.Latitude;
-                        App.gpsLocationLong = position.Longitude;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string error = ex.Message;
-                }
-
-            }
-        }
-        #endregion 
-
-        public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
-        {
-            Android.Locations.Location location = e.Location;
-           // Log.Debug(logTag, "Foreground updating");
-
-            App.gpsLocationLat = location.Latitude;
-            App.gpsLocationLong = location.Longitude;
-        }
-
-        public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)
-        {
-           // Log.Debug(logTag, "Location provider disabled event raised");
-        }
-
-        public void HandleProviderEnabled(object sender, ProviderEnabledEventArgs e)
-        {
-           // Log.Debug(logTag, "Location provider enabled event raised");
-        }
-
-        public void HandleStatusChanged(object sender, StatusChangedEventArgs e)
-        {
-           // Log.Debug(logTag, "Location status changed, event raised");
-        }
-
-        protected async override void OnAppearing()
-        {
-           
-
 
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
@@ -351,6 +191,8 @@ namespace ASolute_Mobile
                 GetMainMenu();
                 Ultis.Settings.UpdatedRecord = "RefreshJobList";
                 Ultis.Settings.RefreshMenuItem = "No";
+
+
             }
             else
             {
@@ -410,7 +252,10 @@ namespace ASolute_Mobile
                 if (login_response.IsGood == true)
                 {
                     var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-         
+
+                    Ultis.Settings.SubTitle = login_Menu.SubTitle;
+                    title2.Text = Ultis.Settings.SubTitle;
+
                     //load value from the menu in json response "CheckList"
                     for (int check = 0; check < login_response.Result["Checklist"].Count; check++)
                     {

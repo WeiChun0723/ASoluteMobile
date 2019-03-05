@@ -26,9 +26,31 @@ namespace ASolute_Mobile
         List<AppImage> recordImages = new List<AppImage>();
         byte[] scaledImageByte;
 
-        public  LogEntry (string id)
+        public  LogEntry (string id,string title)
 		{
 			InitializeComponent ();
+
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
+
             lblStartDateTime.Text = "Date & Time";
             lblEndDateTime.Text = "Date & Time";
 
@@ -301,7 +323,7 @@ namespace ASolute_Mobile
 
         async void UpdateLogBook(clsTrip data)
         {
-            var content = await CommonFunction.CallWebService(1, data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
+            var content = await CommonFunction.PostRequest(data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (response.IsGood)

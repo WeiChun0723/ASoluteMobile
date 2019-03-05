@@ -28,12 +28,28 @@ namespace ASolute_Mobile
         static List<AppImage> recordImages = new List<AppImage>();
         static Plugin.Geolocator.Abstractions.Position position = null;
         static string address = "";
+        static string location = "0,0";
 
         public static async Task GetGPS()
         {
-            //Getlocation();
+            Getlocation();
 
-            string location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0) ) ? "0,0" : String.Format("{0:0.0000}", App.gpsLocationLat) + "," + String.Format("{0:0.0000}", App.gpsLocationLong) ;
+            if(App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0))
+            {
+                if (position != null)
+                {
+                    location = String.Format("{0:0.000000}", position.Latitude) + "," + String.Format("{0:0.000000}", position.Longitude);
+                }
+                else
+                {
+                    location = "0,0";
+                }
+
+            }
+            else
+            {
+                location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
+            }
 
             if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
             {
@@ -47,7 +63,7 @@ namespace ASolute_Mobile
             }
         }
 
-        public static async Task Getlocation()
+        public static async void Getlocation()
         {
             try
             {
@@ -56,9 +72,9 @@ namespace ASolute_Mobile
 
                 if (position.Equals(null))
                 {
-                    //position = await locator.GetLastKnownLocationAsync();
+                    position = await locator.GetLastKnownLocationAsync();
 
-                    var getAddress = await locator.GetAddressesForPositionAsync(position);
+                    /*var getAddress = await locator.GetAddressesForPositionAsync(position);
                     var addressDetail = getAddress.FirstOrDefault();
 
 
@@ -82,7 +98,7 @@ namespace ASolute_Mobile
                     if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
                     {
                         address += "," + addressDetail.CountryName;
-                    }
+                    }*/
                 }
 
             }

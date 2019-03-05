@@ -22,11 +22,35 @@ namespace ASolute_Mobile
 	public partial class LogHistory : ContentPage
 	{
 
-        public string date;
+        public string date, screenTitle;
+        
 
-        public LogHistory ()
+        public LogHistory (string title)
 		{
 			InitializeComponent ();
+
+            screenTitle = title;
+
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
 
             if (Ultis.Settings.Language.Equals("English"))
             {
@@ -54,7 +78,7 @@ namespace ASolute_Mobile
 
         public void addNewLog(object sender, EventArgs e)
         {
-            LogEntry addNewLog = new LogEntry("");
+            LogEntry addNewLog = new LogEntry("" ,screenTitle);
             addNewLog.previousPage = this;
             Navigation.PushAsync(addNewLog);
         }
@@ -182,7 +206,7 @@ namespace ASolute_Mobile
                 {
                     try
                     {
-                        LogEntry existLog = new LogEntry(logId);
+                        LogEntry existLog = new LogEntry(logId, screenTitle);
                         existLog.previousPage = this;
                         await Navigation.PushAsync(existLog);
                     }

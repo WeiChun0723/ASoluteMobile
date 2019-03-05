@@ -35,10 +35,31 @@ namespace ASolute_Mobile
         List<AppImage> recordImages = new List<AppImage>();
         byte[] scaledImageByte;
 
-        public RefuelEntry ()
+        public RefuelEntry (string title)
 		{
             // this screen need to call web servvice to get the current date cost rate, so it do not allow user to enter new record when they is no internet to call the get cost rate web service.
 			InitializeComponent ();
+
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
 
             if (Ultis.Settings.Language.Equals("English"))
             {
@@ -133,7 +154,7 @@ namespace ASolute_Mobile
                     if (cost != 0.00)
                     {
                         int odo = Convert.ToInt32(odometer.Text);
-                        if (!(fuelCostNew.PreviousOdometer >= odo))
+                        if (fuelCostNew.PreviousOdometer <= odo)
                         {
                             //combine the date and time together               
                             string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
@@ -183,7 +204,7 @@ namespace ASolute_Mobile
                                     App.Database.SaveRecordAsync(refuel_Data);
                                     //await BackgroundTask.UploadLatestRecord(this);
 
-                                    var content = await CommonFunction.CallWebService(1, refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
+                                    var content = await CommonFunction.PostRequest( refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                     if(response.IsGood)
@@ -270,7 +291,7 @@ namespace ASolute_Mobile
                     }
                     else
                     {
-                        check = "Sila isi semua data yang diperlukan.";
+                        check = "Minyak tidak boleh melebihi 500 liter.";
                     }
                     await DisplayAlert("", check, "OK");
                 }
@@ -299,6 +320,11 @@ namespace ASolute_Mobile
             }
         }
 
+        void StationSelected(object sender, System.EventArgs e)
+        {
+            station_choice = stationPicker.SelectedIndex;
+        }
+
         public void LiterInput(object sender, TextChangedEventArgs e)
         {
             try
@@ -315,7 +341,7 @@ namespace ASolute_Mobile
 
                     double result = Convert.ToDouble(costPerLiter.Text.ToString()) * fuelLiter;
 
-                    amount.Text = "RM" + result.ToString();
+                    amount.Text = "RM" + Math.Round(result,2);
                 }
             }
             catch
@@ -329,7 +355,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                if (Convert.ToInt16(liter.Text) == 0)
+                if (Convert.ToDouble(liter.Text) == 0.00)
                 {
                     amount.Text = "RM 0.00";
 
@@ -339,9 +365,9 @@ namespace ASolute_Mobile
 
                     double costLiter = Convert.ToDouble(e.NewTextValue);
 
-                    double result = Convert.ToDouble(liter.Text.ToString()) * costLiter;
+                    double result = Convert.ToDouble(liter.Text) * costLiter;
 
-                    amount.Text = "RM" + result.ToString();
+                    amount.Text = "RM" + Math.Round(result, 2);
                 }
             }
             catch
@@ -518,7 +544,12 @@ namespace ASolute_Mobile
                     }
 
                     paymentPicker.SelectedIndex = 1;
-                    stationPicker.SelectedIndex = 0;
+
+                    if(fuelCostNew.VendorList.Count == 1)
+                    {
+                        stationPicker.SelectedIndex = 0;
+                    }
+
 
                 }
                 catch (HttpRequestException)

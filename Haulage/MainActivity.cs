@@ -21,6 +21,7 @@ using ASolute_Mobile.Droid.Services;
 using Android.Net.Wifi;
 using Plugin.Geolocator;
 using Android;
+using Haulage.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
@@ -40,7 +41,7 @@ namespace ASolute_Mobile.Droid
             base.OnCreate(bundle);
 
             RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
-           
+
             Rg.Plugins.Popup.Popup.Init(this, bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
             global::Xamarin.Forms.Forms.Init(this, bundle);
@@ -51,44 +52,31 @@ namespace ASolute_Mobile.Droid
 
             LoadApplication(new App());
 
-            var pm = (PowerManager)GetSystemService(Context.PowerService);
-            PowerManager.WakeLock _mWakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "PartialWakeLockTag");
-            _mWakeLock.Acquire();
 
-            var wf = (WifiManager)GetSystemService(Context.WifiService);
-            var _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
-            _wifiLock.Acquire();
+             if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted)
+             {
+                // StartLocationTracking();
 
+             }
 
-            if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted)
+           /* var intent = new Intent(this, typeof(GPS_Service));
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
             {
-                LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
-                {
-                    Log.Debug(logTag, "ServiceConnected Event Raised");
-                    // notifies us of location changes from the system
-                    LocationApp.Current.LocationService.LocationChanged += HandleLocationChanged;
-                    //notifies us of user changes to the location provider (ie the user disables or enables GPS)
-                    LocationApp.Current.LocationService.ProviderDisabled += HandleProviderDisabled;
-                    LocationApp.Current.LocationService.ProviderEnabled += HandleProviderEnabled;
-                    // notifies us of the changing status of a provider (ie GPS no longer available)
-                    LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
-                };
-
-                LocationApp.StartLocationService();
+               StartForegroundService(intent);
             }
+            else
+            {
+                StartService(intent);
+            }*/
 
 
             App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;       
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            if(grantResults.Length > 0 && permissions.Length > 0  )
-            {
-                if(permissions[0].Equals(Manifest.Permission.AccessFineLocation))
-                {
+        public void StartLocationTracking()
+        {
+           
                     LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
                     {
                         Log.Debug(logTag, "ServiceConnected Event Raised");
@@ -102,6 +90,19 @@ namespace ASolute_Mobile.Droid
                     };
 
                     LocationApp.StartLocationService();
+
+        }
+
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            if(grantResults.Length > 0 && permissions.Length > 0  )
+            {
+                if(permissions[0].Equals(Manifest.Permission.AccessFineLocation))
+                {
+                    //StartLocationTracking();
                 }
 
             }
@@ -132,7 +133,7 @@ namespace ASolute_Mobile.Droid
             base.OnDestroy();
            
             LocationApp.StopLocationService();
-           
+
         }
 
         public override void OnBackPressed()

@@ -43,21 +43,20 @@ namespace ASolute_Mobile.Ultis
         private const string UserEmail = "";
         private const string Cargo_Return = "return";
         private const string New_Job = "new_job";
+        private const string SubTitles = "sub_Titles";
         #endregion
 
-        public static string Permission
+        public static string SubTitle
         {
             get
             {
-                return AppSettings.GetValueOrDefault(New_Job, SettingsDefault);
+                return AppSettings.GetValueOrDefault(SubTitles, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(New_Job, value);
+                AppSettings.AddOrUpdateValue(SubTitles, value);
             }
         }
-
-
 
         public static string NewJob
         {

@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.RefuelEntry"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
-             BackgroundColor="#e8e5e5">
+             BackgroundColor="#e8e5e5"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
     
     <ScrollView>
     <StackLayout Padding="15,15,15,15">
@@ -27,7 +28,7 @@
                     <Label Text="Station" FontAttributes="Bold"   x:Name="lblStation"/>
                 </StackLayout>
 
-                <controls:CustomPicker x:Name="stationPicker" Image="ic_arrow_drop_down" Grid.Row="0" Grid.Column="1"  HorizontalOptions="Fill" WidthRequest="130" BackgroundColor="LightYellow"/>
+                <controls:CustomPicker x:Name="stationPicker" Image="ic_arrow_drop_down" Grid.Row="0" Grid.Column="1"  HorizontalOptions="Fill" WidthRequest="130" BackgroundColor="LightYellow" SelectedIndexChanged="StationSelected"/>
      
                 <StackLayout Padding="0,10,0,0" Grid.Row="1" Grid.Column="0">
                     <Label Text="" FontAttributes="Bold"   x:Name="lblDateTime"/>                  

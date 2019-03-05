@@ -21,7 +21,7 @@ namespace ASolute_Mobile.Droid
             {
                 wakeLock.Acquire();
 
-                Task.Run(async () => { await BackgroundTask.GetGPS(); });
+                Task.Run( () => { BackgroundTask.GetGPS(); });
 
                 //wakeLock.Release();
             }

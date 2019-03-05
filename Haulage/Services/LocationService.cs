@@ -13,6 +13,7 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using ASolute.Mobile.Models;
 using Android.Runtime;
+using Android.Net.Wifi;
 
 namespace ASolute_Mobile.Droid.Services
 {
@@ -24,6 +25,8 @@ namespace ASolute_Mobile.Droid.Services
         public event EventHandler<ProviderEnabledEventArgs> ProviderEnabled = delegate { };
         public event EventHandler<StatusChangedEventArgs> StatusChanged = delegate { };
         public HandlerThread _handlerThreadSingle;
+        private  PowerManager.WakeLock _mWakeLock;
+        private WifiManager.WifiLock _wifiLock;
         public LocationService()
         {
         }
@@ -38,6 +41,15 @@ namespace ASolute_Mobile.Droid.Services
         {
             base.OnCreate();
             Log.Debug(logTag, "OnCreate called in the Location Service");
+
+            var pm = (PowerManager)GetSystemService(Context.PowerService);
+            _mWakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "PartialWakeLockTag");
+            bool test = pm.IsIgnoringBatteryOptimizations(PackageName);
+            _mWakeLock.Acquire();
+
+            var wf = (WifiManager)GetSystemService(Context.WifiService);
+             _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
+            _wifiLock.Acquire();
         }
 
         // This gets called when StartService is called in our App class
@@ -55,26 +67,25 @@ namespace ASolute_Mobile.Droid.Services
                 notification = new Notification.Builder(this, channelId)
                 .SetContentIntent(pendingIntent)
                 .SetContentTitle("GPS Tracking")
-                .SetContentText("Sending location.")
+                .SetContentText("Getting location.")
                 .SetSmallIcon(Resource.Drawable.appIcon)
                 .Build();
             }
             else
             {
-               
+              
                 notification = new Notification.Builder(this)
                 .SetContentIntent(pendingIntent)
                 .SetContentTitle("GPS Tracking")
-                .SetContentText("Sending location.")
+                .SetContentText("Getting location.")
                 .SetSmallIcon(Resource.Drawable.appIcon)
                 .Build();
             }
 
             StartForeground((int)NotificationFlags.ForegroundService, notification);
+
             return StartCommandResult.Sticky;
         }
-
-        
 
         private string createNotificationChannel(string channel_id, string channel_name)
         {
@@ -82,7 +93,6 @@ namespace ASolute_Mobile.Droid.Services
             chan.LockscreenVisibility = NotificationVisibility.Private;
             var service = GetSystemService(Context.NotificationService) as NotificationManager;
             service.CreateNotificationChannel(chan);
-
 
             return channel_id;
         }
@@ -120,18 +130,19 @@ namespace ASolute_Mobile.Droid.Services
             var location = LocMgr.GetLastKnownLocation(LocationManager.GpsProvider);
         
             // Get an initial fix on location
-            LocMgr.RequestLocationUpdates(LocationManager.GpsProvider, 40000, 0, this);
-          
+            LocMgr.RequestLocationUpdates(LocationManager.GpsProvider, 0, 0, this);
+
             Device.StartTimer(TimeSpan.FromSeconds(60), ()  =>
-            {
-            Task.Run(async () => {
+             {
+             Task.Run(async () => {
 
-                await BackgroundTask.GetGPS();
+                 await BackgroundTask.GetGPS();
 
+                 await Task.Delay(600000);
+             });
+
+             return true;
             });
-
-            return true;
-        });
 
         }
 
@@ -141,6 +152,8 @@ namespace ASolute_Mobile.Droid.Services
             Log.Debug(logTag, "Service has been terminated");
             // Stop getting updates from the location manager:
             LocMgr.RemoveUpdates(this);
+            _mWakeLock.Release();
+            _wifiLock.Release();
         }
 
         #region ILocationListener implementation

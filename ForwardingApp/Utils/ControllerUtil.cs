@@ -368,9 +368,9 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Fleet", CrossDeviceInfo.Current.AppVersion);
         }
-        //&AppName={1}
+      
         public static String getDownloadRefuelHistoryURL()
         {
             return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
