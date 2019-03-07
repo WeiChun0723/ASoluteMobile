@@ -15,7 +15,7 @@ using ASolute_Mobile.Data;
 using ASolute.Mobile.Models;
 using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
-using Xamarin.Essentials;
+
 
 namespace ASolute_Mobile
 {

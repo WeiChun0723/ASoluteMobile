@@ -5,6 +5,8 @@ namespace ASolute_Mobile
 {
     public class ListViewCommonScreen : ContentPage
     {
+        public static Label title1, title2;
+
         public ListView listView = new ListView();
         public Image image, scanBarCode;
         public SfBusyIndicator loading;
@@ -13,7 +15,28 @@ namespace ASolute_Mobile
         public ListViewCommonScreen()
         {
 
-           image = new Image
+            StackLayout main = new StackLayout();
+
+            title1 = new Label
+            {
+                FontSize = 15,
+                //Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
+                TextColor = Color.White
+            };
+
+            title2 = new Label
+            {
+                FontSize = 10,
+
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
+
+            image = new Image
             {
                 Source = "nodatafound.png",
                 HorizontalOptions = LayoutOptions.FillAndExpand,

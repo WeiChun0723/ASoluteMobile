@@ -5,7 +5,7 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
+using Xamarin.Forms.GoogleMaps;
 
 namespace ASolute_Mobile.Planner
 {
@@ -13,13 +13,49 @@ namespace ASolute_Mobile.Planner
     {
         string equipmentNo, latitude, longtitude;
 
-        public EquipmentDetails(string eq)
+        public EquipmentDetails(string eq, clsTruckingModel truckingModel)
         {
             InitializeComponent();
 
             equipmentNo = eq;
 
-            GetEquipmentDetails();
+            if(!(String.IsNullOrEmpty(equipmentNo)))
+            {
+                GetEquipmentDetails();
+            }
+
+           
+
+            if(truckingModel != null)
+            {
+                latitude = truckingModel.Latitude;
+                longtitude = truckingModel.Longitude;
+                DisplayTruckDetails(truckingModel.Details);
+            }
+
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = truckingModel.Id,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
+
+
+           
         }
 
         void ShowOnMap()
@@ -28,7 +64,7 @@ namespace ASolute_Mobile.Planner
             {
                 GoogleMap.IsVisible = true;
                 switchChange.IsVisible = true;
-                GoogleMap.IsShowingUser = false;
+
 
                 double loc_latitude = Convert.ToDouble(latitude);
                 double loc_longtitude = Convert.ToDouble(longtitude);
@@ -82,44 +118,7 @@ namespace ASolute_Mobile.Planner
             {
                 var equipment = JObject.Parse(content)["Result"].ToObject<List<clsCaptionValue>>();
 
-                foreach (clsCaptionValue details in equipment)
-                {
-                    StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
-
-                    if (details.Display == true)
-                    {
-                        Label captionLabel = new Label()
-                        {
-                            FontAttributes = FontAttributes.Bold,
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            Text = details.Caption + ":  ",
-                            WidthRequest = 120
-                        };
-                        Label valueLabel = new Label()
-                        {
-                            FontAttributes = FontAttributes.Bold,
-                            Text = details.Value
-                        };
-
-                        stackLayout.Children.Add(captionLabel);
-                        stackLayout.Children.Add(valueLabel);
-                        equipmentDetails.Children.Add(stackLayout);
-                    }
-
-                    if (details.Caption.Equals("Reg No."))
-                    {
-                        Title = details.Value + " Details";
-                    }
-
-                    if (details.Caption.Equals("Latitude"))
-                    {
-                        latitude = details.Value;
-                    }
-                    if (details.Caption.Equals("Longitude"))
-                    {
-                        longtitude = details.Value;
-                    }
-                }
+                DisplayTruckDetails(equipment);
 
                 ShowOnMap();
             }
@@ -129,6 +128,50 @@ namespace ASolute_Mobile.Planner
             }
 
 
+        }
+
+        void DisplayTruckDetails(List<clsCaptionValue> equipment)
+        {
+            foreach (clsCaptionValue details in equipment)
+            {
+                StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
+
+                if (details.Display == true)
+                {
+                    Label captionLabel = new Label()
+                    {
+                        FontAttributes = FontAttributes.Bold,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        Text = details.Caption + ":  ",
+                        WidthRequest = 120
+                    };
+                    Label valueLabel = new Label()
+                    {
+                        FontAttributes = FontAttributes.Bold,
+                        Text = details.Value
+                    };
+
+                    stackLayout.Children.Add(captionLabel);
+                    stackLayout.Children.Add(valueLabel);
+                    equipmentDetails.Children.Add(stackLayout);
+                }
+
+                if (details.Caption.Equals("Reg No."))
+                {
+                    Title = details.Value + " Details";
+                }
+
+                if (details.Caption.Equals("Latitude"))
+                {
+                    latitude = details.Value;
+                }
+                if (details.Caption.Equals("Longitude"))
+                {
+                    longtitude = details.Value;
+                }
+            }
+
+            ShowOnMap();
         }
        
     }

@@ -6,10 +6,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
-using Android.Locations;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Droid;
-using ASolute_Mobile.Droid.Services;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.Utils;
@@ -28,11 +26,13 @@ namespace ASolute_Mobile
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string firebaseID = "firebase";
         Label title1, title2;
+       
         public MainMenuItem()
         {
-       
 
-            StackLayout main = new StackLayout();
+            ListViewCommonScreen.title1.Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
+             
+            /*StackLayout main = new StackLayout();
 
             title1 = new Label
             {
@@ -51,7 +51,7 @@ namespace ASolute_Mobile
             main.Children.Add(title1);
             main.Children.Add(title2);
 
-            NavigationPage.SetTitleView(this,main);
+            NavigationPage.SetTitleView(this,main);*/
 
             listView.ItemTapped += async (sender, e) =>
             {
@@ -127,7 +127,7 @@ namespace ASolute_Mobile
                         break;
                     case "EqList" :
                         //await Navigation.PushAsync(new Planner.EqCategory());
-                        await Navigation.PushAsync(new Planner.AllTruckMap(((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new AllTruckMap(((AppMenu)e.Item).name));
                         break;
                     case "TallyIn" :
                        await  Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
@@ -186,12 +186,11 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (NetworkCheck.IsInternet()) 
+            if (NetworkCheck.IsInternet() ) 
             {
                 GetMainMenu();
                 Ultis.Settings.UpdatedRecord = "RefreshJobList";
                 Ultis.Settings.RefreshMenuItem = "No";
-
 
             }
             else
@@ -246,7 +245,7 @@ namespace ASolute_Mobile
             checkItems.Clear();
             try
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(Ultis.Settings.FireID));
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
               
                 if (login_response.IsGood == true)
@@ -254,7 +253,8 @@ namespace ASolute_Mobile
                     var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
 
                     Ultis.Settings.SubTitle = login_Menu.SubTitle;
-                    title2.Text = Ultis.Settings.SubTitle;
+                    ListViewCommonScreen.title2.Text = Ultis.Settings.SubTitle;
+                    //title2.Text = Ultis.Settings.SubTitle;
 
                     //load value from the menu in json response "CheckList"
                     for (int check = 0; check < login_response.Result["Checklist"].Count; check++)

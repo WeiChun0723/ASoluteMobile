@@ -8176,6 +8176,12 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e003f
 			public const int FUNCTION = 2131623999;
 			
+			// aapt resource value: 0x7f0e010b
+			public const int InfoWindowSubtitle = 2131624203;
+			
+			// aapt resource value: 0x7f0e010a
+			public const int InfoWindowTitle = 2131624202;
+			
 			// aapt resource value: 0x7f0e00c4
 			public const int Itemname = 2131624132;
 			
@@ -8188,8 +8194,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0042
 			public const int SYM = 2131624002;
 			
-			// aapt resource value: 0x7f0e0115
-			public const int ShadowEffectShape = 2131624213;
+			// aapt resource value: 0x7f0e0117
+			public const int ShadowEffectShape = 2131624215;
 			
 			// aapt resource value: 0x7f0e00f5
 			public const int action0 = 2131624181;
@@ -8299,8 +8305,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0048
 			public const int bottom = 2131624008;
 			
-			// aapt resource value: 0x7f0e010b
-			public const int bottom_labels = 2131624203;
+			// aapt resource value: 0x7f0e010d
+			public const int bottom_labels = 2131624205;
 			
 			// aapt resource value: 0x7f0e006c
 			public const int box = 2131624044;
@@ -8356,11 +8362,11 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e00c7
 			public const int container = 2131624135;
 			
-			// aapt resource value: 0x7f0e010c
-			public const int content = 2131624204;
+			// aapt resource value: 0x7f0e010e
+			public const int content = 2131624206;
 			
-			// aapt resource value: 0x7f0e0112
-			public const int contentFrame = 2131624210;
+			// aapt resource value: 0x7f0e0114
+			public const int contentFrame = 2131624212;
 			
 			// aapt resource value: 0x7f0e008a
 			public const int contentPanel = 2131624074;
@@ -8467,8 +8473,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e00b4
 			public const int gridLineLayout = 2131624116;
 			
-			// aapt resource value: 0x7f0e010d
-			public const int gridLinesLayout = 2131624205;
+			// aapt resource value: 0x7f0e010f
+			public const int gridLinesLayout = 2131624207;
 			
 			// aapt resource value: 0x7f0e0005
 			public const int home = 2131623941;
@@ -8566,14 +8572,14 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e00d6
 			public const int loadingProgressWheel = 2131624150;
 			
-			// aapt resource value: 0x7f0e0114
-			public const int masked = 2131624212;
+			// aapt resource value: 0x7f0e0116
+			public const int masked = 2131624214;
 			
 			// aapt resource value: 0x7f0e00f8
 			public const int media_actions = 2131624184;
 			
-			// aapt resource value: 0x7f0e0111
-			public const int message = 2131624209;
+			// aapt resource value: 0x7f0e0113
+			public const int message = 2131624211;
 			
 			// aapt resource value: 0x7f0e003c
 			public const int middle = 2131623996;
@@ -8833,8 +8839,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0077
 			public const int slicedCircle = 2131624055;
 			
-			// aapt resource value: 0x7f0e010f
-			public const int sliding_tabs = 2131624207;
+			// aapt resource value: 0x7f0e0111
+			public const int sliding_tabs = 2131624209;
 			
 			// aapt resource value: 0x7f0e00c5
 			public const int smallLabel = 2131624133;
@@ -8917,8 +8923,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0015
 			public const int textinput_error = 2131623957;
 			
-			// aapt resource value: 0x7f0e010e
-			public const int thumbLayout = 2131624206;
+			// aapt resource value: 0x7f0e0110
+			public const int thumbLayout = 2131624208;
 			
 			// aapt resource value: 0x7f0e00fd
 			public const int time = 2131624189;
@@ -8935,8 +8941,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0093
 			public const int title_template = 2131624083;
 			
-			// aapt resource value: 0x7f0e0110
-			public const int toolbar = 2131624208;
+			// aapt resource value: 0x7f0e0112
+			public const int toolbar = 2131624210;
 			
 			// aapt resource value: 0x7f0e0049
 			public const int top = 2131624009;
@@ -8944,8 +8950,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0092
 			public const int topPanel = 2131624082;
 			
-			// aapt resource value: 0x7f0e010a
-			public const int top_labels = 2131624202;
+			// aapt resource value: 0x7f0e010c
+			public const int top_labels = 2131624204;
 			
 			// aapt resource value: 0x7f0e00c9
 			public const int touch_outside = 2131624137;
@@ -8983,8 +8989,8 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f0e0016
 			public const int view_offset_helper = 2131623958;
 			
-			// aapt resource value: 0x7f0e0113
-			public const int visible = 2131624211;
+			// aapt resource value: 0x7f0e0115
+			public const int visible = 2131624213;
 			
 			// aapt resource value: 0x7f0e00ea
 			public const int volume_item_container = 2131624170;
@@ -9329,49 +9335,52 @@ namespace Haulage.Droid
 			public const int onesignal_bgimage_notif_layout = 2130903114;
 			
 			// aapt resource value: 0x7f03004b
-			public const int range_navigator_layout = 2130903115;
+			public const int PinInfoWindow = 2130903115;
 			
 			// aapt resource value: 0x7f03004c
-			public const int ScrollViewer = 2130903116;
+			public const int range_navigator_layout = 2130903116;
 			
 			// aapt resource value: 0x7f03004d
-			public const int select_dialog_item_material = 2130903117;
+			public const int ScrollViewer = 2130903117;
 			
 			// aapt resource value: 0x7f03004e
-			public const int select_dialog_multichoice_material = 2130903118;
+			public const int select_dialog_item_material = 2130903118;
 			
 			// aapt resource value: 0x7f03004f
-			public const int select_dialog_singlechoice_material = 2130903119;
+			public const int select_dialog_multichoice_material = 2130903119;
 			
 			// aapt resource value: 0x7f030050
-			public const int sfautocomplete_layout = 2130903120;
+			public const int select_dialog_singlechoice_material = 2130903120;
 			
 			// aapt resource value: 0x7f030051
-			public const int sfcomboBox_layout = 2130903121;
+			public const int sfautocomplete_layout = 2130903121;
 			
 			// aapt resource value: 0x7f030052
-			public const int Spinner_item = 2130903122;
+			public const int sfcomboBox_layout = 2130903122;
 			
 			// aapt resource value: 0x7f030053
-			public const int support_simple_spinner_dropdown_item = 2130903123;
+			public const int Spinner_item = 2130903123;
 			
 			// aapt resource value: 0x7f030054
-			public const int Tabbar = 2130903124;
+			public const int support_simple_spinner_dropdown_item = 2130903124;
 			
 			// aapt resource value: 0x7f030055
-			public const int Toolbar = 2130903125;
+			public const int Tabbar = 2130903125;
 			
 			// aapt resource value: 0x7f030056
-			public const int tooltip = 2130903126;
+			public const int Toolbar = 2130903126;
 			
 			// aapt resource value: 0x7f030057
-			public const int week = 2130903127;
+			public const int tooltip = 2130903127;
 			
 			// aapt resource value: 0x7f030058
-			public const int zxingscanneractivitylayout = 2130903128;
+			public const int week = 2130903128;
 			
 			// aapt resource value: 0x7f030059
-			public const int zxingscannerfragmentlayout = 2130903129;
+			public const int zxingscanneractivitylayout = 2130903129;
+			
+			// aapt resource value: 0x7f03005a
+			public const int zxingscannerfragmentlayout = 2130903130;
 			
 			static Layout()
 			{

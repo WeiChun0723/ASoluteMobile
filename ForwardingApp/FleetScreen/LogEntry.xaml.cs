@@ -342,6 +342,7 @@ namespace ASolute_Mobile
                     }
 
                     endTime.Time = DateTime.Now.TimeOfDay;
+
                 }
                 else
                 {
@@ -356,6 +357,7 @@ namespace ASolute_Mobile
                 }
 
                 Ultis.Settings.RefreshMenuItem = "Yes";
+         
                 imageLinkID = response.Result["LinkId"];
                 trip.Id = response.Result["Id"];
                 UploadImage();

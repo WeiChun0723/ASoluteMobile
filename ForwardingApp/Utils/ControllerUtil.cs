@@ -361,14 +361,14 @@ namespace ASolute_Mobile.Utils
             return String.Format("File/LogoUpdated?SessionId={0}", Ultis.Settings.SessionSettingKey);
         }
 
-        public static String getDownloadMenuURL(string firebase)
-        {
-            return String.Format("Session/Load?Id={0}&FirebaseId={1}", Ultis.Settings.SessionSettingKey,firebase);
-        }
-
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Fleet", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String getDownloadMenuURL(string firebase)
+        {
+            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey,firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
         }
       
         public static String getDownloadRefuelHistoryURL()

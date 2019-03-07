@@ -479,6 +479,7 @@
     <Compile Include="Services\BackgroundCleanUpReceiver.cs" />
     <Compile Include="Services\BluetoothService_test.cs" />
     <Compile Include="Services\GPS_Service.cs" />
+    <Compile Include="CustomRenderer\PinCustomRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -511,6 +512,7 @@
     <AndroidResource Include="Resources\drawable\container.png" />
     <AndroidResource Include="Resources\drawable\Image1.png" />
     <AndroidResource Include="Resources\drawable\printing.png" />
+    <AndroidResource Include="Resources\layout\PinInfoWindow.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

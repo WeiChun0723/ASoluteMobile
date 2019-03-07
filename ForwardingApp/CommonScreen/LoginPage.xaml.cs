@@ -34,7 +34,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "ASolute Fleet";
+            AppLabel.Text = "AILS Haulage";
 
 
             //set username entry maximum to 10 chars
@@ -52,7 +52,8 @@ namespace ASolute_Mobile
                 passwordEntry.Focus();
             };
 
-           
+            organization.Text = Ultis.Settings.AppEnterpriseName;
+            usernameEntry.Text = Ultis.Settings.SessionUserId;
         }
 
         protected override void OnAppearing()
@@ -61,8 +62,6 @@ namespace ASolute_Mobile
 
             GetBaseURL();
 
-            organizationEntry.Text = Ultis.Settings.AppEnterpriseName;
-            usernameEntry.Text = Ultis.Settings.SessionUserId;
         }
       
         async void Update_URL_Clicked(object sender, System.EventArgs e)
@@ -86,7 +85,7 @@ namespace ASolute_Mobile
 
         }
 
-        public async void Login_Clicked(object sender, System.EventArgs e)
+         async void Login_Clicked(object sender, System.EventArgs e)
         {
             this.activityIndicator.IsRunning = true;
             
@@ -97,8 +96,8 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                    //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
-                   var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                   var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                  //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)

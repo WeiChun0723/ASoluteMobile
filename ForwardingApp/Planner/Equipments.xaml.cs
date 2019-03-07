@@ -84,7 +84,7 @@ namespace ASolute_Mobile.Planner
 
                 if (category != null)
                 {
-                    await Navigation.PushAsync(new EquipmentDetails(category.Caption));
+                    await Navigation.PushAsync(new EquipmentDetails(category.Caption,null));
                 }
             }
            catch

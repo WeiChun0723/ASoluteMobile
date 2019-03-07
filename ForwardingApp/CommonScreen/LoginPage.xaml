@@ -14,7 +14,7 @@
             <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100" />
             <StackLayout Padding="0, 10">
             </StackLayout>
-            <Label TextColor="Black" FontSize="Small" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" />
+            <Label TextColor="Black" FontSize="Small" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold" />
             <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}" >
                 <Entry x:Name="usernameEntry" >
                     <Entry.Behaviors>
@@ -31,7 +31,7 @@
                     <Image Source="password" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-          <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+         <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
                 <Entry x:Name="equipmentEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />
@@ -40,12 +40,12 @@
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="truck" />
                 </inputLayout:SfTextInputLayout.LeadingView>
-            </inputLayout:SfTextInputLayout> 
+            </inputLayout:SfTextInputLayout> -->
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="loginButton" Text="Login" Clicked="Login_Clicked" />
             
             <StackLayout Orientation="Horizontal">
                 <buttons:SfButton Style="{StaticResource buttonStyle}"  Text="Register User" Clicked="NewUser" HorizontalOptions="FillAndExpand"/>
-                <buttons:SfButton Style="{StaticResource buttonStyle}"  x:Name="organizationEntry" Clicked="Update_URL_Clicked" HorizontalOptions="FillAndExpand"/>
+                <buttons:SfButton Style="{StaticResource buttonStyle}"  x:Name="organization" Clicked="Update_URL_Clicked" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
 
             <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />

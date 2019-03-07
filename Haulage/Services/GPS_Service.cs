@@ -16,14 +16,9 @@ namespace Haulage.Droid.Services
     [Service]
     public class GPS_Service : Service
     {
-        private static LocationApp current;
+    
 
-        public static LocationApp Current
-        {
-            get { return current; }
-        }
-
-
+     
 
         public override IBinder OnBind(Intent intent)
         {

@@ -16,7 +16,6 @@ namespace ASolute_Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CheckList : ContentPage
     {
-
         string chkid;
         
         List<clsKeyValue> checkingList = new List<clsKeyValue>();
@@ -28,9 +27,8 @@ namespace ASolute_Mobile
             Title = "Check list";
             chkid = id;
 
-            checkList.RowHeight = 100;
+            //checkList.RowHeight = 100;
             BindingContext = new CheckListViewModel(items);
-        
         }
         
         protected override bool OnBackButtonPressed()

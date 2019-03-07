@@ -160,7 +160,7 @@ namespace ASolute_Mobile
                             string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
 
                             RefuelData refuel_Data = new RefuelData();
-                            if (stationPicker.SelectedIndex != -1 && paymentPicker.SelectedIndex != -1 && liter.Text != null && fuelCard.Text != null)
+                            if ( paymentPicker.SelectedIndex != -1 && liter.Text != null && fuelCard.Text != null)
                             {
                                 try
                                 {
@@ -339,14 +339,14 @@ namespace ASolute_Mobile
 
                     double fuelLiter = Convert.ToDouble(e.NewTextValue);
 
-                    double result = Convert.ToDouble(costPerLiter.Text.ToString()) * fuelLiter;
+                    double result = Convert.ToDouble(costPerLiter.Text) * fuelLiter;
 
                     amount.Text = "RM" + Math.Round(result,2);
                 }
             }
             catch
             {
-                DisplayAlert("Error", "Please try again", "OK");
+
             }
 
         }
@@ -532,7 +532,8 @@ namespace ASolute_Mobile
                     }                    
                     amount.Text = "RM 0.00";
                     datePicker.MaximumDate = DateTime.Now;
-                 
+
+
                     for (int i = 0; i < fuelCostNew.VendorList.Count; i++)
                     {
                         stationPicker.Items.Add(fuelCostNew.VendorList[i].Value.ToUpper());
@@ -549,7 +550,6 @@ namespace ASolute_Mobile
                     {
                         stationPicker.SelectedIndex = 0;
                     }
-
 
                 }
                 catch (HttpRequestException)

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.Planner.AllTruckMap" xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.Planner.AllTruckMap"
+             xmlns:local="clr-namespace:ASolute_Mobile.CustomRenderer"
              xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
     
@@ -26,6 +28,7 @@
          </refresh:SfPullToRefresh>  -->
     <StackLayout>
                 <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
-                <maps:Map x:Name="GoogleMap" MapType="Street"  />
+                <local:CustomMap x:Name="GoogleMap" MapType="Street"  />
+
      </StackLayout>
 </ContentPage>

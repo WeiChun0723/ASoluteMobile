@@ -31,7 +31,6 @@ namespace ASolute_Mobile.Utils
             var response = await client.GetAsync(uri);
             var content = await response.Content.ReadAsStringAsync();
             Debug.WriteLine(content);
-            
 
             return content;
         }

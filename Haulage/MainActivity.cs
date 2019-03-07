@@ -52,23 +52,11 @@ namespace ASolute_Mobile.Droid
 
             LoadApplication(new App());
 
-
              if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted)
              {
-                // StartLocationTracking();
+                 StartLocationTracking();
 
              }
-
-           /* var intent = new Intent(this, typeof(GPS_Service));
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
-            {
-               StartForegroundService(intent);
-            }
-            else
-            {
-                StartService(intent);
-            }*/
-
 
             App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;       
         }
@@ -102,7 +90,7 @@ namespace ASolute_Mobile.Droid
             {
                 if(permissions[0].Equals(Manifest.Permission.AccessFineLocation))
                 {
-                    //StartLocationTracking();
+                    StartLocationTracking();
                 }
 
             }
