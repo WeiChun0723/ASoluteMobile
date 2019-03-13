@@ -270,14 +270,14 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/Pallet/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String getPickingList()
+        public static String getPickingList(string menuId)
         {
-            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}&menuId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), menuId);
         }
 
-        public static String loadPickingDetail(string pickingID)
+        public static String loadPickingDetail(string pickingID,string pickingType)
         {
-            return String.Format("Wms/Picking/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),pickingID);
+            return String.Format("Wms/Picking/Load?SessionId={0}&GeoLoc={1}&Id={2}&menuId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),pickingID, pickingType);
         }
 
         public static String postPickingDetail()
@@ -363,12 +363,12 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}", Ultis.Settings.SessionSettingKey);
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Warehouse", CrossDeviceInfo.Current.AppVersion);
         }
 
         public static String getDownloadMenuURL(string firebase)
         {
-            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey,firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey,firebase, "Warehouse", CrossDeviceInfo.Current.AppVersion);
         }
       
         public static String getDownloadRefuelHistoryURL()

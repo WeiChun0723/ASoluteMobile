@@ -25,7 +25,9 @@ namespace ASolute_Mobile.WMS_Screen
             InitializeComponent();
 
             Title = title;
-    
+
+
+           
         }
 
         protected override void OnAppearing()
@@ -191,24 +193,6 @@ namespace ASolute_Mobile.WMS_Screen
 
                             filterText.Text = result.Text;
 
-                            /*string recordID = "";
-                            foreach(clsWhsCommon tallyIn in tallyInList)
-                            {
-                                if(tallyIn.DocumentNo.Equals(result.Text))
-                                {
-                                    recordID = tallyIn.Id;
-                                }
-                            }
-
-                            if(recordID != "")
-                            {
-                                await Navigation.PushAsync(new TallyInDetail(recordID));
-                            }
-                            else
-                            {
-                                await DisplayAlert("Not found", "No such id.", "OK");
-                            }*/
-
                         });
                     };
                 }
@@ -220,12 +204,7 @@ namespace ASolute_Mobile.WMS_Screen
                 tapped = true;
             }
 
-           
-
-
         }
-
-
 
         public async void selectTallyIn(object sender, ItemTappedEventArgs e)
         {

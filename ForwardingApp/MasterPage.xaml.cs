@@ -1,9 +1,6 @@
-﻿using ASolute.Mobile.Models;
-using ASolute_Mobile.CustomerTracking;
-using ASolute_Mobile.HaulageScreen;
+﻿using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
 using Plugin.DeviceInfo;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Xamarin.Forms;

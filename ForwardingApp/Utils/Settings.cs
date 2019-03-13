@@ -44,7 +44,34 @@ namespace ASolute_Mobile.Ultis
         private const string Cargo_Return = "return";
         private const string New_Job = "new_job";
         private const string SubTitles = "sub_Titles";
+        private const string Titles = "title";
+        private const string UpdateTimes = "update_time";
         #endregion
+
+
+        public static string UpdateTime
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(UpdateTimes, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(UpdateTimes, value);
+            }
+        }
+
+        public static string Title
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(Titles, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(Titles, value);
+            }
+        }
 
         public static string SubTitle
         {

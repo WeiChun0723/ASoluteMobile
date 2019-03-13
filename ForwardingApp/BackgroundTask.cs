@@ -51,15 +51,23 @@ namespace ASolute_Mobile
                 location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
             }
 
-            if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
+            if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet())
             {
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var sendGPSURI = ControllerUtil.getGPSTracking(location, address);
-                var content = await client.GetAsync(sendGPSURI);
-                var response = await content.Content.ReadAsStringAsync();
-                clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(response);
-                Debug.WriteLine(response);
+                try
+                {
+                    var client = new HttpClient();
+                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                    var sendGPSURI = ControllerUtil.getGPSTracking(location, address);
+                    var content = await client.GetAsync(sendGPSURI);
+                    var response = await content.Content.ReadAsStringAsync();
+                    clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(response);
+                    Debug.WriteLine(response);
+                }
+                catch
+                {
+
+                }
+               
             }
         }
 
@@ -221,8 +229,6 @@ namespace ASolute_Mobile
                                 {
                                     history = jobItem.jobNo + " Futile update";
                                 }
-
-
                             }
                         }
                       

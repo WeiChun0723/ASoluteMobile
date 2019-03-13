@@ -9,13 +9,30 @@ namespace ASolute_Mobile.HaulageScreen
 {
     public partial class DriverRFC : ContentPage
     {
-        public DriverRFC()
+        public DriverRFC(string title)
         {
             InitializeComponent();
 
-            Title = "Collection Request";
+            StackLayout main = new StackLayout();
 
-         
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
         }
 
         protected override void OnAppearing()

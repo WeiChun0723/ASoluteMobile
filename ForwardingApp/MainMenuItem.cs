@@ -20,18 +20,20 @@ using Xamarin.Forms;
 
 namespace ASolute_Mobile
 {
-    public class MainMenuItem : ListViewCommonScreen 
+    public class MainMenuItem : ListViewCommonScreen
     {
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string firebaseID = "firebase";
         Label title1, title2;
-       
+
         public MainMenuItem()
         {
 
+            search.IsVisible = false;
+
             ListViewCommonScreen.title1.Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
-             
+
             /*StackLayout main = new StackLayout();
 
             title1 = new Label
@@ -67,12 +69,12 @@ namespace ASolute_Mobile
                         break;
 
                     case "FuelCost":
-                        RefuelHistory refuel = new RefuelHistory(((AppMenu)e.Item).name);                
+                        RefuelHistory refuel = new RefuelHistory(((AppMenu)e.Item).name);
                         await Navigation.PushAsync(refuel);
                         break;
 
                     case "EqInquiry":
-                        EquipmentInquiry equipment = new EquipmentInquiry();            
+                        EquipmentInquiry equipment = new EquipmentInquiry();
                         await Navigation.PushAsync(equipment);
                         break;
 
@@ -89,10 +91,10 @@ namespace ASolute_Mobile
                         break;
 
                     case "JobList":
-                       //await Navigation.PushAsync(new TransportScreen.JobLists(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new TransportScreen.JobLists(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
                         //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
                         await Navigation.PushAsync(new HaulageScreen.JobList(((AppMenu)e.Item).name));
-                       // await Navigation.PushAsync(new ChatRoom());
+                        // await Navigation.PushAsync(new ChatRoom());
                         break;
 
                     case "MasterJobList":
@@ -117,32 +119,37 @@ namespace ASolute_Mobile
                         break;
 
                     case "Shunting":
-                        await Navigation.PushAsync(new HaulageScreen.Shunting(menuAction));
+                        await Navigation.PushAsync(new HaulageScreen.Shunting(((AppMenu)e.Item).name));
                         break;
                     case "PendingCollection":
-                        await Navigation.PushAsync(new HaulageScreen.PendingCollection(menuAction));
+                        await Navigation.PushAsync(new HaulageScreen.PendingCollection(((AppMenu)e.Item).name));
                         break;
                     case "DriverRFC":
-                        await Navigation.PushAsync(new HaulageScreen.DriverRFC());
+                        await Navigation.PushAsync(new HaulageScreen.DriverRFC(((AppMenu)e.Item).name));
                         break;
-                    case "EqList" :
+                    case "EqList":
                         //await Navigation.PushAsync(new Planner.EqCategory());
                         await Navigation.PushAsync(new AllTruckMap(((AppMenu)e.Item).name));
                         break;
-                    case "TallyIn" :
-                       await  Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
+                    case "TallyIn":
+                        Ultis.Settings.Title = ((AppMenu)e.Item).name;
+                        await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
                         break;
-                    case "PalletTrx" :
+                    case "PalletTrx":
                         await Navigation.PushAsync(new WMS_Screen.PalletMovement(((AppMenu)e.Item).name));
                         break;
-                    case "Picking" :
-                        await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name));
-                        break;
-                    case "Packing" :
+                
+                    case "Packing":
                         await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
                         break;
                     case "TallyOut":
                         await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
+                        break;
+                    case "FullPick":
+                        await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        break;
+                    case "LoosePick":
+                        await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
                         break;
                 }
 
@@ -173,7 +180,7 @@ namespace ASolute_Mobile
                 this.ToolbarItems.Clear();
             }
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => 
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) =>
             {
 
                 try
@@ -186,12 +193,26 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (NetworkCheck.IsInternet() ) 
+            if (NetworkCheck.IsInternet())
             {
-                GetMainMenu();
-                Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                Ultis.Settings.RefreshMenuItem = "No";
+                System.TimeSpan interval = new System.TimeSpan();
+                if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
+                {
+                    DateTime enteredDate = DateTime.Parse(Ultis.Settings.UpdateTime);
+                    interval = DateTime.Now.Subtract(enteredDate);
+                }
 
+                if (Ultis.Settings.RefreshMenuItem == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
+                {
+                    GetMainMenu();
+                    Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                    Ultis.Settings.RefreshMenuItem = "No";
+                    Ultis.Settings.UpdateTime = DateTime.Now.ToString();
+                }
+                else
+                {
+                    LoadMainMenu();
+                }
             }
             else
             {
@@ -208,7 +229,7 @@ namespace ASolute_Mobile
         }
 
         //press twice back button to exit the app within 3 second
-        protected override bool OnBackButtonPressed()
+        /*protected override bool OnBackButtonPressed()
         {
             if (doubleBackToExitPressedOnce)
             {
@@ -231,11 +252,11 @@ namespace ASolute_Mobile
             );
 
             return true;
-        }
+        }*/
 
         public async void GetMainMenu()
         {
-          
+
             loading.IsVisible = true;
 
             OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
@@ -245,9 +266,9 @@ namespace ASolute_Mobile
             checkItems.Clear();
             try
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(Ultis.Settings.FireID));
+                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
-              
+
                 if (login_response.IsGood == true)
                 {
                     var login_Menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
@@ -273,7 +294,7 @@ namespace ASolute_Mobile
                     {
                         AppMenu existingRecord = App.Database.GetMenuRecordAsync(mainMenu.Id);
 
-                        if (mainMenu.Id != "LogOff" )
+                        if (mainMenu.Id != "LogOff")
                         {
                             if (existingRecord == null || (!(existingRecord != null)))
                             {
@@ -397,15 +418,17 @@ namespace ASolute_Mobile
             catch (Exception exception)
             {
                 await DisplayAlert("Error", exception.Message, "Ok");
-            } 
+            }
         }
 
         public void CloseApp()
         {
             if (Device.RuntimePlatform == Device.Android)
             {
+
                 LocationApp.StopLocationService();
                 DependencyService.Get<CloseApp>().close_app();
+
             }
         }
 
@@ -419,7 +442,7 @@ namespace ASolute_Mobile
             listView.ItemsSource = Item;
             listView.HasUnevenRows = true;
             //IOS need to predefine the row height if not will truncated 
-            if(Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 listView.RowHeight = 150;
             }

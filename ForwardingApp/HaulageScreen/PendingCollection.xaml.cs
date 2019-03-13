@@ -32,14 +32,28 @@ namespace ASolute_Mobile.HaulageScreen
                 refreshPendingCollection();
             }
             
-            if (Ultis.Settings.Language.Equals("English"))
+        
+            StackLayout main = new StackLayout();
+
+
+            Label title1 = new Label
             {
-                Title = "Pending Collection";
-            }
-            else
+                FontSize = 15,
+                Text = title,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
             {
-                Title = "Pending Collection";
-            }
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
 
         }
 

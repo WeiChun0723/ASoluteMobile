@@ -25,7 +25,7 @@ using Haulage.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -52,7 +52,7 @@ namespace ASolute_Mobile.Droid
 
             LoadApplication(new App());
 
-             if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted)
+            if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
              {
                  StartLocationTracking();
 
@@ -88,7 +88,7 @@ namespace ASolute_Mobile.Droid
 
             if(grantResults.Length > 0 && permissions.Length > 0  )
             {
-                if(permissions[0].Equals(Manifest.Permission.AccessFineLocation))
+                if(permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
                     StartLocationTracking();
                 }
@@ -120,7 +120,7 @@ namespace ASolute_Mobile.Droid
             Log.Debug(logTag, "OnDestroy: Location app is becoming inactive");
             base.OnDestroy();
            
-            LocationApp.StopLocationService();
+            //LocationApp.StopLocationService();
 
         }
 

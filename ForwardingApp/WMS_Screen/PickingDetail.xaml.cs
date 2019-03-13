@@ -12,16 +12,16 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class PickingDetail : ContentPage
     {
 
-        string pickingID, linkID;
+        string pickingID,pickingType, linkID, pickingTitle;
         clsWhsHeader pickingDetails;
 
-        public PickingDetail(string id , string details, string pickingName)
+        public PickingDetail(string id , string pickingtype ,string title)
         {
             InitializeComponent();
 
             pickingID = id;
-
-
+            pickingType = pickingtype;
+            pickingTitle = title;
         }
 
         protected override void OnAppearing()
@@ -33,7 +33,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetPickingDetails()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadPickingDetail(pickingID));
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadPickingDetail(pickingID, pickingType));
             clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyIn_response.IsGood)
@@ -54,7 +54,7 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         caption.Text = "    " + desc.Value;
                         caption.FontAttributes = FontAttributes.Bold;
-                        Title = "Picking # " + desc.Value;
+                        Title = pickingTitle + " # " + desc.Value;
                     }
                     else
                     {
@@ -64,7 +64,7 @@ namespace ASolute_Mobile.WMS_Screen
                     if (desc.Caption.Equals(""))
                     {
 
-                        Title = "Picking # " + desc.Value;
+                        Title = pickingTitle + " # " + desc.Value;
                     }
 
                     pickingDesc.Children.Add(caption);
@@ -110,7 +110,7 @@ namespace ASolute_Mobile.WMS_Screen
 
             if (product != null)
             {
-                await Navigation.PushAsync(new PickingEntry(product,linkID));
+                await Navigation.PushAsync(new PickingEntry(product,linkID,pickingTitle));
             }
         }
     }

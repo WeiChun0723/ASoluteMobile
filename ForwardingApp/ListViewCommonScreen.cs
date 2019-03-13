@@ -8,6 +8,7 @@ namespace ASolute_Mobile
         public static Label title1, title2;
 
         public ListView listView = new ListView();
+        public SearchBar search = new SearchBar();
         public Image image, scanBarCode;
         public SfBusyIndicator loading;
      
@@ -20,14 +21,14 @@ namespace ASolute_Mobile
             title1 = new Label
             {
                 FontSize = 15,
-                //Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
+                Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
                 TextColor = Color.White
             };
 
             title2 = new Label
             {
                 FontSize = 10,
-
+                Text = Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
 
@@ -95,6 +96,7 @@ namespace ASolute_Mobile
 
             mainLayout.Children.Add(loading);
             mainLayout.Children.Add(image);
+            mainLayout.Children.Add(search);
             mainLayout.Children.Add(listView);
             mainLayout.Children.Add(scanBarCode);
 

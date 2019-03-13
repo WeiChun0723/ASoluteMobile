@@ -23,8 +23,11 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-        /* Master = masterPage;
-            Detail = new NavigationPage(new MyProviders());*/
+            /* Master = masterPage;
+                Detail = new NavigationPage(new MyProviders());*/
+
+
+           
 
             masterPage.ListView.ItemSelected += OnItemSelected;
             MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
@@ -35,8 +38,6 @@ namespace ASolute_Mobile
                    // Task.Run(async () => { await BackgroundTask.UploadLatestRecord(); }).Wait();                  
                 });
             });
-
-          
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -298,7 +299,7 @@ namespace ASolute_Mobile
 
         public async void refreshMainPage()
         {
-            var context_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(Ultis.Settings.FireID));
+            var context_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
             clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
 
             var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();

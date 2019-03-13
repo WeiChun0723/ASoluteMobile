@@ -41,7 +41,7 @@ namespace ASolute_Mobile.HaulageScreen
             Label title2 = new Label
             {
                 FontSize = 10,
-                Text = Ultis.Settings.SessionUserItem.DriverId + " , " + Ultis.Settings.SessionUserItem.CompanyName,
+                Text = Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
 

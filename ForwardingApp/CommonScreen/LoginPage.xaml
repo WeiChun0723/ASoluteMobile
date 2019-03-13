@@ -31,7 +31,7 @@
                     <Image Source="password" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-         <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+        <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
                 <Entry x:Name="equipmentEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />
@@ -40,7 +40,7 @@
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="truck" />
                 </inputLayout:SfTextInputLayout.LeadingView>
-            </inputLayout:SfTextInputLayout> -->
+            </inputLayout:SfTextInputLayout>-->
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="loginButton" Text="Login" Clicked="Login_Clicked" />
             
             <StackLayout Orientation="Horizontal">

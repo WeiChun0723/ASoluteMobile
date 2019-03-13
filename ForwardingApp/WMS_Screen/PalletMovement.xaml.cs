@@ -21,7 +21,15 @@ namespace ASolute_Mobile.WMS_Screen
             InitializeComponent();
 
             Title = screenTitle;
+
+            pdEntry.Completed += PdEntry_Completed;
         }
+
+        void PdEntry_Completed(object sender, EventArgs e)
+        {
+            GetPalletTrx(pdEntry.Text);
+        }
+
 
         void PalletIDScan(object sender, EventArgs e)
         {

@@ -390,6 +390,15 @@
     <Reference Include="ASolute.Mobile.Models">
       <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.SfBarcode.iOS">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfBarcode.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.SfBarcode.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfBarcode.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfBarcode.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.SfBarcode.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfBarcode.XForms.iOS">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfBarcode.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.SfBarcode.XForms.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">

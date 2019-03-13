@@ -19,7 +19,7 @@ namespace ASolute_Mobile
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            string test = Utils.ControllerUtil.getPositionAsync();
+
         }
 
         protected override async void OnAppearing()
@@ -76,9 +76,6 @@ namespace ASolute_Mobile
 
             loading.IsVisible = false;
         }
-
-       
-
 
     }
 }

@@ -176,12 +176,13 @@ namespace ASolute_Mobile.WMS_Screen
                                         PalletId = result.Text,
                                         Description = Ultis.Settings.SessionUserId
                                     };
+
                                     tallyOutItems.Add(item);
                                     scanPage.ResumeAnalysis();
                                 }
                                 else
                                 {
-                                    displayToast("Invalid tally out");
+                                    displayToast(upload_response.Message);
                                     scanPage.ResumeAnalysis();
                                 }
                             });
@@ -260,7 +261,7 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(0, 128, 0));
             }
-            else if (message == "Invalid tally out")
+            else 
             {
                 toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(255, 0, 0));
             }

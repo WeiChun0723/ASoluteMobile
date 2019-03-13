@@ -11,15 +11,15 @@ namespace ASolute_Mobile.WMS_Screen
 {
     public partial class PickingEntry : ContentPage
     {
-        string fieldName, linkID;
+        string fieldName, linkID, pickingTitle;
         bool tapped = true;
 
-        public PickingEntry(clsWhsItem summary, string id)
+        public PickingEntry(clsWhsItem summary, string id, string title)
         {
             InitializeComponent();
 
             linkID = id;
-
+            pickingTitle = title;
             pickingDesc.Children.Clear();
 
             Label topBlank = new Label();
@@ -45,7 +45,7 @@ namespace ASolute_Mobile.WMS_Screen
                 if(desc.Caption.Equals("Pallet"))
                 {
 
-                    Title = "Picking # " + desc.Value;
+                    Title = pickingTitle + " # " + desc.Value;
                 }
 
                 pickingDesc.Children.Add(caption);

@@ -14,6 +14,7 @@ using ASolute_Mobile.Ultis;
 using Plugin.DeviceInfo;
 using Plugin.Geolocator;
 using Plugin.Media;
+using System.Threading.Tasks;
 
 namespace ASolute_Mobile
 {
@@ -34,7 +35,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "AILS Haulage";
+            AppLabel.Text = "AILS WMS";
 
 
             //set username entry maximum to 10 chars
@@ -56,11 +57,11 @@ namespace ASolute_Mobile
             usernameEntry.Text = Ultis.Settings.SessionUserId;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
 
-            GetBaseURL();
+            await GetBaseURL();
 
         }
       
@@ -74,7 +75,7 @@ namespace ASolute_Mobile
             await Navigation.PushAsync(new HaulageScreen.Registration());
         }
 
-        async void GetBaseURL()
+        async Task GetBaseURL()
         {
             clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.AppEnterpriseName)));
 

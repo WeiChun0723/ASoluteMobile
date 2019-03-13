@@ -17,12 +17,15 @@ namespace ASolute_Mobile.WMS_Screen
         List<clsDataRow> picking;
         ObservableCollection<AppMenu> Item;
         bool tapped = true;
+        string pickingType = "";
 
-        public Picking(string screenTitle)
+        public Picking(string screenTitle, string menuID)
         {
             InitializeComponent();
 
             Title = screenTitle;
+
+            pickingType = menuID;
 
         }
 
@@ -70,7 +73,7 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
 
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPickingList());
+            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPickingList(pickingType));
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
@@ -205,7 +208,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, ((AppMenu)e.Item).summary, ((AppMenu)e.Item).name));
+            await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, pickingType, Title));
 
         }
 

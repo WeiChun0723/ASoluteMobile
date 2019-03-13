@@ -93,7 +93,7 @@
                 LeadingViewPosition="Inside"
                 MinimumHeightRequest="50">   
                 
-            <Entry x:Name="pdEntry" TextChanged="PdEntry_TextChanged"> 
+            <Entry x:Name="pdEntry" TextChanged="PdEntry_TextChanged" > 
             <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="30" />
                 </Entry.Behaviors>        
@@ -172,7 +172,7 @@
             <StackLayout x:Name="palletDesc" BackgroundColor="#E5E5E5" IsVisible="false" Spacing="10"></StackLayout>
             <!--<Label x:Name="palletDesc" FontSize="Small" VerticalTextAlignment="Center"  HorizontalOptions="FillAndExpand" BackgroundColor="Silver" IsVisible="false"/>-->
             
-            <buttons:SfButton Padding="0,10" Text="PickUp"  HorizontalOptions="CenterAndExpand" Clicked="PickUpPallet" BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="50" WidthRequest="150" FontAttributes="Bold" IsVisible="false" x:Name="btnPickUp"/>
+            <buttons:SfButton Padding="0,10" Text="Pickup"  HorizontalOptions="CenterAndExpand" Clicked="PickUpPallet" BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="50" WidthRequest="150" FontAttributes="Bold" IsVisible="false" x:Name="btnPickUp"/>
             <buttons:SfButton Text="Dropoff" HorizontalOptions="CenterAndExpand" Clicked="DropUpPallet" BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="50" WidthRequest="150" FontAttributes="Bold" IsVisible="false" x:Name="btnDropOff"/>
             <!--<Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
                     <Image.GestureRecognizers>

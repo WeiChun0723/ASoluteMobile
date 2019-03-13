@@ -84,10 +84,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\JobListTabbedPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -200,6 +196,10 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\AllTruckMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\BarCodePopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -336,10 +336,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CustomNavigationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IFileHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\JobListTabbedPage.xaml.cs">
-      <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -418,7 +414,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml.cs">
       <DependentUpon>PalletMovement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\testing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\Picking.xaml.cs">
       <DependentUpon>Picking.xaml</DependentUpon>
     </Compile>
@@ -451,6 +446,10 @@
       <DependentUpon>AllTruckMap.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\BarCodePopUp.xaml.cs">
+      <DependentUpon>BarCodePopUp.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

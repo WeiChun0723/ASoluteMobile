@@ -18,14 +18,14 @@ namespace ASolute_Mobile
             title1 = new Label
             {
                 FontSize = 15,
-                //Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
+                Text = Ultis.Settings.Title,
                 TextColor = Color.White
             };
 
             title2 = new Label
             {
                 FontSize = 10,
-
+                Text= Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
 

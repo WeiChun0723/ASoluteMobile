@@ -22,6 +22,8 @@ namespace ASolute_Mobile.HaulageScreen
 		{
 			InitializeComponent ();
 
+            Ultis.Settings.App = "Haulage";
+
             StackLayout main = new StackLayout();
 
             Label title1 = new Label
@@ -34,7 +36,7 @@ namespace ASolute_Mobile.HaulageScreen
             Label title2 = new Label
             {
                 FontSize = 10,
-                Text = Ultis.Settings.SessionUserItem.DriverId + " , " + Ultis.Settings.SessionUserItem.CompanyName,
+                Text = Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
 
@@ -42,7 +44,6 @@ namespace ASolute_Mobile.HaulageScreen
             main.Children.Add(title2);
 
             NavigationPage.SetTitleView(this, main);
-
         }
 
         protected async override void OnAppearing()

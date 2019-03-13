@@ -21,10 +21,11 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
 using System.Text.RegularExpressions;
+using Rg.Plugins.Popup.Services;
 
 namespace ASolute_Mobile
 {
-    
+
     public class JobDetails : ContentPage
     {
         //public JobLists previousPage;
@@ -36,17 +37,17 @@ namespace ASolute_Mobile
         CustomEditor remarkTextEditor = null;
         List<AppImage> images = new List<AppImage>();
         Grid imageGrid, confirmGrid, trailerContainerGrid;
-        double imageWidth;        
+        double imageWidth;
         bool collectSealStatus = false, uploaded = false, connectedPrinter = false;
-        Image savedSignature,map, phone, futile, camera, confirm;
-        string jobNo, actionID, actionMessage, containerNumber,savedTrailer,savedContPre,savedNumber,savedSealNo,savedMGW,savedTare,savedRemark;
-        StackLayout mapPhoneStackLayout,remarksStackLayout, signatureStackLayout, imageButtonStackLayout;
-        CustomEntry contPrefix, contNumber, sealEntry, mgwEntry, tareEntry, trailerEntry;       
+        Image savedSignature, map, phone, futile, camera, confirm;
+        string jobNo, actionID, actionMessage, containerNumber, savedTrailer, savedContPre, savedNumber, savedSealNo, savedMGW, savedTare, savedRemark;
+        StackLayout mapPhoneStackLayout, remarksStackLayout, signatureStackLayout, imageButtonStackLayout;
+        CustomEntry contPrefix, contNumber, sealEntry, mgwEntry, tareEntry, trailerEntry;
         clsHaulageModel haulageJob = new clsHaulageModel();
         static byte[] scaledImageByte;
         static int uploadedImage = 0;
         CheckBox check1, check2;
-        string checking="";
+        string checking = "", booking = "", action ="";
         SfBusyIndicator print;
         Label title1 = new Label();
 
@@ -58,12 +59,12 @@ namespace ASolute_Mobile
             title1.FontSize = 15;
 
             title1.TextColor = Color.White;
-           
+
 
             Label title2 = new Label
             {
                 FontSize = 10,
-                Text = Ultis.Settings.SessionUserItem.DriverId + " , " + Ultis.Settings.SessionUserItem.CompanyName,
+                Text = Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
 
@@ -72,14 +73,13 @@ namespace ASolute_Mobile
 
             NavigationPage.SetTitleView(this, main);
 
-
             actionID = ID;
             actionMessage = Message;
             Ultis.Settings.Action = ID;
             Ultis.Settings.App = "Haulage";
 
             NavigationPage.SetHasNavigationBar(this, true);
-           
+
             imageGrid = new Grid { ColumnSpacing = 0, RowSpacing = 0 };
             imageWidth = App.DisplayScreenWidth / 3;
             imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(imageWidth) });
@@ -91,7 +91,7 @@ namespace ASolute_Mobile
             PageContent();
             Action();
 
-           
+
             Ultis.Settings.MenuRequireAction = "Job_List";
         }
 
@@ -109,7 +109,8 @@ namespace ASolute_Mobile
                 this.ToolbarItems.Clear();
             }
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) =>
+            {
 
                 try
                 {
@@ -130,7 +131,7 @@ namespace ASolute_Mobile
 
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
 
-            if(connectedPrinter == true)
+            if (connectedPrinter == true)
             {
                 DependencyService.Get<IBthService>().disconnBTDevice();
             }
@@ -142,20 +143,20 @@ namespace ASolute_Mobile
             var label = new Label
             {
                 Text = labelText,
-                Style = (Style)App.Current.Resources["jobDetailCaptionStyle"],                
+                Style = (Style)App.Current.Resources["jobDetailCaptionStyle"],
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand               
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             return label;
         }
 
-        public static CustomEntry CreateEntry( bool mandatory, int position)
+        public static CustomEntry CreateEntry(bool mandatory, int position)
         {
             var entry = new CustomEntry
-            {                          
+            {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                HeightRequest = 40,               
+                HeightRequest = 40,
             };
 
             if (mandatory)
@@ -167,15 +168,15 @@ namespace ASolute_Mobile
                 entry.LineColor = Color.White;
             }
 
-            if(position == 0)
+            if (position == 0)
             {
                 entry.HorizontalTextAlignment = TextAlignment.Start;
             }
-            else if(position == 1)
+            else if (position == 1)
             {
                 entry.HorizontalTextAlignment = TextAlignment.End;
             }
-            
+
             return entry;
         }
 
@@ -220,14 +221,14 @@ namespace ASolute_Mobile
                     }
                 }
             }
-            
+
         }
 
         private async void Action()
         {
             // Check the action id and show th control depend on what the action id needed
             if (!(String.IsNullOrEmpty(Ultis.Settings.Action)))
-            {                
+            {
 
                 if (Ultis.Settings.Action.Equals("EmptyPickup"))
                 {
@@ -265,43 +266,43 @@ namespace ASolute_Mobile
                 else if (Ultis.Settings.Action.Equals("Point1_In") || Ultis.Settings.Action.Equals("Point2_In"))
                 {
 
-                        try
+                    try
+                    {
+                        clsHaulageModel haulage = new clsHaulageModel();
+
+                        haulage.Id = Ultis.Settings.SessionCurrentJobId;
+                        if (actionID.Equals("Point1_In"))
                         {
-                            clsHaulageModel haulage = new clsHaulageModel();
-
-                            haulage.Id = Ultis.Settings.SessionCurrentJobId;
-                            if (actionID.Equals("Point1_In"))
-                            {
-                                haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point1_In;
-                            }
-                            else
-                            {
-                                haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point2_In;
-                            }
-
-                            var client = new HttpClient();
-                            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                            var uri = ControllerUtil.postHaulageURL();
-                            var content = JsonConvert.SerializeObject(haulage);
-                            var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-                            var response = await client.PostAsync(uri, httpContent);
-                            var reply = await response.Content.ReadAsStringAsync();
-                            Debug.WriteLine(reply);
-                            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
-
-                            if (json_response.IsGood == true)
-                            {
-                                GetActionID();
-                            }
-                            else
-                            {
-                                await DisplayAlert("Upload Error", json_response.Message, "Okay");
-                            }
+                            haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point1_In;
                         }
-                        catch (Exception exception)
+                        else
                         {
-                            await DisplayAlert("Error", exception.Message, "OK");
+                            haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point2_In;
                         }
+
+                        var client = new HttpClient();
+                        client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                        var uri = ControllerUtil.postHaulageURL();
+                        var content = JsonConvert.SerializeObject(haulage);
+                        var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
+                        var response = await client.PostAsync(uri, httpContent);
+                        var reply = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(reply);
+                        clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
+
+                        if (json_response.IsGood == true)
+                        {
+                            GetActionID();
+                        }
+                        else
+                        {
+                            await DisplayAlert("Upload Error", json_response.Message, "Okay");
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        await DisplayAlert("Error", exception.Message, "OK");
+                    }
 
 
                     signatureStackLayout.IsVisible = false;
@@ -331,11 +332,11 @@ namespace ASolute_Mobile
                             contPrefix.IsEnabled = false;
                             contNumber.IsEnabled = false;
                         }
-                        catch(Exception exception)
+                        catch (Exception exception)
                         {
                             await DisplayAlert("Sub string Error", exception.Message, "OK");
                         }
-                        
+
                     }
                 }
             }
@@ -458,6 +459,7 @@ namespace ASolute_Mobile
                 trailerContainerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 trailerContainerGrid.IsVisible = false;
 
+                int count = 0;
                 foreach (DetailItems detailItem in jobDetails)
                 {
                     Label label = new Label();
@@ -466,18 +468,32 @@ namespace ASolute_Mobile
                     {
                         label.Text = detailItem.Caption + ":  " + detailItem.Value;
                         jobNo = detailItem.Caption + " :  " + detailItem.Value;
-                        label.FontAttributes = FontAttributes.Bold;
+
                     }
                     else if (detailItem.Caption == "")
                     {
                         label.Text = detailItem.Value;
-                        label.FontAttributes = FontAttributes.Bold;
+
+                    }
+                    else if(count == 0)
+                    {
+                        label.Text = detailItem.Caption + ":  " + detailItem.Value;
+                        count++;
+                        action = detailItem.Value;
+                     
+                    }
+                    else if(detailItem.Caption ==  "Booking")
+                    {
+                        label.Text = detailItem.Caption + ":  " + detailItem.Value;
+                        booking = detailItem.Value;
                     }
                     else
                     {
                         label.Text = detailItem.Caption + ":  " + detailItem.Value;
-                        label.FontAttributes = FontAttributes.Bold;
+
                     }
+
+                    label.FontAttributes = FontAttributes.Bold;
 
                     StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 5, 0, 5) };
                     stackLayout.Children.Add(label);
@@ -736,7 +752,7 @@ namespace ASolute_Mobile
                     HeightRequest = 50,
                     VerticalOptions = LayoutOptions.Center
                 };
-                var printing = new TapGestureRecognizer();
+               /* var printing = new TapGestureRecognizer();
                 printing.Tapped += async (sender, e) =>
                 {
                     savedTrailer = trailerEntry.Text;
@@ -761,7 +777,41 @@ namespace ASolute_Mobile
 
                 };
                 printer.GestureRecognizers.Add(printing);
-                mapPhoneStackLayout.Children.Add(printer);
+                mapPhoneStackLayout.Children.Add(printer);*/
+
+                Image barcode = new Image
+                {
+                    Source = "barCode.png",
+                    WidthRequest = 50,
+                    HeightRequest = 50,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var barCode = new TapGestureRecognizer();
+                barCode.Tapped += async (sender, e) =>
+                {
+                    savedTrailer = trailerEntry.Text;
+                    savedContPre = contPrefix.Text;
+                    savedNumber = contNumber.Text;
+                    savedSealNo = sealEntry.Text;
+                    savedMGW = mgwEntry.Text;
+                    savedTare = tareEntry.Text;
+                    savedRemark = remarkTextEditor.Text;
+                    if (check1.Checked)
+                    {
+                        collectSealStatus = true;
+                        checking = "true";
+                    }
+                    else
+                    {
+                        collectSealStatus = false;
+                        checking = "false";
+                    }
+
+                    await PopupNavigation.Instance.PushAsync(new BarCodePopUp(action,booking));
+
+                };
+                barcode.GestureRecognizers.Add(barCode);
+                mapPhoneStackLayout.Children.Add(barcode);
 
                 print = new SfBusyIndicator()
                 {
@@ -1061,12 +1111,12 @@ namespace ASolute_Mobile
 
                 DisplayImage();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 await DisplayAlert("Error", e.Message, "OK");
             }
 
-         
+
         }
 
         public async void EmptyPickupObject()
@@ -1256,7 +1306,7 @@ namespace ASolute_Mobile
             {
                 images.Clear();
                 imageGrid.Children.Clear();
-                if(jobItem.Done == 0)
+                if (jobItem.Done == 0)
                 {
                     images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
                 }
@@ -1264,17 +1314,17 @@ namespace ASolute_Mobile
                 foreach (AppImage Image in images)
                 {
                     byte[] imageByte;
-               
-                        IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
-                        Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
 
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
-                            stream.CopyTo(ms);  // was empty without stream.Position = 0;
-                            imageByte = ms.ToArray();
-                        }                 
-                    var image = new Image();                                       
+                    IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
+                    Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
+                        stream.CopyTo(ms);  // was empty without stream.Position = 0;
+                        imageByte = ms.ToArray();
+                    }
+                    var image = new Image();
                     image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
                     AddThumbnailToImageGrid(image, Image);
                 }
@@ -1290,16 +1340,16 @@ namespace ASolute_Mobile
         {
             print.IsVisible = true;
 
-            var content = await CommonFunction.CallWebService(0,null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNote(currentJobId));
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNote(currentJobId));
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            if(response.IsGood)
+            if (response.IsGood)
             {
-                if(response.Result.Count != 0)
+                if (response.Result.Count != 0)
                 {
                     try
                     {
-                        if(connectedPrinter == false)
+                        if (connectedPrinter == false)
                         {
 
                             bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
@@ -1321,7 +1371,7 @@ namespace ASolute_Mobile
                         System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
                         string detail = "";
                         int detailCount = 0;
-                        foreach(string details in response.Result)
+                        foreach (string details in response.Result)
                         {
                             detailCount++;
 
@@ -1330,7 +1380,7 @@ namespace ASolute_Mobile
                                 detail = details.Replace("<H>", "");
                                 WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
                             }
-                            else if(details.Contains("<B>"))
+                            else if (details.Contains("<B>"))
                             {
                                 detail = details.Replace("<B>", "");
                                 WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
@@ -1342,7 +1392,7 @@ namespace ASolute_Mobile
                             }
 
 
-                            if(detailCount  == response.Result.Count)
+                            if (detailCount == response.Result.Count)
                             {
                                 detail = detail + "\r\n\r\n";
                             }
@@ -1350,7 +1400,7 @@ namespace ASolute_Mobile
                             {
                                 detail = detail + "\r\n";
                             }
-                           
+
 
                             WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(detail));
 
