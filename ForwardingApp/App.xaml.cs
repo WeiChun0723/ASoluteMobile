@@ -62,10 +62,10 @@ namespace ASolute_Mobile
             /*   Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
            MainPage = new CustomNavigationPage(new AppNavigation());*/
 
-            OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
+            /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
                        .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
                        .HandleNotificationReceived(HandleNotificationReceived)
-                       .EndInit();
+                       .EndInit(); */
 
         }
 

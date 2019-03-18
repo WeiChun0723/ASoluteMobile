@@ -60,8 +60,8 @@ namespace ASolute_Mobile
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
-            await GetBaseURL();
+            organization.Text = Ultis.Settings.AppEnterpriseName;
+            // await GetBaseURL();
 
         }
       
@@ -98,7 +98,7 @@ namespace ASolute_Mobile
                 try
                 {
                    var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
-                  //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                 // var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)

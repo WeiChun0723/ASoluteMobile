@@ -14,8 +14,6 @@ using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Plugin.DeviceInfo;
-using Plugin.Geolocator;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -29,7 +27,6 @@ namespace ASolute_Mobile
 
         public MainMenuItem()
         {
-
             search.IsVisible = false;
 
             ListViewCommonScreen.title1.Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
@@ -128,8 +125,7 @@ namespace ASolute_Mobile
                         await Navigation.PushAsync(new HaulageScreen.DriverRFC(((AppMenu)e.Item).name));
                         break;
                     case "EqList":
-                        //await Navigation.PushAsync(new Planner.EqCategory());
-                        await Navigation.PushAsync(new AllTruckMap(((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new Planner.EqCategory());
                         break;
                     case "TallyIn":
                         Ultis.Settings.Title = ((AppMenu)e.Item).name;
@@ -138,7 +134,6 @@ namespace ASolute_Mobile
                     case "PalletTrx":
                         await Navigation.PushAsync(new WMS_Screen.PalletMovement(((AppMenu)e.Item).name));
                         break;
-                
                     case "Packing":
                         await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
                         break;
@@ -150,6 +145,9 @@ namespace ASolute_Mobile
                         break;
                     case "LoosePick":
                         await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        break;
+                    case "MapView":
+                        await Navigation.PushAsync(new  AllTruckMap(((AppMenu)e.Item).name));
                         break;
                 }
 
@@ -218,7 +216,6 @@ namespace ASolute_Mobile
             {
                 LoadMainMenu();
             }
-
         }
 
         protected override void OnDisappearing()
@@ -229,7 +226,7 @@ namespace ASolute_Mobile
         }
 
         //press twice back button to exit the app within 3 second
-        /*protected override bool OnBackButtonPressed()
+       /* protected override bool OnBackButtonPressed()
         {
             if (doubleBackToExitPressedOnce)
             {
@@ -421,16 +418,16 @@ namespace ASolute_Mobile
             }
         }
 
-        public void CloseApp()
+        /*public void CloseApp()
         {
             if (Device.RuntimePlatform == Device.Android)
             {
 
-                LocationApp.StopLocationService();
+                //LocationApp.StopLocationService();
                 DependencyService.Get<CloseApp>().close_app();
 
             }
-        }
+        }*/
 
         // load the item that stored in db to the list view by using custom view cell
         public void LoadMainMenu()

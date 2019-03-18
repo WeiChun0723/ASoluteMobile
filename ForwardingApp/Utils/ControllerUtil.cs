@@ -233,7 +233,7 @@ namespace ASolute_Mobile.Utils
             return String.Format("Equipment/Detail?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), equipment);
         }
 
-        public static String getAllEq()
+        public static String GetAllEq()
         {
             return String.Format("Equipment/ListAll?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }

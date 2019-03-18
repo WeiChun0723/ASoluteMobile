@@ -69,12 +69,19 @@
             </inputLayout:SfTextInputLayout.TrailingView>
             </inputLayout:SfTextInputLayout>
             
+            
+            <StackLayout Orientation="Horizontal" Spacing="15">
             <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="ConfirmPicking"/>
                     </Image.GestureRecognizers>
             </Image>
-            
+            <Image Source="printing.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="Center" x:Name="printing_icon" IsEnabled="True">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ConfirmPicking"/>
+                    </Image.GestureRecognizers>
+            </Image>
+            </StackLayout>
         </StackLayout>
         
     </ScrollView>

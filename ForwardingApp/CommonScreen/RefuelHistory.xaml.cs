@@ -58,6 +58,7 @@ namespace ASolute_Mobile
             }
 
             Ultis.Settings.App = "Haulage";
+
         }
 
         protected override async void OnAppearing()

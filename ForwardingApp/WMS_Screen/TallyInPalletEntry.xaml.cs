@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
+using ASolute_Mobile.CustomRenderer;
+using ASolute_Mobile.InputValidation;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,6 +22,8 @@ namespace ASolute_Mobile.WMS_Screen
         List<string> unit = new List<string>();
         List<string> status = new List<string>();
         bool tapped = true;
+        CustomEntry customEntry;
+        CustomDatePicker customDatePicker;
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID)
         {
@@ -30,12 +34,6 @@ namespace ASolute_Mobile.WMS_Screen
             productPallet = product;
 
             Title = "Tally In # " + product.ProductCode;
-
-            expDatePicker.MinimumDate = DateTime.Now;
-            manuDatePicker.MinimumDate = DateTime.Now;
-
-            expDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            manuDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
             palletDesc.Children.Clear();
 
@@ -64,11 +62,6 @@ namespace ASolute_Mobile.WMS_Screen
 
             Label bottomBlank = new Label();
             palletDesc.Children.Add(bottomBlank);
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
 
             GetNewPalletList();
         }
@@ -103,38 +96,94 @@ namespace ASolute_Mobile.WMS_Screen
 
                 statusBox.Text = newPallet.DefaultStockStatus;
 
+                int row = 4, column = 0;
                 foreach (clsAttribute attr in newPallet.Attribute)
                 {
-                    if (attr.Caption == "Lot No")
+                    grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+
+                    Label fieldLbl = new Label
                     {
-                        string1lbl.IsVisible = true;
-                        lotEntry.IsVisible = true;
-                        String01.Text = attr.Caption;
-                    }
-                    else if (attr.Caption == "Batch No")
+                        Text = attr.Caption,
+                        FontAttributes = FontAttributes.Bold,
+                        VerticalTextAlignment = TextAlignment.Center
+                    };
+
+                    StackLayout entryStack = new StackLayout
                     {
-                        string2lbl.IsVisible = true;
-                        batEntry.IsVisible = true;
-                        String02.Text = attr.Caption;
-                    }
-                    else if (attr.Caption == "Color")
+                        Orientation = StackOrientation.Horizontal,
+                        StyleId = attr.Key
+                    };
+
+
+                    if (attr.Key.Equals("ExpiryDate") || attr.Key.Equals("MfgDate"))
                     {
-                        string3lbl.IsVisible = true;
-                        colorEnrty.IsVisible = true;
-                        String03.Text = attr.Caption;
+                        customDatePicker = new CustomDatePicker
+                        {
+                            StyleId = attr.Key,
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            Date = DateTime.Now.AddDays(-1),
+                            NullableDate = null
+                        };
+
+                        entryStack.Children.Add(customDatePicker);
                     }
-                    else if (attr.Caption == "Exp Date")
+                    else
                     {
-                        explbl.IsVisible = true;
-                        expEntry.IsVisible = true;
-                        ExpiryDate.Text = attr.Caption;
+                        customEntry = new CustomEntry
+                        {
+                            StyleId = attr.Key,
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+
+                        };
+
+                        customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 20 });
+
+
+                        entryStack.Children.Add(customEntry);
                     }
-                    else if (attr.Caption == "Manu Date")
+
+                    if (attr.Value.Equals("O") || attr.Value.Equals(""))
                     {
-                        manulbl.IsVisible = true;
-                        manuEntry.IsVisible = true;
-                        MgfDate.Text = attr.Caption;
+                        customEntry.LineColor = Color.WhiteSmoke;
+
                     }
+                    else if (attr.Value.Equals("M"))
+                    {
+                        customEntry.LineColor = Color.LightYellow;
+                        customDatePicker.BackgroundColor = Color.LightYellow;
+                    }
+
+                    Image scan = new Image
+                    {
+                        Source = "barCode.png",
+                        WidthRequest = 60,
+                        HeightRequest = 30,
+                        VerticalOptions = LayoutOptions.Center,
+                        StyleId = attr.Key
+                    };
+
+                    var scan_barcode = new TapGestureRecognizer
+                    {
+                        NumberOfTapsRequired = 1
+                    };
+
+                    scan_barcode.Tapped += (sender, e) =>
+                    {
+                        var image = sender as Image;
+
+                        EntryScan(image);
+                    };
+                    scan.GestureRecognizers.Add(scan_barcode);
+
+                    entryStack.Children.Add(scan);
+
+
+                    grid.Children.Add(fieldLbl, column, row);
+                    column++;
+                    grid.Children.Add(entryStack, column, row);
+                    row++;
+                    column = 0;
+
                 }
 
             }
@@ -144,74 +193,65 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-
-
         void PalletScan(object sender, EventArgs e)
         {
             fieldName = "PalletScan";
             BarCodeScan(fieldName);
         }
 
-        void EntryScan(object sender, EventArgs e)
+        async void EntryScan(Image image)
         {
-            var image = sender as Image;
-
-            if (image.StyleId.Equals("batchNum"))
+            try
             {
-                fieldName = "BatchScan";
-                BarCodeScan(fieldName);
+                var scanPage = new ZXingScannerPage();
+                await Navigation.PushAsync(scanPage);
+
+                scanPage.OnScanResult += (result) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Navigation.PopAsync();
+
+                        CustomEntry entry = null;
+                        CustomDatePicker picker = null;
+
+                        foreach (View t in grid.Children)
+                        {
+                            if (t.StyleId == image.StyleId)
+                            {
+                                var stack = (StackLayout)t;
+
+                                foreach (View v in stack.Children)
+                                {
+                                    if (v.StyleId == image.StyleId)
+                                    {
+                                        string type = v.GetType().ToString();
+
+                                        if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
+                                        {
+                                            entry = (CustomEntry)v;
+                                            entry.Text = result.Text;
+                                        }
+                                        else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
+                                        {
+                                            picker = (CustomDatePicker)v;
+                                            picker.Date = DateTime.Parse(result.Text);
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
+
+
+                    });
+                };
             }
-            else if (image.StyleId.Equals("lotNum"))
+            catch
             {
-                fieldName = "LotScan";
-                BarCodeScan(fieldName);
+
             }
-            else if (image.StyleId.Equals("manuDateScan"))
-            {
-                fieldName = "ManuScan";
-                BarCodeScan(fieldName);
-            }
-        }
-
-        void ExpiryDateScan(object sender, EventArgs e)
-        {
-            fieldName = "ExpiryScan";
-            BarCodeScan(fieldName);
-        }
-
-        void DateEntry_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
-        {
-
-
-            var dateEntry = sender as Entry;
-
-            if (dateEntry.StyleId.Equals("expDate"))
-            {
-                expDatePicker.Focus();
-                expDate.Unfocus();
-            }
-            else
-            {
-                manuDatePicker.Focus();
-                manuDate.Unfocus();
-            }
-
-        }
-
-        void DatePicker_DateSelected(object sender, Xamarin.Forms.DateChangedEventArgs e)
-        {
-            var date = sender as DatePicker;
-
-
-            if (date.StyleId.Equals("expDatePicker"))
-            {
-                expDate.Text = expDatePicker.Date.ToString("dd/MM/yyyy");
-            }
-            else
-            {
-                manuDate.Text = manuDatePicker.Date.ToString("dd/MM/yyyy");
-            }
-
         }
 
         async void BarCodeScan(string field)
@@ -230,31 +270,8 @@ namespace ASolute_Mobile.WMS_Screen
                         {
                             await Navigation.PopAsync();
 
-                            if (field == "PalletScan")
-                            {
-                                palletNo.Text = result.Text;
+                            palletNo.Text = result.Text;
 
-                            }
-                            else if (field == "BatchScan")
-                            {
-
-                                batchNo.Text = result.Text;
-                            }
-                            else if (field == "LotScan")
-                            {
-                                lotNo.Text = result.Text;
-                            }
-                            else if (field == "ManuScan")
-                            {
-                                DateTime enteredDate = DateTime.Parse(result.Text);
-                                manuDatePicker.Date = enteredDate;
-                            }
-                            else if (field == "ExpiryScan")
-                            {
-                                DateTime enteredDate = DateTime.Parse(result.Text);
-                                expDatePicker.Date = enteredDate;
-
-                            }
                         });
                     };
                 }
@@ -291,13 +308,15 @@ namespace ASolute_Mobile.WMS_Screen
                         Qty = Convert.ToInt32(quantity.Text),
                         Uom = newPallet.ProductUom[unitBox.SelectedIndex].Key,
                         StockStatus = statusBox.Text,
-                        String01 = (!(String.IsNullOrEmpty(lotNo.Text))) ? lotNo.Text : String.Empty,
-                        String02 = (!(String.IsNullOrEmpty(batchNo.Text))) ? batchNo.Text : String.Empty,
-                        String03 = (!(String.IsNullOrEmpty(color.Text))) ? color.Text : String.Empty,
+                        String01 = (!(String.IsNullOrEmpty(SearchControl("String01")))) ? SearchControl("String01") : String.Empty,
+                        String02 = (!(String.IsNullOrEmpty(SearchControl("String02")))) ? SearchControl("String02") : String.Empty,
+                        String03 = (!(String.IsNullOrEmpty(SearchControl("String03")))) ? SearchControl("String03") : String.Empty,
+                        String04 = (!(String.IsNullOrEmpty(SearchControl("String04")))) ? SearchControl("String04") : String.Empty,
+                        String05 = (!(String.IsNullOrEmpty(SearchControl("String05")))) ? SearchControl("String05") : String.Empty,
+                        String06 = (!(String.IsNullOrEmpty(SearchControl("String06")))) ? SearchControl("String06") : String.Empty,
+                        ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate")))) ? SearchControl("ExpiryDate") : String.Empty,
+                        MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate")))) ? SearchControl("MfgDate") : String.Empty,
                     };
-
-                    pallet.ExpiryDate = (expDatePicker.Date.ToString("yyyy-MM-dd") == DateTime.Now.Date.ToString("yyyy-MM-dd")) ? String.Empty : expDatePicker.Date.ToString("yyyy-MM-dd");
-                    pallet.MfgDate = (manuDatePicker.Date.ToString("yyyy-MM-dd") == DateTime.Now.Date.ToString("yyyy-MM-dd")) ? String.Empty : manuDatePicker.Date.ToString("yyyy-MM-dd");
 
                     var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPallet(id));
                     clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -310,13 +329,24 @@ namespace ASolute_Mobile.WMS_Screen
                         quantity.Text = String.Empty;
                         unitBox.Text = String.Empty;
                         statusBox.Text = newPallet.DefaultStockStatus;
-                        batchNo.Text = String.Empty;
-                        expDate.Text = String.Empty;
-                        //datePicker.Date = Convert.ToDateTime("");
+
+                        List<string> dynamicFields = new List<string>
+                        {
+                            "String01",
+                            "String02",
+                            "String03",
+                            "String04",
+                            "String05",
+                            "String06",
+                            "ExpiryDate",
+                            "MfgDate",
+                        };
+                        ClearValue(dynamicFields);
                     }
                     else
                     {
                         await DisplayAlert("Error", upload_response.Message, "OK");
+                      
                     }
 
                 }
@@ -331,5 +361,76 @@ namespace ASolute_Mobile.WMS_Screen
             }
 
         }
+
+        string SearchControl(string controlID)
+        {
+            foreach (View t in grid.Children)
+            {
+                if (t.StyleId == controlID)
+                {
+                    var stack = (StackLayout)t;
+
+                    foreach (View v in stack.Children)
+                    {
+                        if (v.StyleId == controlID)
+                        {
+                            string type = v.GetType().ToString();
+
+                            if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
+                            {
+                                CustomEntry entry = (CustomEntry)v;
+                                return entry.Text;
+                            }
+                            else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
+                            {
+                                CustomDatePicker picker = (CustomDatePicker)v;
+                                return picker.Date.ToString("yyyy-MM-dd");
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        void ClearValue(List<string> fields)
+        {
+            foreach (string name in fields)
+            {
+                foreach (View t in grid.Children)
+                {
+                    if (t.StyleId == name)
+                    {
+                        var stack = (StackLayout)t;
+
+                        foreach (View v in stack.Children)
+                        {
+                            if (v.StyleId == name)
+                            {
+                                string type = v.GetType().ToString();
+
+                                if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
+                                {
+                                    CustomEntry entry = (CustomEntry)v;
+                                    entry.Text = String.Empty;
+                                }
+                                else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
+                                {
+                                    CustomDatePicker picker = (CustomDatePicker)v;
+                                    picker.Date = DateTime.Now.AddDays(-1);
+                                    picker.NullableDate = null;
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+           
     }
 }

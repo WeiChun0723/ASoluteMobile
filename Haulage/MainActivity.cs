@@ -34,31 +34,40 @@ namespace ASolute_Mobile.Droid
         protected override void OnCreate(Bundle bundle)
         {
 
-            TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
-                
-            ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
-            
-            base.OnCreate(bundle);
+            try
+            {
+                TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
 
-            RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+                ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
 
-            Rg.Plugins.Popup.Popup.Init(this, bundle);
-            Xamarin.Essentials.Platform.Init(this, bundle);
-            global::Xamarin.Forms.Forms.Init(this, bundle);
-            Xamarin.FormsMaps.Init(this, bundle);
-            Xamarin.FormsGoogleMaps.Init(this, bundle);
-            UserDialogs.Init(this);
-            ZXing.Net.Mobile.Forms.Android.Platform.Init();
+                base.OnCreate(bundle);
 
-            LoadApplication(new App());
 
-            if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
-             {
-                 StartLocationTracking();
+                //RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
 
-             }
+                Rg.Plugins.Popup.Popup.Init(this, bundle);
+                //Xamarin.Essentials.Platform.Init(this, bundle);
+                global::Xamarin.Forms.Forms.Init(this, bundle);
+                Xamarin.FormsMaps.Init(this, bundle);
+                Xamarin.FormsGoogleMaps.Init(this, bundle);
+                UserDialogs.Init(this);
+                ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
-            App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;       
+                LoadApplication(new App());
+
+                if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                 {
+                    // StartLocationTracking();
+
+                 }
+
+                App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
+            }
+            catch
+            {
+
+            }
+                 
         }
 
 
@@ -90,7 +99,7 @@ namespace ASolute_Mobile.Droid
             {
                 if(permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
-                    StartLocationTracking();
+                   // StartLocationTracking();
                 }
 
             }
@@ -123,7 +132,7 @@ namespace ASolute_Mobile.Droid
             //LocationApp.StopLocationService();
 
         }
-
+        
         public override void OnBackPressed()
         {
             if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
@@ -133,7 +142,7 @@ namespace ASolute_Mobile.Droid
             else
             {
                 // Do something if there are not any pages in the `PopupStack`
-            }
+            } 
         }
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)

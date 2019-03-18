@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
@@ -18,8 +19,6 @@ namespace ASolute_Mobile
             InitializeComponent();
 
             NavigationPage.SetHasNavigationBar(this, false);
-
-
         }
 
         protected override async void OnAppearing()
@@ -48,33 +47,43 @@ namespace ASolute_Mobile
 
         public async void GetBaseURL(object s, EventArgs e)
         {
-            loading.IsVisible = true;
 
-            if (!String.IsNullOrEmpty(enterpriseEntry.Text))
+            try
             {
-                Ultis.Settings.AppFirstInstall = "Second";
+                loading.IsVisible = true;
 
-                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text)));
-
-                if (json_response.IsGood)
+                if (!String.IsNullOrEmpty(enterpriseEntry.Text))
                 {
-                    Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text.ToUpper();
-                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    Ultis.Settings.AppFirstInstall = "Second";
+
+                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text)));
+
+                    if (json_response.IsGood)
+                    {
+                        Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text.ToUpper();
+                        Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    }
+                    else
+                    {
+                        await DisplayAlert("Json Error", json_response.Message, "OK");
+                    }
+
+                    Application.Current.MainPage = new NavigationPage(new LoginPage());
+
                 }
                 else
                 {
-                    await DisplayAlert("Json Error", json_response.Message, "OK");
+                    await DisplayAlert("Missing field", "Please fill in all field.", "OK");
                 }
 
-                Application.Current.MainPage = new NavigationPage(new LoginPage());
-
+                loading.IsVisible = false;
             }
-            else
+            catch(HttpRequestException exception)
             {
-                await DisplayAlert("Missing field", "Please fill in all field.", "OK");
+                await DisplayAlert("Unable to connect", "Please connect to internet", "OK");
             }
 
-            loading.IsVisible = false;
+           
         }
 
     }

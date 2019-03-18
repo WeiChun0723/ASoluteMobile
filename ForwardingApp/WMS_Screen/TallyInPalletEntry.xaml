@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.WMS_Screen.TallyInPalletEntry" xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" xmlns:local="clr-namespace:ASolute_Mobile.InputValidation" BackgroundColor="#E5E5E5">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.WMS_Screen.TallyInPalletEntry" 
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" 
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" 
+             xmlns:local="clr-namespace:ASolute_Mobile.InputValidation" BackgroundColor="#E5E5E5">
     <ScrollView>
         <StackLayout Padding="15,15,15,15" Spacing="30">
             <StackLayout x:Name="palletDesc" BackgroundColor="#D4D4D4">
             </StackLayout>
-            <Grid RowSpacing="15" ColumnSpacing="0">
+            <Grid RowSpacing="15" ColumnSpacing="0" x:Name="grid">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -35,26 +35,30 @@
                         </Image.GestureRecognizers>
                     </Image>
                 </StackLayout>
+               
                 <StackLayout Padding="0,10,0,0" Grid.Row="1" Grid.Column="0">
-                    <Label Text="Pallet Size " FontAttributes="Bold" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">
                     <Label Text="Quantity" FontAttributes="Bold" />
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <controls:CustomEntry x:Name="quantity" HeightRequest="30" HorizontalOptions="FillAndExpand" LineColor="LightYellow" Keyboard="Numeric" />
                     <combobox:SfComboBox HeightRequest="40" x:Name="unitBox" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
                 </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="3" Grid.Column="0">
+                <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">
                     <Label Text="Status" FontAttributes="Bold" WidthRequest="150" />
                 </StackLayout>
-                <combobox:SfComboBox Grid.Row="3" Grid.Column="1" HeightRequest="40" x:Name="statusBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
-                <StackLayout Padding="0,10,0,0" Grid.Row="4" Grid.Column="0" x:Name="string1lbl" IsVisible="false">
+                <combobox:SfComboBox Grid.Row="2" Grid.Column="1" HeightRequest="40" x:Name="statusBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
+               
+                 <StackLayout Padding="0,10,0,0" Grid.Row="3" Grid.Column="0">
+                    <Label Text="Pallet Size " FontAttributes="Bold" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
+                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
+                </StackLayout>
+                
+                <!--<StackLayout Padding="0,10,0,0" Grid.Row="4" Grid.Column="0" x:Name="string1lbl" IsVisible="false">
                     <Label Text="Lot No" FontAttributes="Bold" x:Name="String01"/>
                 </StackLayout>
+                
                 <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal" x:Name="lotEntry" IsVisible="false">
                     <controls:CustomEntry x:Name="lotNo" HeightRequest="30" HorizontalOptions="Fill" LineColor="WhiteSmoke" WidthRequest="150">
                         <controls:CustomEntry.Behaviors>
@@ -91,11 +95,11 @@
                             <local:MaxLengthValidation MaxLength="50" />
                         </controls:CustomEntry.Behaviors>
                     </controls:CustomEntry>
-                    <!--<Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center">
+                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="string03">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="BatchScan" />
+                            <TapGestureRecognizer Tapped="EntryScan" />
                         </Image.GestureRecognizers>
-                    </Image>-->
+                    </Image>
                 </StackLayout>
                 <StackLayout Padding="0,10,0,0" Grid.Row="7" Grid.Column="0" x:Name="explbl" IsVisible="false">
                     <Label Text="Exp Date" FontAttributes="Bold" x:Name="ExpiryDate"/>
@@ -120,9 +124,10 @@
                             <TapGestureRecognizer Tapped="EntryScan" />
                         </Image.GestureRecognizers>
                     </Image>
-                </StackLayout>
+                </StackLayout>-->
             </Grid>
-            <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
+
+            <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"  HorizontalOptions="Center" x:Name="confirm_icon">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ConfirmAddPallet" />
                 </Image.GestureRecognizers>

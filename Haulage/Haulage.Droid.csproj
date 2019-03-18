@@ -446,9 +446,6 @@
     <Reference Include="Xamarin.Forms.GoogleMaps">
       <HintPath>..\packages\Xamarin.Forms.GoogleMaps.3.0.4\lib\MonoAndroid70\Xamarin.Forms.GoogleMaps.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Essentials">
-      <HintPath>..\packages\Xamarin.Essentials.1.0.1\lib\monoandroid81\Xamarin.Essentials.dll</HintPath>
-    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
     <Reference Include="Syncfusion.SfBarcode.Android">

@@ -42,6 +42,7 @@ namespace ASolute_Mobile
 
             StackLayout main = new StackLayout();
 
+
             Label title1 = new Label
             {
                 FontSize = 15,
@@ -59,7 +60,7 @@ namespace ASolute_Mobile
             main.Children.Add(title1);
             main.Children.Add(title2);
 
-            NavigationPage.SetTitleView(this, main);
+            NavigationPage.SetTitleView(this, main); 
 
             if (Ultis.Settings.Language.Equals("English"))
             {
@@ -70,7 +71,7 @@ namespace ASolute_Mobile
             {
                 Title = "Isi Minyak";
                 liter.Placeholder = "Maksimum 500 liter.";
-            }        
+            } 
 
             //generate id for the image to link with the record for offline sync 
             Guid fuelRecord = Guid.NewGuid();
@@ -90,7 +91,7 @@ namespace ASolute_Mobile
             {
                 DownloadDefaultValue();
             }
-                    
+
         }
 
         protected override void OnAppearing()

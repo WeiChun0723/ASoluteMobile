@@ -84,11 +84,13 @@ namespace ASolute_Mobile.Planner
 
                 if (category != null)
                 {
-                    await Navigation.PushAsync(new EquipmentDetails(category.Caption,null));
+                    await Navigation.PushAsync(new EquipmentDetails(category.Caption, null));
                 }
             }
-           catch
+            catch(Exception ex)
             {
+
+                //await DisplayAlert("error", ex.Message, "ok");
                 //this is to avoid app be crash when the user press the grid header.
             }
         }

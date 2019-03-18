@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSWMS" android:installLocation="auto" android:versionCode="39" android:versionName="2">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSWMS" android:installLocation="auto" android:versionCode="40" android:versionName="3">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,8 +15,6 @@
 	<uses-permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-	<uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
-	<uses-permission android:name="android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND" />
 	<application android:name="AILS Haulage" android:theme="@style/MyTheme" android:label="AILS WMS" android:icon="@drawable/appIcon">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>

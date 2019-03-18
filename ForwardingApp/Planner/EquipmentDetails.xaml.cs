@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
@@ -21,10 +22,8 @@ namespace ASolute_Mobile.Planner
 
             if(!(String.IsNullOrEmpty(equipmentNo)))
             {
-                GetEquipmentDetails();
+                Task.Run(async () => { await GetEquipmentDetails(); }).Wait(); 
             }
-
-           
 
             if(truckingModel != null)
             {
@@ -38,9 +37,11 @@ namespace ASolute_Mobile.Planner
             Label title1 = new Label
             {
                 FontSize = 15,
-                Text = truckingModel.Id,
+
                 TextColor = Color.White
             };
+
+            title1.Text = (truckingModel == null) ? eq : truckingModel.Id;
 
             Label title2 = new Label
             {
@@ -108,7 +109,7 @@ namespace ASolute_Mobile.Planner
             }
         }
 
-        async void GetEquipmentDetails()
+        async Task GetEquipmentDetails()
         {
             var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getEqDetail(equipmentNo));
             clsResponse equipment_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -120,7 +121,7 @@ namespace ASolute_Mobile.Planner
 
                 DisplayTruckDetails(equipment);
 
-                ShowOnMap();
+                //ShowOnMap();
             }
             else
             {

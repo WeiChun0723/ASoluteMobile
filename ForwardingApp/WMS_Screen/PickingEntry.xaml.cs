@@ -11,10 +11,11 @@ namespace ASolute_Mobile.WMS_Screen
 {
     public partial class PickingEntry : ContentPage
     {
+        List<clsWhsItem> clsWhsItems = new List<clsWhsItem>();
         string fieldName, linkID, pickingTitle;
         bool tapped = true;
 
-        public PickingEntry(clsWhsItem summary, string id, string title)
+        public PickingEntry(clsWhsItem summary, string id, string title, List<clsWhsItem> items)
         {
             InitializeComponent();
 
@@ -25,8 +26,7 @@ namespace ASolute_Mobile.WMS_Screen
             Label topBlank = new Label();
             pickingDesc.Children.Add(topBlank);
 
-
-
+            clsWhsItems = items;
 
             foreach (clsCaptionValue desc in summary.Summary)
             {
@@ -56,7 +56,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         }
 
-        async void PalletIDScan(object sender, EventArgs e)
+        async void PalletIDScan(object sender, EventArgs e)           
         {
             fieldName = "PalletIDScan";
             BarCodeScan(fieldName);
@@ -70,7 +70,6 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void BarCodeScan(string field)
         {
-
             if(tapped)
             {
                 tapped = false;

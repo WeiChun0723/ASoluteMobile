@@ -450,6 +450,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\BarCodePopUp.xaml.cs">
       <DependentUpon>BarCodePopUp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomDatePicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

@@ -70,7 +70,7 @@ namespace ASolute_Mobile.WMS_Screen
                     pickingDesc.Children.Add(caption);
                 }
 
-                Label bottomBlank = new Label();
+                Label bottomBlank = new Label();               
                 pickingDesc.Children.Add(bottomBlank);
                
                 dataGrid.ItemsSource = pickingDetails.Items;
@@ -99,7 +99,6 @@ namespace ASolute_Mobile.WMS_Screen
 
         void Handle_Refreshed(object sender, System.EventArgs e)
         {
-
             pullToRefresh.IsRefreshing = false;
         }
 
@@ -110,7 +109,7 @@ namespace ASolute_Mobile.WMS_Screen
 
             if (product != null)
             {
-                await Navigation.PushAsync(new PickingEntry(product,linkID,pickingTitle));
+                await Navigation.PushAsync(new PickingEntry(product,linkID,pickingTitle, pickingDetails.Items));
             }
         }
     }

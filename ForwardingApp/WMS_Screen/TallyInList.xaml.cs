@@ -26,8 +26,6 @@ namespace ASolute_Mobile.WMS_Screen
 
             Title = title;
 
-
-           
         }
 
         protected override void OnAppearing()
