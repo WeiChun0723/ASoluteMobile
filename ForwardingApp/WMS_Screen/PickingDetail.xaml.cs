@@ -15,10 +15,10 @@ namespace ASolute_Mobile.WMS_Screen
         string pickingID,pickingType, linkID, pickingTitle;
         clsWhsHeader pickingDetails;
 
+
         public PickingDetail(string id , string pickingtype ,string title)
         {
             InitializeComponent();
-
             pickingID = id;
             pickingType = pickingtype;
             pickingTitle = title;
@@ -27,7 +27,6 @@ namespace ASolute_Mobile.WMS_Screen
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             GetPickingDetails();
         }
 

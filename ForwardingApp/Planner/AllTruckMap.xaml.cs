@@ -68,7 +68,7 @@ namespace ASolute_Mobile.Planner
                         var pin = new Pin
                         {
                             Position = new Position(Convert.ToDouble(equipment.Latitude), Convert.ToDouble(equipment.Longitude)),
-                            Label = equipment.TruckId ,
+                            Label = equipment.TruckId + "/" + equipment.BackColor.ToUpper() 
 
                         };
 

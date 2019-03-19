@@ -18,7 +18,28 @@ namespace ASolute_Mobile.Planner
         {
             InitializeComponent();
             eqCategory = category;
-            Title = category;
+
+            StackLayout main = new StackLayout();
+
+            Label title1 = new Label
+            {
+                FontSize = 15,
+                Text = category,
+                TextColor = Color.White
+            };
+
+            Label title2 = new Label
+            {
+                FontSize = 10,
+                Text = Ultis.Settings.SubTitle,
+                TextColor = Color.White
+            };
+
+            main.Children.Add(title1);
+            main.Children.Add(title2);
+
+            NavigationPage.SetTitleView(this, main);
+
 
             EquipmentData();
 

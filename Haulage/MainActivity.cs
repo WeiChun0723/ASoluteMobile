@@ -25,12 +25,12 @@ using Haulage.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
         readonly string logTag = "MainActivity";
-             
+
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -43,7 +43,7 @@ namespace ASolute_Mobile.Droid
                 base.OnCreate(bundle);
 
 
-                //RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+                RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
 
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
                 //Xamarin.Essentials.Platform.Init(this, bundle);
@@ -55,11 +55,11 @@ namespace ASolute_Mobile.Droid
 
                 LoadApplication(new App());
 
-                if(CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
-                 {
-                    // StartLocationTracking();
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                {
+                    StartLocationTracking();
 
-                 }
+                }
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
             }
@@ -67,26 +67,26 @@ namespace ASolute_Mobile.Droid
             {
 
             }
-                 
+
         }
 
 
         public void StartLocationTracking()
         {
-           
-                    LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
-                    {
-                        Log.Debug(logTag, "ServiceConnected Event Raised");
+
+            LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
+            {
+                Log.Debug(logTag, "ServiceConnected Event Raised");
                         // notifies us of location changes from the system
                         LocationApp.Current.LocationService.LocationChanged += HandleLocationChanged;
                         //notifies us of user changes to the location provider (ie the user disables or enables GPS)
                         LocationApp.Current.LocationService.ProviderDisabled += HandleProviderDisabled;
-                        LocationApp.Current.LocationService.ProviderEnabled += HandleProviderEnabled;
+                LocationApp.Current.LocationService.ProviderEnabled += HandleProviderEnabled;
                         // notifies us of the changing status of a provider (ie GPS no longer available)
                         LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
-                    };
+            };
 
-                    LocationApp.StartLocationService();
+            LocationApp.StartLocationService();
 
         }
 
@@ -95,15 +95,15 @@ namespace ASolute_Mobile.Droid
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            if(grantResults.Length > 0 && permissions.Length > 0  )
+            if (grantResults.Length > 0 && permissions.Length > 0)
             {
-                if(permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
-                   // StartLocationTracking();
+                    StartLocationTracking();
                 }
 
             }
-           
+
         }
 
         protected override void OnPause()
@@ -115,24 +115,24 @@ namespace ASolute_Mobile.Droid
         }
 
 
-        protected override void OnResume() 
+        protected override void OnResume()
         {
-           
+
             Log.Debug(logTag, "OnResume: Location app is moving into foreground");
             base.OnResume();
-           
+
         }
 
         protected override void OnDestroy()
         {
-           
-            Log.Debug(logTag, "OnDestroy: Location app is becoming inactive");
+
+            //Log.Debug(logTag, "OnDestroy: Location app is becoming inactive");
             base.OnDestroy();
-           
+
             //LocationApp.StopLocationService();
 
         }
-        
+
         public override void OnBackPressed()
         {
             if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
@@ -142,16 +142,16 @@ namespace ASolute_Mobile.Droid
             else
             {
                 // Do something if there are not any pages in the `PopupStack`
-            } 
+            }
         }
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
             Android.Locations.Location location = e.Location;
             Log.Debug(logTag, "Foreground updating");
-           
+
             App.gpsLocationLat = location.Latitude;
-            App.gpsLocationLong = location.Longitude;                    
+            App.gpsLocationLong = location.Longitude;
         }
 
         public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)

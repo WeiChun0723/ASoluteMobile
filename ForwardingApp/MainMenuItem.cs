@@ -23,34 +23,12 @@ namespace ASolute_Mobile
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
         string firebaseID = "firebase";
-        Label title1, title2;
 
         public MainMenuItem()
         {
             search.IsVisible = false;
 
             ListViewCommonScreen.title1.Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
-
-            /*StackLayout main = new StackLayout();
-
-            title1 = new Label
-            {
-                FontSize = 15,
-                Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
-                TextColor = Color.White
-            };
-
-            title2 = new Label
-            {
-                FontSize = 10,
-
-                TextColor = Color.White
-            };
-
-            main.Children.Add(title1);
-            main.Children.Add(title2);
-
-            NavigationPage.SetTitleView(this,main);*/
 
             listView.ItemTapped += async (sender, e) =>
             {
@@ -256,9 +234,9 @@ namespace ASolute_Mobile
 
             loading.IsVisible = true;
 
-            OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+            /*OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
 
-            Ultis.Settings.FireID = firebaseID;
+            Ultis.Settings.FireID = firebaseID;*/
 
             checkItems.Clear();
             try

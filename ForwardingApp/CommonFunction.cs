@@ -49,12 +49,12 @@ namespace ASolute_Mobile.Utils
             return reply;
         }
 
-        public static async Task<string> ScanBarCode(ContentPage contentPage)
+        public static  string ScanBarCode(ContentPage contentPage)
         {
             try
             {
                 var scanPage = new ZXingScannerPage();
-                await contentPage.Navigation.PushAsync(scanPage);
+                contentPage.Navigation.PushAsync(scanPage);
 
                 scanPage.OnScanResult += (result) =>
                 {
@@ -64,13 +64,13 @@ namespace ASolute_Mobile.Utils
                         returnResult = result.Text;
                     });
                 };
+                return returnResult;
             }
             catch (Exception e)
             {
-                await contentPage.DisplayAlert("Error", e.Message, "OK");
+                contentPage.DisplayAlert("Error", e.Message, "OK");
             }
-
-            return returnResult;
+            return "";
         }
 
 

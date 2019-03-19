@@ -139,10 +139,7 @@ namespace ASolute_Mobile
                                     uploadUri = ControllerUtil.postJobDetailURL(history);
                                     imageEventID = jobItem.EventRecordId.ToString();
                                 }
-                                else if (Ultis.Settings.App == "Courier")
-                                {
-                                    uploadUri = ControllerUtil.postFowardJobURL(jobItem);
-                                }                               
+                                                           
                             }
                             else if(jobItem.UpdateType == "CargoReturnUpdate")
                             {                            
@@ -425,6 +422,8 @@ namespace ASolute_Mobile
             {
                 contentPage.IsBusy = true;
             }
+
+
 
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";

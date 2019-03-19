@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Utils;
@@ -13,38 +14,44 @@ namespace ASolute_Mobile.WMS_Screen
     {
         List<clsWhsItem> clsWhsItems = new List<clsWhsItem>();
         string fieldName, linkID, pickingTitle;
-        bool tapped = true;
+        int index = 0, count = 0;
 
-        public PickingEntry(clsWhsItem summary, string id, string title, List<clsWhsItem> items)
+        public PickingEntry(clsWhsItem pickingSummary, string id, string title, List<clsWhsItem> items)
         {
             InitializeComponent();
 
             linkID = id;
             pickingTitle = title;
+            clsWhsItems = items;
+
+            index = items.FindIndex(a => a.PalletId == pickingSummary.PalletId);
+
+            LoadPickingSummary(pickingSummary.Summary);
+        }
+
+        void LoadPickingSummary(List<clsCaptionValue> values)
+        {
             pickingDesc.Children.Clear();
 
             Label topBlank = new Label();
             pickingDesc.Children.Add(topBlank);
 
-            clsWhsItems = items;
-
-            foreach (clsCaptionValue desc in summary.Summary)
+            foreach (clsCaptionValue desc in values)
             {
                 Label caption = new Label();
                 caption.FontSize = 13;
-              
-                if(desc.Caption.Equals(""))
+
+                if (desc.Caption.Equals(""))
                 {
-                    caption.Text = "      " +  desc.Value;
+                    caption.Text = "      " + desc.Value;
                 }
                 else
                 {
                     caption.Text = "      " + desc.Caption + ": " + desc.Value;
                 }
 
-                if(desc.Caption.Equals("Pallet"))
+                if (desc.Caption.Equals("Pallet"))
                 {
-
                     Title = pickingTitle + " # " + desc.Value;
                 }
 
@@ -53,56 +60,53 @@ namespace ASolute_Mobile.WMS_Screen
 
             Label bottomBlank = new Label();
             pickingDesc.Children.Add(bottomBlank);
-
         }
 
-        async void PalletIDScan(object sender, EventArgs e)           
+        void ScanBarCode(object sender, EventArgs e)
         {
-            fieldName = "PalletIDScan";
-            BarCodeScan(fieldName);
-        }
+            var image = sender as Image;
 
-        void ConfirmScan(object sender, EventArgs e)
-        {
-            fieldName = "ConfirmScan";
-            BarCodeScan(fieldName);
+            if (image.StyleId.Equals("confirmScan"))
+            {
+                fieldName = "ConfirmScan";
+                BarCodeScan(fieldName);
+            }
+            else if (image.StyleId.Equals("palletScan"))
+            {
+                fieldName = "PalletIDScan";
+                BarCodeScan(fieldName);
+            }
         }
 
         async void BarCodeScan(string field)
         {
-            if(tapped)
+            try
             {
-                tapped = false;
-                try
-                {
-                    var scanPage = new ZXingScannerPage();
-                    await Navigation.PushAsync(scanPage);
+                var scanPage = new ZXingScannerPage();
+                await Navigation.PushAsync(scanPage);
 
-                    scanPage.OnScanResult += (result) =>
+                scanPage.OnScanResult += (result) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        await Navigation.PopAsync();
+
+                        if (field == "PalletIDScan")
                         {
-                            await Navigation.PopAsync();
+                            palletIDEntry.Text = result.Text;
 
-                            if (field == "PalletIDScan")
-                            {
-                                palletIDEntry.Text = result.Text;
+                        }
+                        else if (field == "ConfirmScan")
+                        {
+                            confirmEntry.Text = result.Text;
+                        }
 
-                            }
-                            else if (field == "ConfirmScan")
-                            {
-                                confirmEntry.Text = result.Text;
-                            }
-
-                        });
-                    };
-
-                    tapped = true;
-                }
-                catch (Exception e)
-                {
-                    await DisplayAlert("Error", e.Message, "OK");
-                }
+                    });
+                };
+            }
+            catch (Exception e)
+            {
+                await DisplayAlert("Error", e.Message, "OK");
             }
 
         }
@@ -114,23 +118,58 @@ namespace ASolute_Mobile.WMS_Screen
                 LinkId = linkID,
                 OldLocation = confirmEntry.Text,
                 Id = palletIDEntry.Text,
-                CheckDigit = Convert.ToInt32(checkDigitEntry.Text)
+                CheckDigit = Convert.ToInt32(checkDigitEntry.Text)  
             };
 
             var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postPickingDetail());
             clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            if(update_response.IsGood)
+            if (update_response.IsGood)
             {
                 await DisplayAlert("Success", "Picking task updated", "OK");
 
-                //Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 1]);
+                try
+                {
+                    checkDigitEntry.Text = String.Empty;
+                    palletIDEntry.Text = String.Empty;
+                    confirmEntry.Text = String.Empty;
 
-                await Navigation.PopAsync();
+                    index++;
+                    count++;
+
+                    if (this.Title.Contains("Loose Pick"))
+                    {
+                        genButton.IsVisible = true;
+                        genButton.Text = "Items : " + count;
+                    }
+
+                    LoadPickingSummary(clsWhsItems[index].Summary);
+                }
+                catch
+                {
+                    await DisplayAlert("Finish", "This is the last items in the list.", "OK");
+                    //await Navigation.PopAsync();
+                }
             }
             else
             {
                 await DisplayAlert("Error", update_response.Message, "OK");
+            }
+        }
+
+        async void GenPallet_Clicked(object sender, EventArgs e)
+        {
+            var content = await CommonFunction.PostRequest(null,Ultis.Settings.SessionBaseURI, ControllerUtil.generatePallet(linkID));
+            clsResponse genPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if(genPallet_response.IsGood)
+            {
+                await DisplayAlert("Success", "Pallet generated.", "OK");
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Error", genPallet_response.Message, "OK");
             }
         }
     }

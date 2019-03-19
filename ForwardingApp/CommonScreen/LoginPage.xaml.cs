@@ -20,8 +20,6 @@ namespace ASolute_Mobile
 {
     public partial class LoginPage : ContentPage
     {
-        public static string crash = "Yes";
-
         public LoginPage()
         {
             InitializeComponent();
@@ -35,7 +33,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "AILS WMS";
+            AppLabel.Text = "AILS Haulage Ver." + CrossDeviceInfo.Current.AppVersion;
 
 
             //set username entry maximum to 10 chars
@@ -53,15 +51,15 @@ namespace ASolute_Mobile
                 passwordEntry.Focus();
             };
 
-            organization.Text = Ultis.Settings.AppEnterpriseName;
+
             usernameEntry.Text = Ultis.Settings.SessionUserId;
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            organization.Text = Ultis.Settings.AppEnterpriseName;
-            // await GetBaseURL();
+            organization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.AppEnterpriseName))) ? Ultis.Settings.AppEnterpriseName : "Enterprise";
+             await GetBaseURL();
 
         }
       

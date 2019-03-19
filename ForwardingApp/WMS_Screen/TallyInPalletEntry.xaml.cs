@@ -114,15 +114,18 @@ namespace ASolute_Mobile.WMS_Screen
                         StyleId = attr.Key
                     };
 
-
                     if (attr.Key.Equals("ExpiryDate") || attr.Key.Equals("MfgDate"))
                     {
                         customDatePicker = new CustomDatePicker
                         {
                             StyleId = attr.Key,
                             HorizontalOptions = LayoutOptions.FillAndExpand,
-                            Date = DateTime.Now.AddDays(-1),
                             NullableDate = null
+                        };
+
+                        customDatePicker.Unfocused += (object sender, FocusEventArgs e) => 
+                        {
+                            DateUnfocus(sender);
                         };
 
                         entryStack.Children.Add(customDatePicker);
@@ -193,6 +196,37 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
+        void DateUnfocus(object sender)
+        {
+
+            var date = sender as CustomDatePicker;
+
+            foreach (View t in grid.Children)
+            {
+                if (t.StyleId == date.StyleId)
+                {
+                    var stack = (StackLayout)t;
+
+                    foreach (View v in stack.Children)
+                    {
+                        if (v.StyleId == date.StyleId)
+                        {
+                            string type = v.GetType().ToString();
+
+                            if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
+                            {
+                                CustomDatePicker picker = (CustomDatePicker)v;
+                                if (picker.Date.ToString("yyyy-MM-dd").Equals(DateTime.Now.ToString("yyyy-MM-dd")))
+                                {
+                                    picker.NullableDate = DateTime.Now;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         void PalletScan(object sender, EventArgs e)
         {
             fieldName = "PalletScan";
@@ -242,8 +276,6 @@ namespace ASolute_Mobile.WMS_Screen
                                 }
                             }
                         }
-
-
 
                     });
                 };
@@ -384,7 +416,16 @@ namespace ASolute_Mobile.WMS_Screen
                             else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
                             {
                                 CustomDatePicker picker = (CustomDatePicker)v;
-                                return picker.Date.ToString("yyyy-MM-dd");
+
+                                if(picker.NullableDate == null)
+                                {
+                                    return "";
+                                }
+                                else
+                                {
+                                    return picker.Date.ToString("yyyy-MM-dd");
+                                }
+
                             }
 
                         }
@@ -419,7 +460,7 @@ namespace ASolute_Mobile.WMS_Screen
                                 else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
                                 {
                                     CustomDatePicker picker = (CustomDatePicker)v;
-                                    picker.Date = DateTime.Now.AddDays(-1);
+
                                     picker.NullableDate = null;
 
                                 }

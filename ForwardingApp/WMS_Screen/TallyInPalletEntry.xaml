@@ -55,78 +55,8 @@
                     <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
                 </StackLayout>
                 
-                <!--<StackLayout Padding="0,10,0,0" Grid.Row="4" Grid.Column="0" x:Name="string1lbl" IsVisible="false">
-                    <Label Text="Lot No" FontAttributes="Bold" x:Name="String01"/>
-                </StackLayout>
-                
-                <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal" x:Name="lotEntry" IsVisible="false">
-                    <controls:CustomEntry x:Name="lotNo" HeightRequest="30" HorizontalOptions="Fill" LineColor="WhiteSmoke" WidthRequest="150">
-                        <controls:CustomEntry.Behaviors>
-                            <local:MaxLengthValidation MaxLength="50" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="lotNum" >
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="EntryScan" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="5" Grid.Column="0" x:Name="string2lbl" IsVisible="false">
-                    <Label Text="Batch No" FontAttributes="Bold" x:Name="String02"/>
-                </StackLayout>
-                <StackLayout Grid.Row="5" Grid.Column="1" Orientation="Horizontal" x:Name="batEntry" IsVisible="false">
-                    <controls:CustomEntry x:Name="batchNo" HeightRequest="30" HorizontalOptions="Fill" LineColor="WhiteSmoke" WidthRequest="150">
-                        <controls:CustomEntry.Behaviors>
-                            <local:MaxLengthValidation MaxLength="50" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="batchNum">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="EntryScan" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="6" Grid.Column="0"  x:Name="string3lbl" IsVisible="false">
-                    <Label Text="Color" FontAttributes="Bold" x:Name="String03"/>
-                </StackLayout>
-                <StackLayout Grid.Row="6" Grid.Column="1" Orientation="Horizontal" x:Name="colorEnrty" IsVisible="false">
-                    <controls:CustomEntry x:Name="color" HeightRequest="30" HorizontalOptions="Fill" LineColor="WhiteSmoke" WidthRequest="150">
-                        <controls:CustomEntry.Behaviors>
-                            <local:MaxLengthValidation MaxLength="50" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="string03">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="EntryScan" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="7" Grid.Column="0" x:Name="explbl" IsVisible="false">
-                    <Label Text="Exp Date" FontAttributes="Bold" x:Name="ExpiryDate"/>
-                </StackLayout>
-                <StackLayout Grid.Row="7" Grid.Column="1" Orientation="Horizontal" x:Name="expEntry" IsVisible="false">
-                    <Entry x:Name="expDate" Focused="DateEntry_Focused" HorizontalOptions="FillAndExpand" WidthRequest="130" />
-                    <DatePicker x:Name="expDatePicker" HorizontalOptions="Fill" WidthRequest="130" Format="dd/MM/yyyy" IsVisible="false" DateSelected="DatePicker_DateSelected" />
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" >
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ExpiryDateScan" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="8" Grid.Column="0" x:Name="manulbl" IsVisible="false">
-                    <Label Text="Manu Date" FontAttributes="Bold" x:Name="MgfDate"/>
-                </StackLayout>
-                <StackLayout Grid.Row="8" Grid.Column="1" Orientation="Horizontal" x:Name="manuEntry" IsVisible="false">
-                    <Entry x:Name="manuDate" Focused="DateEntry_Focused" HorizontalOptions="FillAndExpand" WidthRequest="130" />
-                    <DatePicker x:Name="manuDatePicker" HorizontalOptions="Fill" WidthRequest="130" Format="dd/MM/yyyy" IsVisible="false" DateSelected="DatePicker_DateSelected" />
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="manuDateScan">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="EntryScan" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>-->
             </Grid>
-
+            
             <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"  HorizontalOptions="Center" x:Name="confirm_icon">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ConfirmAddPallet" />

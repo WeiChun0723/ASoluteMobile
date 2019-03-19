@@ -27,16 +27,14 @@
                 </Entry.Behaviors>      
             </Entry>
             <inputLayout:SfTextInputLayout.TrailingView> 
-                    <Image Source="barCode.png"  VerticalOptions="Center">
+                    <Image Source="barCode.png"  VerticalOptions="Center" x:Name="confirmScan">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ConfirmScan"/>
+                            <TapGestureRecognizer Tapped="ScanBarCode" NumberOfTapsRequired="1"/>
                         </Image.GestureRecognizers>
                      </Image>
                     
             </inputLayout:SfTextInputLayout.TrailingView>
                 
-        
-          
             </inputLayout:SfTextInputLayout>
             
               <inputLayout:SfTextInputLayout 
@@ -61,26 +59,22 @@
             </Entry>
          
             <inputLayout:SfTextInputLayout.TrailingView >
-                      <Image Source="barCode.png" HeightRequest="100" VerticalOptions="Center">
+                      <Image Source="barCode.png"  VerticalOptions="Center" x:Name="palletScan">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="PalletIDScan"/>
+                            <TapGestureRecognizer Tapped="ScanBarCode" NumberOfTapsRequired="1"/>
                         </Image.GestureRecognizers>
                      </Image>    
             </inputLayout:SfTextInputLayout.TrailingView>
             </inputLayout:SfTextInputLayout>
             
             
-            <StackLayout Orientation="Horizontal" Spacing="15">
+            <StackLayout Orientation="Horizontal" Spacing="15" HorizontalOptions="CenterAndExpand">
             <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ConfirmPicking"/>
+                        <TapGestureRecognizer Tapped="ConfirmPicking" NumberOfTapsRequired="1"/>
                     </Image.GestureRecognizers>
             </Image>
-            <Image Source="printing.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="Center" x:Name="printing_icon" IsEnabled="True">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ConfirmPicking"/>
-                    </Image.GestureRecognizers>
-            </Image>
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="genButton" IsVisible="false" Clicked="GenPallet_Clicked"/>
             </StackLayout>
         </StackLayout>
         

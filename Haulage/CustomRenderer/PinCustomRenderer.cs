@@ -36,7 +36,7 @@ namespace Haulage.Droid.CustomRenderer
                 var formsMap = (CustomMap)e.NewElement;
                 MapPins = formsMap.MapPins;
                 Control.GetMapAsync(this);
-                
+
             }
         }
 
@@ -52,9 +52,40 @@ namespace Haulage.Droid.CustomRenderer
         {
             var marker = new MarkerOptions();
             marker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
-            marker.SetTitle(pin.Label);
+
             marker.SetSnippet(pin.Address);
-            marker.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueAzure));
+
+            string[] pinColor = pin.Label.Split('/');
+
+            if(!(String.IsNullOrEmpty(pinColor[1])))
+            {
+                switch (pinColor[1])
+                {
+                    case "RED":
+                        marker.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueRed));
+                        break;
+
+                    case "BLUE":
+                        marker.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueAzure));
+                        break;
+
+                    case "YELLOW":
+                        marker.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueYellow));
+                        break;
+
+                    case "ORANGE":
+                        marker.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueOrange));
+                        break;
+
+                    case "GREEN":
+                        marker.SetIcon(BitmapDescriptorFactory.DefaultMarker(BitmapDescriptorFactory.HueGreen));
+                        break;
+
+                }
+            }
+
+            marker.SetTitle(pinColor[0]);
+
             return marker;
         }
 
@@ -73,7 +104,7 @@ namespace Haulage.Droid.CustomRenderer
 
 
                 view = inflater.Inflate(Resource.Layout.PinInfoWindow, null);
-               
+
 
                 var infoTitle = view.FindViewById<TextView>(Resource.Id.InfoWindowTitle);
                 var infoSubtitle = view.FindViewById<TextView>(Resource.Id.InfoWindowSubtitle);
