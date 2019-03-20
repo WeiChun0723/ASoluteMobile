@@ -9,7 +9,7 @@ namespace ASolute_Mobile
 
         public ListView listView = new ListView();
         public SearchBar search = new SearchBar();
-        public Image image, scanBarCode;
+        public Image noDataImage, scanBarCode;
         public SfBusyIndicator loading;
      
 
@@ -37,7 +37,7 @@ namespace ASolute_Mobile
 
             NavigationPage.SetTitleView(this, main);
 
-            image = new Image
+            noDataImage = new Image
             {
                 Source = "nodatafound.png",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -68,34 +68,9 @@ namespace ASolute_Mobile
 
             listView.IsPullToRefreshEnabled = true;
             listView.SeparatorColor = Color.White;
-            /*StackLayout frameLayout = new StackLayout();
-            frameLayout.SetBinding(BackgroundColorProperty, "background");
-
-            label.FontAttributes = FontAttributes.Bold;
-            label.SetBinding(Label.TextProperty, "summary");
-
-            frameLayout.Children.Add(label);
-
-
-            listView.ItemTemplate = new DataTemplate(() =>
-            {
-                ViewCell viewCell = new ViewCell();
-
-                Frame frame = new Frame
-                {
-                    Content = frameLayout,
-                    HasShadow = true,
-                    Margin = 5,
-                };
-
-                frame.SetBinding(BackgroundColorProperty, "background");
-                viewCell.View = frame;
-
-                return viewCell;
-            });*/
 
             mainLayout.Children.Add(loading);
-            mainLayout.Children.Add(image);
+            mainLayout.Children.Add(noDataImage);
             mainLayout.Children.Add(search);
             mainLayout.Children.Add(listView);
             mainLayout.Children.Add(scanBarCode);

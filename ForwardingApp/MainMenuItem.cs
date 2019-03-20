@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
 using ASolute.Mobile.Models;
-using ASolute_Mobile.Droid;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.Utils;
-using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
@@ -22,7 +17,7 @@ namespace ASolute_Mobile
     {
         public bool doubleBackToExitPressedOnce = false;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
-        string firebaseID = "firebase";
+        //string firebaseID = "firebase";
 
         public MainMenuItem()
         {
@@ -76,9 +71,9 @@ namespace ASolute_Mobile
                         await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
                         break;
                     case "CargoReturn":
-                        string return_id = "test";
+                        /*string return_id = "test";
                         string return_eventID = "1000";
-                        /*if(!(String.IsNullOrEmpty(Ultis.Settings.CargoReturn)))
+                        if(!(String.IsNullOrEmpty(Ultis.Settings.CargoReturn)))
                          {
                              string[] info = Ultis.Settings.CargoReturn.Split(',');
                              return_id = info[0];
@@ -105,28 +100,35 @@ namespace ASolute_Mobile
                     case "EqList":
                         await Navigation.PushAsync(new Planner.EqCategory());
                         break;
+                    case "MapView":
+                        await Navigation.PushAsync(new AllTruckMap(((AppMenu)e.Item).name));
+                        break;
+
                     case "TallyIn":
                         Ultis.Settings.Title = ((AppMenu)e.Item).name;
-                        await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new ListViewTemplate(((AppMenu)e.Item).name, ControllerUtil.getTallyInList()));
                         break;
                     case "PalletTrx":
                         await Navigation.PushAsync(new WMS_Screen.PalletMovement(((AppMenu)e.Item).name));
                         break;
                     case "Packing":
-                        await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new ListViewTemplate(((AppMenu)e.Item).name, ControllerUtil.getPackingList()));
                         break;
                     case "TallyOut":
-                        await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
+                        //await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
+                        await Navigation.PushAsync(new ListViewTemplate(((AppMenu)e.Item).name, ControllerUtil.getTallyOutList()));
                         break;
                     case "FullPick":
-                        await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        await Navigation.PushAsync(new ListViewTemplate(((AppMenu)e.Item).name, ControllerUtil.getPickingList(((AppMenu)e.Item).menuId)));
                         break;
                     case "LoosePick":
-                        await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        await Navigation.PushAsync(new ListViewTemplate(((AppMenu)e.Item).name, ControllerUtil.getPickingList(((AppMenu)e.Item).menuId)));
                         break;
-                    case "MapView":
-                        await Navigation.PushAsync(new  AllTruckMap(((AppMenu)e.Item).name));
-                        break;
+                    
                 }
 
                 loading.IsVisible = false;
@@ -250,7 +252,7 @@ namespace ASolute_Mobile
 
                     Ultis.Settings.SubTitle = login_Menu.SubTitle;
                     ListViewCommonScreen.title2.Text = Ultis.Settings.SubTitle;
-                    //title2.Text = Ultis.Settings.SubTitle;
+
 
                     //load value from the menu in json response "CheckList"
                     for (int check = 0; check < login_response.Result["Checklist"].Count; check++)

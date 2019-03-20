@@ -25,7 +25,7 @@ using Haulage.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -43,7 +43,7 @@ namespace ASolute_Mobile.Droid
                 base.OnCreate(bundle);
 
 
-                RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+                //RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
 
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
                 //Xamarin.Essentials.Platform.Init(this, bundle);
@@ -55,11 +55,11 @@ namespace ASolute_Mobile.Droid
 
                 LoadApplication(new App());
 
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                /*if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
                     StartLocationTracking();
 
-                }
+                }*/
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
             }
@@ -95,14 +95,14 @@ namespace ASolute_Mobile.Droid
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            if (grantResults.Length > 0 && permissions.Length > 0)
+            /*if (grantResults.Length > 0 && permissions.Length > 0)
             {
                 if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
                     StartLocationTracking();
                 }
 
-            }
+            }*/
 
         }
 

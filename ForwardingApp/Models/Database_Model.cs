@@ -170,61 +170,11 @@ namespace ASolute_Mobile.Models
         public double CostRate { get; set; }
         public string FuelCardNo { get; set; }     
     }
-
-    public class RefuelData : Generic
-    {
-        public string ID { get; set; }
-        public int Done { get; set; }
-        public string TruckId { get; set; }
-        public double CostRate { get; set; }
-        public string DriverId { get; set; }
-        public string VendorCode { get; set; }
-        public DateTime RefuelDateTime { get; set; }
-        public int PaymentMode { get; set; }
-        public double Quantity { get; set; }
-        public int Odometer { get; set; }
-        public string FuelCardNo { get; set; }
-        public string VoucherNo { get; set; }
-        public string OtherRef { get; set; }
-    }
-
-    public class LogBookData : Generic
-    {
-        public string OfflineID { get; set; }
-        public int Done { get; set; }
-        public string LinkId { get; set; }
-        public string EndGeoLoc { get; set; }
-        public string EndLocationName { get; set; }
-        public int EndOdometer { get; set; }       
-        public DateTime? EndTime { get; set; }
-        public string StartLocationName { get; set; }
-        public int? StartOdometer { get; set; }
-        public DateTime StartTime { get; set; }
-        public string DriverId { get; set; }
-        public string TruckId { get; set; }
-        public string Id { get; set; }
-        public string StartGeoLoc { get; set; }
-    }
     
     public class AutoComplete : Generic
     {
         public string Value { get; set; }
         public string Type { get; set; }
-    }
-
-    //model for courier app
-    public class UserDetail : Generic
-    {
-        public string OrderID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public int PostCode { get; set; }
-        public string CityState { get; set; }
-        public int Contact { get; set; }
-        public string Remarks { get; set; }
-        public string OrderType { get; set; }
-        public DateTime OrderDate { get; set; }
-        public Double Weight { get; set; }
     }
 
     public class HaulageVolume

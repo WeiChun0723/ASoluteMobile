@@ -84,7 +84,7 @@ namespace ASolute_Mobile.Droid.Services
 
             StartForeground((int)NotificationFlags.ForegroundService, notification);
 
-            return StartCommandResult.Sticky;
+            return StartCommandResult.NotSticky;
         }
 
         private string createNotificationChannel(string channel_id, string channel_name)

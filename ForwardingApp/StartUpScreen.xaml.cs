@@ -23,7 +23,6 @@ namespace ASolute_Mobile
 
         protected override async void OnAppearing()
         {
-
             uint duration = 3 * 1000;
 
             await Task.WhenAll(
@@ -78,7 +77,7 @@ namespace ASolute_Mobile
 
                 loading.IsVisible = false;
             }
-            catch(HttpRequestException exception)
+            catch
             {
                 await DisplayAlert("Unable to connect", "Please connect to internet", "OK");
             }

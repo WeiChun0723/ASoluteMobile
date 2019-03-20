@@ -108,7 +108,6 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 await DisplayAlert("Error", e.Message, "OK");
             }
-
         }
 
         async void ConfirmPicking(object sender, EventArgs e)

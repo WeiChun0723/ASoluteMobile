@@ -117,12 +117,12 @@ namespace ASolute_Mobile.TransportScreen
             if (records.Count == 0)
             {
                 listView.IsVisible = true;
-                image.IsVisible = true;
+                noDataImage.IsVisible = true;
             }
             else
             {
                 listView.IsVisible = true;
-                image.IsVisible = false;
+                noDataImage.IsVisible = false;
             }
         }
     }

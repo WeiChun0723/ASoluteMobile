@@ -203,6 +203,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ListViewTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -370,10 +374,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatRoomObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\GetBaseURLViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PropertyChange.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\Register.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\RegisterUserViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)testing\TestingClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)testing\TestingOCR.xaml.cs">
       <DependentUpon>TestingOCR.xaml</DependentUpon>
@@ -446,11 +447,13 @@
       <DependentUpon>AllTruckMap.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomMap.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyIn.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\BarCodePopUp.xaml.cs">
       <DependentUpon>BarCodePopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomDatePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ListViewTemplate.xaml.cs">
+      <DependentUpon>ListViewTemplate.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -459,8 +462,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)CustomerTracking\" />
     <Folder Include="$(MSBuildThisFileDirectory)InputValidation\" />
     <Folder Include="$(MSBuildThisFileDirectory)CommonScreen\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Models\HaulageViewModel\Model\" />
     <Folder Include="$(MSBuildThisFileDirectory)testing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Planner\" />
     <Folder Include="$(MSBuildThisFileDirectory)WMS_Screen\" />

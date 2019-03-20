@@ -30,7 +30,7 @@ namespace ASolute_Mobile
         double imageWidth;
         clsResponse json_reponse = new clsResponse();
         clsFuelCostNew fuelCostNew = new clsFuelCostNew();         
-        string newFuelID, imageEventID = "";
+        string recordID, imageEventID = "";
         int station_choice = 0, payment_choice;
         List<AppImage> recordImages = new List<AppImage>();
         byte[] scaledImageByte;
@@ -73,9 +73,6 @@ namespace ASolute_Mobile
                 liter.Placeholder = "Maksimum 500 liter.";
             } 
 
-            //generate id for the image to link with the record for offline sync 
-            Guid fuelRecord = Guid.NewGuid();
-            newFuelID = fuelRecord.ToString();
 
             imageGrid.RowSpacing = 0;
             imageGrid.ColumnSpacing = 0;
@@ -135,7 +132,7 @@ namespace ASolute_Mobile
 
         public async void CaptureImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(newFuelID, this);
+            await CommonFunction.StoreImages(recordID, this);
             DisplayImage();
 
             if(!(String.IsNullOrEmpty(imageEventID)))
@@ -160,50 +157,22 @@ namespace ASolute_Mobile
                             //combine the date and time together               
                             string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
 
-                            RefuelData refuel_Data = new RefuelData();
+                            clsFuelCost refuel_Data = new clsFuelCost();
                             if ( paymentPicker.SelectedIndex != -1 && liter.Text != null && fuelCard.Text != null)
                             {
                                 try
                                 {
-                                    refuel_Data.ID = newFuelID;
-                                    refuel_Data.Done = 0;
                                     refuel_Data.TruckId = Ultis.Settings.SessionUserItem.TruckId;
                                     refuel_Data.Odometer = Convert.ToInt32(odometer.Text);
                                     refuel_Data.DriverId = Ultis.Settings.SessionUserItem.DriverId;
                                     refuel_Data.VendorCode = fuelCostNew.VendorList[station_choice].Key;
-                                    refuel_Data.PaymentMode = paymentPicker.SelectedIndex;
+                                    refuel_Data.PaymentMode = (paymentPicker.SelectedIndex == 1) ? clsFuelCost.PaymentModeEnum.Card : clsFuelCost.PaymentModeEnum.Cash;
                                     refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
                                     refuel_Data.Quantity = Convert.ToDouble(liter.Text);
-                                    if (String.IsNullOrEmpty(fuelCard.Text))
-                                    {
-                                        refuel_Data.FuelCardNo = "";
-                                    }
-                                    else
-                                    {
-                                        refuel_Data.FuelCardNo = fuelCard.Text;
-                                    }
-
-                                    if (String.IsNullOrEmpty(voucher.Text))
-                                    {
-                                        refuel_Data.VoucherNo = "";
-                                    }
-                                    else
-                                    {
-                                        refuel_Data.VoucherNo = voucher.Text;
-                                    }
-
-                                    if (String.IsNullOrEmpty(other.Text))
-                                    {
-                                        refuel_Data.OtherRef = "";
-                                    }
-                                    else
-                                    {
-                                        refuel_Data.OtherRef = other.Text;
-                                    }
-
+                                    refuel_Data.FuelCardNo = (String.IsNullOrEmpty(fuelCard.Text)) ? "" : fuelCard.Text;
+                                    refuel_Data.VoucherNo = (String.IsNullOrEmpty(voucher.Text)) ? "" : voucher.Text;
+                                    refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
                                     refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
-                                    App.Database.SaveRecordAsync(refuel_Data);
-                                    //await BackgroundTask.UploadLatestRecord(this);
 
                                     var content = await CommonFunction.PostRequest( refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -213,12 +182,10 @@ namespace ASolute_Mobile
                                         imageEventID = response.Result["LinkId"];
                                         if (Ultis.Settings.Language.Equals("English"))
                                         {
-                                            //CommonFunction.AppActivity("Add refuel record", "Succeed", status.Message);
                                             await DisplayAlert("Success", "Record added", "OK");
                                         }
                                         else
                                         {
-                                            //CommonFunction.AppActivity("Isi minyak entri", "Berjaya", status.Message);
                                             await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
                                         }
 
@@ -591,7 +558,7 @@ namespace ASolute_Mobile
         {
             images.Clear();
             imageGrid.Children.Clear();
-            images = App.Database.GetUplodedRecordImagesAsync(newFuelID,"NormalImage");
+            images = App.Database.GetUplodedRecordImagesAsync(recordID,"NormalImage");
             foreach (AppImage Image in images)
             {
                 IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);

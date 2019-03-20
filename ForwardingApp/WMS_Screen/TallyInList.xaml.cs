@@ -54,8 +54,6 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     try
                     {
-                       
-
                         tallyList.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
                     }
                     catch(Exception error)

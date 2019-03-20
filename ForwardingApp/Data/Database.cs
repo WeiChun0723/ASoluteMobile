@@ -19,9 +19,6 @@ namespace ASolute_Mobile.Data
             database.CreateTable<ChatRecord>();
             database.CreateTable<ProviderInfo>();
             database.CreateTable<UserItem>();
-            database.CreateTable<UserDetail>();
-            database.CreateTable<RefuelData>();
-            database.CreateTable<LogBookData>();
             database.CreateTable<RefuelHistoryData>();
             database.CreateTable<SummaryItems>();
             database.CreateTable<DetailItems>();
@@ -42,9 +39,6 @@ namespace ASolute_Mobile.Data
 		{
             database.DropTable<ChatRecord>();
             database.DropTable<UserItem>();
-            database.DropTable<UserDetail>();
-            database.DropTable<RefuelData>();
-            database.DropTable<LogBookData>();
             database.DropTable<RefuelHistoryData>();
             database.DropTable<SummaryItems>();
             database.DropTable<DetailItems>();
@@ -244,11 +238,7 @@ namespace ASolute_Mobile.Data
             return database.Table<RefuelHistoryData>().Where(i => i.recordId == id).FirstOrDefault();
         }
 
-        public LogBookData GetLogOfflineAsync(string id)
-        {
-            return database.Table<LogBookData>().Where(i => i.Id == id).FirstOrDefault();
-        }
-
+       
         public JobItems GetPendingRecordAsync(string id)
         {
             return database.Table<JobItems>().Where(i => i.Id == id).FirstOrDefault();
@@ -301,10 +291,7 @@ namespace ASolute_Mobile.Data
             return database.Query<JobItems>("SELECT * FROM [JobItems] WHERE [Done] = ? ", doneStatus);
         }
 
-        public List<LogBookData> GetTripLog(int doneStatus)
-        {
-            return database.Query<LogBookData>("SELECT * FROM [LogBookData] WHERE [Done] = ?", doneStatus);
-        }
+     
 
         public List<RefuelHistoryData> GetRecordItems()
         {
@@ -360,10 +347,6 @@ namespace ASolute_Mobile.Data
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [type] = ?", id,type);
         }
 
-        public List<RefuelData> PendingRefuelData()
-        {
-            return database.Query<RefuelData>("SELECT * FROM [RefuelData] WHERE [Done] = 0");
-        }
 
         public List<SummaryItems> GetSummarysAsync(string id,string type)
         {
@@ -447,10 +430,7 @@ namespace ASolute_Mobile.Data
             database.Query<Log>("DELETE FROM Log");
         }
 
-        public void deleteLogPendingData()
-        {
-            database.Query<LogBookData>("DELETE FROM LogBookData");
-        }
+     
 
         public void deletePending(string type)
         {
@@ -497,11 +477,7 @@ namespace ASolute_Mobile.Data
             database.Query<AutoComplete>("DELETE FROM AutoComplete WHERE [Type] = ?", type);
         }
 
-        public void deleteLogData()
-        {
-            database.Query<LogBookData>("DELETE FROM LogBookData");
-        }
-
+   
         public void deleteDonePending()
         {
             database.Query<JobItems>("DELETE FROM JobItems ");
@@ -546,22 +522,7 @@ namespace ASolute_Mobile.Data
 
         }
 
-        public int SaveUserDetail(UserDetail detail)
-        {
-            detail.owner = Ultis.Settings.SessionUserId;
-            if (detail.tableID != 0)
-            {
-
-                return database.Update(detail);
-            }
-            else
-            {
-
-                return database.Insert(detail);
-            }
-
-        }
-
+     
         public int SaveJobsAsync(JobItems job)
         {
             job.owner = Ultis.Settings.SessionUserId;
@@ -685,36 +646,6 @@ namespace ASolute_Mobile.Data
                 return database.Insert(item);
             }
         }
-
-        public int SaveRecordAsync(RefuelData refuel)
-        {
-            if (refuel.tableID != 0)
-            {
-               
-                return database.Update(refuel);
-            }
-            else
-            {
-               
-                return database.Insert(refuel);
-            }
-        }
-
-        public int SaveLogRecordAsync(LogBookData log)
-        {
-            if (log.tableID != 0)
-            {
-
-                return database.Update(log);
-            }
-            else
-            {
-
-                return database.Insert(log);
-            }
-        }
-
-    
 
         public int SaveAutoCompleteAsync(AutoComplete value)
         {

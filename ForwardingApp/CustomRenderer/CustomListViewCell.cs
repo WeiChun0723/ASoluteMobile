@@ -38,88 +38,98 @@ namespace ASolute_Mobile
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
 
                 }
-                if(Ultis.Settings.List == "Job_List")
+                else if(Ultis.Settings.List == "Job_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageJob");
                 }
-                if(Ultis.Settings.List == "Receiving_List")
+                else if(Ultis.Settings.List == "Receiving_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingReceiving");
                 }
-                if(Ultis.Settings.List == "Loading_List")
+                else if(Ultis.Settings.List == "Loading_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingLoad");
                 }
-                if (Ultis.Settings.List== "refuel_List")
+                else if (Ultis.Settings.List== "refuel_List")
                 {
                     RefuelHistoryData model = (RefuelHistoryData)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.recordId,"Refuel");
                 }       
-                if(Ultis.Settings.List == "Main_Menu")
+                else if(Ultis.Settings.List == "Main_Menu")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId,"MainMenu");
                 }
-                if (Ultis.Settings.List == "Log_History")
+                else if (Ultis.Settings.List == "Log_History")
                 {
                     Log model = (Log)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.logId, "Log");
                 }
-                if (Ultis.Settings.List == "Run_Sheet")
+                else if (Ultis.Settings.List == "Run_Sheet")
                 {
                     JobItems model = (JobItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageHistory");
                 }
-                if (Ultis.Settings.List == "Pending_Collection")
+                else if (Ultis.Settings.List == "Pending_Collection")
                 {
                     ListObject model = (ListObject)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "pendingCollection");
                 }
-                if (Ultis.Settings.List == "provider_List")
+                else if (Ultis.Settings.List == "provider_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     providers = App.Database.Providers(model.menuId);  
 
                 }
-                if (Ultis.Settings.List == "container_List")
+                else if (Ultis.Settings.List == "container_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Container");
                 }
-                if (Ultis.Settings.List == "category_List")
+                else if (Ultis.Settings.List == "category_List")
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
                 }
-                if (Ultis.Settings.List == "Picking_List")
+                else
                 {
                     AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "PickingList");
-                }
-                if (Ultis.Settings.List== "Packing_List")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "PackingList");
-                }
-                if (Ultis.Settings.List == "TallyOut_List")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "TallyOutList");
-                }
-                if (Ultis.Settings.List == "TallyIn_List")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "TallyInList");
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, Ultis.Settings.List);
                 }
 
-                //  AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+
+                /*if (Ultis.Settings.List == "Loose Pick")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Loose Pick");
+                }
+                if (Ultis.Settings.List == "Full Pick")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Full Pick");
+                }
+                if (Ultis.Settings.List== "Packing")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Packing");
+                }
+                if (Ultis.Settings.List == "Tally Out")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Tally Out");
+                }
+                if (Ultis.Settings.List == "Tally In")
+                {
+                    AppMenu model = (AppMenu)this.BindingContext;
+                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Tally In");
+                }*/
 
                 StackLayout cellWrapper = new StackLayout()
                 {
@@ -139,7 +149,6 @@ namespace ASolute_Mobile
                         label.Text = items.Name;
                         cellWrapper.Children.Add(label);
                     }
-
                 }
                 else
                 {

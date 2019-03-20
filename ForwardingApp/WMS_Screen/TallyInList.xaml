@@ -5,16 +5,7 @@
              xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
              xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
-             xmlns:local ="ASolute_Mobile.Planner.GridStyle">
-    
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:GridStyle x:Key="style"/>
-            
-        </ResourceDictionary>
-</ContentPage.Resources>    
-    
+             >
     
     <refresh:SfPullToRefresh x:Name="pullToRefresh"
                                     IsRefreshing="false" 
