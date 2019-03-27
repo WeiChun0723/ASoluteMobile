@@ -9,14 +9,14 @@
                 <Label Text="Job No." FontAttributes="Bold" />
                 <syncfusion:SfBarcode BackgroundColor="White" x:Name="export" Symbology="Code39" HeightRequest="130" HorizontalOptions="FillAndExpand">
                     <syncfusion:SfBarcode.SymbologySettings>
-                        <syncfusion:Code39Settings NarrowBarWidth="2" BarHeight="200" />
+                       <syncfusion:Code39Settings x:Name="jobBarcode" NarrowBarWidth="2" BarHeight="150"/>
                     </syncfusion:SfBarcode.SymbologySettings>
                 </syncfusion:SfBarcode>
                 <StackLayout Padding="0,15,0,0"></StackLayout>
                 <Label Text="Booking No." FontAttributes="Bold" />
                 <syncfusion:SfBarcode BackgroundColor="White" x:Name="booking" Symbology="Code39" HeightRequest="130" HorizontalOptions="FillAndExpand">
                     <syncfusion:SfBarcode.SymbologySettings>
-                        <syncfusion:Code39Settings NarrowBarWidth="1.8" BarHeight="200" />
+                        <syncfusion:Code39Settings  x:Name="bookingBarcode" NarrowBarWidth="1.8" BarHeight="150"/>
                     </syncfusion:SfBarcode.SymbologySettings>
                 </syncfusion:SfBarcode>
             </StackLayout>

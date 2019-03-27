@@ -236,7 +236,7 @@ namespace ASolute_Mobile.TransportScreen
                     truck.Remarks = " ";
                 }
 
-                var content = await CommonFunction.PostRequest(truck, Ultis.Settings.SessionBaseURI, ControllerUtil.postJobDetailURL(action));
+                var content = await CommonFunction.PostRequestAsync(truck, Ultis.Settings.SessionBaseURI, ControllerUtil.postJobDetailURL(action));
                 clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(update_response.IsGood)
@@ -277,7 +277,7 @@ namespace ASolute_Mobile.TransportScreen
 
                 image.FileName = recordImage.photoFileName;
 
-                var content = await CommonFunction.PostRequest(image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventRecordID.ToString()));
+                var content = await CommonFunction.PostRequestAsync(image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventRecordID.ToString()));
                 clsResponse image_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (image_response.IsGood == true)

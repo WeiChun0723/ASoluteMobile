@@ -105,7 +105,7 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 if(emailAddressEntry.Text.Contains("@") && emailAddressEntry.Text.Contains(".com"))
                 {
-                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text));
+                    var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text));
                     clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if(company_response.IsGood)
@@ -162,7 +162,7 @@ namespace ASolute_Mobile.CustomerTracking
                         register.OSVer = CrossDeviceInfo.Current.VersionNumber.ToString();
                         register.AppVer = CrossDeviceInfo.Current.AppVersion;
 
-                        var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
+                        var content = await CommonFunction.PostRequestAsync(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
                         clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (register_response.IsGood)

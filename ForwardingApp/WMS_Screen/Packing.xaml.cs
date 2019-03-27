@@ -15,7 +15,7 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class Packing : ContentPage
     {
         List<clsDataRow> packing;
-        ObservableCollection<AppMenu> Item;
+        ObservableCollection<ListItems> Item;
         bool tapped = true;
 
         public Packing(string screenTitle)
@@ -67,7 +67,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             loading.IsVisible = true;
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPackingList());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getPackingList());
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
@@ -78,7 +78,7 @@ namespace ASolute_Mobile.WMS_Screen
                 App.Database.deleteMenuItems("PackingList");
                 foreach (clsDataRow data in packing)
                 {
-                    AppMenu record = new AppMenu
+                    ListItems record = new ListItems
                     {
                         menuId = data.Id,
                         background = data.BackColor,
@@ -103,9 +103,7 @@ namespace ASolute_Mobile.WMS_Screen
                             {
                                 summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
                             }
-
                         }
-
                         if (summaryItem.Caption.Equals(""))
                         {
                             record.name = summaryItem.Value;
@@ -177,7 +175,7 @@ namespace ASolute_Mobile.WMS_Screen
         void loadPackingList()
         {
             Ultis.Settings.List = "Packing_List";
-            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("PackingList"));
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("PackingList"));
             pickingList.ItemsSource = Item;
             pickingList.HasUnevenRows = true;
             pickingList.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -200,7 +198,8 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
+             await Navigation.PushAsync(new PackingDetail(((ListItems)e.Item).menuId));
+            //await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((AppMenu)e.Item).menuId)));
 
         }
 

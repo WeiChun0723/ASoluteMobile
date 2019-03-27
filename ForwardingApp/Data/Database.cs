@@ -22,7 +22,7 @@ namespace ASolute_Mobile.Data
             database.CreateTable<RefuelHistoryData>();
             database.CreateTable<SummaryItems>();
             database.CreateTable<DetailItems>();
-            database.CreateTable<AppMenu>();                        
+            database.CreateTable<ListItems>();                        
             database.CreateTable<Log>();          
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
@@ -42,7 +42,7 @@ namespace ASolute_Mobile.Data
             database.DropTable<RefuelHistoryData>();
             database.DropTable<SummaryItems>();
             database.DropTable<DetailItems>();
-            database.DropTable<AppMenu>();
+            database.DropTable<ListItems>();
             database.DropTable<Log>();           
             database.DropTable<AppImage>();               
             database.DropTable<JobNoList>();
@@ -116,7 +116,7 @@ namespace ASolute_Mobile.Data
             return database.Query<ProviderInfo>("SELECT * FROM [ProviderInfo] WHERE [Code] = ?", Code);
         }
 
-        public int DeleteMenu(AppMenu menu)
+        public int DeleteMenu(ListItems menu)
         {
             deleteProvider(menu.menuId);
            
@@ -155,7 +155,6 @@ namespace ASolute_Mobile.Data
         {
             database.Query<TruckModel>("DELETE FROM TruckModel");
         }
-
 
         public int SaveDetailsAsync(DetailItems item)
         {
@@ -244,9 +243,9 @@ namespace ASolute_Mobile.Data
             return database.Table<JobItems>().Where(i => i.Id == id).FirstOrDefault();
         }
 
-        public AppMenu GetMenuRecordAsync(string id)
+        public ListItems GetMenuRecordAsync(string id)
         {
-            return database.Table<AppMenu>().Where(i => i.menuId == id).FirstOrDefault();
+            return database.Table<ListItems>().Where(i => i.menuId == id).FirstOrDefault();
         }
 
         public Log GetLogRecordAsync(int id)
@@ -264,7 +263,6 @@ namespace ASolute_Mobile.Data
             return database.Table<clsFuelCost>().Where(i => i.RecordId == id).FirstOrDefault();
         }
 
-       
         public AutoComplete GetAutoCompleteValue(string value)
         {
             return database.Table<AutoComplete>().Where(i => i.Value == value).FirstOrDefault();
@@ -275,7 +273,6 @@ namespace ASolute_Mobile.Data
             return database.Table<JobNoList>().Where(i => i.JobNoValue == id).FirstOrDefault();
         }
 
-      
         public List<JobItems> GetJobItems(int doneStatus, string type)
         {
             return database.Query<JobItems>("SELECT * FROM [JobItems] WHERE [Done] = ? AND [JobType] = ?", doneStatus, type);
@@ -298,14 +295,19 @@ namespace ASolute_Mobile.Data
             return database.Query<RefuelHistoryData>("SELECT * FROM [RefuelHistoryData] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }     
 
-        public List<AppMenu> GetMainMenuItems()
+        public List<ListItems> GetMainMenuItems()
         {
-            return database.Query<AppMenu>("SELECT * FROM [AppMenu] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }
 
-        public List<AppMenu> GetMainMenu(string category)
+        public List<ListItems> GetMainMenu(string category)
         {
-            return database.Query<AppMenu>("SELECT * FROM [AppMenu] WHERE [category] = ?", category);
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [category] = ?", category);
+        }
+
+        public List<ListItems> GetStops(string category,string stopId)
+        {
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [category] = ? AND [StopId] = ?", category, stopId);
         }
 
         public List<Log> GetLogItems()
@@ -374,7 +376,6 @@ namespace ASolute_Mobile.Data
             return database.Table<FuelCostNew>().FirstOrDefault();
         }
 
-
         public void deleteJobImages(string id){
             database.Query<AppImage>("DELETE FROM [Image] WHERE [jobId] = ?", id);
         }
@@ -391,12 +392,12 @@ namespace ASolute_Mobile.Data
 
         public void deleteMainMenu()
         {
-            database.Query<AppMenu>("DELETE FROM AppMenu");
+            database.Query<ListItems>("DELETE FROM ListItems");
         }
 
         public void deleteMainMenuItem(string category)
         {
-            database.Query<AppMenu>("DELETE FROM AppMenu WHERE [category] = ?", category);
+            database.Query<ListItems>("DELETE FROM ListItems WHERE [category] = ?", category);
         }
 
         public void deleteAllDetail()
@@ -409,7 +410,6 @@ namespace ASolute_Mobile.Data
             database.Query<RefuelHistoryData>("DELETE FROM RefuelHistoryData ");
         }
 
-        
         public void deleteMenuItems(string type)
         {
             database.Query<SummaryItems>("DELETE FROM SummaryItems WHERE [type] = ?" , type);
@@ -430,8 +430,6 @@ namespace ASolute_Mobile.Data
             database.Query<Log>("DELETE FROM Log");
         }
 
-     
-
         public void deletePending(string type)
         {
             database.Query<JobItems>("DELETE FROM JobItems WHERE [Done] = 0 AND [JobType] = ?",type);
@@ -451,11 +449,6 @@ namespace ASolute_Mobile.Data
         {
             database.Query<JobItems>("DELETE FROM JobItems WHERE [JobType] = ?", type);
         }
-
-        /*public void deleteHaulageSummary()
-        {
-            database.Query<SummaryItems>("DELETE FROM SummaryItems ");
-        }*/
 
         public void deletePendingObject()
         {
@@ -555,7 +548,7 @@ namespace ASolute_Mobile.Data
 
         }
 
-        public int SaveMenuAsync(AppMenu item)
+        public int SaveMenuAsync(ListItems item)
         {
             item.owner = Ultis.Settings.SessionUserId;
             if (item.tableID != 0)

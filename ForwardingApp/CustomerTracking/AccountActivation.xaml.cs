@@ -22,7 +22,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void Submit_Clicked(object sender, EventArgs e)
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL(ActivationEntry.Text));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL(ActivationEntry.Text));
             clsResponse send_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (send_response.IsGood)
@@ -38,7 +38,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 }
 
-                var login_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID,  firebaseID ));
+                var login_content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID,  firebaseID ));
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(login_content);
 
                 if(login_response.IsGood)
@@ -62,7 +62,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void Resend_Clicked(object sender, EventArgs e)
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL());
             clsResponse resend_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(resend_response.IsGood)

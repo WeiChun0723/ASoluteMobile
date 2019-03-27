@@ -51,7 +51,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             tallyInDesc.Children.Clear();
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyInDetail(id));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyInDetail(id));
             clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyIn_response.IsGood)

@@ -207,6 +207,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\WMS_DetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)BusTicketing\StopsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)BusTicketing\Ticket.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)BusTicketing\CheckOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -361,7 +377,6 @@
       <DependentUpon>Logout.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ListViewCommonScreen.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\JobLists.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml.cs">
       <DependentUpon>DriverRFC.xaml</DependentUpon>
     </Compile>
@@ -454,6 +469,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)ListViewTemplate.xaml.cs">
       <DependentUpon>ListViewTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\WMS_DetailsPage.xaml.cs">
+      <DependentUpon>WMS_DetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)BusTicketing\StopsList.xaml.cs">
+      <DependentUpon>StopsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)BusTicketing\Ticket.xaml.cs">
+      <DependentUpon>Ticket.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)BusTicketing\CheckOut.xaml.cs">
+      <DependentUpon>CheckOut.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -467,6 +494,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)WMS_Screen\" />
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\" />
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
+    <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogHistory.xaml">

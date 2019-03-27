@@ -22,6 +22,7 @@ using ASolute.Mobile.Models;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using ASolute_Mobile.Planner;
+using ASolute_Mobile.BusTicketing;
 
 namespace ASolute_Mobile
 {
@@ -30,9 +31,10 @@ namespace ASolute_Mobile
         static Database database;
         public static string databaseLocation;
         string sessionKey = Ultis.Settings.SessionSettingKey;
-        public static double gpsLocationLat {get; set; }
-        public static double gpsLocationLong {get; set; }
+        public static double gpsLocationLat { get; set; }
+        public static double gpsLocationLong { get; set; }
         public static double DisplayScreenWidth { get; set; }
+        public static double DisplayScreenHeight { get; set; }
 
         public App()
         {
@@ -40,27 +42,29 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-           if (sessionKey != "")
-           {
-               MainPage = new MainPage();
 
-           }
-           else 
-           {
-               if(Ultis.Settings.AppFirstInstall == "First")
-               {
+
+            if (sessionKey != "")
+            {
+                MainPage = new MainPage();
+
+            }
+            else
+            {
+                if (Ultis.Settings.AppFirstInstall == "First")
+                {
 
                     MainPage = new CustomNavigationPage(new StartUpScreen());
                 }
-               else
-               {
-                   MainPage = new CustomNavigationPage(new LoginPage());
-               }
+                else
+                {
+                    MainPage = new CustomNavigationPage(new LoginPage());
+                }
 
-           }
+            }
 
-            /*   Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-           MainPage = new CustomNavigationPage(new AppNavigation());*/
+              /* Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+           MainPage = new CustomNavigationPage(new AppNavigation());
 
             /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
                        .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
@@ -72,22 +76,22 @@ namespace ASolute_Mobile
         void HandleNotificationReceived(OSNotification notification)
         {
 
-          /*if(!String.IsNullOrEmpty(notification.payload.body))
-            {
-              
+            /*if(!String.IsNullOrEmpty(notification.payload.body))
+              {
 
-                ChatRecord chat = new ChatRecord
-                {
-                    Content = notification.payload.body ,
-                    Sender = "OtherPPL",
-                    updatedDate = DateTime.Now ,
-                    BackgroundColor = "#cedcff"
-                };
 
-                App.Database.SaveChat(chat);
+                  ChatRecord chat = new ChatRecord
+                  {
+                      Content = notification.payload.body ,
+                      Sender = "OtherPPL",
+                      updatedDate = DateTime.Now ,
+                      BackgroundColor = "#cedcff"
+                  };
 
-                MessagingCenter.Send<App>((App)Application.Current, "Testing");
-            }*/
+                  App.Database.SaveChat(chat);
+
+                  MessagingCenter.Send<App>((App)Application.Current, "Testing");
+              }*/
 
             Ultis.Settings.NewJob = "Yes";
             Ultis.Settings.UpdatedRecord = "RefreshJobList";
@@ -109,19 +113,19 @@ namespace ASolute_Mobile
             }
         }
 
-        protected  override void OnStart()
+        protected override void OnStart()
         {
 
         }
 
         protected override void OnSleep()
         {
-           
+
         }
 
         protected override void OnResume()
         {
-         
+
         }
 
         public static void DropDatabase()

@@ -60,7 +60,7 @@ namespace ASolute_Mobile
                             try
                             {
                                
-                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
                                 clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (autoScan_response.IsGood)
@@ -99,7 +99,7 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL());
+                                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL());
                                 clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (panic_response.IsGood == true)
                                 {
@@ -154,7 +154,7 @@ namespace ASolute_Mobile
                             try
                             {
                               
-                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getCallOperatorURL());
+                                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCallOperatorURL());
                                 clsResponse callMe_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (callMe_response.IsGood == true)
                                 {
@@ -211,7 +211,7 @@ namespace ASolute_Mobile
                             try
                             {
 
-                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, uri);
+                                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, uri);
                                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (json_response.IsGood == true)
@@ -265,7 +265,7 @@ namespace ASolute_Mobile
                             try
                             {
                               
-                                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL());
+                                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL());
                                 clsResponse logoutResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (logoutResponse.IsGood == true)
@@ -299,7 +299,7 @@ namespace ASolute_Mobile
 
         public async void refreshMainPage()
         {
-            var context_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+            var context_content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
             clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
 
             var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();

@@ -196,7 +196,7 @@ namespace ASolute_Mobile
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-            var uri = ControllerUtil.getDownloadHaulageListURL();
+            var uri = ControllerUtil.getListURL();
             var response = await client.GetAsync(uri);
             var content = await response.Content.ReadAsStringAsync();
             Debug.WriteLine(content);
@@ -781,7 +781,7 @@ namespace ASolute_Mobile
 
                 Image barcode = new Image
                 {
-                    Source = "barCode.png",
+                    Source = "barcode_scanner.png",
                     WidthRequest = 50,
                     HeightRequest = 50,
                     VerticalOptions = LayoutOptions.Center

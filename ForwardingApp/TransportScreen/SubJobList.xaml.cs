@@ -49,7 +49,7 @@ namespace ASolute_Mobile.TransportScreen
         {
             records.Clear();
          
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getSubJobURL(jobID));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getSubJobURL(jobID));
             clsResponse pending_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (pending_response.IsGood)

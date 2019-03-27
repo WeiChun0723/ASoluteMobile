@@ -33,7 +33,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "AILS Haulage Ver." + CrossDeviceInfo.Current.AppVersion;
+            AppLabel.Text = "AILS Bus Ticketing Ver." + CrossDeviceInfo.Current.AppVersion;
 
 
             //set username entry maximum to 10 chars
@@ -95,8 +95,8 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                   var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
-                 // var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getFleetLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                  var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                  //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
@@ -161,7 +161,7 @@ namespace ASolute_Mobile
 
                         if(Ultis.Settings.Language.Equals("Malay"))
                         {
-                            await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getLanguageURL(0));
+                            await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getLanguageURL(0));
                             Ultis.Settings.Language = "English";
                         }
 

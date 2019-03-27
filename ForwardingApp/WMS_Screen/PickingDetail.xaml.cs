@@ -32,7 +32,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetPickingDetails()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadPickingDetail(pickingID, pickingType));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.loadPickingDetail(pickingID, pickingType));
             clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyIn_response.IsGood)

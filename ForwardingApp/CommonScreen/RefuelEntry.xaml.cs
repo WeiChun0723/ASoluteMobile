@@ -174,7 +174,7 @@ namespace ASolute_Mobile
                                     refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
                                     refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
 
-                                    var content = await CommonFunction.PostRequest( refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
+                                    var content = await CommonFunction.PostRequestAsync( refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                     if(response.IsGood)

@@ -65,7 +65,7 @@ namespace ASolute_Mobile.CustomerTracking
         {
             data.Clear();
 
-            var volume_content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageVolume(date));
+            var volume_content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageVolume(date));
             clsResponse volume_response = JsonConvert.DeserializeObject<clsResponse>(volume_content);
 
             if (volume_response.IsGood)

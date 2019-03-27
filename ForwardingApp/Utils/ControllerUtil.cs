@@ -11,6 +11,14 @@ namespace ASolute_Mobile.Utils
 {
     public class ControllerUtil
     {
+        #region Common url
+
+        public static String getBusStops()
+        {
+            return String.Format("Ticket/PriceList");
+        }
+        #endregion
+
 
         #region Common url
 
@@ -246,6 +254,10 @@ namespace ASolute_Mobile.Utils
             return String.Format("Haulage/Print?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobID);
         }
 
+        public static String getListURL()
+        {
+            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
 
         public static String postDriverRFCURL(string containerNum)
         {
@@ -354,7 +366,7 @@ namespace ASolute_Mobile.Utils
 
         public static String generatePallet(string linkid)
         {
-            return String.Format("Wms/Picking/GenPallet?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),linkid);
+            return String.Format("Wms/Picking/GenPallet?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), linkid);
         }
 
         #endregion
@@ -375,6 +387,12 @@ namespace ASolute_Mobile.Utils
             return String.Format("Session/Login?UserId={0}&Pwd={1}", encryptedUserId, encryptedPassword);
         }
 
+        public static String getLoginURL(string encryptedUserId, string encryptedPassword, string equipment)
+        {
+            return String.Format("Session/Login?UserId={0}&Pwd={1}&Eq={2}", encryptedUserId, encryptedPassword, equipment);
+        }
+
+
         public static String getDownloadLogoAcknowledgementURL()
         {
             return String.Format("File/LogoUpdated?SessionId={0}", Ultis.Settings.SessionSettingKey);
@@ -382,22 +400,17 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Warehouse", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Bus", CrossDeviceInfo.Current.AppVersion);
         }
 
         public static String getDownloadMenuURL(string firebase)
         {
-            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "Warehouse", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
         }
 
         public static String getDownloadRefuelHistoryURL()
         {
             return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String getDownloadHaulageListURL()
-        {
-            return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getDownloadHaulageHistoryURL(string date)

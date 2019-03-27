@@ -323,58 +323,66 @@ namespace ASolute_Mobile
 
         async void UpdateLogBook(clsTrip data)
         {
-            var content = await CommonFunction.PostRequest(data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
-            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            if (response.IsGood)
+            try
             {
+                var content = await CommonFunction.PostRequestAsync(data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
+                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (endLogEntry.IsVisible == false)
+                if (response.IsGood)
                 {
-                    endLogEntry.IsVisible = true;
-                    if (Ultis.Settings.Language.Equals("English"))
+
+                    if (endLogEntry.IsVisible == false)
                     {
-                        await DisplayAlert("Success", "New log record added", "OK");
+                        endLogEntry.IsVisible = true;
+                        if (Ultis.Settings.Language.Equals("English"))
+                        {
+                            await DisplayAlert("Success", "New log record added", "OK");
+                        }
+                        else
+                        {
+                            await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
+                        }
+
+                        endTime.Time = DateTime.Now.TimeOfDay;
+
                     }
                     else
                     {
-                        await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
+                        if (Ultis.Settings.Language.Equals("English"))
+                        {
+                            await DisplayAlert("Success", "Log Book record updated.", "OK");
+                        }
+                        else
+                        {
+                            await DisplayAlert("Berjaya", "Kemaskini data buku log.", "OK");
+                        }
                     }
 
-                    endTime.Time = DateTime.Now.TimeOfDay;
+                    Ultis.Settings.RefreshMenuItem = "Yes";
+
+                    imageLinkID = response.Result["LinkId"];
+                    trip.Id = response.Result["Id"];
+                    UploadImage();
 
                 }
                 else
                 {
+                    //await DisplayAlert("Error", response.Message, "OK");
                     if (Ultis.Settings.Language.Equals("English"))
                     {
-                        await DisplayAlert("Success", "Log Book record updated.", "OK");
+                        await DisplayAlert("Error", response.Message, "OK");
                     }
                     else
                     {
-                        await DisplayAlert("Berjaya", "Kemaskini data buku log.", "OK");
+                        await DisplayAlert("Failed", response.Message, "OK");
                     }
                 }
-
-                Ultis.Settings.RefreshMenuItem = "Yes";
-         
-                imageLinkID = response.Result["LinkId"];
-                trip.Id = response.Result["Id"];
-                UploadImage();
-                
             }
-            else
+            catch
             {
-                //await DisplayAlert("Error", response.Message, "OK");
-                if (Ultis.Settings.Language.Equals("English"))
-                {
-                    await DisplayAlert("Error", response.Message, "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Failed", response.Message, "OK");
-                }
+
             }
+
         }
 
 

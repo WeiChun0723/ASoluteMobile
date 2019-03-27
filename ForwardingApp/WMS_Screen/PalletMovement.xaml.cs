@@ -102,7 +102,7 @@ namespace ASolute_Mobile.WMS_Screen
                         pallet.CheckDigit = Convert.ToInt32(checkDigitEntry.Text);
                     }
 
-                    var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrx());
+                    var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrx());
                     clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (update_response.IsGood)
@@ -194,7 +194,7 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
             try
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiry(palletID));
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiry(palletID));
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(newPallet_response.IsGood)

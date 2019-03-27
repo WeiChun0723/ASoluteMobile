@@ -54,7 +54,7 @@ namespace ASolute_Mobile.CustomerTracking
                     remarks.Text = "";
                 }
              
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.updateContainerRFC(provider_code, process_id, currentTime, remarks.Text));
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.updateContainerRFC(provider_code, process_id, currentTime, remarks.Text));
                 clsResponse rfc_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(rfc_response.IsGood)

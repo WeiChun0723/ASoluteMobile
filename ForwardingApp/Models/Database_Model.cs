@@ -18,13 +18,13 @@ namespace ASolute_Mobile.Models
         public DateTime? updatedDate { get; set; }      
     }
 
-    public class TallyIn
+    /*public class TallyIn
     {
         public string Id { get; set; }
         public string DocumentNo { get; set; }
         public string ContainerNo { get; set; }
         public string Principal { get; set; }
-    }
+    }*/
 
     public class ChatRecord : Generic
     {
@@ -55,6 +55,11 @@ namespace ASolute_Mobile.Models
         public bool Display { get; set; }
         public string Type { get; set; }
         public string BackColor { get; set; }
+
+        //testing
+        public string StopId { get; set; }
+        public string StopName { get; set; }
+        public double Rate { get; set; }
     }
 
     public class DetailItems : Generic
@@ -79,7 +84,7 @@ namespace ASolute_Mobile.Models
         
     }
 
-    public class AppMenu : Generic
+    public class ListItems : Generic
     {
         public string menuId { get; set; }
         public string name { get; set; }
@@ -90,21 +95,11 @@ namespace ASolute_Mobile.Models
         public string background { get; set; }
         public string action { get; set; }
 
-    }
+        //testing
+        public string StopId { get; set; }
+        public string StopName { get; set; }
+        public double Rate { get; set; }
 
-    public class Log : Generic
-    {
-        public string logId { get; set; }
-        public int Done { get; set; }
-        public int OrderNo { get; set; }
-    }
-
-    public class JobNoList : Generic
-    {
-        public string menuId { get; set; }
-        public string JobId { get; set; }
-        public string JobNoValue { get; set; }
-        public bool Uploaded { get; set; }
     }
 
     public class JobItems : Generic
@@ -136,6 +131,23 @@ namespace ASolute_Mobile.Models
         public string Summary { get; set; }
 
     }
+
+    public class Log : Generic
+    {
+        public string logId { get; set; }
+        public int Done { get; set; }
+        public int OrderNo { get; set; }
+    }
+
+    public class JobNoList : Generic
+    {
+        public string menuId { get; set; }
+        public string JobId { get; set; }
+        public string JobNoValue { get; set; }
+        public bool Uploaded { get; set; }
+    }
+
+
 
     public class TruckModel : Generic
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rg.Plugins.Popup.Pages;
+using Syncfusion.SfBarcode.XForms;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile.HaulageScreen
@@ -13,6 +14,7 @@ namespace ASolute_Mobile.HaulageScreen
 
             export.Text = actionCode;
             booking.Text = bookingCode;
+
         }
     }
 }

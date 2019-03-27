@@ -16,7 +16,7 @@ namespace ASolute_Mobile.WMS_Screen
     {
 
         List<clsDataRow> tallyOutList;
-        ObservableCollection<AppMenu> Item;
+        ObservableCollection<ListItems> Item;
         bool tapped = true;
 
         public TallyOut(string screenTitle)
@@ -68,7 +68,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             loading.IsVisible = true;
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyOutList());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyOutList());
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
@@ -79,7 +79,7 @@ namespace ASolute_Mobile.WMS_Screen
                 App.Database.deleteMenuItems("TallyOutList");
                 foreach (clsDataRow data in tallyOutList)
                 {
-                    AppMenu record = new AppMenu
+                    ListItems record = new ListItems
                     {
                         menuId = data.Id,
                         background = data.BackColor,
@@ -178,7 +178,7 @@ namespace ASolute_Mobile.WMS_Screen
         void loadPackingList()
         {
             Ultis.Settings.List = "TallyOut_List";
-            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("TallyOutList"));
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("TallyOutList"));
             pickingList.ItemsSource = Item;
             pickingList.HasUnevenRows = true;
             pickingList.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -201,7 +201,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new TallyOutDetail(((AppMenu)e.Item).menuId));
+            await Navigation.PushAsync(new TallyOutDetail(((ListItems)e.Item).menuId));
 
         }
 

@@ -62,7 +62,7 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 loading.IsVisible = true;
 
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyOutDetail(tallyOutID));
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.loadTallyOutDetail(tallyOutID));
                 clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (tallyIn_response.IsGood)
@@ -165,7 +165,7 @@ namespace ASolute_Mobile.WMS_Screen
                                     Id = result.Text
                                 };
 
-                                var content = await CommonFunction.PostRequest(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
+                                var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
                                 clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (upload_response.IsGood)

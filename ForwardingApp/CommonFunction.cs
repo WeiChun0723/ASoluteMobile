@@ -23,7 +23,7 @@ namespace ASolute_Mobile.Utils
         static string returnResult;
 
         //call when calling the web service to get response
-        public static async Task<string> GetWebService(string baseAdd,string callUri)
+        public static async Task<string> GetRequestAsync(string baseAdd,string callUri)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(baseAdd);
@@ -35,7 +35,7 @@ namespace ASolute_Mobile.Utils
             return content;
         }
 
-        public static async Task<string> PostRequest(object data, string baseAdd, string calllUri)
+        public static async Task<string> PostRequestAsync(object data, string baseAdd, string calllUri)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(baseAdd);
@@ -77,28 +77,36 @@ namespace ASolute_Mobile.Utils
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(baseAdd);
-            var uri = calllUri;
-            var content = "";
-
-            if (method == 0)
+            try
             {
-                var response = await client.GetAsync(uri);
-                content = await response.Content.ReadAsStringAsync();
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(baseAdd);
+                var uri = calllUri;
+                var content = "";
+
+                if (method == 0)
+                {
+                    var response = await client.GetAsync(uri);
+                    content = await response.Content.ReadAsStringAsync();
+                }
+                else if (method == 1)
+                {
+                    var objectContent = JsonConvert.SerializeObject(data);
+                    var httpContent = new StringContent(objectContent, Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(uri, httpContent);
+                    content = await response.Content.ReadAsStringAsync();
+                }
+
+                Debug.WriteLine(content);
+
+
+                return content;
             }
-            else if(method == 1)
+            catch
             {
-                var objectContent = JsonConvert.SerializeObject(data);
-                var httpContent = new StringContent(objectContent, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(uri, httpContent);
-                content = await response.Content.ReadAsStringAsync();
+
             }
-
-            Debug.WriteLine(content);
-
-          
-            return content;
+            return "";
         }
 
         //capture image and store local path in db function

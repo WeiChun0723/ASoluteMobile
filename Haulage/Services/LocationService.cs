@@ -57,7 +57,7 @@ namespace ASolute_Mobile.Droid.Services
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             Log.Debug(logTag, "LocationService started");
-            string channelId = "";
+           /* string channelId = "";
             Notification notification = null;
             var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(MainActivity)), 0);
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
@@ -82,7 +82,7 @@ namespace ASolute_Mobile.Droid.Services
                 .Build();
             }
 
-            StartForeground((int)NotificationFlags.ForegroundService, notification);
+            StartForeground((int)NotificationFlags.ForegroundService, notification);*/
 
             return StartCommandResult.NotSticky;
         }

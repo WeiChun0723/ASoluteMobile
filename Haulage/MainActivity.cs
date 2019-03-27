@@ -25,7 +25,7 @@ using Haulage.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS BUS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -42,8 +42,11 @@ namespace ASolute_Mobile.Droid
 
                 base.OnCreate(bundle);
 
+                if(PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                {
+                    //RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+                }
 
-                //RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
 
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
                 //Xamarin.Essentials.Platform.Init(this, bundle);
@@ -55,21 +58,35 @@ namespace ASolute_Mobile.Droid
 
                 LoadApplication(new App());
 
-                /*if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                /*if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                {
+                    Intent intent = new Intent();
+                    String packageName = PackageName;
+                    PowerManager pm = (PowerManager)GetSystemService(PowerService);
+                    if (!pm.IsIgnoringBatteryOptimizations(packageName))
+                    {
+                        intent.SetAction(Android.Provider.Settings.ActionRequestIgnoreBatteryOptimizations);
+
+                        intent.SetData(Android.Net.Uri.Parse("package:" + packageName));
+                        StartActivity(intent);
+                    }
+                }
+
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
                     StartLocationTracking();
-
                 }*/
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
+                App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
+
             }
-            catch
+            catch(Exception ex)
             {
 
             }
 
         }
-
 
         public void StartLocationTracking()
         {
@@ -77,7 +94,7 @@ namespace ASolute_Mobile.Droid
             LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
             {
                 Log.Debug(logTag, "ServiceConnected Event Raised");
-                        // notifies us of location changes from the system
+                 // notifies us of location changes from the system
                         LocationApp.Current.LocationService.LocationChanged += HandleLocationChanged;
                         //notifies us of user changes to the location provider (ie the user disables or enables GPS)
                         LocationApp.Current.LocationService.ProviderDisabled += HandleProviderDisabled;
@@ -130,7 +147,8 @@ namespace ASolute_Mobile.Droid
             base.OnDestroy();
 
             //LocationApp.StopLocationService();
-
+           //((ActivityManager)GetSystemService(ActivityService)).ClearApplicationUserData();
+           
         }
 
         public override void OnBackPressed()

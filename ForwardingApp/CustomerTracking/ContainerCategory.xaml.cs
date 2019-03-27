@@ -31,7 +31,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void selectCategory(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new ProviderDetails(providerCode,((AppMenu)e.Item).menuId, ((AppMenu)e.Item).name));
+            await Navigation.PushAsync(new ProviderDetails(providerCode,((ListItems)e.Item).menuId, ((ListItems)e.Item).name));
             
         }
 
@@ -45,7 +45,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void getCategory()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryList(providerCode));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryList(providerCode));
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (provider_response.IsGood)
@@ -58,7 +58,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 foreach (clsCaptionValue category in categories)
                 {
-                    AppMenu menu = new AppMenu();
+                    ListItems menu = new ListItems();
                     menu.menuId = category.Caption;
                     menu.name = category.Value;
                     App.Database.SaveMenuAsync(menu);
@@ -117,7 +117,7 @@ namespace ASolute_Mobile.CustomerTracking
          public void loadCateogoryList()
          {
              Ultis.Settings.List = "category_List";
-             ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
+             ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenuItems());
              category_list.ItemsSource = Item;
              category_list.HasUnevenRows = true;
              category_list.Style = (Style)App.Current.Resources["recordListStyle"];

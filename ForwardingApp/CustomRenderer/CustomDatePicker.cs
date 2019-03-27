@@ -17,7 +17,8 @@ namespace ASolute_Mobile.CustomRenderer
         private void UpdateDate()
         {
             if (NullableDate.HasValue) { if (null != _format) Format = _format; Date = NullableDate.Value; }
-            else { _format = Format; Format = "  "; }
+            else 
+            { _format = Format; Format = "  "; }
         }
         protected override void OnBindingContextChanged()
         {

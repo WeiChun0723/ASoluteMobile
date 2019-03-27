@@ -188,7 +188,7 @@ namespace ASolute_Mobile.HaulageScreen
                 jobList.RowHeight = 200;
             }
 
-            Ultis.Settings.List = "Job_List";
+            Ultis.Settings.List = "HaulageJob_List";
             ObservableCollection<JobItems> jobs = new ObservableCollection<JobItems>(App.Database.GetJobItems(doneStatus, "HaulageJob"));
             jobList.ItemsSource = jobs;
             jobList.HasUnevenRows = true;

@@ -27,7 +27,7 @@ namespace ASolute_Mobile.testing
         {
             try
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (login_response.IsGood == true)
@@ -49,7 +49,7 @@ namespace ASolute_Mobile.testing
 
                     foreach (clsDataRow mainMenu in login_Menu.MainMenu)
                     {
-                        AppMenu existingRecord = App.Database.GetMenuRecordAsync(mainMenu.Id);
+                        ListItems existingRecord = App.Database.GetMenuRecordAsync(mainMenu.Id);
 
                         if (mainMenu.Id != "LogOff")
                         {
@@ -57,7 +57,7 @@ namespace ASolute_Mobile.testing
                             {
                                 if (existingRecord == null)
                                 {
-                                    existingRecord = new AppMenu();
+                                    existingRecord = new ListItems();
                                 }
 
                                 existingRecord.menuId = mainMenu.Id;
@@ -185,7 +185,7 @@ namespace ASolute_Mobile.testing
         {
   
             Ultis.Settings.List = "Main_Menu";
-            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenuItems());
+            ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenuItems());
             listView.ItemsSource = Item;
             listView.Style = (Style)App.Current.Resources["recordListStyle"];
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));

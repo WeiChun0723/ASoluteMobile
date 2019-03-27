@@ -52,7 +52,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
 
                     Ultis.Settings.AppFirstInstall = "Second";
-                    var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                    var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
                     clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (autoScan_response.IsGood)
@@ -92,7 +92,7 @@ namespace ASolute_Mobile.CustomerTracking
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new ContainerCategory(((AppMenu)e.Item).menuId,((AppMenu)e.Item).name));
+            await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).menuId,((ListItems)e.Item).name));
 
 
         }
@@ -106,7 +106,7 @@ namespace ASolute_Mobile.CustomerTracking
     
         public async Task getProviderList()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderList());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderList());
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(provider_response.IsGood)
@@ -120,7 +120,7 @@ namespace ASolute_Mobile.CustomerTracking
                 foreach(clsProvider p in providers)
                 {
 
-                    AppMenu menu = new AppMenu();
+                    ListItems menu = new ListItems();
                     menu.menuId = p.Code;
                     menu.name = p.Name;
                     menu.category = "ProviderList";
@@ -146,7 +146,7 @@ namespace ASolute_Mobile.CustomerTracking
         public void LoadProviderList()
         {
             Ultis.Settings.List = "provider_List";
-            ObservableCollection<AppMenu> Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("ProviderList"));
+            ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("ProviderList"));
             provide_list.ItemsSource = Item;
             provide_list.HasUnevenRows = true;          
             provide_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));

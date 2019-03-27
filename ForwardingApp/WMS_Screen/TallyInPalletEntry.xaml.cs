@@ -18,12 +18,12 @@ namespace ASolute_Mobile.WMS_Screen
         clsWhsItem productPallet = new clsWhsItem();
         string id, fieldName;
         clsPalletNew newPallet;
-        List<string> size = new List<string>();
-        List<string> unit = new List<string>();
+        List<string> sizes = new List<string>();
+        List<string> units = new List<string>();
         List<string> status = new List<string>();
-        bool tapped = true;
         CustomEntry customEntry;
         CustomDatePicker customDatePicker;
+        List<bool> checkField = new List<bool>();
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID)
         {
@@ -68,137 +68,153 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetNewPalletList()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id, productPallet.ProductLinkId));
-            clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            if (newPallet_response.IsGood)
+            try
             {
-                newPallet = JObject.Parse(content)["Result"].ToObject<clsPalletNew>();
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id, productPallet.ProductLinkId));
+                clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                foreach (clsKeyValue sizes in newPallet.PalletSize)
+                if (newPallet_response.IsGood)
                 {
-                    size.Add(sizes.Value);
-                }
+                    newPallet = JObject.Parse(content)["Result"].ToObject<clsPalletNew>();
 
-                foreach (clsKeyValue units in newPallet.ProductUom)
-                {
-                    unit.Add(units.Key);
-                }
-
-                foreach (clsKeyValue status_ in newPallet.StockStatus)
-                {
-                    status.Add(status_.Key);
-                }
-
-                sizeBox.ComboBoxSource = size;
-                unitBox.ComboBoxSource = unit;
-                statusBox.ComboBoxSource = status;
-
-                statusBox.Text = newPallet.DefaultStockStatus;
-
-                int row = 4, column = 0;
-                foreach (clsAttribute attr in newPallet.Attribute)
-                {
-                    grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
-
-                    Label fieldLbl = new Label
+                    foreach (clsKeyValue size in newPallet.PalletSize)
                     {
-                        Text = attr.Caption,
-                        FontAttributes = FontAttributes.Bold,
-                        VerticalTextAlignment = TextAlignment.Center
-                    };
+                        sizes.Add(size.Value);
+                    }
 
-                    StackLayout entryStack = new StackLayout
+                    foreach (clsKeyValue unit in newPallet.ProductUom)
                     {
-                        Orientation = StackOrientation.Horizontal,
-                        StyleId = attr.Key
-                    };
+                        units.Add(unit.Key);
+                    }
 
-                    if (attr.Key.Equals("ExpiryDate") || attr.Key.Equals("MfgDate"))
+                    foreach (clsKeyValue status_ in newPallet.StockStatus)
                     {
-                        customDatePicker = new CustomDatePicker
+                        status.Add(status_.Key);
+                    }
+
+                    sizeBox.ComboBoxSource = sizes;
+                    unitBox.ComboBoxSource = units;
+                    statusBox.ComboBoxSource = status;
+
+                    statusBox.Text = newPallet.DefaultStockStatus;
+
+                    int row = 4, column = 0;
+                    foreach (clsAttribute attr in newPallet.Attribute)
+                    {
+                        grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+
+                        Label fieldLbl = new Label
                         {
-                            StyleId = attr.Key,
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            NullableDate = null
+                            Text = attr.Caption,
+                            FontAttributes = FontAttributes.Bold,
+                            VerticalTextAlignment = TextAlignment.Center
                         };
 
-                        customDatePicker.Unfocused += (object sender, FocusEventArgs e) => 
+                        StackLayout entryStack = new StackLayout
                         {
-                            DateUnfocus(sender);
+                            Orientation = StackOrientation.Horizontal,
+                            StyleId = attr.Key
                         };
 
-                        entryStack.Children.Add(customDatePicker);
-                    }
-                    else
-                    {
-                        customEntry = new CustomEntry
+                        if (attr.Key.Equals("ExpiryDate") || attr.Key.Equals("MfgDate"))
                         {
-                            StyleId = attr.Key,
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            customDatePicker = new CustomDatePicker
+                            {
+                                StyleId = attr.Key,
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                                NullableDate = null
+                            };
 
+                            customDatePicker.Unfocused += (object sender, FocusEventArgs e) =>
+                            {
+                                DateUnfocus(sender);
+                            };
+
+                            entryStack.Children.Add(customDatePicker);
+                        }
+                        else
+                        {
+                            customEntry = new CustomEntry
+                            {
+                                StyleId = attr.Key,
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+
+                            };
+
+                            customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 20 });
+
+
+                            entryStack.Children.Add(customEntry);
+                        }
+
+                        if (attr.Value.Equals("O") || attr.Value.Equals(""))
+                        {
+                            if (customEntry != null)
+                            {
+                                customEntry.LineColor = Color.WhiteSmoke;
+                            }
+
+                        }
+                        else if (attr.Value.Equals("M"))
+                        {
+                            if (customEntry != null)
+                            {
+                                customEntry.LineColor = Color.LightYellow;
+                            }
+                            if (customDatePicker != null)
+                            {
+                                customDatePicker.BackgroundColor = Color.LightYellow;
+                            }
+                        }
+
+                        Image scan = new Image
+                        {
+                            Source = "barCode.png",
+                            WidthRequest = 60,
+                            HeightRequest = 30,
+                            VerticalOptions = LayoutOptions.Center,
+                            StyleId = attr.Key
                         };
 
-                        customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 20 });
+                        var scan_barcode = new TapGestureRecognizer
+                        {
+                            NumberOfTapsRequired = 1
+                        };
+
+                        scan_barcode.Tapped += (sender, e) =>
+                        {
+                            var image = sender as Image;
+
+                            EntryScan(image);
+                        };
+                        scan.GestureRecognizers.Add(scan_barcode);
+
+                        entryStack.Children.Add(scan);
 
 
-                        entryStack.Children.Add(customEntry);
+                        grid.Children.Add(fieldLbl, column, row);
+                        column++;
+                        grid.Children.Add(entryStack, column, row);
+                        row++;
+                        column = 0;
+
                     }
-
-                    if (attr.Value.Equals("O") || attr.Value.Equals(""))
-                    {
-                        customEntry.LineColor = Color.WhiteSmoke;
-
-                    }
-                    else if (attr.Value.Equals("M"))
-                    {
-                        customEntry.LineColor = Color.LightYellow;
-                        customDatePicker.BackgroundColor = Color.LightYellow;
-                    }
-
-                    Image scan = new Image
-                    {
-                        Source = "barCode.png",
-                        WidthRequest = 60,
-                        HeightRequest = 30,
-                        VerticalOptions = LayoutOptions.Center,
-                        StyleId = attr.Key
-                    };
-
-                    var scan_barcode = new TapGestureRecognizer
-                    {
-                        NumberOfTapsRequired = 1
-                    };
-
-                    scan_barcode.Tapped += (sender, e) =>
-                    {
-                        var image = sender as Image;
-
-                        EntryScan(image);
-                    };
-                    scan.GestureRecognizers.Add(scan_barcode);
-
-                    entryStack.Children.Add(scan);
-
-
-                    grid.Children.Add(fieldLbl, column, row);
-                    column++;
-                    grid.Children.Add(entryStack, column, row);
-                    row++;
-                    column = 0;
 
                 }
-
+                else
+                {
+                    await DisplayAlert("Error", newPallet_response.Message, "OK");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("Error", newPallet_response.Message, "OK");
+                await DisplayAlert("Error", ex.Message, "OK");
             }
+
         }
 
         void DateUnfocus(object sender)
         {
-
             var date = sender as CustomDatePicker;
 
             foreach (View t in grid.Children)
@@ -216,10 +232,12 @@ namespace ASolute_Mobile.WMS_Screen
                             if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
                             {
                                 CustomDatePicker picker = (CustomDatePicker)v;
+
                                 if (picker.Date.ToString("yyyy-MM-dd").Equals(DateTime.Now.ToString("yyyy-MM-dd")))
                                 {
-                                    picker.NullableDate = DateTime.Now;
+                                    picker.NullableDate = picker.Date;
                                 }
+
                             }
                         }
                     }
@@ -288,46 +306,58 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void BarCodeScan(string field)
         {
-            if (tapped)
+            try
             {
-                tapped = false;
-                try
-                {
-                    var scanPage = new ZXingScannerPage();
-                    await Navigation.PushAsync(scanPage);
+                var scanPage = new ZXingScannerPage();
+                await Navigation.PushAsync(scanPage);
 
-                    scanPage.OnScanResult += (result) =>
+                scanPage.OnScanResult += (result) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
-                        {
-                            await Navigation.PopAsync();
+                        await Navigation.PopAsync();
 
-                            palletNo.Text = result.Text;
+                        palletNo.Text = result.Text;
 
-                        });
-                    };
-                }
-                catch (Exception e)
-                {
-                    await DisplayAlert("Error", e.Message, "OK");
-                }
-
-                tapped = true;
+                    });
+                };
             }
-
+            catch (Exception e)
+            {
+                await DisplayAlert("Error", e.Message, "OK");
+            }
         }
 
         async void ConfirmAddPallet(object sender, EventArgs e)
         {
             try
             {
+                checkField.Clear();
+
+                foreach (clsAttribute attr in newPallet.Attribute)
+                {
+                    if (attr.Value.Equals("M"))
+                    {
+                        string test = (!(String.IsNullOrEmpty(SearchControl(attr.Key, "GetValue")))) ? SearchControl(attr.Key, "GetValue") : String.Empty;
+
+                        if (String.IsNullOrEmpty(test))
+                        {
+                            checkField.Add(false);
+                        }
+                        else
+                        {
+                            checkField.Add(true);
+                        }
+                    }
+                }
+
                 if (!(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
-             && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)))
+                    && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)) && !(checkField.Contains(false)))
                 {
 
-                    string[] test = sizeBox.Text.Split('(');
+                    string[] size = sizeBox.Text.Split('(');
 
-                    string[] numbers = Regex.Split(test[1], @"\D+");
+                    string[] numbers = Regex.Split(size[1], @"\D+");
 
                     clsPallet pallet = new clsPallet
                     {
@@ -340,17 +370,17 @@ namespace ASolute_Mobile.WMS_Screen
                         Qty = Convert.ToInt32(quantity.Text),
                         Uom = newPallet.ProductUom[unitBox.SelectedIndex].Key,
                         StockStatus = statusBox.Text,
-                        String01 = (!(String.IsNullOrEmpty(SearchControl("String01")))) ? SearchControl("String01") : String.Empty,
-                        String02 = (!(String.IsNullOrEmpty(SearchControl("String02")))) ? SearchControl("String02") : String.Empty,
-                        String03 = (!(String.IsNullOrEmpty(SearchControl("String03")))) ? SearchControl("String03") : String.Empty,
-                        String04 = (!(String.IsNullOrEmpty(SearchControl("String04")))) ? SearchControl("String04") : String.Empty,
-                        String05 = (!(String.IsNullOrEmpty(SearchControl("String05")))) ? SearchControl("String05") : String.Empty,
-                        String06 = (!(String.IsNullOrEmpty(SearchControl("String06")))) ? SearchControl("String06") : String.Empty,
-                        ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate")))) ? SearchControl("ExpiryDate") : String.Empty,
-                        MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate")))) ? SearchControl("MfgDate") : String.Empty,
+                        String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue")))) ? SearchControl("String01", "GetValue") : String.Empty,
+                        String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue")))) ? SearchControl("String02", "GetValue") : String.Empty,
+                        String03 = (!(String.IsNullOrEmpty(SearchControl("String03", "GetValue")))) ? SearchControl("String03", "GetValue") : String.Empty,
+                        String04 = (!(String.IsNullOrEmpty(SearchControl("String04", "GetValue")))) ? SearchControl("String04", "GetValue") : String.Empty,
+                        String05 = (!(String.IsNullOrEmpty(SearchControl("String05", "GetValue")))) ? SearchControl("String05", "GetValue") : String.Empty,
+                        String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue")))) ? SearchControl("String06", "GetValue") : String.Empty,
+                        ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue")))) ? SearchControl("ExpiryDate", "GetValue") : String.Empty,
+                        MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue")))) ? SearchControl("MfgDate", "GetValue") : String.Empty,
                     };
 
-                    var content = await CommonFunction.PostRequest(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPallet(id));
+                    var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPallet(id));
                     clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (upload_response.IsGood)
@@ -363,7 +393,7 @@ namespace ASolute_Mobile.WMS_Screen
                         statusBox.Text = newPallet.DefaultStockStatus;
 
                         List<string> dynamicFields = new List<string>
-                        {
+                            {
                             "String01",
                             "String02",
                             "String03",
@@ -371,16 +401,18 @@ namespace ASolute_Mobile.WMS_Screen
                             "String05",
                             "String06",
                             "ExpiryDate",
-                            "MfgDate",
-                        };
-                        ClearValue(dynamicFields);
+                            "MfgDate"
+                            };
+
+                        foreach (string field in dynamicFields)
+                        {
+                            SearchControl(field, "ClearValue");
+                        }
                     }
                     else
                     {
                         await DisplayAlert("Error", upload_response.Message, "OK");
-                      
                     }
-
                 }
                 else
                 {
@@ -391,10 +423,9 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 await DisplayAlert("Error", error.Message, "OK");
             }
-
         }
 
-        string SearchControl(string controlID)
+        string SearchControl(string controlID, string action)
         {
             foreach (View t in grid.Children)
             {
@@ -411,23 +442,42 @@ namespace ASolute_Mobile.WMS_Screen
                             if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
                             {
                                 CustomEntry entry = (CustomEntry)v;
-                                return entry.Text;
+
+                                if (action == "GetValue")
+                                {
+                                    return entry.Text;
+                                }
+                                else
+                                {
+                                    entry.Text = String.Empty;
+                                }
+
                             }
                             else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
                             {
                                 CustomDatePicker picker = (CustomDatePicker)v;
 
-                                if(picker.NullableDate == null)
+                                if (action == "GetValue")
                                 {
-                                    return "";
+                                    if (picker.NullableDate == null)
+                                    {
+                                        return "";
+                                    }
+                                    else
+                                    {
+                                        return picker.Date.ToString("yyyy-MM-dd");
+                                    }
                                 }
                                 else
                                 {
-                                    return picker.Date.ToString("yyyy-MM-dd");
+                                    if (picker.NullableDate != null)
+                                    {
+                                        picker.Date = DateTime.Now;
+                                        picker.NullableDate = null;
+                                    }
                                 }
 
                             }
-
                         }
                     }
                 }
@@ -436,42 +486,5 @@ namespace ASolute_Mobile.WMS_Screen
             return null;
         }
 
-        void ClearValue(List<string> fields)
-        {
-            foreach (string name in fields)
-            {
-                foreach (View t in grid.Children)
-                {
-                    if (t.StyleId == name)
-                    {
-                        var stack = (StackLayout)t;
-
-                        foreach (View v in stack.Children)
-                        {
-                            if (v.StyleId == name)
-                            {
-                                string type = v.GetType().ToString();
-
-                                if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
-                                {
-                                    CustomEntry entry = (CustomEntry)v;
-                                    entry.Text = String.Empty;
-                                }
-                                else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
-                                {
-                                    CustomDatePicker picker = (CustomDatePicker)v;
-
-                                    picker.NullableDate = null;
-
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-           
     }
 }

@@ -31,7 +31,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetPackingDetails()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.loadPackingDetail(packingID));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.loadPackingDetail(packingID));
             clsResponse tallyIn_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyIn_response.IsGood)

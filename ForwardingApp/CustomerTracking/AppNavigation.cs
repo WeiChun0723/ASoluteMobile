@@ -148,7 +148,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                         var content = await CommonFunction.PostRequest(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
                         clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);*/
-                        var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
+                        var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.emailVerify(entry.Text));
                         clsResponse verify_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (verify_response.IsGood)
@@ -190,7 +190,7 @@ namespace ASolute_Mobile.CustomerTracking
                 }
 
 
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(id, firebaseID));
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(id, firebaseID));
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (login_response.IsGood)

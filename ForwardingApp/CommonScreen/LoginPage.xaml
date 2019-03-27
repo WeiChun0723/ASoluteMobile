@@ -26,12 +26,16 @@
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
             <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}" EnablePasswordVisibilityToggle="true"   >
-                <Entry IsPassword="true" x:Name="passwordEntry" />
+                <Entry IsPassword="true" x:Name="passwordEntry" > 
+                 <Entry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="100"/>
+                </Entry.Behaviors>  
+                </Entry>
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="password" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-      <!--<inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
+     <!-- <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">
                 <Entry x:Name="equipmentEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />

@@ -80,7 +80,7 @@ namespace ASolute_Mobile
                     contents =content
                 };
 
-                var webservice_content = await CommonFunction.PostRequest(chat, "https://onesignal.com/api/v1/notifications", "");
+                var webservice_content = await CommonFunction.PostRequestAsync(chat, "https://onesignal.com/api/v1/notifications", "");
 
                 var testing = JObject.Parse(webservice_content);
                 int result = Convert.ToInt32(testing["recipients"].ToString());

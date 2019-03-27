@@ -17,7 +17,7 @@ namespace ASolute_Mobile.WMS_Screen
     {
 
         List<clsDataRow> tallyInList;
-        ObservableCollection<AppMenu> Item;
+        ObservableCollection<ListItems> Item;
         bool tapped = true;
 
         public TallyInList(string title)
@@ -73,7 +73,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             loading.IsVisible = true;
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyInList());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getTallyInList());
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
@@ -84,7 +84,7 @@ namespace ASolute_Mobile.WMS_Screen
                 App.Database.deleteMenuItems("TallyInList");
                 foreach (clsDataRow data in tallyInList)
                 {
-                        AppMenu record = new AppMenu
+                        ListItems record = new ListItems
                         {
                             menuId = data.Id,
                             background = data.BackColor,
@@ -151,7 +151,7 @@ namespace ASolute_Mobile.WMS_Screen
         public void loadTallyInList()
         {
             Ultis.Settings.List = "TallyIn_List";
-            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("TallyInList"));
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("TallyInList"));
             tallyList.ItemsSource = Item;
             tallyList.HasUnevenRows = true;
             tallyList.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -205,7 +205,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void selectTallyIn(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
+            await Navigation.PushAsync(new TallyInDetail(((ListItems)e.Item).menuId));
  
         }
 

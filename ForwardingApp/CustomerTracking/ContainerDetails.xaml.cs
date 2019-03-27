@@ -94,7 +94,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async Task GetContainerDetail()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerDetail(provider_code, provider_container));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerDetail(provider_code, provider_container));
             clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(container_response.IsGood)

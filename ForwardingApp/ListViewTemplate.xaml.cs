@@ -17,8 +17,8 @@ namespace ASolute_Mobile
     public partial class ListViewTemplate : ContentPage
     {
 
-        List<clsDataRow> tallyInList;
-        ObservableCollection<AppMenu> Item;
+        List<clsDataRow> dataList;
+        ObservableCollection<ListItems> Item;
         string uri,name;
 
         public ListViewTemplate(string title, string callUri)
@@ -48,9 +48,24 @@ namespace ASolute_Mobile
 
             name = title;
             uri = callUri;
-            GetListData();
-        
+             
+
         }
+
+        protected override  void OnAppearing()
+        {
+            base.OnAppearing();
+
+            GetListData();
+        }
+
+
+         void Handle_Refreshing(object sender, System.EventArgs e)
+        {
+            GetListData();
+
+        }
+
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -112,21 +127,25 @@ namespace ASolute_Mobile
             switch(type)
             {
                 case "Tally In":
-                    await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
+                    //await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
+                   await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetail(((ListItems)e.Item).menuId), ((ListItems)e.Item).menuId,type));
                     break;
                 case "Packing":
-                    await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
+                    //await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
+                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((ListItems)e.Item).menuId), ((ListItems)e.Item).menuId,type));
                     break;
                 case "Loose Pick":
-                    await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "LoosePick", name));
+                    //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "LoosePick", name));
+                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).menuId,"LoosePick") , ((ListItems)e.Item).menuId, type));
                     break;
                 case "Full Pick":
-                    await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "FullPick", name));
+                    //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "FullPick", name));
+                     await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).menuId, "FullPick"), ((ListItems)e.Item).menuId, type));
                     break;
                 case "Tally Out":
-                    await Navigation.PushAsync(new TallyOutDetail(((AppMenu)e.Item).menuId));
+                    //await Navigation.PushAsync(new TallyOutDetail(((AppMenu)e.Item).menuId));
+                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetail(((ListItems)e.Item).menuId), ((ListItems)e.Item).menuId, type));
                     break;
-
             }
         }
 
@@ -134,22 +153,22 @@ namespace ASolute_Mobile
         {
             loading.IsVisible = true;
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, uri);
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, uri);
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (response.IsGood)
             {
-                tallyInList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
+                dataList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
                 App.Database.deleteMainMenuItem(name);
                 App.Database.deleteMenuItems(name);
-                foreach (clsDataRow data in tallyInList)
+                foreach (clsDataRow data in dataList)
                 {
-                    AppMenu record = new AppMenu
+                    ListItems record = new ListItems
                     {
                         menuId = data.Id,
                         background = data.BackColor,
-                        category = name
+                        category = name,
                     };
 
                     string summary = "";
@@ -207,7 +226,7 @@ namespace ASolute_Mobile
         public void loadTallyInList()
         {
             Ultis.Settings.List = name;
-            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu(name));
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(name));
             listView.ItemsSource = Item;
             listView.HasUnevenRows = true;
             listView.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -215,13 +234,10 @@ namespace ASolute_Mobile
 
             if (Item.Count == 0)
             {
-
                 noData.IsVisible = true;
-
             }
             else
             {
-
                 noData.IsVisible = false;
             }
         }

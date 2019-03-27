@@ -4,7 +4,7 @@
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
         <SearchBar x:Name="searchBar" IsVisible="true" Placeholder="Search here to Filter" TextChanged="OnFilterTextChanged" HeightRequest="50" />
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData" />
-        <ListView x:Name="listView" ItemTapped="SelectList" SeparatorColor="White" />
+        <ListView x:Name="listView" ItemTapped="SelectList" SeparatorColor="White" Refreshing="Handle_Refreshing"/>
         <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="55" HorizontalOptions="End" x:Name="scan_icon">
             <Image.GestureRecognizers>
                 <TapGestureRecognizer Tapped="BarCodeScan"  NumberOfTapsRequired="1"/>

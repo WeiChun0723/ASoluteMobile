@@ -74,7 +74,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
                     try
                     {
-                        List<AppMenu> test = new List<AppMenu>(App.Database.GetMainMenuItems());
+                        List<ListItems> test = new List<ListItems>(App.Database.GetMainMenuItems());
                         container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) || x.name.Contains(searchKey) || x.summary.Contains(searchKey));
 
                     }
@@ -106,12 +106,12 @@ namespace ASolute_Mobile.CustomerTracking
         public async void selectContainer(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new ContainerDetails(providerCode, ((AppMenu)e.Item).menuId));
+            await Navigation.PushAsync(new ContainerDetails(providerCode, ((ListItems)e.Item).menuId));
         }
 
         public async Task GetContainer()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerList(providerCode, categorycode));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerList(providerCode, categorycode));
             clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (container_response.IsGood)
@@ -122,7 +122,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
                     string summary = "";
                     bool firstLine = true;
-                    AppMenu menu = new AppMenu();
+                    ListItems menu = new ListItems();
                     menu.menuId = container.Id;
                     menu.category = "Container";
 
@@ -179,7 +179,7 @@ namespace ASolute_Mobile.CustomerTracking
         public void loadContainerList()
         {
             Ultis.Settings.List= "container_List";
-            List<AppMenu> Item = new List<AppMenu>(App.Database.GetMainMenuItems());
+            List<ListItems> Item = new List<ListItems>(App.Database.GetMainMenuItems());
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;
    

@@ -258,7 +258,7 @@ namespace ASolute_Mobile
                         }
                         else if(Ultis.Settings.App == "Haulage")
                         {
-                            await GetWebService(ControllerUtil.getDownloadHaulageListURL(), "HaulageJobList", contentPage, "HaulageJob");
+                            await GetWebService(ControllerUtil.getListURL(), "HaulageJobList", contentPage, "HaulageJob");
                             await GetWebService(ControllerUtil.getReasonListURL(), "ReasonList", contentPage, "");
 
                         }

@@ -58,7 +58,7 @@ namespace ASolute_Mobile.TransportScreen
 
         public async void ReasonList()
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getReasonListURL());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getReasonListURL());
             clsResponse reason_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(reason_response.IsGood)
@@ -149,7 +149,7 @@ namespace ASolute_Mobile.TransportScreen
                         futile.RefNo = ReferenceNo.Text;
                     }
 
-                    var content = await CommonFunction.PostRequest(futile, Ultis.Settings.SessionBaseURI, ControllerUtil.postFutileTripURL());
+                    var content = await CommonFunction.PostRequestAsync(futile, Ultis.Settings.SessionBaseURI, ControllerUtil.postFutileTripURL());
                     clsResponse futile_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (futile_response.IsGood)
@@ -190,7 +190,7 @@ namespace ASolute_Mobile.TransportScreen
 
                 image.FileName = recordImage.photoFileName;
 
-                var content = await CommonFunction.PostRequest(image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventRecordID.ToString()));
+                var content = await CommonFunction.PostRequestAsync(image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventRecordID.ToString()));
                 clsResponse image_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (image_response.IsGood == true)

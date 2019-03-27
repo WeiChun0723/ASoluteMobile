@@ -18,7 +18,8 @@ namespace ASolute_Mobile.Droid
     {
         public void close_app()
         {
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            //Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+          
         }
     }
 }

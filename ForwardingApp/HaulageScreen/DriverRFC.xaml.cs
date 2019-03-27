@@ -110,7 +110,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             if(!(String.IsNullOrEmpty(contPrefix.Text)) && !(String.IsNullOrEmpty(contNum.Text)))
             {
-                var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.postDriverRFCURL(contPrefix.Text + contNum.Text));
+                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.postDriverRFCURL(contPrefix.Text + contNum.Text));
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(response.IsGood)

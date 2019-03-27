@@ -38,7 +38,7 @@ namespace ASolute_Mobile
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
 
                 }
-                else if(Ultis.Settings.List == "Job_List")
+                else if(Ultis.Settings.List == "HaulageJob_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
@@ -64,7 +64,7 @@ namespace ASolute_Mobile
                 }       
                 else if(Ultis.Settings.List == "Main_Menu")
                 {
-                    AppMenu model = (AppMenu)this.BindingContext;
+                    ListItems model = (ListItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId,"MainMenu");
                 }
                 else if (Ultis.Settings.List == "Log_History")
@@ -84,52 +84,26 @@ namespace ASolute_Mobile
                 }
                 else if (Ultis.Settings.List == "provider_List")
                 {
-                    AppMenu model = (AppMenu)this.BindingContext;
+                    ListItems model = (ListItems)this.BindingContext;
                     providers = App.Database.Providers(model.menuId);  
 
                 }
                 else if (Ultis.Settings.List == "container_List")
                 {
-                    AppMenu model = (AppMenu)this.BindingContext;
+                    ListItems model = (ListItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Container");
                 }
                 else if (Ultis.Settings.List == "category_List")
                 {
-                    AppMenu model = (AppMenu)this.BindingContext;
+                    ListItems model = (ListItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
                 }
                 else
                 {
-                    AppMenu model = (AppMenu)this.BindingContext;
+                    ListItems model = (ListItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.menuId, Ultis.Settings.List);
                 }
 
-
-                /*if (Ultis.Settings.List == "Loose Pick")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Loose Pick");
-                }
-                if (Ultis.Settings.List == "Full Pick")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Full Pick");
-                }
-                if (Ultis.Settings.List== "Packing")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Packing");
-                }
-                if (Ultis.Settings.List == "Tally Out")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Tally Out");
-                }
-                if (Ultis.Settings.List == "Tally In")
-                {
-                    AppMenu model = (AppMenu)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Tally In");
-                }*/
 
                 StackLayout cellWrapper = new StackLayout()
                 {
@@ -204,13 +178,13 @@ namespace ASolute_Mobile
                     menuItem.Clicked += (sender, e) =>
                     {
 
-                        AppMenu menu = (AppMenu)((MenuItem)sender).BindingContext;
+                        ListItems menu = (ListItems)((MenuItem)sender).BindingContext;
                         int results = 0;
                         results = App.Database.DeleteMenu(menu);
                         if (results > 0)
                         {
                             ListView parent = (ListView)this.Parent;
-                            ObservableCollection<AppMenu> itemSource = ((ObservableCollection<AppMenu>)parent.ItemsSource);
+                            ObservableCollection<ListItems> itemSource = ((ObservableCollection<ListItems>)parent.ItemsSource);
                             if (itemSource.Contains(menu))
                             {
                                 itemSource.Remove(menu);
@@ -249,7 +223,7 @@ namespace ASolute_Mobile
 
         public async void callWebService(string code)
         {
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProvider(code));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProvider(code));
             clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
         }
 

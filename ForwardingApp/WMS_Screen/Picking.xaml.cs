@@ -15,7 +15,7 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class Picking : ContentPage
     {
         List<clsDataRow> picking;
-        ObservableCollection<AppMenu> Item;
+        ObservableCollection<ListItems> Item;
         bool tapped = true;
         string pickingType = "";
 
@@ -73,7 +73,7 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
 
 
-            var content = await CommonFunction.GetWebService(Ultis.Settings.SessionBaseURI, ControllerUtil.getPickingList(pickingType));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getPickingList(pickingType));
             clsResponse tallyInList_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (tallyInList_response.IsGood)
@@ -84,7 +84,7 @@ namespace ASolute_Mobile.WMS_Screen
                 App.Database.deleteMenuItems("PickingList");
                 foreach (clsDataRow data in picking)
                 {
-                    AppMenu record = new AppMenu
+                    ListItems record = new ListItems
                     {
                         menuId = data.Id,
                         background = data.BackColor,
@@ -185,7 +185,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
 
             Ultis.Settings.List = "Picking_List";
-            Item = new ObservableCollection<AppMenu>(App.Database.GetMainMenu("PickingList"));
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("PickingList"));
             pickingList.ItemsSource = Item;
             pickingList.HasUnevenRows = true;
             pickingList.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -208,7 +208,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, pickingType, Title));
+            await Navigation.PushAsync(new PickingDetail(((ListItems)e.Item).menuId, pickingType, Title));
 
         }
 

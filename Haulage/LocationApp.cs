@@ -61,15 +61,15 @@ namespace ASolute_Mobile.Droid
 
                 // Start our main service
                 Log.Debug("App", "Calling StartService");
-                if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+                /*if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
                 {
                     Android.App.Application.Context.StartForegroundService(new Intent(Android.App.Application.Context, typeof(LocationService)));
                 }
                 else
                 {
-                    Android.App.Application.Context.StartService(new Intent(Android.App.Application.Context, typeof(LocationService)));
-                }
-               
+
+                }*/
+                Android.App.Application.Context.StartService(new Intent(Android.App.Application.Context, typeof(LocationService)));
 
                 // bind our service (Android goes and finds the running service by type, and puts a reference
                 // on the binder to that service)
