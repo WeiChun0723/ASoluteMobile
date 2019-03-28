@@ -31,7 +31,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void selectCategory(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new ProviderDetails(providerCode,((ListItems)e.Item).menuId, ((ListItems)e.Item).name));
+            await Navigation.PushAsync(new ProviderDetails(providerCode,((ListItems)e.Item).Id, ((ListItems)e.Item).Name));
             
         }
 
@@ -53,14 +53,14 @@ namespace ASolute_Mobile.CustomerTracking
                 categories = JObject.Parse(content)["Result"].ToObject<List<clsCaptionValue>>();
 
                 App.Database.deleteMainMenu();
-                App.Database.deleteMenuItems("Category");
+                App.Database.deleteRecordSummary("Category");
 
 
                 foreach (clsCaptionValue category in categories)
                 {
                     ListItems menu = new ListItems();
-                    menu.menuId = category.Caption;
-                    menu.name = category.Value;
+                    menu.Id = category.Caption;
+                    menu.Name = category.Value;
                     App.Database.SaveMenuAsync(menu);
 
 

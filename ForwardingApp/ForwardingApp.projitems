@@ -228,10 +228,6 @@
       <DependentUpon>JobList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\PendingCollection.xaml.cs">
-      <DependentUpon>PendingCollection.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -272,7 +268,6 @@
       <DependentUpon>LogHistory.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ListObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Database_Model.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MasterPageItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCheck.cs" />
@@ -527,12 +522,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\Shunting.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\PendingCollection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

@@ -16,10 +16,9 @@ namespace ASolute_Mobile
 {
     public partial class ListViewTemplate : ContentPage
     {
-
-        List<clsDataRow> dataList;
+   
         ObservableCollection<ListItems> Item;
-        string uri,name;
+        string uri,screenName;
 
         public ListViewTemplate(string title, string callUri)
         {
@@ -46,9 +45,9 @@ namespace ASolute_Mobile
 
             NavigationPage.SetTitleView(this, main);
 
-            name = title;
+            screenName = title;
             uri = callUri;
-             
+
         }
 
         protected override  void OnAppearing()
@@ -56,13 +55,13 @@ namespace ASolute_Mobile
             base.OnAppearing();
 
             GetListData();
+           
         }
 
 
          void Handle_Refreshing(object sender, System.EventArgs e)
         {
             GetListData();
-
         }
 
 
@@ -74,18 +73,17 @@ namespace ASolute_Mobile
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
-
                     listView.ItemsSource = Item;
                 }
                 else
                 {
                     try
                     {
-                        listView.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
+                        listView.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
                     }
                     catch (Exception error)
                     {
-                        await DisplayAlert("Error", error.Message, "OK");
+                        //await DisplayAlert("Error", error.Message, "OK");
                     }
                 }
             }
@@ -121,31 +119,46 @@ namespace ASolute_Mobile
 
         public async void SelectList(object sender, ItemTappedEventArgs e)
         {
-            string type = name;
-
-            switch(type)
+            try
             {
-                case "Tally In":
-                    //await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
-                   await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetail(((ListItems)e.Item).menuId), ((ListItems)e.Item).menuId,type));
-                    break;
-                case "Packing":
-                    //await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((ListItems)e.Item).menuId), ((ListItems)e.Item).menuId,type));
-                    break;
-                case "Loose Pick":
-                    //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "LoosePick", name));
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).menuId,"LoosePick") , ((ListItems)e.Item).menuId, type));
-                    break;
-                case "Full Pick":
-                    //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "FullPick", name));
-                     await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).menuId, "FullPick"), ((ListItems)e.Item).menuId, type));
-                    break;
-                case "Tally Out":
-                    //await Navigation.PushAsync(new TallyOutDetail(((AppMenu)e.Item).menuId));
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetail(((ListItems)e.Item).menuId), ((ListItems)e.Item).menuId, type));
-                    break;
+                string type = screenName;
+
+                switch (type)
+                {
+                    case "Tally In":
+                        //await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetail(((ListItems)e.Item).Id), ((ListItems)e.Item).Id, type));
+                        break;
+                    case "Packing":
+                        //await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((ListItems)e.Item).Id), ((ListItems)e.Item).Id, type));
+                        break;
+                    case "Loose Pick":
+                        //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "LoosePick", name));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item).Id, type));
+                        break;
+                    case "Full Pick":
+                        //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "FullPick", name));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item).Id, type));
+                        break;
+                    case "Tally Out":
+                        //await Navigation.PushAsync(new TallyOutDetail(((AppMenu)e.Item).menuId));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetail(((ListItems)e.Item).Id), ((ListItems)e.Item).Id, type));
+                        break;
+                    case "Job List":
+                        Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
+                        Ultis.Settings.Action = ((ListItems)e.Item).ActionId;
+                        await Navigation.PushAsync(new JobDetails(((ListItems)e.Item).ActionId, ((ListItems)e.Item).ActionMessage));
+                        break;
+
+
+                }
             }
+            catch(Exception ex)
+            {
+
+            }
+
         }
 
         async void GetListData()
@@ -157,19 +170,44 @@ namespace ASolute_Mobile
 
             if (response.IsGood)
             {
-                dataList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
+                App.Database.deleteRecords(screenName);
+                App.Database.deleteRecordSummary(screenName);
+                App.Database.deleteRecordDetails();
 
-                App.Database.deleteMainMenuItem(name);
-                App.Database.deleteMenuItems(name);
-                foreach (clsDataRow data in dataList)
+                //clsHaulageModel inherit clsDataRow
+                var records = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
+
+                foreach(clsHaulageModel data in records)
                 {
+                    Guid objectID = Guid.NewGuid();
                     ListItems record = new ListItems
                     {
-                        menuId = data.Id,
-                        background = data.BackColor,
-                        category = name,
+                        Id = (screenName == "Pending Collection") ? objectID.ToString() : data.Id,
+                        Background = data.BackColor,
+                        Category = screenName,
                     };
 
+                    if(screenName == "Job List")
+                    {
+                        record.TruckId = data.TruckId;
+                        record.ReqSign = data.ReqSign;
+                        record.Latitude = data.Latitude;
+                        record.Longitude = data.Longitude;
+                        record.TelNo = data.TelNo;
+                        record.EventRecordId = data.EventRecordId;
+                        record.TrailerId = data.TrailerId;
+                        record.ContainerNo = data.ContainerNo;
+                        record.MaxGrossWeight = data.MaxGrossWeight;
+                        record.TareWeight = data.TareWeight;
+                        record.CollectSeal = data.CollectSeal;
+                        record.SealNo = data.SealNo;
+                        record.ActionId = data.ActionId.ToString();
+                        record.ActionMessage = data.ActionMessage;
+                        record.Title = data.Title;
+                        record.SealMode = data.SealMode;
+                    }
+
+                  
                     string summary = "";
 
                     int count = 0;
@@ -191,11 +229,11 @@ namespace ASolute_Mobile
 
                         if (summaryItem.Caption.Equals(""))
                         {
-                            record.name = summaryItem.Value;
+                            summary += summaryItem.Value;
                         }
                     }
 
-                    record.summary = summary;
+                    record.Summary = summary;
 
                     App.Database.SaveMenuAsync(record);
 
@@ -203,16 +241,29 @@ namespace ASolute_Mobile
                     {
                         SummaryItems summaryItem = new SummaryItems();
 
-                        summaryItem.Id = data.Id;
+                        summaryItem.Id = (screenName == "Pending Collection") ? objectID.ToString() : data.Id;
                         summaryItem.Caption = summaryList.Caption;
                         summaryItem.Value = summaryList.Value;
                         summaryItem.Display = summaryList.Display;
-                        summaryItem.Type = name;
+                        summaryItem.Type = screenName;
                         summaryItem.BackColor = data.BackColor;
                         App.Database.SaveSummarysAsync(summaryItem);
 
                     }
+
+                    foreach (clsCaptionValue detailList in data.Details)
+                    {
+                        DetailItems detailItem = new DetailItems();
+
+                        detailItem.Id = data.Id;
+                        detailItem.Caption = detailList.Caption;
+                        detailItem.Value = detailList.Value;
+                        detailItem.Display = detailList.Display;
+                        App.Database.SaveDetailsAsync(detailItem);
+                    }
+
                 }
+
                 loading.IsVisible = false;
                 loadTallyInList();
             }
@@ -222,10 +273,11 @@ namespace ASolute_Mobile
             }
         }
 
+      
         public void loadTallyInList()
         {
-            Ultis.Settings.List = name;
-            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(name));
+            Ultis.Settings.List = screenName;
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(screenName));
             listView.ItemsSource = Item;
             listView.HasUnevenRows = true;
             listView.Style = (Style)App.Current.Resources["recordListStyle"];
@@ -239,6 +291,9 @@ namespace ASolute_Mobile
             {
                 noData.IsVisible = false;
             }
+
+            listView.IsRefreshing = false;
+
         }
     }
 }

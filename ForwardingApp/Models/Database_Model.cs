@@ -56,7 +56,7 @@ namespace ASolute_Mobile.Models
         public string Type { get; set; }
         public string BackColor { get; set; }
 
-        //testing
+        //Bus property
         public string StopId { get; set; }
         public string StopName { get; set; }
         public double Rate { get; set; }
@@ -86,16 +86,16 @@ namespace ASolute_Mobile.Models
 
     public class ListItems : Generic
     {
-        public string menuId { get; set; }
-        public string name { get; set; }
-        public string booking { get; set; }
-        public string customerRef { get; set; }
-        public string category { get; set; }
-        public string summary { get; set; }
-        public string background { get; set; }
-        public string action { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Booking { get; set; }
+        public string CustomerRef { get; set; }
+        public string Category { get; set; }
+        public string Summary { get; set; }
+        public string Background { get; set; }
+        public string Action { get; set; }
 
-        //testing
+        //Bus property
         public string StopId { get; set; }
         public string StopName { get; set; }
         public double Rate { get; set; }
@@ -111,21 +111,15 @@ namespace ASolute_Mobile.Models
         public string ActionMessage { get; set; }
         public string Title { get; set; }
         public string TruckId { get; set; }
-        public string Id { get; set; }
-        public string telNo { get; set; }
+        public string TelNo { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public bool ReqSign { get; set; }
         public long EventRecordId { get; set; }
-        public int Done { get; set; }
         public string Remark { get; set; }
-        public string jobNo { get; set; }
         public string RefNo { get; set; }
         public string ReasonCode { get; set; }
-        public string UpdateType { get; set; }
-        public string JobType { get; set; }
         public string SealMode { get; set; }
-        public string Summary { get; set; }
     }
 
     public class JobItems : Generic
@@ -141,17 +135,15 @@ namespace ASolute_Mobile.Models
         public string Title { get; set; }
         public string TruckId { get; set; }
         public string Id { get; set; }
-        public string telNo { get; set; }
+        public string TelNo { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public bool ReqSign { get; set; }
         public long EventRecordId { get; set; }
         public int Done { get; set; }
         public string Remark { get; set; }
-        public string jobNo { get; set; }
         public string RefNo { get; set; }
         public string ReasonCode { get; set; }
-        public string UpdateType { get; set; }
         public string JobType { get; set; }
         public string SealMode { get; set; }
         public string Summary { get; set; }

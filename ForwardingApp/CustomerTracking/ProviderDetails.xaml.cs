@@ -30,14 +30,14 @@ namespace ASolute_Mobile.CustomerTracking
             loading.IsVisible = true;
             loading.IsEnabled = true;
 
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread((Action)(async () =>
             {
                 App.Database.deleteMainMenu();
-                App.Database.deleteMenuItems("Container");
+                App.Database.deleteRecordSummary((string)"Container");
 
                 await GetContainer();
 
-            });
+            }));
 
         }
 
@@ -75,7 +75,7 @@ namespace ASolute_Mobile.CustomerTracking
                     try
                     {
                         List<ListItems> test = new List<ListItems>(App.Database.GetMainMenuItems());
-                        container_list.ItemsSource = test.Where(x => x.menuId.Contains(searchKey) || x.name.Contains(searchKey) || x.summary.Contains(searchKey));
+                        container_list.ItemsSource = test.Where(x => x.Id.Contains(searchKey) || x.Name.Contains(searchKey) || x.Summary.Contains(searchKey));
 
                     }
                     catch
@@ -106,7 +106,7 @@ namespace ASolute_Mobile.CustomerTracking
         public async void selectContainer(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new ContainerDetails(providerCode, ((ListItems)e.Item).menuId));
+            await Navigation.PushAsync(new ContainerDetails(providerCode, ((ListItems)e.Item).Id));
         }
 
         public async Task GetContainer()
@@ -123,16 +123,16 @@ namespace ASolute_Mobile.CustomerTracking
                     string summary = "";
                     bool firstLine = true;
                     ListItems menu = new ListItems();
-                    menu.menuId = container.Id;
-                    menu.category = "Container";
+                    menu.Id = container.Id;
+                    menu.Category = "Container";
 
                     if(!(String.IsNullOrEmpty(container.BackColor)))
                     {
-                        menu.background = container.BackColor;
+                        menu.Background = container.BackColor;
                     }
                     else
                     {
-                        menu.background = "#ffffff";
+                        menu.Background = "#ffffff";
                     }
 
                     foreach (clsCaptionValue summaryList in container.Summary)
@@ -150,19 +150,19 @@ namespace ASolute_Mobile.CustomerTracking
 
                         if (String.IsNullOrEmpty(summaryList.Caption) || summaryList.Caption == "")
                         {
-                            menu.name = summaryList.Value;
+                            menu.Name = summaryList.Value;
                         }
                         if(summaryList.Caption.Equals("Booking"))
                         {
-                            menu.booking = summaryList.Value;
+                            menu.Booking = summaryList.Value;
                         }
                         if (summaryList.Caption.Equals("Customer Ref"))
                         {
-                            menu.customerRef = summaryList.Value;
+                            menu.CustomerRef = summaryList.Value;
                         }
 
                     }
-                    menu.summary = summary;
+                    menu.Summary = summary;
 
                     App.Database.SaveMenuAsync(menu);
                 }

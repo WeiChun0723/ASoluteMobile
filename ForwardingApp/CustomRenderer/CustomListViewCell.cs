@@ -65,7 +65,7 @@ namespace ASolute_Mobile
                 else if(Ultis.Settings.List == "Main_Menu")
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId,"MainMenu");
+                    summaryRecord = App.Database.GetSummarysAsync(model.Id,"MainMenu");
                 }
                 else if (Ultis.Settings.List == "Log_History")
                 {
@@ -77,31 +77,26 @@ namespace ASolute_Mobile
                     JobItems model = (JobItems)this.BindingContext;
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageHistory");
                 }
-                else if (Ultis.Settings.List == "Pending_Collection")
-                {
-                    ListObject model = (ListObject)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "pendingCollection");
-                }
                 else if (Ultis.Settings.List == "provider_List")
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    providers = App.Database.Providers(model.menuId);  
+                    providers = App.Database.Providers(model.Id);  
 
                 }
                 else if (Ultis.Settings.List == "container_List")
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Container");
+                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "Container");
                 }
                 else if (Ultis.Settings.List == "category_List")
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, "Category");
+                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "Category");
                 }
                 else
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.menuId, Ultis.Settings.List);
+                    summaryRecord = App.Database.GetSummarysAsync(model.Id, Ultis.Settings.List);
                 }
 
 
@@ -190,7 +185,7 @@ namespace ASolute_Mobile
                                 itemSource.Remove(menu);
                             }
 
-                            callWebService(menu.menuId);
+                            callWebService(menu.Id);
                         }
                     };
 

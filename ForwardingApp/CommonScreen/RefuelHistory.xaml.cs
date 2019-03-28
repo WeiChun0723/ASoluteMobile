@@ -124,7 +124,7 @@ namespace ASolute_Mobile
                     var jsonDataList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
                  
 
-                    App.Database.deleteSummary("Refuel");
+                    App.Database.deleteRecordSummary("Refuel");
                     App.Database.deleteHistory();
                    
                     foreach (clsDataRow history in jsonDataList)

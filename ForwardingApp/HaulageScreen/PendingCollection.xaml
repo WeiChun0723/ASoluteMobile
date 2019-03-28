@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ASolute_Mobile.HaulageScreen.PendingCollection">
-    <StackLayout>
-        <ListView x:Name="pendingCollection" IsPullToRefreshEnabled="True" Refreshing="pendingCollectionRefresh" SeparatorColor="White" BackgroundColor="White"></ListView>
-        <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>
-    </StackLayout>
-</ContentPage>

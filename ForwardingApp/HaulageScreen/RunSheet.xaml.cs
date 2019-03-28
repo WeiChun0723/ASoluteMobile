@@ -318,7 +318,7 @@ namespace ASolute_Mobile.HaulageScreen
                         existingRecord.JobType = "HaulageHistory";
                         existingRecord.Latitude = job.Latitude;
                         existingRecord.Longitude = job.Longitude;
-                        existingRecord.telNo = job.TelNo;
+                        existingRecord.TelNo = job.TelNo;
                         existingRecord.EventRecordId = job.EventRecordId;
                         existingRecord.TrailerId = job.TrailerId;
                         existingRecord.ContainerNo = job.ContainerNo;

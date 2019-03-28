@@ -32,17 +32,17 @@ namespace ASolute_Mobile
             {
                 loading.IsVisible = true;
 
-                string menuAction = ((ListItems)e.Item).menuId;
+                string menuAction = ((ListItems)e.Item).Id;
 
                 switch (menuAction)
                 {
                     case "LogBook":
-                        LogHistory log = new LogHistory(((ListItems)e.Item).name);
+                        LogHistory log = new LogHistory(((ListItems)e.Item).Name);
                         await Navigation.PushAsync(log);
                         break;
 
                     case "FuelCost":
-                        RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).name);
+                        RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
                         await Navigation.PushAsync(refuel);
                         break;
 
@@ -65,13 +65,13 @@ namespace ASolute_Mobile
 
                     case "JobList":
                         //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).name));
-                        //await Navigation.PushAsync(new ListViewTemplate(((AppMenu)e.Item).name, ControllerUtil.getListURL()));
+                        //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getListURL()));
                         // await Navigation.PushAsync(new ChatRoom());
                         break;
 
                     case "MasterJobList":
-                        await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).action, ((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
                         break;
                     case "CargoReturn":
                         /*string return_id = "test";
@@ -88,54 +88,53 @@ namespace ASolute_Mobile
                         break;
 
                     case "RunSheet":
-                        await Navigation.PushAsync(new HaulageScreen.RunSheet(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new HaulageScreen.RunSheet(((ListItems)e.Item).Name));
                         break;
 
                     case "Shunting":
-                        await Navigation.PushAsync(new HaulageScreen.Shunting(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new HaulageScreen.Shunting(((ListItems)e.Item).Name));
                         break;
                     case "PendingCollection":
-                        await Navigation.PushAsync(new HaulageScreen.PendingCollection(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPendingCollectionURL()));
                         break;
                     case "DriverRFC":
-                        await Navigation.PushAsync(new HaulageScreen.DriverRFC(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new HaulageScreen.DriverRFC(((ListItems)e.Item).Name));
                         break;
                     case "EqList":
                         await Navigation.PushAsync(new Planner.EqCategory());
                         break;
                     case "MapView":
-                        await Navigation.PushAsync(new AllTruckMap(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new AllTruckMap(((ListItems)e.Item).Name));
                         break;
-
                     case "TallyIn":
                         //Ultis.Settings.Title = ((AppMenu)e.Item).name;
                         //await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).name, ControllerUtil.getTallyInList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getTallyInList()));
                         break;
                     case "PalletTrx":
-                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item).Name));
                         break;
                     case "Packing":
                         //await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).name, ControllerUtil.getPackingList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPackingList()));
                         break;
                     case "TallyOut":
                         //await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).name, ControllerUtil.getTallyOutList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getTallyOutList()));
                         break;
                     case "FullPick":
                         //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).name, ControllerUtil.getPickingList(((ListItems)e.Item).menuId)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
                         break;
                     case "LoosePick":
                         //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).name, ControllerUtil.getPickingList(((ListItems)e.Item).menuId)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
                         break;
                     case "InboundTrip":
-                        await Navigation.PushAsync(new StopsList(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
                         break;
                     case "OutboundTrip":
-                        await Navigation.PushAsync(new StopsList(((ListItems)e.Item).name));
+                        await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
                         break;
                     case "DailyCash":
                         await Navigation.PushAsync(new CheckOut());
@@ -248,8 +247,7 @@ namespace ASolute_Mobile
             checkItems.Clear();
             try
             {
-
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(),this);
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (login_response.IsGood == true)
@@ -269,8 +267,8 @@ namespace ASolute_Mobile
                     }
 
                     // clear the db before insert to it to prevent duplicate
-                    App.Database.deleteMainMenuItem("MainMenu");
-                    App.Database.deleteMenuItems("MainMenu");
+                    App.Database.deleteRecords("MainMenu");
+                    App.Database.deleteRecordSummary("MainMenu");
 
                     foreach (clsDataRow mainMenu in login_Menu.MainMenu)
                     {
@@ -278,10 +276,10 @@ namespace ASolute_Mobile
                         {
                             ListItems mainMenuItems = new ListItems();
 
-                            mainMenuItems.menuId = mainMenu.Id;
-                            mainMenuItems.name = mainMenu.Caption;
-                            mainMenuItems.action = mainMenu.Action;
-                            mainMenuItems.category = "MainMenu";
+                            mainMenuItems.Id = mainMenu.Id;
+                            mainMenuItems.Name = mainMenu.Caption;
+                            mainMenuItems.Action = mainMenu.Action;
+                            mainMenuItems.Category = "MainMenu";
 
                             List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
 
@@ -301,9 +299,8 @@ namespace ASolute_Mobile
 
                                 if (String.IsNullOrEmpty(summaryList.Caption))
                                 {
-                                    mainMenuItems.name = summaryList.Value;
+                                    mainMenuItems.Name = summaryList.Value;
                                 }
-
 
                                 summaryItem.Id = mainMenu.Id;
                                 summaryItem.Caption = summaryList.Caption;
@@ -375,7 +372,7 @@ namespace ASolute_Mobile
                 }
                 else
                 {
-                   await DisplayAlert("Error", login_response.Message, "Ok");
+                    await DisplayAlert("Error", login_response.Message, "Ok");
                 }
             }
             catch (HttpRequestException)

@@ -123,7 +123,7 @@ namespace ASolute_Mobile
                                           
                         App.Database.deleteLogHistory();
                         //App.Database.deleteLogSummary();
-                        App.Database.deleteSummary("Log");
+                        App.Database.deleteRecordSummary("Log");
 
                         foreach (clsDataRow log in logHistoryList)
                         {
@@ -193,7 +193,6 @@ namespace ASolute_Mobile
         {
             downloadLogHistory(logDate.Date.ToString("yyyy-MM-dd"));    
             logHistory.IsRefreshing = false;
-            Task.Run(async () => { await BackgroundTask.UploadLatestRecord(this); }).Wait();
         }
 
         public async void selectLog(object sender, ItemTappedEventArgs e)

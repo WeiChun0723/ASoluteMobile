@@ -53,7 +53,7 @@ namespace ASolute_Mobile.WMS_Screen
                     try
                     {
                       
-                        pickingList.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
+                        pickingList.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey) || x.Name.Contains(searchKey));
                     }
                     catch (Exception error)
                     {
@@ -80,15 +80,15 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 picking = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                App.Database.deleteMainMenuItem("PickingList");
-                App.Database.deleteMenuItems("PickingList");
+                App.Database.deleteRecords("PickingList");
+                App.Database.deleteRecordSummary("PickingList");
                 foreach (clsDataRow data in picking)
                 {
                     ListItems record = new ListItems
                     {
-                        menuId = data.Id,
-                        background = data.BackColor,
-                        category = "PickingList"
+                        Id = data.Id,
+                        Background = data.BackColor,
+                        Category = "PickingList"
                     };
 
                     string summary = "";
@@ -114,12 +114,12 @@ namespace ASolute_Mobile.WMS_Screen
 
                         if (summaryItem.Caption.Equals(""))
                         {
-                            record.name = summaryItem.Value;
+                            record.Name = summaryItem.Value;
                         }
 
                     }
 
-                    record.summary = summary;
+                    record.Summary = summary;
 
                     App.Database.SaveMenuAsync(record);
 
@@ -208,7 +208,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new PickingDetail(((ListItems)e.Item).menuId, pickingType, Title));
+            await Navigation.PushAsync(new PickingDetail(((ListItems)e.Item).Id, pickingType, Title));
 
         }
 

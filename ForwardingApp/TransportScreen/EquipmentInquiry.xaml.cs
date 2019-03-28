@@ -38,7 +38,7 @@ namespace ASolute_Mobile
 
         public async void checkEquipment(object sender, EventArgs e)
         {
-            string equipmentId = equipmentID.Text;
+           /* string equipmentId = equipmentID.Text;
 
             if (NetworkCheck.IsInternet())
             {
@@ -125,7 +125,7 @@ namespace ASolute_Mobile
             else
             {
                 await DisplayAlert("Reminder", "Currently offline cant search", "OK");
-            }
+            }*/
         }
 
     }

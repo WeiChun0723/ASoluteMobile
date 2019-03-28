@@ -92,7 +92,7 @@ namespace ASolute_Mobile.CustomerTracking
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).menuId,((ListItems)e.Item).name));
+            await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).Id,((ListItems)e.Item).Name));
 
 
         }
@@ -114,16 +114,16 @@ namespace ASolute_Mobile.CustomerTracking
                 var providers = JObject.Parse(content)["Result"].ToObject<List<clsProvider>>();
 
               
-                App.Database.deleteMainMenuItem("ProviderList");
+                App.Database.deleteRecords("ProviderList");
                 App.Database.DeleteProvider();
                 
                 foreach(clsProvider p in providers)
                 {
 
                     ListItems menu = new ListItems();
-                    menu.menuId = p.Code;
-                    menu.name = p.Name;
-                    menu.category = "ProviderList";
+                    menu.Id = p.Code;
+                    menu.Name = p.Name;
+                    menu.Category = "ProviderList";
                    App.Database.SaveMenuAsync(menu);
 
 

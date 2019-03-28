@@ -48,7 +48,7 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     try
                     {
-                        pickingList.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
+                        pickingList.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey) || x.Name.Contains(searchKey));
                     }
                     catch (Exception error)
                     {
@@ -74,15 +74,15 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 packing = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                App.Database.deleteMainMenuItem("PackingList");
-                App.Database.deleteMenuItems("PackingList");
+                App.Database.deleteRecords("PackingList");
+                App.Database.deleteRecordSummary("PackingList");
                 foreach (clsDataRow data in packing)
                 {
                     ListItems record = new ListItems
                     {
-                        menuId = data.Id,
-                        background = data.BackColor,
-                        category = "PackingList"
+                        Id = data.Id,
+                        Background = data.BackColor,
+                        Category = "PackingList"
                     };
 
                     string summary = "";
@@ -106,12 +106,12 @@ namespace ASolute_Mobile.WMS_Screen
                         }
                         if (summaryItem.Caption.Equals(""))
                         {
-                            record.name = summaryItem.Value;
+                            record.Name = summaryItem.Value;
                         }
 
                     }
 
-                    record.summary = summary;
+                    record.Summary = summary;
 
                     App.Database.SaveMenuAsync(record);
 
@@ -198,7 +198,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void SelectPicking(object sender, ItemTappedEventArgs e)
         {
 
-             await Navigation.PushAsync(new PackingDetail(((ListItems)e.Item).menuId));
+             await Navigation.PushAsync(new PackingDetail(((ListItems)e.Item).Id));
             //await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((AppMenu)e.Item).menuId)));
 
         }

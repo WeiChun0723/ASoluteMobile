@@ -54,7 +54,7 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     try
                     {
-                        tallyList.ItemsSource = Item.Where(x => x.summary.Contains(searchKey) || x.name.Contains(searchKey));
+                        tallyList.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey) || x.Name.Contains(searchKey));
                     }
                     catch(Exception error)
                     {
@@ -80,15 +80,15 @@ namespace ASolute_Mobile.WMS_Screen
             {
                 tallyInList = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                App.Database.deleteMainMenuItem("TallyInList");
-                App.Database.deleteMenuItems("TallyInList");
+                App.Database.deleteRecords("TallyInList");
+                App.Database.deleteRecordSummary("TallyInList");
                 foreach (clsDataRow data in tallyInList)
                 {
                         ListItems record = new ListItems
                         {
-                            menuId = data.Id,
-                            background = data.BackColor,
-                            category = "TallyInList"
+                            Id = data.Id,
+                            Background = data.BackColor,
+                            Category = "TallyInList"
                         };
 
                         string summary = "";
@@ -114,12 +114,12 @@ namespace ASolute_Mobile.WMS_Screen
 
                             if (summaryItem.Caption.Equals(""))
                             {
-                                record.name = summaryItem.Value;
+                                record.Name = summaryItem.Value;
                             }
 
                         }
 
-                        record.summary = summary;
+                        record.Summary = summary;
 
                         App.Database.SaveMenuAsync(record);
 
@@ -205,7 +205,7 @@ namespace ASolute_Mobile.WMS_Screen
         public async void selectTallyIn(object sender, ItemTappedEventArgs e)
         {
 
-            await Navigation.PushAsync(new TallyInDetail(((ListItems)e.Item).menuId));
+            await Navigation.PushAsync(new TallyInDetail(((ListItems)e.Item).Id));
  
         }
 

@@ -263,6 +263,11 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Haulage/DriverRFC?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNum);
         }
+
+        public static String getPendingCollectionURL()
+        {
+            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
         #endregion
 
 
@@ -423,10 +428,7 @@ namespace ASolute_Mobile.Utils
             return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNumber);
         }
 
-        public static String getPendingCollectionURL()
-        {
-            return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
+       
 
         public static String postHaulageURL()
         {

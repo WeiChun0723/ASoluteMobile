@@ -116,132 +116,7 @@ namespace ASolute_Mobile
             }
         }
 
-        public static async Task UploadLatestRecord(ContentPage page)
-        {
-            if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
-            {
-                if (NetworkCheck.IsInternet())
-                {
-                    try
-                    {
-                        List<JobItems> jobItems = App.Database.GetDoneJobItems(1);
-                        foreach (JobItems jobItem in jobItems)
-                        {
-                            
-                            clsTruckingModel job = new clsTruckingModel();
-                            job.Id = jobItem.Id;
-                            job.Remarks = jobItem.Remark;
-
-                            if (jobItem.UpdateType == "UpdateJob")
-                            {
-                                if(Ultis.Settings.App == "Fleet")
-                                {
-                                    uploadUri = ControllerUtil.postJobDetailURL(history);
-                                    imageEventID = jobItem.EventRecordId.ToString();
-                                }
-                                                           
-                            }
-                            else if(jobItem.UpdateType == "CargoReturnUpdate")
-                            {                            
-                                job.RefNo = jobItem.jobNo;
-                                job.ReasonCode = jobItem.ReasonCode;
-                                uploadUri = ControllerUtil.postCargoReturnURL();
-                            }
-                            else if(jobItem.UpdateType == "FutileUpdate")
-                            {                              
-                                job.ReasonCode = jobItem.ReasonCode;
-                                uploadUri = ControllerUtil.postFutileTripURL();
-                            }
-                            
-                            var client = new HttpClient();
-                            client.BaseAddress = new Uri( Ultis.Settings.SessionBaseURI);
-
-                            string reply;
-                            if (Ultis.Settings.App == "Fleet")
-                            {
-                                var content = JsonConvert.SerializeObject(job);
-                                var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-                                var response = await client.PostAsync(uploadUri, httpContent);
-                                reply = await response.Content.ReadAsStringAsync();
-                            }
-                            else 
-                            {
-                                var foward_response = await client.GetAsync(uploadUri);
-                                reply = await foward_response.Content.ReadAsStringAsync();
-                            }
-
-                            Debug.WriteLine(reply);
-
-                            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
-                                                        
-                            if (json_response.IsGood == true)
-                            {
-                                //uploadedImage = 0;
-                                jobItem.Done = 2;
-                                App.Database.SaveJobsAsync(jobItem);
-
-
-                                if (jobItem.UpdateType == "UpdateJob")
-                                {
-                                    history = jobItem.jobNo;
-                                }
-                                else if (jobItem.UpdateType == "CargoReturnUpdate")
-                                {
-                                    history = jobItem.jobNo + " Cargo returned";
-                                }
-                                else if (jobItem.UpdateType == "FutileUpdate")
-                                {
-                                    history = jobItem.jobNo + " Futile updated";
-                                }
-                                                                
-                                                                                                               
-
-                                if (jobItem.UpdateType == "FutileUpdate" || jobItem.UpdateType == "CargoReturnUpdate")
-                                {
-                                    imageEventID = json_response.Result["EventRecordId"];
-                                }
-
-                                BackgroundUploadImage();
-                              
-                            }
-                            else
-                            {
-                                jobItem.Done = 0;
-                                App.Database.SaveJobsAsync(jobItem);
-
-                                App.Database.deletePending("JobItem");
-                                App.Database.deleteSummary(jobItem.Id);
-                                App.Database.deleteDetail(jobItem.Id);
-
-                                
-                                if (jobItem.UpdateType == "UpdateJob")
-                                {
-                                    history = jobItem.jobNo ;
-                                }
-                                else if (jobItem.UpdateType == "CargoReturnUpdate")
-                                {
-                                    history = jobItem.jobNo + " Cargo update";
-                                }
-                                else if (jobItem.UpdateType == "FutileUpdate")
-                                {
-                                    history = jobItem.jobNo + " Futile update";
-                                }
-                            }
-                        }
-                      
-                    }                 
-                    catch (Exception)
-                    {
-                        
-                    }
-
-                 
-
-                }
-                
-            }
-        }
-
+      
         public static async Task DownloadLatestRecord(ContentPage contentPage)
         {
             if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
@@ -250,22 +125,14 @@ namespace ASolute_Mobile
                 {
                     try
                     {
-                        if ( Ultis.Settings.App == "Fleet")
-                        {
-                           //await GetWebService(ControllerUtil.getDownloadTruckListURL(), "JobList", contentPage, "JobItem");
-                           //await GetWebService(ControllerUtil.getDownloadPendingLoadURL(), "JobList", contentPage, "PendingLoad");
-                           //await GetWebService(ControllerUtil.getDownloadPendingRecURL(), "JobList", contentPage, "PendingReceiving");                           
-                        }
-                        else if(Ultis.Settings.App == "Haulage")
+
+                        if(Ultis.Settings.App == "Haulage")
                         {
                             await GetWebService(ControllerUtil.getListURL(), "HaulageJobList", contentPage, "HaulageJob");
                             await GetWebService(ControllerUtil.getReasonListURL(), "ReasonList", contentPage, "");
 
                         }
-                        else if (Ultis.Settings.App == "Fowarding")
-                        {
-                            await GetWebService(ControllerUtil.getDownloadFowardListURL(), "JobList", contentPage, "JobItem");
-                        }
+
 
                     }
                     catch (Exception exception)
@@ -388,7 +255,7 @@ namespace ASolute_Mobile
                                 if(existingRecord.Done == 2)
                                 {
                                     App.Database.deleteDoneJob(existingRecord.Id);
-                                    App.Database.deleteSummary(existingRecord.Id);
+                                    App.Database.deleteRecordSummary(existingRecord.Id);
                                     App.Database.deleteDetail(existingRecord.Id);
                                 }                            
                             }
@@ -405,7 +272,7 @@ namespace ASolute_Mobile
                                 existingRecord.JobType = jobType;
                                 existingRecord.Latitude = job.Latitude;
                                 existingRecord.Longitude = job.Longitude;
-                                existingRecord.telNo = job.TelNo;
+                                existingRecord.TelNo = job.TelNo;
                                 existingRecord.EventRecordId = job.EventRecordId;
                                 App.Database.SaveJobsAsync(existingRecord);
 
@@ -479,7 +346,7 @@ namespace ASolute_Mobile
                     case "HaulageJobList":
                         App.Database.deleteHaulage();
                         App.Database.deleteHaulageSummary("HaulageJob");
-                        App.Database.deleteHaulageDetail();
+                        App.Database.deleteRecordDetails();
 
                         var HaulageJobList = JObject.Parse(content)["Result"].ToObject <List<clsHaulageModel>>();
                        
@@ -496,7 +363,7 @@ namespace ASolute_Mobile
                                 existingRecord.JobType = jobType;
                                 existingRecord.Latitude = job.Latitude;
                                 existingRecord.Longitude = job.Longitude;
-                                existingRecord.telNo = job.TelNo;
+                                existingRecord.TelNo = job.TelNo;
                                 existingRecord.EventRecordId = job.EventRecordId;
                                 existingRecord.TrailerId = job.TrailerId;
                                 existingRecord.ContainerNo = job.ContainerNo;

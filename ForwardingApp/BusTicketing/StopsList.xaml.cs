@@ -201,8 +201,8 @@ namespace ASolute_Mobile.BusTicketing
                     stops = JObject.Parse(content)["Result"].ToObject<List<clsBusTicket>>();
 
 
-                    App.Database.deleteMainMenuItem("BusTicketing");
-                    App.Database.deleteMenuItems("BusTicketing");
+                    App.Database.deleteRecords("BusTicketing");
+                    App.Database.deleteRecordSummary("BusTicketing");
 
 
                     foreach (clsBusTicket stop in stops)
@@ -213,7 +213,7 @@ namespace ASolute_Mobile.BusTicketing
                             StopId = stop.StopId,
                             StopName = stop.StopName,
                             Rate = stop.Rate,
-                            category = "BusTicketing"
+                            Category = "BusTicketing"
                         };
 
                         App.Database.SaveMenuAsync(items);

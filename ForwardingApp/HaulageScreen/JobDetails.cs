@@ -31,7 +31,8 @@ namespace ASolute_Mobile
         //public JobLists previousPage;
         public JobList previousPage;
         string currentJobId = Ultis.Settings.SessionCurrentJobId;
-        JobItems jobItem;
+        //JobItems jobItem;
+        ListItems jobItem;
 
         List<DetailItems> jobDetails;
         CustomEditor remarkTextEditor = null;
@@ -55,11 +56,9 @@ namespace ASolute_Mobile
         {
             StackLayout main = new StackLayout();
 
-
             title1.FontSize = 15;
 
             title1.TextColor = Color.White;
-
 
             Label title2 = new Label
             {
@@ -226,119 +225,126 @@ namespace ASolute_Mobile
 
         private async void Action()
         {
-            // Check the action id and show th control depend on what the action id needed
-            if (!(String.IsNullOrEmpty(Ultis.Settings.Action)))
+            try
+            {
+                // Check the action id and show th control depend on what the action id needed
+                if (!(String.IsNullOrEmpty(Ultis.Settings.Action)))
+                {
+
+                    if (Ultis.Settings.Action.Equals("EmptyPickup"))
+                    {
+                        trailerContainerGrid.IsVisible = true;
+                        confirmGrid.IsVisible = true;
+                        confirm.IsVisible = true;
+                        mapPhoneStackLayout.IsVisible = true;
+                        remarksStackLayout.IsVisible = true;
+                        if (jobItem.ReqSign)
+                        {
+                            signatureStackLayout.IsVisible = true;
+                        }
+                        imageButtonStackLayout.IsVisible = true;
+
+                        if (!(String.IsNullOrEmpty(jobItem.ContainerNo)))
+                        {
+                            try
+                            {
+                                string input = jobItem.ContainerNo;
+                                string prefix = input.Substring(0, 4);
+                                string number = input.Substring(4, 7);
+
+                                contPrefix.Text = prefix;
+                                contNumber.Text = number;
+
+                                contPrefix.IsEnabled = false;
+                                contNumber.IsEnabled = false;
+                            }
+                            catch (Exception exception)
+                            {
+                                await DisplayAlert("Sub string Error", exception.Message, "OK");
+                            }
+                        }
+                    }
+                    else if (Ultis.Settings.Action.Equals("Point1_In") || Ultis.Settings.Action.Equals("Point2_In"))
+                    {
+
+                        try
+                        {
+                            clsHaulageModel haulage = new clsHaulageModel();
+
+                            haulage.Id = Ultis.Settings.SessionCurrentJobId;
+                            if (actionID.Equals("Point1_In"))
+                            {
+                                haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point1_In;
+                            }
+                            else
+                            {
+                                haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point2_In;
+                            }
+
+                            var client = new HttpClient();
+                            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                            var uri = ControllerUtil.postHaulageURL();
+                            var content = JsonConvert.SerializeObject(haulage);
+                            var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
+                            var response = await client.PostAsync(uri, httpContent);
+                            var reply = await response.Content.ReadAsStringAsync();
+                            Debug.WriteLine(reply);
+                            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
+
+                            if (json_response.IsGood == true)
+                            {
+                                GetActionID();
+                            }
+                            else
+                            {
+                                await DisplayAlert("Upload Error", json_response.Message, "Okay");
+                            }
+                        }
+                        catch (Exception exception)
+                        {
+                            await DisplayAlert("Error", exception.Message, "OK");
+                        }
+
+
+                        signatureStackLayout.IsVisible = false;
+                    }
+                    else if (Ultis.Settings.Action.Equals("Point1_Chk") || Ultis.Settings.Action.Equals("Point2_Chk"))
+                    {
+                        mapPhoneStackLayout.IsVisible = true;
+                        remarksStackLayout.IsVisible = true;
+                        if (jobItem.ReqSign)
+                        {
+                            signatureStackLayout.IsVisible = true;
+                        }
+                        trailerContainerGrid.IsVisible = true;
+                        imageButtonStackLayout.IsVisible = true;
+
+                        if (!(String.IsNullOrEmpty(jobItem.ContainerNo)))
+                        {
+                            try
+                            {
+                                string input = jobItem.ContainerNo.ToString();
+                                string prefix = input.Substring(0, 4);
+                                string number = input.Substring(4, 7);
+
+                                contPrefix.Text = prefix;
+                                contNumber.Text = number;
+
+                                contPrefix.IsEnabled = false;
+                                contNumber.IsEnabled = false;
+                            }
+                            catch (Exception exception)
+                            {
+                                await DisplayAlert("Sub string Error", exception.Message, "OK");
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
             {
 
-                if (Ultis.Settings.Action.Equals("EmptyPickup"))
-                {
-                    trailerContainerGrid.IsVisible = true;
-                    confirmGrid.IsVisible = true;
-                    confirm.IsVisible = true;
-                    mapPhoneStackLayout.IsVisible = true;
-                    remarksStackLayout.IsVisible = true;
-                    if (jobItem.ReqSign)
-                    {
-                        signatureStackLayout.IsVisible = true;
-                    }
-                    imageButtonStackLayout.IsVisible = true;
-
-                    if (!(String.IsNullOrEmpty(jobItem.ContainerNo)))
-                    {
-                        try
-                        {
-                            string input = jobItem.ContainerNo;
-                            string prefix = input.Substring(0, 4);
-                            string number = input.Substring(4, 7);
-
-                            contPrefix.Text = prefix;
-                            contNumber.Text = number;
-
-                            contPrefix.IsEnabled = false;
-                            contNumber.IsEnabled = false;
-                        }
-                        catch (Exception exception)
-                        {
-                            await DisplayAlert("Sub string Error", exception.Message, "OK");
-                        }
-                    }
-                }
-                else if (Ultis.Settings.Action.Equals("Point1_In") || Ultis.Settings.Action.Equals("Point2_In"))
-                {
-
-                    try
-                    {
-                        clsHaulageModel haulage = new clsHaulageModel();
-
-                        haulage.Id = Ultis.Settings.SessionCurrentJobId;
-                        if (actionID.Equals("Point1_In"))
-                        {
-                            haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point1_In;
-                        }
-                        else
-                        {
-                            haulage.ActionId = clsHaulageModel.HaulageActionEnum.Point2_In;
-                        }
-
-                        var client = new HttpClient();
-                        client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                        var uri = ControllerUtil.postHaulageURL();
-                        var content = JsonConvert.SerializeObject(haulage);
-                        var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-                        var response = await client.PostAsync(uri, httpContent);
-                        var reply = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(reply);
-                        clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
-
-                        if (json_response.IsGood == true)
-                        {
-                            GetActionID();
-                        }
-                        else
-                        {
-                            await DisplayAlert("Upload Error", json_response.Message, "Okay");
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        await DisplayAlert("Error", exception.Message, "OK");
-                    }
-
-
-                    signatureStackLayout.IsVisible = false;
-                }
-                else if (Ultis.Settings.Action.Equals("Point1_Chk") || Ultis.Settings.Action.Equals("Point2_Chk"))
-                {
-                    mapPhoneStackLayout.IsVisible = true;
-                    remarksStackLayout.IsVisible = true;
-                    if (jobItem.ReqSign)
-                    {
-                        signatureStackLayout.IsVisible = true;
-                    }
-                    trailerContainerGrid.IsVisible = true;
-                    imageButtonStackLayout.IsVisible = true;
-
-                    if (!(String.IsNullOrEmpty(jobItem.ContainerNo)))
-                    {
-                        try
-                        {
-                            string input = jobItem.ContainerNo.ToString();
-                            string prefix = input.Substring(0, 4);
-                            string number = input.Substring(4, 7);
-
-                            contPrefix.Text = prefix;
-                            contNumber.Text = number;
-
-                            contPrefix.IsEnabled = false;
-                            contNumber.IsEnabled = false;
-                        }
-                        catch (Exception exception)
-                        {
-                            await DisplayAlert("Sub string Error", exception.Message, "OK");
-                        }
-
-                    }
-                }
             }
         }
 
@@ -348,11 +354,13 @@ namespace ASolute_Mobile
             {
                 if (jobItem == null)
                 {
-                    jobItem = App.Database.GetItemAsync(currentJobId);
+                    //jobItem = App.Database.GetItemAsync(currentJobId);
+                    jobItem = App.Database.GetJobRecordAsync(currentJobId);
+                    //jobDetails = App.Database.GetDetailsAsync(currentJobId);
                     jobDetails = App.Database.GetDetailsAsync(currentJobId);
                 }
 
-                if (Ultis.Settings.DeleteImage == "Yes" || jobItem.Done == 1 || jobItem.Done == 2)
+                if (Ultis.Settings.DeleteImage == "Yes" )
                 {
                     DisplayImage();
                     Ultis.Settings.DeleteImage = "No";
@@ -364,7 +372,7 @@ namespace ASolute_Mobile
                     {
                         WidthRequest = 120,
                         HeightRequest = 100,
-                        IsEnabled = (jobItem.Done == 0)
+
                     };
                     remarkTextEditor.Text = jobItem.Remark;
                     //remarkTextEditor.BackgroundColor = Color.White;
@@ -739,7 +747,7 @@ namespace ASolute_Mobile
                 var callTelNo = new TapGestureRecognizer();
                 callTelNo.Tapped += (sender, e) =>
                 {
-                    string number = jobItem.telNo;
+                    string number = jobItem.TelNo;
                     Device.OpenUri(new Uri(String.Format("tel:{0}", number)));
                 };
                 phone.GestureRecognizers.Add(callTelNo);
@@ -827,7 +835,7 @@ namespace ASolute_Mobile
                 {
                     map.IsVisible = true;
                 }
-                if (!string.IsNullOrEmpty(jobItem.telNo))
+                if (!string.IsNullOrEmpty(jobItem.TelNo))
                 {
                     phone.IsVisible = true;
                 }
@@ -1306,10 +1314,9 @@ namespace ASolute_Mobile
             {
                 images.Clear();
                 imageGrid.Children.Clear();
-                if (jobItem.Done == 0)
-                {
-                    images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
-                }
+
+                images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
+
 
                 foreach (AppImage Image in images)
                 {
