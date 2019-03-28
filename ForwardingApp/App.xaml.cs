@@ -42,8 +42,6 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-
-
             if (sessionKey != "")
             {
                 MainPage = new MainPage();

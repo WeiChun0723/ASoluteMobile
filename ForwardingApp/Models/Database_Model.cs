@@ -100,6 +100,32 @@ namespace ASolute_Mobile.Models
         public string StopName { get; set; }
         public double Rate { get; set; }
 
+        //Haulage property
+        public string TrailerId { get; set; }
+        public string ContainerNo { get; set; }
+        public float MaxGrossWeight { get; set; }
+        public float TareWeight { get; set; }
+        public bool CollectSeal { get; set; }
+        public string SealNo { get; set; }
+        public string ActionId { get; set; }
+        public string ActionMessage { get; set; }
+        public string Title { get; set; }
+        public string TruckId { get; set; }
+        public string Id { get; set; }
+        public string telNo { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public bool ReqSign { get; set; }
+        public long EventRecordId { get; set; }
+        public int Done { get; set; }
+        public string Remark { get; set; }
+        public string jobNo { get; set; }
+        public string RefNo { get; set; }
+        public string ReasonCode { get; set; }
+        public string UpdateType { get; set; }
+        public string JobType { get; set; }
+        public string SealMode { get; set; }
+        public string Summary { get; set; }
     }
 
     public class JobItems : Generic

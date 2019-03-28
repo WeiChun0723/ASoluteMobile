@@ -123,10 +123,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\DesignedMainMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\EqCategory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -396,9 +392,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)testing\OCRPopUp.xaml.cs">
       <DependentUpon>OCRPopUp.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)testing\DesignedMainMenu.xaml.cs">
-      <DependentUpon>DesignedMainMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Planner\EqCategory.xaml.cs">
       <DependentUpon>EqCategory.xaml</DependentUpon>

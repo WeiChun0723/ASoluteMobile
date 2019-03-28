@@ -458,7 +458,7 @@
       <HintPath>..\packages\Syncfusion.Xamarin.SfBarcode.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfBarcode.XForms.dll</HintPath>
     </Reference>
     <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
+      <HintPath>..\Droid\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

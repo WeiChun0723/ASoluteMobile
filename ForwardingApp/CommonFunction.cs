@@ -75,7 +75,7 @@ namespace ASolute_Mobile.Utils
 
 
         //Get = 0 , Post = 1
-        public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri)
+        public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri, Page page)
         {
             try
             {
@@ -99,8 +99,17 @@ namespace ASolute_Mobile.Utils
 
                 Debug.WriteLine(content);
 
+                clsResponse reply = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                return content;
+                if(reply.Message == "Invalid Session !")
+                {
+                    BackgroundTask.Logout(page);
+                    await page.DisplayAlert("Error", reply.Message, "OK");
+                }
+                else
+                {
+                    return content;
+                }
             }
             catch
             {

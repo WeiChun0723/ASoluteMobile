@@ -13,9 +13,9 @@ namespace ASolute_Mobile.Utils
     {
         #region Common url
 
-        public static String getBusStops()
+        public static String getBusStops(string list)
         {
-            return String.Format("Ticket/PriceList");
+            return String.Format("Ticket/{0}",list);
         }
         #endregion
 
@@ -400,7 +400,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Bus", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Haulage", CrossDeviceInfo.Current.AppVersion);
         }
 
         public static String getDownloadMenuURL(string firebase)

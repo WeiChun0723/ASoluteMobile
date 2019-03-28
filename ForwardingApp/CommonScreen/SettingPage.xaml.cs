@@ -37,7 +37,7 @@ namespace ASolute_Mobile
             submitButton.IsEnabled = false;    
             this.activityIndicator.IsRunning = true;
 
-                var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text));
+                var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text),this);
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood)

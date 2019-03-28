@@ -17,7 +17,8 @@ namespace ASolute_Mobile.BusTicketing
 
             fromEntry.Text = startStop;
             toEntry.Text = selectStop;
-            btnPrintTicket.Text = "RM " + rate;
+            Decimal stopRate = Convert.ToDecimal(rate);
+            btnPrintTicket.Text = "RM " + String.Format("{0:0.00}", stopRate) ;
 
             Title = "Bus Ticket";
         }
@@ -87,7 +88,7 @@ namespace ASolute_Mobile.BusTicketing
                 WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Bus Fare:\r\n"));
 
                 WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(btnPrintTicket.Text + "\r\n\r\n"));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes( btnPrintTicket.Text +  "\r\n\r\n"));
 
                 WriteMemoryStream(buffer, WoosimPageMode.print());
 

@@ -55,7 +55,7 @@ namespace ASolute_Mobile
                 {
                     Ultis.Settings.AppFirstInstall = "Second";
 
-                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text)));
+                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text),this));
 
                     if (json_response.IsGood)
                     {

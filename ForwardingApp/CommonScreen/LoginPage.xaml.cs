@@ -33,7 +33,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
             }
 
-            AppLabel.Text = "AILS Bus Ticketing Ver." + CrossDeviceInfo.Current.AppVersion;
+            AppLabel.Text = "AILS Bus Ver." + CrossDeviceInfo.Current.AppVersion;
 
 
             //set username entry maximum to 10 chars
@@ -75,11 +75,12 @@ namespace ASolute_Mobile
 
         async Task GetBaseURL()
         {
-            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.AppEnterpriseName)));
+            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.AppEnterpriseName),this));
 
             if(json_response.IsGood)
             {
-                Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                //Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
             }
 
         }
@@ -95,7 +96,7 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                  var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword));
+                  var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
                   //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 

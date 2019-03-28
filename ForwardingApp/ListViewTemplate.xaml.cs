@@ -49,7 +49,6 @@ namespace ASolute_Mobile
             name = title;
             uri = callUri;
              
-
         }
 
         protected override  void OnAppearing()
@@ -153,7 +152,7 @@ namespace ASolute_Mobile
         {
             loading.IsVisible = true;
 
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, uri);
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, uri,this);
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (response.IsGood)

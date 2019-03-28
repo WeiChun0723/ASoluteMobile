@@ -69,6 +69,23 @@ namespace ASolute_Mobile.BusTicketing
                 WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
                 WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(DateTime.UtcNow.ToString("dd/MM/yyyy h:mm:ss tt") + "\r\n\r\n"));
 
+                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Driver:\r\n"));
+
+                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(Ultis.Settings.SessionUserItem.UserName + "\r\n\r\n"));
+
+                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Bus Reg No.:\r\n"));
+
+                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(Ultis.Settings.SessionUserItem.TruckId + "\r\n\r\n"));
+
+                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Total Ticket Sold:\r\n"));
+
+                WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(50 + "\r\n\r\n"));
 
                 WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
                 WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Settlement Amount:\r\n"));

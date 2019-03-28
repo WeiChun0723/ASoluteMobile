@@ -655,10 +655,9 @@ namespace ASolute_Mobile
                         eventID = recordImage.id;
                     }
 
-                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID));
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID),null);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                 
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);
                 }

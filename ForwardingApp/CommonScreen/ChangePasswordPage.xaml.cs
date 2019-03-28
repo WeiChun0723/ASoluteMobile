@@ -70,7 +70,7 @@ namespace ASolute_Mobile
 
                         string encryptedNewPassword = clsCommonFunc.AES_Encrypt(newPasswordEntry.Text);
 
-                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getChangePasswordURL(encryptedNewPassword));
+                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getChangePasswordURL(encryptedNewPassword),this);
                         clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (json_response.IsGood == true)

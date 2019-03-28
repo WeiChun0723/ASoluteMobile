@@ -243,10 +243,7 @@ namespace ASolute_Mobile.Data
             return database.Table<JobItems>().Where(i => i.Id == id).FirstOrDefault();
         }
 
-        public ListItems GetMenuRecordAsync(string id)
-        {
-            return database.Table<ListItems>().Where(i => i.menuId == id).FirstOrDefault();
-        }
+
 
         public Log GetLogRecordAsync(int id)
         {

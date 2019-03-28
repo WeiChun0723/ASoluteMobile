@@ -102,7 +102,7 @@ namespace ASolute_Mobile.HaulageScreen
         public async void GetBasedURL()
         {
 
-            var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper()));
+            var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(enterpriseEntry.Text.ToUpper()),this);
             clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (json_response.IsGood)
@@ -121,7 +121,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             try
             {
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text));
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text),this);
                 clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (register_response.IsGood)

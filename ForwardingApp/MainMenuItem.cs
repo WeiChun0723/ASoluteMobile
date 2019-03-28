@@ -159,7 +159,6 @@ namespace ASolute_Mobile
 
         protected override void OnAppearing()
         {
-
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -182,31 +181,26 @@ namespace ASolute_Mobile
                 }
             });
 
-            if (NetworkCheck.IsInternet())
-            {
-                System.TimeSpan interval = new System.TimeSpan();
-                if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
-                {
-                    DateTime enteredDate = DateTime.Parse(Ultis.Settings.UpdateTime);
-                    interval = DateTime.Now.Subtract(enteredDate);
-                }
 
-                if (Ultis.Settings.RefreshMenuItem == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
-                {
-                    GetMainMenu();
-                    Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                    Ultis.Settings.RefreshMenuItem = "No";
-                    Ultis.Settings.UpdateTime = DateTime.Now.ToString();
-                }
-                else
-                {
-                    LoadMainMenu();
-                }
+            System.TimeSpan interval = new System.TimeSpan();
+            if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
+            {
+                DateTime enteredDate = DateTime.Parse(Ultis.Settings.UpdateTime);
+                interval = DateTime.Now.Subtract(enteredDate);
+            }
+
+            if (Ultis.Settings.RefreshMenuItem == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
+            {
+                GetMainMenu();
+                Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                Ultis.Settings.RefreshMenuItem = "No";
+                Ultis.Settings.UpdateTime = DateTime.Now.ToString();
             }
             else
             {
                 LoadMainMenu();
             }
+
         }
 
         protected override void OnDisappearing()
@@ -255,7 +249,7 @@ namespace ASolute_Mobile
             try
             {
 
-                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(),this);
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (login_response.IsGood == true)
@@ -264,7 +258,6 @@ namespace ASolute_Mobile
 
                     Ultis.Settings.SubTitle = login_Menu.SubTitle;
                     ListViewCommonScreen.title2.Text = Ultis.Settings.SubTitle;
-
 
                     //load value from the menu in json response "CheckList"
                     for (int check = 0; check < login_response.Result["Checklist"].Count; check++)
@@ -281,62 +274,56 @@ namespace ASolute_Mobile
 
                     foreach (clsDataRow mainMenu in login_Menu.MainMenu)
                     {
-                        ListItems existingRecord = App.Database.GetMenuRecordAsync(mainMenu.Id);
-
                         if (mainMenu.Id != "LogOff")
                         {
-                            if (existingRecord == null)
+                            ListItems mainMenuItems = new ListItems();
+
+                            mainMenuItems.menuId = mainMenu.Id;
+                            mainMenuItems.name = mainMenu.Caption;
+                            mainMenuItems.action = mainMenu.Action;
+                            mainMenuItems.category = "MainMenu";
+
+                            List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
+
+                            int index = 0;
+                            foreach (clsCaptionValue summaryList in mainMenu.Summary)
                             {
-                                if (existingRecord == null)
+                                SummaryItems summaryItem = null;
+                                if (index < existingSummaryItems.Capacity)
                                 {
-                                    existingRecord = new ListItems();
+                                    summaryItem = existingSummaryItems.ElementAt(index);
                                 }
 
-                                existingRecord.menuId = mainMenu.Id;
-                                existingRecord.name = mainMenu.Caption;
-                                existingRecord.action = mainMenu.Action;
-                                existingRecord.category = "MainMenu";
-
-                                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
-
-                                int index = 0;
-                                foreach (clsCaptionValue summaryList in mainMenu.Summary)
+                                if (summaryItem == null)
                                 {
-                                    SummaryItems summaryItem = null;
-                                    if (index < existingSummaryItems.Capacity)
-                                    {
-                                        summaryItem = existingSummaryItems.ElementAt(index);
-                                    }
-
-                                    if (summaryItem == null)
-                                    {
-                                        summaryItem = new SummaryItems();
-                                    }
-
-                                    if (String.IsNullOrEmpty(summaryList.Caption))
-                                    {
-                                        existingRecord.name = summaryList.Value;
-                                    }
-
-                                    summaryItem.Id = mainMenu.Id;
-                                    summaryItem.Caption = summaryList.Caption;
-                                    summaryItem.Value = summaryList.Value;
-                                    summaryItem.Display = summaryList.Display;
-                                    summaryItem.Type = "MainMenu";
-                                    summaryItem.BackColor = mainMenu.BackColor;
-                                    App.Database.SaveSummarysAsync(summaryItem);
-                                    index++;
+                                    summaryItem = new SummaryItems();
                                 }
 
-                                App.Database.SaveMenuAsync(existingRecord);
-                                if (existingSummaryItems != null)
+                                if (String.IsNullOrEmpty(summaryList.Caption))
                                 {
-                                    for (; index < existingSummaryItems.Count; index++)
-                                    {
-                                        App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
-                                    }
+                                    mainMenuItems.name = summaryList.Value;
+                                }
+
+
+                                summaryItem.Id = mainMenu.Id;
+                                summaryItem.Caption = summaryList.Caption;
+                                summaryItem.Value = summaryList.Value;
+                                summaryItem.Display = summaryList.Display;
+                                summaryItem.Type = "MainMenu";
+                                summaryItem.BackColor = mainMenu.BackColor;
+                                App.Database.SaveSummarysAsync(summaryItem);
+                                index++;
+                            }
+
+                            App.Database.SaveMenuAsync(mainMenuItems);
+                            if (existingSummaryItems != null)
+                            {
+                                for (; index < existingSummaryItems.Count; index++)
+                                {
+                                    App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
                                 }
                             }
+
                         }
                     }
 
@@ -388,16 +375,7 @@ namespace ASolute_Mobile
                 }
                 else
                 {
-                    if (login_response.Message == "Invalid Session !")
-                    {
-                        BackgroundTask.Logout(this);
-                        await DisplayAlert("Error", login_response.Message, "Ok");
-                    }
-                    else
-                    {
-                        await DisplayAlert("Error", login_response.Message, "Ok");
-                    }
-
+                   await DisplayAlert("Error", login_response.Message, "Ok");
                 }
             }
             catch (HttpRequestException)

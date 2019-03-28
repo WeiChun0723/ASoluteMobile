@@ -16,18 +16,18 @@ namespace ASolute_Mobile.HaulageScreen
 {
 
     public partial class RunSheet : CarouselPage
-	{
+    {
         bool firstLoad = true, changePage = false;
-        string selectDate,option = "none";
+        string selectDate, option = "none";
         DatePicker datePicker;
         ListView runSheetHistory;
         Image previous_icon, next_icon, noData;
         ActivityIndicator activityIndicator;
         DateTime currentDate;
 
-		public RunSheet (string title)
-		{
-			InitializeComponent ();
+        public RunSheet(string title)
+        {
+            InitializeComponent();
 
             StackLayout main = new StackLayout();
 
@@ -59,13 +59,13 @@ namespace ASolute_Mobile.HaulageScreen
             SelectedItem = Children[1];
         }
 
-      protected override void OnCurrentPageChanged()
+        protected override void OnCurrentPageChanged()
         {
             base.OnCurrentPageChanged();
 
             int index = Children.IndexOf(CurrentPage);
-           
-          
+
+
             if (!firstLoad)
             {
 
@@ -79,7 +79,7 @@ namespace ASolute_Mobile.HaulageScreen
                 }
                 else if (index == 2)
                 {
-                 
+
                     currentDate = datePicker.Date.AddDays(1);
                     changePage = true;
                     downloadRunSheet(currentDate.ToString("yyyy MM dd"));
@@ -89,7 +89,7 @@ namespace ASolute_Mobile.HaulageScreen
                 {
                     PageContent();
                 }
-               
+
             }
 
         }
@@ -105,7 +105,8 @@ namespace ASolute_Mobile.HaulageScreen
                 this.ToolbarItems.Clear();
             }
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) =>
+            {
 
                 try
                 {
@@ -128,7 +129,7 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void recordDate(object sender, DateChangedEventArgs e)
         {
-            if(option == "none")
+            if (option == "none")
             {
                 selectDate = e.NewDate.ToString("yyyy MM dd");
 
@@ -194,8 +195,8 @@ namespace ASolute_Mobile.HaulageScreen
             previous_icon = new Image
             {
                 Source = "angleLeft.png",
-                WidthRequest=40,
-                HeightRequest=40
+                WidthRequest = 40,
+                HeightRequest = 40
             };
 
             var previous = new TapGestureRecognizer();
@@ -239,7 +240,7 @@ namespace ASolute_Mobile.HaulageScreen
 
             CurrentPage.Content = mainLayout;
 
-            if(changePage)
+            if (changePage)
             {
                 datePicker.Date = currentDate;
             }
@@ -284,7 +285,7 @@ namespace ASolute_Mobile.HaulageScreen
                 firstLoad = false;
                 CurrentPage = Children[1];
 
-                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadHaulageHistoryURL(date));
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadHaulageHistoryURL(date), this);
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood == true)
@@ -292,10 +293,10 @@ namespace ASolute_Mobile.HaulageScreen
                     switch (option)
                     {
                         case "previous":
-							 datePicker.Date = datePicker.Date.AddDays(-1);
+                            datePicker.Date = datePicker.Date.AddDays(-1);
                             break;
                         case "next":
-                           datePicker.Date = datePicker.Date.AddDays(1);
+                            datePicker.Date = datePicker.Date.AddDays(1);
                             break;
                         case "none":
                             break;
@@ -370,24 +371,14 @@ namespace ASolute_Mobile.HaulageScreen
                 }
                 else
                 {
-                    if (json_response.Message == "Invalid Session !")
-                    {
-                        BackgroundTask.Logout(this);
-                        await DisplayAlert("Error", json_response.Message, "Ok");
-                    }
-                    else
-                    {
-                        await DisplayAlert("Error", json_response.Message, "Ok");
-                    }
-
-
+                    await DisplayAlert("Error", json_response.Message, "Ok");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 await DisplayAlert("Error", exception.Message, "OK");
             }
-            
+
         }
 
         public void refreshRunSheetHistory()
@@ -404,11 +395,11 @@ namespace ASolute_Mobile.HaulageScreen
             runSheetHistory.Style = (Style)App.Current.Resources["recordListStyle"];
             runSheetHistory.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-            if(Item.Count == 0)
+            if (Item.Count == 0)
             {
                 runSheetHistory.IsVisible = false;
                 noData.IsVisible = true;
-                
+
             }
             else
             {

@@ -590,7 +590,7 @@ namespace ASolute_Mobile
                     image.Content = scaledImageByte;
                     image.FileName = recordImage.photoFileName;
 
-                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID));
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID),this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     recordImage.Uploaded = true;
