@@ -404,8 +404,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)testing\ChatRoom.xaml.cs">
       <DependentUpon>ChatRoom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)testing\ContactsInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)testing\ContactsInfoViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml.cs">
       <DependentUpon>TallyInPalletEntry.xaml</DependentUpon>
     </Compile>

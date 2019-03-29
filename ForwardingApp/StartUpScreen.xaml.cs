@@ -59,7 +59,7 @@ namespace ASolute_Mobile
 
                     if (json_response.IsGood)
                     {
-                        Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text.ToUpper();
+                        Ultis.Settings.EnterpriseName = enterpriseEntry.Text.ToUpper();
                         Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                     }
                     else

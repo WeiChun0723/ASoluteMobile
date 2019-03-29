@@ -13,7 +13,6 @@ using Com.OneSignal.Abstractions;
 using System.Collections.Generic;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
-using ASolute_Mobile.testing;
 using ASolute_Mobile.WMS_Screen;
 using System.Threading.Tasks;
 using Plugin.Geolocator;

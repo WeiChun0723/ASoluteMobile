@@ -42,7 +42,6 @@ namespace ASolute_Mobile
 
             StackLayout main = new StackLayout();
 
-
             Label title1 = new Label
             {
                 FontSize = 15,

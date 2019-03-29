@@ -42,8 +42,9 @@ namespace ASolute_Mobile
                         break;
 
                     case "FuelCost":
-                        RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
-                        await Navigation.PushAsync(refuel);
+                        /*RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
+                        await Navigation.PushAsync(refuel);*/
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getDownloadRefuelHistoryURL()));
                         break;
 
                     case "EqInquiry":

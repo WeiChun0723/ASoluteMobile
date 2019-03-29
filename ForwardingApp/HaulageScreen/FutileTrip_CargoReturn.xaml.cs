@@ -3,6 +3,7 @@ using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PCLStorage;
 using Plugin.Media;
 using SignaturePad.Forms;
@@ -28,16 +29,15 @@ namespace ASolute_Mobile
         public string uploadUri = "";
         List<AppImage> images = new List<AppImage>();
         double imageWidth;      
-        string job_id;
-        int reason_choice;
         JobItems jobItem;
-        List<pickerValue> reasonCode;
+        List<clsKeyValue> reasonCode;
         static byte[] scaledImageByte;
         static int uploadedImage = 0;
 
         public FutileTrip_CargoReturn ()
 		{
 			InitializeComponent ();
+            Title = "Futile trip";
             pageContent();
 
             imageGrid.RowSpacing = 0;
@@ -47,58 +47,35 @@ namespace ASolute_Mobile
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-          
-            job_id = Ultis.Settings.SessionCurrentJobId; 
-                      
-            reasonCode = new List<pickerValue>(App.Database.GetPickerValue("ReasonCode"));
-            
-            for (int j = 0; j < reasonCode.Count; j++)
-            {
-                ReasonPicker.Items.Add(reasonCode[j].Value);
-            }
 
-            jobItem = App.Database.GetItemAsync(job_id);
+            GetPickerValue();
+
+            jobItem = App.Database.GetItemAsync(Ultis.Settings.SessionCurrentJobId);
 
             images.Clear();
             imageGrid.Children.Clear();           
         }
 
-        protected override void OnAppearing()
+        async void GetPickerValue()
         {
-            base.OnAppearing();
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getReasonListURL(),this);
+            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            if (Ultis.Settings.NewJob.Equals("Yes"))
+            if(response.IsGood)
             {
-                CommonFunction.CreateToolBarItem(this);
-            }
-            else
-            {
-                this.ToolbarItems.Clear();
-            }
+                reasonCode = JObject.Parse(content)["Result"].ToObject<List<clsKeyValue>>();
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+                List<string> value = new List<string>();
 
-                try
+                foreach(clsKeyValue reason in reasonCode)
                 {
-
-                    CommonFunction.NewJobNotification(this);
+                    value.Add(reason.Value);
                 }
-                catch (Exception e)
-                {
-                    DisplayAlert("Notification error", e.Message, "OK");
-                }
-            });
 
-            Title = "Futile trip";
-
-            if (Ultis.Settings.DeleteImage == "Yes")
-            {
-                displayImage();
-                Ultis.Settings.DeleteImage = "No";
+                reasonPicker.ComboBoxSource = value;
             }
+
         }
-
-      
 
         protected override void OnDisappearing()
         {
@@ -106,19 +83,6 @@ namespace ASolute_Mobile
 
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
-
-        public async void reasonSelected(object sender, SelectedPositionChangedEventArgs e)
-        {
-            if (ReasonPicker.SelectedIndex == -1)
-            {
-                await DisplayAlert("Error", "Please choose station", "Ok");
-            }
-            else
-            {
-                reason_choice = ReasonPicker.SelectedIndex;
-            }
-        }
-
 
         public async void takeImage(object sender, EventArgs e)
         {
@@ -134,7 +98,7 @@ namespace ASolute_Mobile
             {
                 Ultis.Settings.RefreshMenuItem = "Yes";
                 Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                if (ReasonPicker.SelectedIndex != -1 )
+                if (!(String.IsNullOrEmpty(reasonPicker.Text)))
                 {
                     try
                     {                      
@@ -142,41 +106,22 @@ namespace ASolute_Mobile
                         clsHaulageModel futileJob = new clsHaulageModel();
                         futileJob.Id = Ultis.Settings.SessionCurrentJobId;
                         futileJob.ActionId = clsHaulageModel.HaulageActionEnum.FutileTrip;
-                        if (remarkTextEditor.Text == null)
-                        {
-                            futileJob.Remarks = "";
-                        }
-                        else
-                        {
-                            futileJob.Remarks = remarkTextEditor.Text;
-                        }
-                           
-                        futileJob.ReasonCode = reasonCode[reason_choice].Value;
+                        futileJob.Remarks = (remarkTextEditor.Text == null) ? "" : remarkTextEditor.Text;
+                        futileJob.ReasonCode = reasonCode[reasonPicker.SelectedIndex].Key;
 
-                        var client = new HttpClient();
-                        client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                        var uri = ControllerUtil.postHaulageURL();
-                        var content = JsonConvert.SerializeObject(futileJob);
-                        var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-                        var response = await client.PostAsync(uri, httpContent);
-                        var reply = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(reply);
-                        clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(reply);
+                        var content = await CommonFunction.CallWebService(1, futileJob, Ultis.Settings.SessionBaseURI, ControllerUtil.postHaulageURL(), this);
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        if (json_response.IsGood == true)
+                        if (response.IsGood == true)
                         {
                             confirm_icon.IsEnabled = false;
                             confirm_icon.Source = "confirmDisable.png";
                             await DisplayAlert("Success", "Job status uploaded", "OK");
                             Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 2]);
-
-                           
-                            //await Navigation.PopAsync();
-
                         }
                         else
                         {
-                            await DisplayAlert("Error", json_response.Message, "OK");
+                            await DisplayAlert("Error", response.Message, "OK");
                         }
                                                   
                     }                
@@ -211,12 +156,6 @@ namespace ASolute_Mobile
                 ReferenceStack.IsVisible = true;
                               
             }
-            else if (Ultis.Settings.MenuRequireAction == "FutileTrip")
-            {
-                Title = "Futile Trip";                                    
-            }
-
-          
         }
 
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)

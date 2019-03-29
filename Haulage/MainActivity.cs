@@ -79,7 +79,6 @@ namespace ASolute_Mobile.Droid
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                 App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
-
             }
             catch(Exception ex)
             {
@@ -147,8 +146,6 @@ namespace ASolute_Mobile.Droid
             base.OnDestroy();
 
             //LocationApp.StopLocationService();
-           //((ActivityManager)GetSystemService(ActivityService)).ClearApplicationUserData();
-           
         }
 
         public override void OnBackPressed()

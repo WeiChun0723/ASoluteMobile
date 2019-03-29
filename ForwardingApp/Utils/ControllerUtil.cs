@@ -268,6 +268,11 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
+
+        public static String postHaulageURL()
+        {
+            return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
         #endregion
 
 
@@ -430,10 +435,7 @@ namespace ASolute_Mobile.Utils
 
        
 
-        public static String postHaulageURL()
-        {
-            return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
+
 
         public static String addJobURL(string container)
         {

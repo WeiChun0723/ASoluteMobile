@@ -26,6 +26,13 @@ namespace ASolute_Mobile
 
             StackLayout main = new StackLayout();
 
+            if (callUri.Contains("FuelCost"))
+            {
+                icon.Source = "refuel.png";
+                icon.WidthRequest = 70;
+                icon.HeightRequest = 70;
+            }
+
             Label title1 = new Label
             {
                 FontSize = 15,
@@ -93,23 +100,31 @@ namespace ASolute_Mobile
             }
         }
 
-        public async void BarCodeScan(object sender, EventArgs e)
+        public async void IconTapped(object sender, EventArgs e)
         {
             try
             {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
+                if(uri.Contains("FuelCost"))
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
+                    await Navigation.PushAsync(new RefuelEntry(screenName));
+                }
+                else
+                {
+                    var scanPage = new ZXingScannerPage();
+                    await Navigation.PushAsync(scanPage);
+
+                    scanPage.OnScanResult += (result) =>
                     {
-                        await Navigation.PopAsync();
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Navigation.PopAsync();
 
-                        searchBar.Text = result.Text;
+                            searchBar.Text = result.Text;
 
-                    });
-                };
+                        });
+                    };
+                }
+
             }
             catch
             {
@@ -293,6 +308,8 @@ namespace ASolute_Mobile
             }
 
             listView.IsRefreshing = false;
+
+
 
         }
     }

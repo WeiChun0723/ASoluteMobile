@@ -18,11 +18,10 @@ namespace ASolute_Mobile.Ultis
         }
 
         #region Setting Constants
-   
         private static UserItem CurrentUserItem;
         private static readonly string SettingsDefault = string.Empty;
         private const string FirstInstall = "first";
-        private const string EnterpriseName = "enterpriseName";
+        private const string Enterprise = "enterpriseName";
         private const string SessionKey = "session_key";
         private const string UserId = "session_userId";
         private const string Password = "session_password";
@@ -184,15 +183,15 @@ namespace ASolute_Mobile.Ultis
             }
         }
 
-        public static string AppEnterpriseName
+        public static string EnterpriseName
         {
             get
             {
-                return AppSettings.GetValueOrDefault(EnterpriseName, SettingsDefault);
+                return AppSettings.GetValueOrDefault(Enterprise, SettingsDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(EnterpriseName, value);
+                AppSettings.AddOrUpdateValue(Enterprise, value);
             }
         }
 
@@ -220,21 +219,6 @@ namespace ASolute_Mobile.Ultis
                 AppSettings.AddOrUpdateValue(UserId, value);
             }
         }
-
-        public static string SessionPassword
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(Password, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(Password, value);
-            }
-        }
-
-
-
 
         public static string SessionCurrentJobId
         {

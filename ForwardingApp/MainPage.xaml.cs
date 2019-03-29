@@ -26,9 +26,6 @@ namespace ASolute_Mobile
             /* Master = masterPage;
                 Detail = new NavigationPage(new MyProviders());*/
 
-
-           
-
             masterPage.ListView.ItemSelected += OnItemSelected;
             MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
             {
@@ -274,6 +271,12 @@ namespace ASolute_Mobile
                                     App.DropDatabase();
 
                                     BackgroundTask.Logout(this);
+
+                                    if(Device.RuntimePlatform == Device.Android)
+                                    {
+                                        DependencyService.Get<CloseApp>().close_app();
+                                    }
+                                   
                                 }
                             }
                             catch (Exception exception)

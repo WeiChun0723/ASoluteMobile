@@ -51,14 +51,13 @@ namespace ASolute_Mobile
                 passwordEntry.Focus();
             };
 
-
             usernameEntry.Text = Ultis.Settings.SessionUserId;
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            organization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.AppEnterpriseName))) ? Ultis.Settings.AppEnterpriseName : "Enterprise";
+            organization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.EnterpriseName))) ? Ultis.Settings.EnterpriseName : "Enterprise";
              await GetBaseURL();
 
         }
@@ -75,11 +74,11 @@ namespace ASolute_Mobile
 
         async Task GetBaseURL()
         {
-            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.AppEnterpriseName),this));
+            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.EnterpriseName),this));
 
             if(json_response.IsGood)
             {
-                //Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+               // Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                 Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
             }
 
@@ -106,7 +105,6 @@ namespace ASolute_Mobile
                         Ultis.Settings.UpdatedRecord = "RefreshJobList";
                         Ultis.Settings.RefreshMenuItem = "Yes";
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
-                        Ultis.Settings.SessionPassword = passwordEntry.Text;
 
                         var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>(); 
                  
@@ -158,12 +156,6 @@ namespace ASolute_Mobile
                         else
                         {
                             Ultis.Settings.Language = "Malay";
-                        }
-
-                        if(Ultis.Settings.Language.Equals("Malay"))
-                        {
-                            await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getLanguageURL(0));
-                            Ultis.Settings.Language = "English";
                         }
 
                         if (login_user.GetLogo || !File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
@@ -233,7 +225,7 @@ namespace ASolute_Mobile
                 }
                 catch(Exception exception)
                 {
-                    await DisplayAlert("Unable to connect", exception.Message, "Ok");
+                    await DisplayAlert("Error", exception.Message, "Ok");
                 }
             }
             else

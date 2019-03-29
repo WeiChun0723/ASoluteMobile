@@ -5,9 +5,9 @@
         <SearchBar x:Name="searchBar" IsVisible="true" Placeholder="Search here to Filter" TextChanged="OnFilterTextChanged" HeightRequest="50" />
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData" />
         <ListView x:Name="listView" ItemTapped="SelectList" SeparatorColor="White" Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true" />
-        <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="55" HorizontalOptions="End" x:Name="scan_icon">
+        <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="55" HorizontalOptions="End" x:Name="icon">
             <Image.GestureRecognizers>
-                <TapGestureRecognizer Tapped="BarCodeScan"  NumberOfTapsRequired="1"/>
+                <TapGestureRecognizer Tapped="IconTapped"  NumberOfTapsRequired="1"/>
             </Image.GestureRecognizers>
         </Image>
     </StackLayout>

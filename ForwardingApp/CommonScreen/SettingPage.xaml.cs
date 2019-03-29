@@ -17,7 +17,7 @@ namespace ASolute_Mobile
             {
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
-            nameEntry.Text = Ultis.Settings.AppEnterpriseName;
+            nameEntry.Text = Ultis.Settings.EnterpriseName;
 
 
             if(!(Device.RuntimePlatform == Device.iOS))
@@ -45,7 +45,7 @@ namespace ASolute_Mobile
                     string returnUri = json_response.Result;
                     if (!(returnUri.Contains("Unknown")))
                     {
-                        Ultis.Settings.AppEnterpriseName = nameEntry.Text.ToUpper();
+                        Ultis.Settings.EnterpriseName = nameEntry.Text.ToUpper();
                         Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                         await DisplayAlert("Success", "Enterprise name updated.", "Ok");
                         await Navigation.PopAsync();

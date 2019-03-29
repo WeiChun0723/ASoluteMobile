@@ -57,7 +57,7 @@ namespace ASolute_Mobile.HaulageScreen
                 icEntry.Unfocus();
             };
 
-            enterpriseEntry.Text = Ultis.Settings.AppEnterpriseName;
+            enterpriseEntry.Text = Ultis.Settings.EnterpriseName;
         }
 
         public void enterpriseTextChange(object sender, TextChangedEventArgs e)
@@ -108,7 +108,7 @@ namespace ASolute_Mobile.HaulageScreen
             if (json_response.IsGood)
             {
                 Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
-                Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
+                Ultis.Settings.EnterpriseName = enterpriseEntry.Text;
                 RegisterUser();
             }
             else
@@ -127,7 +127,7 @@ namespace ASolute_Mobile.HaulageScreen
                 if (register_response.IsGood)
                 {
                     await DisplayAlert("Success", "Registration successfully wait a moment the app will auto login.", "OK");
-                    Ultis.Settings.AppEnterpriseName = enterpriseEntry.Text;
+                    Ultis.Settings.EnterpriseName = enterpriseEntry.Text;
                     Ultis.Settings.RefreshMenuItem = "Yes";
                     DownloadLogo();
                 }
