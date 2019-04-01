@@ -263,7 +263,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(recordDetails.EventRecordId.ToString(), this);
+            await CommonFunction.StoreImages(recordDetails.EventRecordId.ToString(), this, "NormalImage");
             DisplayImage();
             BackgroundTask.StartTimer();
         }

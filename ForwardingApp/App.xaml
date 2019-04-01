@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.App"
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer">
 	
     <Application.Resources>
         
@@ -36,6 +37,20 @@
             <Style x:Key="titleStyle" TargetType="Label">
                  
                 <Setter Property="TextColor" Value="#ffffff " />
+            </Style>
+            
+            <Style x:Key="readOnlyLabel" TargetType="Label">
+                 <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="WidthRequest" Value="100" />
+                <Setter Property="MinimumWidthRequest" Value="100" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+            
+            <Style x:Key="customEntry" TargetType="controls:CustomEntry">
+                 <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                
             </Style>
     <!-- NEW -->      
             
@@ -83,11 +98,7 @@
                 <Setter Property="BackgroundColor" Value="White" />
             </Style>
 
-            <Style x:Key="readOnlyLabel" TargetType="Label">
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="DarkRed"/>
-                <Setter Property="FontSize" Value="Medium"/>
-            </Style>
+           
 
             <Style x:Key="mandatoryLabel" TargetType="Label">
                 <Setter Property="FontAttributes" Value="Bold" />

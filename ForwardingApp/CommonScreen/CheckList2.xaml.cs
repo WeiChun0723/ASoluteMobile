@@ -116,7 +116,7 @@ namespace ASolute_Mobile
         {
            
             lblReminder.IsVisible = false;
-            await CommonFunction.StoreImages(linkId, this);
+            await CommonFunction.StoreImages(linkId, this, "NormalImage");
 
             displayImage();
 

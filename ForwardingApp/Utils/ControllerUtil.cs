@@ -249,12 +249,12 @@ namespace ASolute_Mobile.Utils
 
         #region haulage url
 
-        public static String getConsigmentNote(string jobID)
+        public static String getConsigmentNoteURL(string jobID)
         {
             return String.Format("Haulage/Print?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobID);
         }
 
-        public static String getListURL()
+        public static String getHaulageJobListURL()
         {
             return String.Format("Haulage/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }

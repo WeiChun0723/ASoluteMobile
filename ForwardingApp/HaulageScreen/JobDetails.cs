@@ -32,8 +32,7 @@ namespace ASolute_Mobile
         public JobList previousPage;
         string currentJobId = Ultis.Settings.SessionCurrentJobId;
         //JobItems jobItem;
-        ListItems jobItem;
-
+        JobItems jobItem;
         List<DetailItems> jobDetails;
         CustomEditor remarkTextEditor = null;
         List<AppImage> images = new List<AppImage>();
@@ -41,14 +40,13 @@ namespace ASolute_Mobile
         double imageWidth;
         bool collectSealStatus = false, uploaded = false, connectedPrinter = false;
         Image savedSignature, map, phone, futile, camera, confirm;
-        string jobNo, actionID, actionMessage, containerNumber, savedTrailer, savedContPre, savedNumber, savedSealNo, savedMGW, savedTare, savedRemark;
+        string jobNo, actionID, actionMessage, containerNumber;
         StackLayout mapPhoneStackLayout, remarksStackLayout, signatureStackLayout, imageButtonStackLayout;
         CustomEntry contPrefix, contNumber, sealEntry, mgwEntry, tareEntry, trailerEntry;
         clsHaulageModel haulageJob = new clsHaulageModel();
         static byte[] scaledImageByte;
-        static int uploadedImage = 0;
         CheckBox check1, check2;
-        string checking = "", booking = "", action ="";
+        string booking = "", action = "";
         SfBusyIndicator print;
         Label title1 = new Label();
 
@@ -193,13 +191,7 @@ namespace ASolute_Mobile
 
         private async void GetActionID()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-            var uri = ControllerUtil.getListURL();
-            var response = await client.GetAsync(uri);
-            var content = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(content);
-
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageJobListURL(), this);
             clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (json_response.IsGood)
@@ -208,12 +200,61 @@ namespace ASolute_Mobile
 
                 foreach (clsHaulageModel job in HaulageJobList)
                 {
+                    ListItems record = new ListItems
+                    {
+                        Id = job.Id,
+                        Background = job.BackColor,
+                        Category = "JobList",
+                        TruckId = job.TruckId,
+                        ReqSign = job.ReqSign,
+                        Latitude = job.Latitude,
+                        Longitude = job.Longitude,
+                        TelNo = job.TelNo,
+                        EventRecordId = job.EventRecordId,
+                        TrailerId = job.TrailerId,
+                        ContainerNo = job.ContainerNo,
+                        MaxGrossWeight = job.MaxGrossWeight,
+                        TareWeight = job.TareWeight,
+                        CollectSeal = job.CollectSeal,
+                        SealNo = job.SealNo,
+                        ActionId = job.ActionId.ToString(),
+                        ActionMessage = job.ActionMessage,
+                        Title = job.Title,
+                        SealMode = job.SealMode
+                    };
+
+                    App.Database.SaveMenuAsync(record);
+
+                    foreach (clsCaptionValue summaryList in job.Summary)
+                    {
+                        SummaryItems summaryItem = new SummaryItems();
+
+                        summaryItem.Id =  job.Id;
+                        summaryItem.Caption = summaryList.Caption;
+                        summaryItem.Value = summaryList.Value;
+                        summaryItem.Display = summaryList.Display;
+                        summaryItem.Type = "JobList";
+                        summaryItem.BackColor = job.BackColor;
+                        App.Database.SaveSummarysAsync(summaryItem);
+                    }
+
+                    foreach (clsCaptionValue detailList in job.Details)
+                    {
+                        DetailItems detailItem = new DetailItems();
+
+                        detailItem.Id = job.Id;
+                        detailItem.Caption = detailList.Caption;
+                        detailItem.Value = detailList.Value;
+                        detailItem.Display = detailList.Display;
+                        App.Database.SaveDetailsAsync(detailItem);
+                    }
+
+
                     if (job.Id.Equals(Ultis.Settings.SessionCurrentJobId))
                     {
                         Ultis.Settings.Action = job.ActionId.ToString();
                         containerNumber = job.ContainerNo;
                         actionMessage = job.ActionMessage;
-                        await BackgroundTask.DownloadLatestRecord(this);
                         jobItem = null;
                         PageContent();
                         Action();
@@ -342,7 +383,7 @@ namespace ASolute_Mobile
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -354,13 +395,13 @@ namespace ASolute_Mobile
             {
                 if (jobItem == null)
                 {
-                    //jobItem = App.Database.GetItemAsync(currentJobId);
-                    jobItem = App.Database.GetJobRecordAsync(currentJobId);
-                    //jobDetails = App.Database.GetDetailsAsync(currentJobId);
+                    jobItem = App.Database.GetItemAsync(currentJobId);
+                    //jobItem = App.Database.GetJobRecordAsync(currentJobId);
                     jobDetails = App.Database.GetDetailsAsync(currentJobId);
+                    //jobDetails = App.Database.GetDetailsAsync(currentJobId);
                 }
 
-                if (Ultis.Settings.DeleteImage == "Yes" )
+                if (Ultis.Settings.DeleteImage == "Yes")
                 {
                     DisplayImage();
                     Ultis.Settings.DeleteImage = "No";
@@ -483,14 +524,14 @@ namespace ASolute_Mobile
                         label.Text = detailItem.Value;
 
                     }
-                    else if(count == 0)
+                    else if (count == 0)
                     {
                         label.Text = detailItem.Caption + ":  " + detailItem.Value;
                         count++;
                         action = detailItem.Value;
-                     
+
                     }
-                    else if(detailItem.Caption ==  "Booking")
+                    else if (detailItem.Caption == "Booking")
                     {
                         label.Text = detailItem.Caption + ":  " + detailItem.Value;
                         booking = detailItem.Value;
@@ -676,7 +717,6 @@ namespace ASolute_Mobile
                 };
 
 
-
                 mgwEntry = CreateEntry(false, 1);
                 tareEntry = CreateEntry(false, 1);
 
@@ -760,32 +800,32 @@ namespace ASolute_Mobile
                     HeightRequest = 50,
                     VerticalOptions = LayoutOptions.Center
                 };
-               /* var printing = new TapGestureRecognizer();
-                printing.Tapped += async (sender, e) =>
-                {
-                    savedTrailer = trailerEntry.Text;
-                    savedContPre = contPrefix.Text;
-                    savedNumber = contNumber.Text;
-                    savedSealNo = sealEntry.Text;
-                    savedMGW = mgwEntry.Text;
-                    savedTare = tareEntry.Text;
-                    savedRemark = remarkTextEditor.Text;
-                    if (check1.Checked)
-                    {
-                        collectSealStatus = true;
-                        checking = "true";
-                    }
-                    else
-                    {
-                        collectSealStatus = false;
-                        checking = "false";
-                    }
+                /* var printing = new TapGestureRecognizer();
+                 printing.Tapped += async (sender, e) =>
+                 {
+                     savedTrailer = trailerEntry.Text;
+                     savedContPre = contPrefix.Text;
+                     savedNumber = contNumber.Text;
+                     savedSealNo = sealEntry.Text;
+                     savedMGW = mgwEntry.Text;
+                     savedTare = tareEntry.Text;
+                     savedRemark = remarkTextEditor.Text;
+                     if (check1.Checked)
+                     {
+                         collectSealStatus = true;
+                         checking = "true";
+                     }
+                     else
+                     {
+                         collectSealStatus = false;
+                         checking = "false";
+                     }
 
-                    PrintConsigmentNote();
+                     PrintConsigmentNote();
 
-                };
-                printer.GestureRecognizers.Add(printing);
-                mapPhoneStackLayout.Children.Add(printer);*/
+                 };
+                 printer.GestureRecognizers.Add(printing);
+                 mapPhoneStackLayout.Children.Add(printer);*/
 
                 Image barcode = new Image
                 {
@@ -797,25 +837,7 @@ namespace ASolute_Mobile
                 var barCode = new TapGestureRecognizer();
                 barCode.Tapped += async (sender, e) =>
                 {
-                    savedTrailer = trailerEntry.Text;
-                    savedContPre = contPrefix.Text;
-                    savedNumber = contNumber.Text;
-                    savedSealNo = sealEntry.Text;
-                    savedMGW = mgwEntry.Text;
-                    savedTare = tareEntry.Text;
-                    savedRemark = remarkTextEditor.Text;
-                    if (check1.Checked)
-                    {
-                        collectSealStatus = true;
-                        checking = "true";
-                    }
-                    else
-                    {
-                        collectSealStatus = false;
-                        checking = "false";
-                    }
-
-                    await PopupNavigation.Instance.PushAsync(new BarCodePopUp(action,booking));
+                    await PopupNavigation.Instance.PushAsync(new BarCodePopUp(action, booking));
 
                 };
                 barcode.GestureRecognizers.Add(barCode);
@@ -898,54 +920,14 @@ namespace ASolute_Mobile
                 var takeImage = new TapGestureRecognizer();
                 takeImage.Tapped += async (sender, e) =>
                 {
-                    savedTrailer = trailerEntry.Text;
-                    savedContPre = contPrefix.Text;
-                    savedNumber = contNumber.Text;
-                    savedSealNo = sealEntry.Text;
-                    savedMGW = mgwEntry.Text;
-                    savedTare = tareEntry.Text;
-                    savedRemark = remarkTextEditor.Text;
-                    if (check1.Checked)
-                    {
-                        collectSealStatus = true;
-                        checking = "true";
-                    }
-                    else
-                    {
-                        collectSealStatus = false;
-                        checking = "false";
-                    }
 
-                    await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this);
+                    await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this, "NormalImage");
                     DisplayImage();
                     BackgroundTask.StartTimer();
-                    //UploadImage(jobItem.EventRecordId.ToString());
-
+                  
                 };
                 camera.GestureRecognizers.Add(takeImage);
                 imageButtonStackLayout.Children.Add(camera);
-
-
-
-                if (!(String.IsNullOrEmpty(savedTrailer)) || !(String.IsNullOrEmpty(savedContPre)) || !(String.IsNullOrEmpty(checking)) || !(String.IsNullOrEmpty(checking)))
-                {
-                    trailerEntry.Text = savedTrailer;
-                    contPrefix.Text = savedContPre;
-                    contNumber.Text = savedNumber;
-                    sealEntry.Text = savedSealNo;
-                    mgwEntry.Text = savedMGW;
-                    tareEntry.Text = savedTare;
-                    remarkTextEditor.Text = savedRemark;
-                    if (checking.Equals("true"))
-                    {
-                        check1.Checked = true;
-                    }
-                    else if (checking.Equals("false"))
-                    {
-                        check2.Checked = true;
-                    }
-
-                }
 
                 if (uploaded)
                 {
@@ -1246,46 +1228,7 @@ namespace ASolute_Mobile
 
         }
 
-        public async void UploadImage(string uploadID)
-        {
-            List<AppImage> recordImages = App.Database.GetRecordImagesAsync(uploadID, false);
-            foreach (AppImage recordImage in recordImages)
-            {
-                clsFileObject image = new clsFileObject();
 
-                if (recordImage.type == "signature")
-                {
-                    image.Content = recordImage.imageData;
-                }
-                else
-                {
-                    byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
-                    image.Content = scaledImageByte;
-                }
-
-                image.FileName = recordImage.photoFileName;
-
-                var image_client = new HttpClient();
-                image_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var image_uri = ControllerUtil.UploadImageURL(jobItem.EventRecordId.ToString());
-                var imagecontent = JsonConvert.SerializeObject(image);
-                var image_httpContent = new StringContent(imagecontent, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage image_response = await image_client.PostAsync(image_uri, image_httpContent);
-                var Imagereply = await image_response.Content.ReadAsStringAsync();
-                Debug.WriteLine(Imagereply);
-                clsResponse Imageresult = JsonConvert.DeserializeObject<clsResponse>(Imagereply);
-
-                if (Imageresult.IsGood == true)
-                {
-                    uploadedImage++;
-                    recordImage.Uploaded = true;
-                    App.Database.SaveRecordImageAsync(recordImage);
-                }
-            }
-
-        }
 
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)
         {
@@ -1347,7 +1290,7 @@ namespace ASolute_Mobile
         {
             print.IsVisible = true;
 
-            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNote(currentJobId),this);
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getConsigmentNoteURL(currentJobId), this);
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (response.IsGood)

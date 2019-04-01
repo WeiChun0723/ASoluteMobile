@@ -131,7 +131,7 @@ namespace ASolute_Mobile
 
         public async void captureImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(offlineLogID, this);
+            await CommonFunction.StoreImages(offlineLogID, this, "NormalImage");
             DisplayImage();
 
             if(!(String.IsNullOrEmpty(imageLinkID)))

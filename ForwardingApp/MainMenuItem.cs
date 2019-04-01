@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.BusTicketing;
+using ASolute_Mobile.CommonScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -24,6 +27,7 @@ namespace ASolute_Mobile
 
         public MainMenuItem()
         {
+
             search.IsVisible = false;
 
             ListViewCommonScreen.title1.Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama";
@@ -36,15 +40,18 @@ namespace ASolute_Mobile
 
                 switch (menuAction)
                 {
+                    case "Info":
+                        await Navigation.PushAsync(new UserInfo());
+                        break;
                     case "LogBook":
                         LogHistory log = new LogHistory(((ListItems)e.Item).Name);
                         await Navigation.PushAsync(log);
                         break;
 
                     case "FuelCost":
-                        /*RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
-                        await Navigation.PushAsync(refuel);*/
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getDownloadRefuelHistoryURL()));
+                        RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
+                        await Navigation.PushAsync(refuel);
+                       // await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getDownloadRefuelHistoryURL()));
                         break;
 
                     case "EqInquiry":
@@ -66,8 +73,8 @@ namespace ASolute_Mobile
 
                     case "JobList":
                         //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getListURL()));
+                        await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
+                        //await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
                         // await Navigation.PushAsync(new ChatRoom());
                         break;
 
@@ -96,7 +103,7 @@ namespace ASolute_Mobile
                         await Navigation.PushAsync(new HaulageScreen.Shunting(((ListItems)e.Item).Name));
                         break;
                     case "PendingCollection":
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPendingCollectionURL()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPendingCollectionURL()));
                         break;
                     case "DriverRFC":
                         await Navigation.PushAsync(new HaulageScreen.DriverRFC(((ListItems)e.Item).Name));
@@ -110,26 +117,26 @@ namespace ASolute_Mobile
                     case "TallyIn":
                         //Ultis.Settings.Title = ((AppMenu)e.Item).name;
                         //await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getTallyInList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInList()));
                         break;
                     case "PalletTrx":
                         await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item).Name));
                         break;
                     case "Packing":
                         //await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPackingList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingList()));
                         break;
                     case "TallyOut":
                         //await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getTallyOutList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutList()));
                         break;
                     case "FullPick":
                         //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
                         break;
                     case "LoosePick":
                         //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item).Name, ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
                         break;
                     case "InboundTrip":
                         await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
@@ -157,8 +164,23 @@ namespace ASolute_Mobile
             };
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
+            var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
+            if (status != PermissionStatus.Granted)
+            {
+                if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
+                {
+                    await DisplayAlert("Need location", "App need that location", "OK");
+                }
+
+                var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
+                //Best practice to always check that the key exists
+                if (results.ContainsKey(Permission.Location))
+                    status = results[Permission.Location];
+            }
+
+
             if (Ultis.Settings.NewJob.Equals("Yes"))
             {
                 CommonFunction.CreateToolBarItem(this);
@@ -400,19 +422,26 @@ namespace ASolute_Mobile
         // load the item that stored in db to the list view by using custom view cell
         public void LoadMainMenu()
         {
-            loading.IsVisible = false;
-
-            Ultis.Settings.List = "Main_Menu";
-            ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
-            listView.ItemsSource = Item;
-            listView.HasUnevenRows = true;
-            //IOS need to predefine the row height if not will truncated 
-            if (Device.RuntimePlatform == Device.iOS)
+            try
             {
-                listView.RowHeight = 150;
+                loading.IsVisible = false;
+
+                Ultis.Settings.List = "Main_Menu";
+                ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
+                listView.ItemsSource = Item;
+                listView.HasUnevenRows = true;
+                //IOS need to predefine the row height if not will truncated 
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    listView.RowHeight = 150;
+                }
+                listView.Style = (Style)App.Current.Resources["recordListStyle"];
+                listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
             }
-            listView.Style = (Style)App.Current.Resources["recordListStyle"];
-            listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+            catch
+            {
+
+            }
         }
 
     }

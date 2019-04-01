@@ -3,9 +3,11 @@ using ASolute_Mobile.CustomerTracking;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
+using PCLStorage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
@@ -14,23 +16,23 @@ namespace ASolute_Mobile
 {
     public class CustomListViewCell : ViewCell
     {
-        public static List<SummaryItems> summaryRecord ;
+        public static List<SummaryItems> summaryRecord;
         public static List<ProviderInfo> providers;
-
+        int count = 0;
         string color;
-        
+
         public CustomListViewCell()
         {
-           
+
         }
 
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
 
-            if(this.BindingContext != null)
+            if (this.BindingContext != null)
             {
-                
+
                 if (Ultis.Settings.List == "Job_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
@@ -38,34 +40,34 @@ namespace ASolute_Mobile
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
 
                 }
-                else if(Ultis.Settings.List == "HaulageJob_List")
+                else if (Ultis.Settings.List == "HaulageJob_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageJob");
                 }
-                else if(Ultis.Settings.List == "Receiving_List")
+                else if (Ultis.Settings.List == "Receiving_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingReceiving");
                 }
-                else if(Ultis.Settings.List == "Loading_List")
+                else if (Ultis.Settings.List == "Loading_List")
                 {
                     JobItems model = (JobItems)this.BindingContext;
 
                     summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingLoad");
                 }
-                else if (Ultis.Settings.List== "refuel_List")
+                else if (Ultis.Settings.List == "refuel_List")
                 {
                     RefuelHistoryData model = (RefuelHistoryData)this.BindingContext;
 
-                    summaryRecord = App.Database.GetSummarysAsync(model.recordId,"Refuel");
-                }       
-                else if(Ultis.Settings.List == "Main_Menu")
+                    summaryRecord = App.Database.GetSummarysAsync(model.recordId, "Refuel");
+                }
+                else if (Ultis.Settings.List == "Main_Menu")
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id,"MainMenu");
+                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "MainMenu");
                 }
                 else if (Ultis.Settings.List == "Log_History")
                 {
@@ -80,7 +82,7 @@ namespace ASolute_Mobile
                 else if (Ultis.Settings.List == "provider_List")
                 {
                     ListItems model = (ListItems)this.BindingContext;
-                    providers = App.Database.Providers(model.Id);  
+                    providers = App.Database.Providers(model.Id);
 
                 }
                 else if (Ultis.Settings.List == "container_List")
@@ -100,7 +102,22 @@ namespace ASolute_Mobile
                 }
 
 
-                StackLayout cellWrapper = new StackLayout()
+                StackLayout mainLayout = new StackLayout()
+                {
+                    //Padding = new Thickness(10, 10, 10, 10),
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    Orientation = StackOrientation.Horizontal
+                };
+
+                StackLayout cellTextWrapper = new StackLayout()
+                {
+                    //Padding = new Thickness(10, 10, 10, 10),
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand
+                };
+
+                StackLayout cellImageWrapper = new StackLayout()
                 {
                     //Padding = new Thickness(10, 10, 10, 10),
                     HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -109,14 +126,14 @@ namespace ASolute_Mobile
 
                 bool firstSummaryLine = true;
 
-                if(Ultis.Settings.List == "provider_List" )
+                if (Ultis.Settings.List == "provider_List")
                 {
                     foreach (ProviderInfo items in providers)
                     {
                         Label label = new Label();
                         label.FontAttributes = FontAttributes.Bold;
                         label.Text = items.Name;
-                        cellWrapper.Children.Add(label);
+                        cellTextWrapper.Children.Add(label);
                     }
                 }
                 else
@@ -148,21 +165,41 @@ namespace ASolute_Mobile
                             label.FontAttributes = FontAttributes.Bold;
                         }
 
-
-                        cellWrapper.Children.Add(label);
+                        cellTextWrapper.Children.Add(label);
 
                         if (!(String.IsNullOrEmpty(items.BackColor)))
                         {
-                            cellWrapper.BackgroundColor = Color.FromHex(items.BackColor);
+                            cellTextWrapper.BackgroundColor = Color.FromHex(items.BackColor);
                             color = items.BackColor;
                         }
 
+                        if (items.Id == "Info" && count >= summaryRecord.Count - 1)
+                        {
+                            cellImageWrapper.Children.Clear();
+
+                            Image userPicture = new Image
+                            {
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                                VerticalOptions = LayoutOptions.FillAndExpand,
+                                HeightRequest = 120,
+                                WidthRequest = 100,
+                                Source = "user_icon.png"
+                            };
+
+                            var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
+                            userPicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+
+                            cellImageWrapper.Children.Add(userPicture);
+                            count = 0;
+                        }
+
+                        count++;
                     }
                 }
-                       
-               // absoluteLayout.Children.Add(cellWrapper);
 
-                if(Ultis.Settings.List.Equals("provider_List"))
+                // absoluteLayout.Children.Add(cellWrapper);
+
+                if (Ultis.Settings.List.Equals("provider_List"))
                 {
                     MenuItem menuItem = new MenuItem()
                     {
@@ -189,7 +226,8 @@ namespace ASolute_Mobile
                         }
                     };
 
-                    menuItem.BindingContextChanged += (sender, e) => {
+                    menuItem.BindingContextChanged += (sender, e) =>
+                    {
                         if (((MenuItem)sender).BindingContext != null)
                         {
 
@@ -198,20 +236,25 @@ namespace ASolute_Mobile
 
                     this.ContextActions.Add(menuItem);
                 }
- 
-                 View = new Frame
-                 {
-                    Content = cellWrapper,
+
+                mainLayout.Children.Add(cellTextWrapper);
+                mainLayout.Children.Add(cellImageWrapper);
+
+                View = new Frame
+                {
+                    Content = mainLayout,
                     HasShadow = true,
                     Margin = 5
-                 
-                 };
+
+                };
 
                 if (!(String.IsNullOrEmpty(color)))
                 {
                     View.BackgroundColor = Color.FromHex(color);
                 }
-                
+
+
+
             }
 
         }

@@ -86,7 +86,7 @@ namespace ASolute_Mobile
 
         public async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this);
+            await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this, "NormalImage");
 
             displayImage();
             BackgroundTask.StartTimer();

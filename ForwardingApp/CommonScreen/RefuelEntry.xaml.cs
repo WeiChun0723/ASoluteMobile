@@ -88,6 +88,8 @@ namespace ASolute_Mobile
                 DownloadDefaultValue();
             }
 
+
+            recordID = Guid.NewGuid().ToString();
         }
 
         protected override void OnAppearing()
@@ -131,7 +133,7 @@ namespace ASolute_Mobile
 
         public async void CaptureImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(recordID, this);
+            await CommonFunction.StoreImages(recordID, this, "NormalImage");
             DisplayImage();
 
             if(!(String.IsNullOrEmpty(imageEventID)))

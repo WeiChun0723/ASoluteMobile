@@ -272,10 +272,7 @@ namespace ASolute_Mobile
 
                                     BackgroundTask.Logout(this);
 
-                                    if(Device.RuntimePlatform == Device.Android)
-                                    {
-                                        DependencyService.Get<CloseApp>().close_app();
-                                    }
+
                                    
                                 }
                             }

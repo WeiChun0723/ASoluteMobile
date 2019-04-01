@@ -8,7 +8,6 @@
             </StackLayout>
             <StackLayout Spacing="0" Padding="10,10,10,10">
                 <Label Text="Reason" FontAttributes="Bold" />
-               <!-- <controls:CustomPicker x:Name="ReasonPicker" HorizontalOptions="FillAndExpand" BackgroundColor="LightYellow" SelectedIndexChanged="reasonSelected" Image="ic_arrow_drop_down" />-->
                 <combobox:SfComboBox HeightRequest="40" x:Name="reasonPicker" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
             </StackLayout>
             <StackLayout Spacing="0" Padding="10,10,10,10">

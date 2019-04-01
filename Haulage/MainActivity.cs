@@ -25,7 +25,7 @@ using Haulage.Droid.Services;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS BUS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -44,7 +44,8 @@ namespace ASolute_Mobile.Droid
 
                 if(PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
-                    //RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+                    // RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+
                 }
 
 
@@ -70,12 +71,12 @@ namespace ASolute_Mobile.Droid
                         intent.SetData(Android.Net.Uri.Parse("package:" + packageName));
                         StartActivity(intent);
                     }
-                }
+                }*/
 
                 if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
                     StartLocationTracking();
-                }*/
+                }
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                 App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
@@ -84,7 +85,6 @@ namespace ASolute_Mobile.Droid
             {
 
             }
-
         }
 
         public void StartLocationTracking()
@@ -111,14 +111,14 @@ namespace ASolute_Mobile.Droid
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            /*if (grantResults.Length > 0 && permissions.Length > 0)
+            if (grantResults.Length > 0 && permissions.Length > 0)
             {
                 if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
                     StartLocationTracking();
                 }
 
-            }*/
+            }
 
         }
 

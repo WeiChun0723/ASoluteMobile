@@ -520,6 +520,7 @@
     <AndroidResource Include="Resources\drawable\printing.png" />
     <AndroidResource Include="Resources\layout\PinInfoWindow.axml" />
     <AndroidResource Include="Resources\drawable\cash.png" />
+    <AndroidResource Include="Resources\drawable\myPic.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

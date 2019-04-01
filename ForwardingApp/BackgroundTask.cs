@@ -128,7 +128,7 @@ namespace ASolute_Mobile
 
                         if(Ultis.Settings.App == "Haulage")
                         {
-                            await GetWebService(ControllerUtil.getListURL(), "HaulageJobList", contentPage, "HaulageJob");
+                            await GetWebService(ControllerUtil.getHaulageJobListURL(), "HaulageJobList", contentPage, "HaulageJob");
                             await GetWebService(ControllerUtil.getReasonListURL(), "ReasonList", contentPage, "");
 
                         }
@@ -164,8 +164,6 @@ namespace ASolute_Mobile
             {
                 contentPage.IsBusy = true;
             }
-
-
 
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";
@@ -262,9 +260,7 @@ namespace ASolute_Mobile
 
                             if (existingRecord == null)
                             {                               
-
                                 existingRecord = new JobItems();
-
                                 existingRecord.TruckId = job.TruckId;
                                 existingRecord.ReqSign = job.ReqSign;
                                 existingRecord.Id = job.Id;
@@ -352,8 +348,7 @@ namespace ASolute_Mobile
                        
                         foreach (clsHaulageModel job in HaulageJobList)
                         {
-                            //JobItems existingRecord = App.Database.GetPendingRecordAsync(job.Id);
-                            
+
                             JobItems existingRecord = new JobItems();
                             
                                 existingRecord.TruckId = job.TruckId;

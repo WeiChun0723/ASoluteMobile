@@ -51,7 +51,7 @@
                 <buttons:SfButton Style="{StaticResource buttonStyle}"  Text="Register User" Clicked="NewUser" HorizontalOptions="FillAndExpand"/>
                 <buttons:SfButton Style="{StaticResource buttonStyle}"  x:Name="organization" Clicked="Update_URL_Clicked" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
-
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="clearCacheButton" Text="Clear Cache" Clicked="Handle_Clicked" />
             <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
     </ScrollView>

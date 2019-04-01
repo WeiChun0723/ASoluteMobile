@@ -15,6 +15,7 @@ using Plugin.DeviceInfo;
 using Plugin.Geolocator;
 using Plugin.Media;
 using System.Threading.Tasks;
+using Syncfusion.XForms.Buttons;
 
 namespace ASolute_Mobile
 {
@@ -23,14 +24,14 @@ namespace ASolute_Mobile
         public LoginPage()
         {
             InitializeComponent();
-           
+
             //hide the navigation bar
             NavigationPage.SetHasNavigationBar(this, false);
 
             //search for any company icon that stored in file and display it
-            if(File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
+            if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
             {
-                logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());    
+                logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
             AppLabel.Text = "AILS Bus Ver." + CrossDeviceInfo.Current.AppVersion;
@@ -39,15 +40,15 @@ namespace ASolute_Mobile
             //set username entry maximum to 10 chars
             usernameEntry.TextChanged += (sender, args) =>
             {
-                string _text = usernameEntry.Text.ToUpper(); 
+                string _text = usernameEntry.Text.ToUpper();
 
                 usernameEntry.Text = _text;
             };
 
             usernameEntry.Focus();
-                
+
             usernameEntry.Completed += (s, e) =>
-            {                
+            {
                 passwordEntry.Focus();
             };
 
@@ -57,14 +58,37 @@ namespace ASolute_Mobile
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            organization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.EnterpriseName))) ? Ultis.Settings.EnterpriseName : "Enterprise";
-             await GetBaseURL();
+            try
+            {
+                organization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.EnterpriseName))) ? Ultis.Settings.EnterpriseName : "Enterprise";
+                await GetBaseURL();
+
+            }
+            catch
+            {
+
+            }
 
         }
-      
+
+        void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            var button = sender as SfButton;
+
+            switch (button.StyleId)
+            {
+                case "clearCacheButton":
+                    if (Device.RuntimePlatform == Device.Android)
+                    {
+                        DependencyService.Get<CloseApp>().close_app();
+                    }
+                    break;
+            }
+        }
+
         async void Update_URL_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new SettingPage());            
+            await Navigation.PushAsync(new SettingPage());
         }
 
         async void NewUser(object sender, System.EventArgs e)
@@ -74,30 +98,41 @@ namespace ASolute_Mobile
 
         async Task GetBaseURL()
         {
-            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.EnterpriseName),this));
-
-            if(json_response.IsGood)
+            try
             {
-               // Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
-                Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
+                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(Ultis.Settings.EnterpriseName), this));
+
+                if (json_response.IsGood)
+                {
+                    // Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
+                }
+
+
+
             }
+            catch
+            {
+
+            }
+
 
         }
 
-         async void Login_Clicked(object sender, System.EventArgs e)
+        async void Login_Clicked(object sender, System.EventArgs e)
         {
             this.activityIndicator.IsRunning = true;
-            
+
             if (!string.IsNullOrEmpty(usernameEntry.Text) &&
                 !string.IsNullOrEmpty(passwordEntry.Text))
-            {            
+            {
                 string encryptedUserId = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(usernameEntry.Text));
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                  var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
-                  //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
-                   clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
+                    //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
                     {
@@ -106,8 +141,8 @@ namespace ASolute_Mobile
                         Ultis.Settings.RefreshMenuItem = "Yes";
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
 
-                        var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>(); 
-                 
+                        var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+
                         foreach (clsDataRow contextMenu in login_user.ContextMenu)
                         {
                             List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
@@ -146,7 +181,7 @@ namespace ASolute_Mobile
 
                         var userObject = JObject.Parse(content)["Result"].ToObject<UserItem>();
                         //Save user info to constant
-                        Ultis.Settings.SessionUserItem = userObject;                       
+                        Ultis.Settings.SessionUserItem = userObject;
                         Ultis.Settings.SessionSettingKey = System.Net.WebUtility.UrlEncode(login_user.SessionId);
 
                         if (login_user.Language == 0)
@@ -179,12 +214,12 @@ namespace ASolute_Mobile
                                     {
                                         var downloadLogoAckURI = ControllerUtil.getDownloadLogoAcknowledgementURL();
                                         var logoAckResp = await client.GetAsync(downloadLogoAckURI);
-                                       
+
                                     }
-                                    catch(Exception exception)
+                                    catch (Exception exception)
                                     {
                                         await DisplayAlert("Error", exception.Message, "OK");
-                                    }                                                                       
+                                    }
                                 }
                                 else
                                 {
@@ -209,13 +244,13 @@ namespace ASolute_Mobile
                         }
 
                         Application.Current.MainPage = new MainPage();
-                       
-                    }                                  
+
+                    }
                     else
                     {
                         await DisplayAlert("Error", login_response.Message, "OK");
                         this.activityIndicator.IsRunning = false;
-                    }                              
+                    }
                 }
                 catch (HttpRequestException exception)
                 {
@@ -223,7 +258,7 @@ namespace ASolute_Mobile
                     Application.Current.MainPage = new LoginPage();
 
                 }
-                catch(Exception exception)
+                catch (Exception exception)
                 {
                     await DisplayAlert("Error", exception.Message, "Ok");
                 }
@@ -231,10 +266,10 @@ namespace ASolute_Mobile
             else
             {
                 await DisplayAlert("Login Fail", "Please make sure all fields are complete", "Ok");
-               
+
             }
             this.activityIndicator.IsRunning = false;
         }
 
-    }   
+    }
 }

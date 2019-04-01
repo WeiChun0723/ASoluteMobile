@@ -37,6 +37,7 @@ namespace ASolute_Mobile.iOS
             Syncfusion.SfNumericTextBox.XForms.iOS.SfNumericTextBoxRenderer.Init();
             Syncfusion.SfPullToRefresh.XForms.iOS.SfPullToRefreshRenderer.Init();
             Syncfusion.ListView.XForms.iOS.SfListViewRenderer.Init();
+            Syncfusion.XForms.iOS.Border.SfBorderRenderer.Init();
 
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
 

@@ -31,6 +31,7 @@ namespace ASolute_Mobile.InputValidation
             }
 
             ((Entry)sender).Text = value.ToUpper();
+           
         }
 
         protected override void OnDetachingFrom(Entry bindable)

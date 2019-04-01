@@ -133,7 +133,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(tallyOutDetail.EventRecordId.ToString(), this);
+            await CommonFunction.StoreImages(tallyOutDetail.EventRecordId.ToString(), this, "NormalImage");
             DisplayImage();
             BackgroundTask.StartTimer();
         }

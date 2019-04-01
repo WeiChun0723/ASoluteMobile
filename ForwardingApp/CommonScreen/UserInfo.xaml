@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.CommonScreen.UserInfo" xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" 
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+    <ScrollView>
+        <StackLayout Padding="15,15,15,15" Spacing="10">
+         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
+            <Image x:Name="profilePic" HeightRequest="300"/>
+            <!--<border:SfBorder BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="150">
+                <Image x:Name="profilePic" HeightRequest="300"/>
+            </border:SfBorder>-->
+            <StackLayout x:Name="userDetail" Padding="0,15,0,15">
+                <Label Style="{StaticResource readOnlyLabel}" x:Name="userID" />
+                <Label Style="{StaticResource readOnlyLabel}" x:Name="userName" />
+                <Label Style="{StaticResource readOnlyLabel}" x:Name="userVehicle" />
+            </StackLayout>
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="takeImageButton" Text="Take Image" Clicked="Handle_Clicked" />
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="chooseImageButton" Text="Choose Image" Clicked="Handle_Clicked" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

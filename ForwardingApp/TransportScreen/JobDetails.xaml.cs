@@ -163,7 +163,7 @@ namespace ASolute_Mobile.TransportScreen
 
         public async void takeImage(object sender, EventArgs e)
         {
-            await CommonFunction.StoreImages(jobID, this);
+            await CommonFunction.StoreImages(jobID, this, "NormalImage");
             UploadImage(jobID);
             try
             {

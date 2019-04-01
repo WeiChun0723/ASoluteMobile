@@ -369,8 +369,14 @@ namespace ASolute_Mobile.Data
             return database.Table<FuelCostNew>().FirstOrDefault();
         }
 
-        public void deleteJobImages(string id){
-            database.Query<AppImage>("DELETE FROM [Image] WHERE [jobId] = ?", id);
+        //delete user previous profile picture
+        public void DeleteUserImage(string userId){
+            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [id] = ?", userId);
+        }
+
+        public AppImage GetUserProfilePicture (string id)
+        {
+            return database.Table<AppImage>().Where(i => i.id == id).FirstOrDefault();
         }
 
         public void deleteJobNo()

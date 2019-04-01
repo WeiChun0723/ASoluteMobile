@@ -115,11 +115,11 @@ namespace ASolute_Mobile.Utils
             {
 
             }
-            return "";
+            return null;
         }
 
         //capture image and store local path in db function
-        public static async Task StoreImages(string id, ContentPage contentPage)
+        public static async Task StoreImages(string id, ContentPage contentPage,string imageType)
         {
             try
             {
@@ -137,6 +137,11 @@ namespace ASolute_Mobile.Utils
                 if (file == null)
                     return;
 
+                if(id == Ultis.Settings.SessionUserItem.DriverId)
+                {
+                    App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
+                }
+
                 AppImage image = new AppImage();
                 image.id = id;
                 image.photoFileLocation = file.Path;
@@ -145,7 +150,7 @@ namespace ASolute_Mobile.Utils
                 string photoFileName = HelperUtil.GetPhotoFileName(image.photoFileLocation);
 
                 image.photoFileName = photoFileName;
-                image.type = "NormalImage";
+                image.type = imageType;
                 byte[] imagesAsBytes;
                 using (var memoryStream = new MemoryStream())
                 {
@@ -155,8 +160,16 @@ namespace ASolute_Mobile.Utils
                 }
 
                 //resize the photo and store in different directory 
+                byte[] thumbnailByte;
+                if (id == Ultis.Settings.SessionUserItem.DriverId)
+                {
+                    thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
+                }
+                else
+                {
+                    thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 256, 256, 100);
+                }
 
-                byte[] thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 256, 256, 100);
                 string thumbnailFolder = HelperUtil.GetThumbnailFolder(image.photoFileLocation);
                 if (!Directory.Exists(thumbnailFolder))
                 {
@@ -164,7 +177,9 @@ namespace ASolute_Mobile.Utils
                 }
                 image.photoThumbnailFileLocation = Path.Combine(thumbnailFolder, photoFileName);
                 File.WriteAllBytes(image.photoThumbnailFileLocation, thumbnailByte);
+                image.imageData = thumbnailByte;
                 App.Database.SaveRecordImageAsync(image);
+
             }
             catch(Exception ex)
             {
