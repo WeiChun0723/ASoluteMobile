@@ -24,15 +24,12 @@ namespace ASolute_Mobile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FutileTrip_CargoReturn : ContentPage
 	{
-
-        //public JobDetails jobPreviousPage;
         public string uploadUri = "";
         List<AppImage> images = new List<AppImage>();
-        double imageWidth;      
-        JobItems jobItem;
+        double imageWidth;
+        //JobItems jobItem;
+        ListItems jobItem;
         List<clsKeyValue> reasonCode;
-        static byte[] scaledImageByte;
-        static int uploadedImage = 0;
 
         public FutileTrip_CargoReturn ()
 		{
@@ -40,20 +37,16 @@ namespace ASolute_Mobile
             Title = "Futile trip";
             pageContent();
 
-            imageGrid.RowSpacing = 0;
-            imageGrid.ColumnSpacing = 0;
+            //initialized height for image grid row
             imageWidth = App.DisplayScreenWidth / 3;
-            imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(imageWidth) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            imageGridRow.Height = imageWidth;
 
+            //get picker value
             GetPickerValue();
 
-            jobItem = App.Database.GetItemAsync(Ultis.Settings.SessionCurrentJobId);
-
-            images.Clear();
-            imageGrid.Children.Clear();           
+            //jobItem = App.Database.GetItemAsync(Ultis.Settings.SessionCurrentJobId);
+            jobItem = App.Database.GetJobRecordAsync(Ultis.Settings.SessionCurrentJobId);
+        
         }
 
         async void GetPickerValue()
@@ -84,15 +77,14 @@ namespace ASolute_Mobile
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
-        public async void takeImage(object sender, EventArgs e)
+        public async void TakeImage(object sender, EventArgs e)
         {
             await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this, "NormalImage");
-
-            displayImage();
+            DisplayImage();
             BackgroundTask.StartTimer();
         }    
 
-        public async void uploadDetail(object sender, EventArgs e)
+        public async void UploadDetail(object sender, EventArgs e)
         {
             try
             {
@@ -109,7 +101,7 @@ namespace ASolute_Mobile
                         futileJob.Remarks = (remarkTextEditor.Text == null) ? "" : remarkTextEditor.Text;
                         futileJob.ReasonCode = reasonCode[reasonPicker.SelectedIndex].Key;
 
-                        var content = await CommonFunction.CallWebService(1, futileJob, Ultis.Settings.SessionBaseURI, ControllerUtil.postHaulageURL(), this);
+                        var content = await CommonFunction.CallWebService(1, futileJob, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
                         clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (response.IsGood == true)
@@ -146,7 +138,7 @@ namespace ASolute_Mobile
 
         }
     
-
+        //indicate for cargo return or futile trip, but cargo return seem no use , this code can be remove
         public void pageContent()
         {
             if (Ultis.Settings.MenuRequireAction == "Cargo_Return" )
@@ -171,7 +163,7 @@ namespace ASolute_Mobile
             {
                 await Navigation.PushAsync(new ImageViewer((AppImage)((TappedEventArgs)e).Parameter));
             };
-            image.GestureRecognizers.Add(tapGestureRecognizer);
+            //image.GestureRecognizers.Add(tapGestureRecognizer);
             int noOfImages = imageGrid.Children.Count();
             int noOfCols = imageGrid.ColumnDefinitions.Count();
             int rowNo = noOfImages / noOfCols;
@@ -179,7 +171,7 @@ namespace ASolute_Mobile
             imageGrid.Children.Add(image, colNo, rowNo);
         }
 
-        public async void displayImage()
+        public async void DisplayImage()
         {
             images.Clear();
             imageGrid.Children.Clear();
@@ -199,52 +191,6 @@ namespace ASolute_Mobile
                 image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
                 AddThumbnailToImageGrid(image, Image);
             }
-        }
-
-        public async void UploadImage(string uploadID)
-        {
-            List<AppImage> recordImages = App.Database.GetRecordImagesAsync(uploadID, false);
-            foreach (AppImage recordImage in recordImages)
-            {
-                clsFileObject image = new clsFileObject();
-
-                if (recordImage.type == "signature")
-                {
-                    image.Content = recordImage.imageData;
-                }
-                else
-                {
-                    byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                    scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
-                    image.Content = scaledImageByte;
-                }
-
-                image.FileName = recordImage.photoFileName;
-
-                var image_client = new HttpClient();
-                image_client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var image_uri = ControllerUtil.UploadImageURL(jobItem.EventRecordId.ToString());
-                var imagecontent = JsonConvert.SerializeObject(image);
-                var image_httpContent = new StringContent(imagecontent, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage image_response = await image_client.PostAsync(image_uri, image_httpContent);
-                var Imagereply = await image_response.Content.ReadAsStringAsync();
-                Debug.WriteLine(Imagereply);
-                clsResponse Imageresult = JsonConvert.DeserializeObject<clsResponse>(Imagereply);
-
-                if (Imageresult.IsGood == true)
-                {
-                    uploadedImage++;
-                    recordImage.Uploaded = true;
-                    App.Database.SaveRecordImageAsync(recordImage);
-                }
-            }
-
-            if (uploadedImage == recordImages.Count)
-            {
-                await DisplayAlert("Success", "Image uploded", "OK");
-            }
-
         }
     }
 }

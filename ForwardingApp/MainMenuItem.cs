@@ -73,8 +73,8 @@ namespace ASolute_Mobile
 
                     case "JobList":
                         //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
-                        //await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
+                        //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
                         // await Navigation.PushAsync(new ChatRoom());
                         break;
 
@@ -166,7 +166,7 @@ namespace ASolute_Mobile
 
         protected async override void OnAppearing()
         {
-            var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
+            /*var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
             if (status != PermissionStatus.Granted)
             {
                 if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
@@ -178,7 +178,7 @@ namespace ASolute_Mobile
                 //Best practice to always check that the key exists
                 if (results.ContainsKey(Permission.Location))
                     status = results[Permission.Location];
-            }
+            }*/
 
 
             if (Ultis.Settings.NewJob.Equals("Yes"))

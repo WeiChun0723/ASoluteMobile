@@ -34,7 +34,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
-            AppLabel.Text = "AILS Bus Ver." + CrossDeviceInfo.Current.AppVersion;
+            AppLabel.Text = "AILS Haulage Ver." + CrossDeviceInfo.Current.AppVersion;
 
 
             //set username entry maximum to 10 chars

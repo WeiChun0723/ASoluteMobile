@@ -29,6 +29,8 @@ namespace ASolute_Mobile.CommonScreen
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
+            loading.IsVisible = true;
+
             var button = sender as SfButton;
 
             switch (button.StyleId)
@@ -46,7 +48,7 @@ namespace ASolute_Mobile.CommonScreen
 
          void ShowProfilePicture()
         {
-            loading.IsVisible = true;
+           
             try
             {
                 AppImage image =  App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
@@ -82,6 +84,7 @@ namespace ASolute_Mobile.CommonScreen
                 if(selectedImageFile == null)
                 {
                     //await DisplayAlert("Error", "Could not get the image, please try again.", "OK");
+                    loading.IsVisible = false;
                     return;
                 }
                 else

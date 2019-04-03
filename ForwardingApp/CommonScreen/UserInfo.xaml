@@ -6,10 +6,10 @@
     <ScrollView>
         <StackLayout Padding="15,15,15,15" Spacing="10">
          <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
-            <Image x:Name="profilePic" HeightRequest="300"/>
-            <!--<border:SfBorder BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="150">
-                <Image x:Name="profilePic" HeightRequest="300"/>
-            </border:SfBorder>-->
+         
+            <border:SfBorder BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="600">
+                <Image x:Name="profilePic" HeightRequest="250"/>
+            </border:SfBorder>
             <StackLayout x:Name="userDetail" Padding="0,15,0,15">
                 <Label Style="{StaticResource readOnlyLabel}" x:Name="userID" />
                 <Label Style="{StaticResource readOnlyLabel}" x:Name="userName" />

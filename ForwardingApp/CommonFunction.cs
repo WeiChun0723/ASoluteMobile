@@ -169,7 +169,6 @@ namespace ASolute_Mobile.Utils
                 {
                     thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 256, 256, 100);
                 }
-
                 string thumbnailFolder = HelperUtil.GetThumbnailFolder(image.photoFileLocation);
                 if (!Directory.Exists(thumbnailFolder))
                 {

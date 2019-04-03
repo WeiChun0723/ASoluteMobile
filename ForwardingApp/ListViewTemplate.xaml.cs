@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
@@ -116,13 +117,48 @@ namespace ASolute_Mobile
 
                     scanPage.OnScanResult += (result) =>
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        if (menuItems.Id == "JobList")
                         {
-                            await Navigation.PopAsync();
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                scanPage.PauseAnalysis();
 
-                            searchBar.Text = result.Text;
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.addJobURL(result.Text), this);
+                                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                                if (response.IsGood)
+                                {
+                                    Ultis.Settings.RefreshMenuItem = "Yes";
+                                    Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                                    GetListData();
+                                    displayToast("Job added to job list.");
+                                    scanPage.ResumeAnalysis();
+                                }
+                                else
+                                {
+                                    var answer = await DisplayAlert("Error", response.Message, "OK", "Cancel");
+                                    if (answer.Equals(true))
+                                    {
+                                        scanPage.ResumeAnalysis();
+                                    }
+                                    else
+                                    {
+                                        await Navigation.PopAsync();
+                                    }
+                                }
+                            });
+                        }
+                        else
+                        {
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                await Navigation.PopAsync();
 
-                        });
+                                searchBar.Text = result.Text;
+
+                            });
+
+                        }
+
                     };
                 }
 
@@ -131,6 +167,20 @@ namespace ASolute_Mobile
             {
 
             }
+        }
+
+        public void displayToast(string message)
+        {
+            var toastConfig = new ToastConfig(message);
+            toastConfig.SetDuration(2000);
+            toastConfig.Position = 0;
+            toastConfig.SetMessageTextColor(System.Drawing.Color.FromArgb(0, 0, 0));
+            if (message == "Job added to job list.")
+            {
+                toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(50, 205, 50));
+            }
+
+            UserDialogs.Instance.Toast(toastConfig);
         }
 
         public async void SelectList(object sender, ItemTappedEventArgs e)
@@ -163,10 +213,9 @@ namespace ASolute_Mobile
                         break;
                     case "JobList":
                         Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
-                        Ultis.Settings.Action = ((ListItems)e.Item).ActionId;
-                        await Navigation.PushAsync(new JobDetails(((ListItems)e.Item).ActionId, ((ListItems)e.Item).ActionMessage));
-
-                       /* await Navigation.PushAsync(new NewJobDetails((ListItems)e.Item));*/
+                        /*Ultis.Settings.Action = ((ListItems)e.Item).ActionId;
+                        await Navigation.PushAsync(new JobDetails(((ListItems)e.Item).ActionId, ((ListItems)e.Item).ActionMessage));*/
+                        await Navigation.PushAsync(new NewJobDetails());
                         break;
                 }
             }
@@ -224,7 +273,6 @@ namespace ASolute_Mobile
                             record.Title = data.Title;
                             record.SealMode = data.SealMode;
                         }
-
 
                         string summary = "";
 

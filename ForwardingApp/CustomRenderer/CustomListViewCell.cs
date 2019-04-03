@@ -4,6 +4,7 @@ using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using PCLStorage;
+using Syncfusion.XForms.Border;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,230 +31,245 @@ namespace ASolute_Mobile
         {
             base.OnBindingContextChanged();
 
-            if (this.BindingContext != null)
+            try
             {
+                if (this.BindingContext != null)
+                {
 
-                if (Ultis.Settings.List == "Job_List")
-                {
-                    JobItems model = (JobItems)this.BindingContext;
-
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
-
-                }
-                else if (Ultis.Settings.List == "HaulageJob_List")
-                {
-                    JobItems model = (JobItems)this.BindingContext;
-
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageJob");
-                }
-                else if (Ultis.Settings.List == "Receiving_List")
-                {
-                    JobItems model = (JobItems)this.BindingContext;
-
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingReceiving");
-                }
-                else if (Ultis.Settings.List == "Loading_List")
-                {
-                    JobItems model = (JobItems)this.BindingContext;
-
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingLoad");
-                }
-                else if (Ultis.Settings.List == "refuel_List")
-                {
-                    RefuelHistoryData model = (RefuelHistoryData)this.BindingContext;
-
-                    summaryRecord = App.Database.GetSummarysAsync(model.recordId, "Refuel");
-                }
-                else if (Ultis.Settings.List == "Main_Menu")
-                {
-                    ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "MainMenu");
-                }
-                else if (Ultis.Settings.List == "Log_History")
-                {
-                    Log model = (Log)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.logId, "Log");
-                }
-                else if (Ultis.Settings.List == "Run_Sheet")
-                {
-                    JobItems model = (JobItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageHistory");
-                }
-                else if (Ultis.Settings.List == "provider_List")
-                {
-                    ListItems model = (ListItems)this.BindingContext;
-                    providers = App.Database.Providers(model.Id);
-
-                }
-                else if (Ultis.Settings.List == "container_List")
-                {
-                    ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "Container");
-                }
-                else if (Ultis.Settings.List == "category_List")
-                {
-                    ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, "Category");
-                }
-                else
-                {
-                    ListItems model = (ListItems)this.BindingContext;
-                    summaryRecord = App.Database.GetSummarysAsync(model.Id, Ultis.Settings.List);
-                }
-
-
-                StackLayout mainLayout = new StackLayout()
-                {
-                    //Padding = new Thickness(10, 10, 10, 10),
-                    HorizontalOptions = LayoutOptions.FillAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                    Orientation = StackOrientation.Horizontal
-                };
-
-                StackLayout cellTextWrapper = new StackLayout()
-                {
-                    //Padding = new Thickness(10, 10, 10, 10),
-                    HorizontalOptions = LayoutOptions.FillAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand
-                };
-
-                StackLayout cellImageWrapper = new StackLayout()
-                {
-                    //Padding = new Thickness(10, 10, 10, 10),
-                    HorizontalOptions = LayoutOptions.FillAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand
-                };
-
-                bool firstSummaryLine = true;
-
-                if (Ultis.Settings.List == "provider_List")
-                {
-                    foreach (ProviderInfo items in providers)
+                    if (Ultis.Settings.List == "Job_List")
                     {
-                        Label label = new Label();
-                        label.FontAttributes = FontAttributes.Bold;
-                        label.Text = items.Name;
-                        cellTextWrapper.Children.Add(label);
+                        JobItems model = (JobItems)this.BindingContext;
+
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
+
                     }
-                }
-                else
-                {
-
-                    foreach (SummaryItems items in summaryRecord)
+                    else if (Ultis.Settings.List == "HaulageJob_List")
                     {
-                        Label label = new Label();
-                        label.FontSize = 15;
+                        JobItems model = (JobItems)this.BindingContext;
 
-                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.List.Equals("category_List"))
-                        {
-                            label.Text = items.Value;
-
-                        }
-                        else if (items.Caption == "Action" || items.Display == false)
-                        {
-                            label.IsVisible = false;
-                        }
-                        else
-                        {
-                            label.Text = items.Caption + ": " + items.Value;
-                        }
-
-                        if (firstSummaryLine)
-                        {
-
-                            firstSummaryLine = false;
-                            label.FontAttributes = FontAttributes.Bold;
-                        }
-
-                        cellTextWrapper.Children.Add(label);
-
-                        if (!(String.IsNullOrEmpty(items.BackColor)))
-                        {
-                            cellTextWrapper.BackgroundColor = Color.FromHex(items.BackColor);
-                            color = items.BackColor;
-                        }
-
-                        if (items.Id == "Info" && count >= summaryRecord.Count - 1)
-                        {
-                            cellImageWrapper.Children.Clear();
-
-                            Image userPicture = new Image
-                            {
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                VerticalOptions = LayoutOptions.FillAndExpand,
-                                HeightRequest = 120,
-                                WidthRequest = 100,
-                                Source = "user_icon.png"
-                            };
-
-                            var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
-                            userPicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
-
-                            cellImageWrapper.Children.Add(userPicture);
-                            count = 0;
-                        }
-
-                        count++;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageJob");
                     }
-                }
-
-                // absoluteLayout.Children.Add(cellWrapper);
-
-                if (Ultis.Settings.List.Equals("provider_List"))
-                {
-                    MenuItem menuItem = new MenuItem()
+                    else if (Ultis.Settings.List == "Receiving_List")
                     {
-                        Text = "Delete",
-                        IsDestructive = true
+                        JobItems model = (JobItems)this.BindingContext;
+
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingReceiving");
+                    }
+                    else if (Ultis.Settings.List == "Loading_List")
+                    {
+                        JobItems model = (JobItems)this.BindingContext;
+
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingLoad");
+                    }
+                    else if (Ultis.Settings.List == "refuel_List")
+                    {
+                        RefuelHistoryData model = (RefuelHistoryData)this.BindingContext;
+
+                        summaryRecord = App.Database.GetSummarysAsync(model.recordId, "Refuel");
+                    }
+                    else if (Ultis.Settings.List == "Main_Menu")
+                    {
+                        ListItems model = (ListItems)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "MainMenu");
+                    }
+                    else if (Ultis.Settings.List == "Log_History")
+                    {
+                        Log model = (Log)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.logId, "Log");
+                    }
+                    else if (Ultis.Settings.List == "Run_Sheet")
+                    {
+                        JobItems model = (JobItems)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageHistory");
+                    }
+                    else if (Ultis.Settings.List == "provider_List")
+                    {
+                        ListItems model = (ListItems)this.BindingContext;
+                        providers = App.Database.Providers(model.Id);
+
+                    }
+                    else if (Ultis.Settings.List == "container_List")
+                    {
+                        ListItems model = (ListItems)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "Container");
+                    }
+                    else if (Ultis.Settings.List == "category_List")
+                    {
+                        ListItems model = (ListItems)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "Category");
+                    }
+                    else
+                    {
+                        ListItems model = (ListItems)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, Ultis.Settings.List);
+                    }
+
+
+                    StackLayout mainLayout = new StackLayout()
+                    {
+                        //Padding = new Thickness(10, 10, 10, 10),
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.FillAndExpand,
+                        Orientation = StackOrientation.Horizontal
                     };
 
-                    menuItem.Clicked += (sender, e) =>
+                    StackLayout cellTextWrapper = new StackLayout()
+                    {
+                        //Padding = new Thickness(10, 10, 10, 10),
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.FillAndExpand
+                    };
+
+                    StackLayout cellImageWrapper = new StackLayout()
+                    {
+                        //Padding = new Thickness(10, 10, 10, 10),
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.FillAndExpand
+                    };
+
+                    bool firstSummaryLine = true;
+
+                    if (Ultis.Settings.List == "provider_List")
+                    {
+                        foreach (ProviderInfo items in providers)
+                        {
+                            Label label = new Label();
+                            label.FontAttributes = FontAttributes.Bold;
+                            label.Text = items.Name;
+                            cellTextWrapper.Children.Add(label);
+                        }
+                    }
+                    else
                     {
 
-                        ListItems menu = (ListItems)((MenuItem)sender).BindingContext;
-                        int results = 0;
-                        results = App.Database.DeleteMenu(menu);
-                        if (results > 0)
+                        foreach (SummaryItems items in summaryRecord)
                         {
-                            ListView parent = (ListView)this.Parent;
-                            ObservableCollection<ListItems> itemSource = ((ObservableCollection<ListItems>)parent.ItemsSource);
-                            if (itemSource.Contains(menu))
+                            Label label = new Label();
+                            label.FontSize = 15;
+
+                            if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.List.Equals("category_List"))
                             {
-                                itemSource.Remove(menu);
+                                label.Text = items.Value;
+
+                            }
+                            else if (items.Caption == "Action" || items.Display == false)
+                            {
+                                label.IsVisible = false;
+                            }
+                            else
+                            {
+                                label.Text = items.Caption + ": " + items.Value;
                             }
 
-                            callWebService(menu.Id);
-                        }
-                    };
+                            if (firstSummaryLine)
+                            {
 
-                    menuItem.BindingContextChanged += (sender, e) =>
+                                firstSummaryLine = false;
+                                label.FontAttributes = FontAttributes.Bold;
+                            }
+
+                            cellTextWrapper.Children.Add(label);
+
+                            if (!(String.IsNullOrEmpty(items.BackColor)))
+                            {
+                                cellTextWrapper.BackgroundColor = Color.FromHex(items.BackColor);
+                                color = items.BackColor;
+                            }
+
+                            if (items.Id == "Info" && count >= summaryRecord.Count - 1)
+                            {
+                                cellImageWrapper.Children.Clear();
+
+                                SfBorder sfBorder = new SfBorder
+                                {
+                                    BorderColor = Color.Transparent,
+                                    HorizontalOptions = LayoutOptions.Center,
+                                    VerticalOptions = LayoutOptions.Center,
+                                    CornerRadius = 50,
+                                   
+                                };
+
+                                Image userPicture = new Image
+                                {
+                                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                                    VerticalOptions = LayoutOptions.FillAndExpand,
+                                    HeightRequest = 120,
+                                    WidthRequest = 100,
+                                    Source = "user_icon.png"
+                                };
+
+                                sfBorder.Content = userPicture;
+
+                                var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
+                                userPicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+
+                                cellImageWrapper.Children.Add(sfBorder);
+                                count = 0;
+                            }
+
+                            count++;
+                        }
+                    }
+
+                    // absoluteLayout.Children.Add(cellWrapper);
+
+                    if (Ultis.Settings.List.Equals("provider_List"))
                     {
-                        if (((MenuItem)sender).BindingContext != null)
+                        MenuItem menuItem = new MenuItem()
+                        {
+                            Text = "Delete",
+                            IsDestructive = true
+                        };
+
+                        menuItem.Clicked += (sender, e) =>
                         {
 
-                        }
+                            ListItems menu = (ListItems)((MenuItem)sender).BindingContext;
+                            int results = 0;
+                            results = App.Database.DeleteMenu(menu);
+                            if (results > 0)
+                            {
+                                ListView parent = (ListView)this.Parent;
+                                ObservableCollection<ListItems> itemSource = ((ObservableCollection<ListItems>)parent.ItemsSource);
+                                if (itemSource.Contains(menu))
+                                {
+                                    itemSource.Remove(menu);
+                                }
+
+                                callWebService(menu.Id);
+                            }
+                        };
+
+                        menuItem.BindingContextChanged += (sender, e) =>
+                        {
+                            if (((MenuItem)sender).BindingContext != null)
+                            {
+
+                            }
+                        };
+
+                        this.ContextActions.Add(menuItem);
+                    }
+
+                    mainLayout.Children.Add(cellTextWrapper);
+                    mainLayout.Children.Add(cellImageWrapper);
+
+                    View = new Frame
+                    {
+                        Content = mainLayout,
+                        HasShadow = true,
+                        Margin = 5
+
                     };
 
-                    this.ContextActions.Add(menuItem);
+                    if (!(String.IsNullOrEmpty(color)))
+                    {
+                        View.BackgroundColor = Color.FromHex(color);
+                    }
                 }
-
-                mainLayout.Children.Add(cellTextWrapper);
-                mainLayout.Children.Add(cellImageWrapper);
-
-                View = new Frame
-                {
-                    Content = mainLayout,
-                    HasShadow = true,
-                    Margin = 5
-
-                };
-
-                if (!(String.IsNullOrEmpty(color)))
-                {
-                    View.BackgroundColor = Color.FromHex(color);
-                }
-
-
+            }
+            catch
+            {
 
             }
 

@@ -269,7 +269,7 @@ namespace ASolute_Mobile.Utils
             return String.Format("Haulage/Collection?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String postHaulageURL()
+        public static String updateHaulageJobURL()
         {
             return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }

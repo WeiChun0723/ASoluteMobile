@@ -130,10 +130,7 @@ namespace ASolute_Mobile
                         {
                             await GetWebService(ControllerUtil.getHaulageJobListURL(), "HaulageJobList", contentPage, "HaulageJob");
                             await GetWebService(ControllerUtil.getReasonListURL(), "ReasonList", contentPage, "");
-
                         }
-
-
                     }
                     catch (Exception exception)
                     {
@@ -491,37 +488,40 @@ namespace ASolute_Mobile
                 recordImages = App.Database.GetPendingRecordImages(false);
                 foreach (AppImage recordImage in recordImages)
                 {
-                    clsFileObject image = new clsFileObject();
-
-                    if (recordImage.type == "signature")
+                    if(recordImage.type != "ProfilePic")
                     {
-                        image.Content = recordImage.imageData;
+                        clsFileObject image = new clsFileObject();
+
+                        if (recordImage.type == "signature")
+                        {
+                            image.Content = recordImage.imageData;
+                        }
+                        else
+                        {
+                            byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
+                            scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
+                            image.Content = scaledImageByte;
+                        }
+
+                        image.FileName = recordImage.photoFileName;
+
+                        string eventID;
+
+                        if (!(String.IsNullOrEmpty(imageEventID)))
+                        {
+                            eventID = imageEventID;
+                        }
+                        else
+                        {
+                            eventID = recordImage.id;
+                        }
+
+                        var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID), null);
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        recordImage.Uploaded = true;
+                        App.Database.SaveRecordImageAsync(recordImage);
                     }
-                    else
-                    {
-                        byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                        scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
-                        image.Content = scaledImageByte;
-                    }
-
-                    image.FileName = recordImage.photoFileName;
-
-                    string eventID;
-
-                    if(!(String.IsNullOrEmpty(imageEventID)))
-                    {
-                        eventID = imageEventID;
-                    }
-                    else
-                    {
-                        eventID = recordImage.id;
-                    }
-
-                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID),null);
-                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    recordImage.Uploaded = true;
-                    App.Database.SaveRecordImageAsync(recordImage);
                 }
 
                 //uploadedImage = false;

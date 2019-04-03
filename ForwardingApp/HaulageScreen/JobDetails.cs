@@ -324,7 +324,7 @@ namespace ASolute_Mobile
 
                             var client = new HttpClient();
                             client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                            var uri = ControllerUtil.postHaulageURL();
+                            var uri = ControllerUtil.updateHaulageJobURL();
                             var content = JsonConvert.SerializeObject(haulage);
                             var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
                             var response = await client.PostAsync(uri, httpContent);
@@ -396,9 +396,7 @@ namespace ASolute_Mobile
                 if (jobItem == null)
                 {
                     jobItem = App.Database.GetItemAsync(currentJobId);
-                    //jobItem = App.Database.GetJobRecordAsync(currentJobId);
                     jobDetails = App.Database.GetDetailsAsync(currentJobId);
-                    //jobDetails = App.Database.GetDetailsAsync(currentJobId);
                 }
 
                 if (Ultis.Settings.DeleteImage == "Yes")
@@ -605,6 +603,7 @@ namespace ASolute_Mobile
 
                     sealEntry.Text = _sealtext;
                 };
+
 
                 sealEntry.Text = jobItem.SealNo;
                 if ((Ultis.Settings.Action.Equals("Point1_Chk") || Ultis.Settings.Action.Equals("Point2_Chk")))
@@ -920,11 +919,10 @@ namespace ASolute_Mobile
                 var takeImage = new TapGestureRecognizer();
                 takeImage.Tapped += async (sender, e) =>
                 {
-
+                   
                     await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this, "NormalImage");
                     DisplayImage();
                     BackgroundTask.StartTimer();
-                  
                 };
                 camera.GestureRecognizers.Add(takeImage);
                 imageButtonStackLayout.Children.Add(camera);
@@ -1076,7 +1074,7 @@ namespace ASolute_Mobile
                         activity.IsVisible = false;
 
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         await DisplayAlert("Reminder", "Please sign for the job.", "OK");
                     }
@@ -1177,7 +1175,7 @@ namespace ASolute_Mobile
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                var uri = ControllerUtil.postHaulageURL();
+                var uri = ControllerUtil.updateHaulageJobURL();
                 var content = JsonConvert.SerializeObject(haulageJob);
                 var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(uri, httpContent);
