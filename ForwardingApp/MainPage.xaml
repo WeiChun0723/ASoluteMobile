@@ -17,9 +17,8 @@
         
         <NavigationPage BarBackgroundColor="#9A2116" x:Name="navigation">
             <x:Arguments>
-                <local:MainMenuItem />
+                <local:NewMainMenu />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>
-    
     </MasterDetailPage>

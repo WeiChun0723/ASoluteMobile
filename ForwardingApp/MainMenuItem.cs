@@ -49,9 +49,9 @@ namespace ASolute_Mobile
                         break;
 
                     case "FuelCost":
-                        RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
-                        await Navigation.PushAsync(refuel);
-                       // await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getDownloadRefuelHistoryURL()));
+                       /* RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
+                        await Navigation.PushAsync(refuel);*/
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getDownloadRefuelHistoryURL()));
                         break;
 
                     case "EqInquiry":
@@ -120,22 +120,21 @@ namespace ASolute_Mobile
                         await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInList()));
                         break;
                     case "PalletTrx":
-                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item).Name));
+                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                         break;
                     case "Packing":
-                        //await Navigation.PushAsync(new WMS_Screen.Packing(((AppMenu)e.Item).name));
                         await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingList()));
                         break;
                     case "TallyOut":
-                        //await Navigation.PushAsync(new WMS_Screen.TallyOut(((AppMenu)e.Item).name));
                         await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutList()));
                         break;
                     case "FullPick":
-                        //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
                         await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
                         break;
                     case "LoosePick":
-                        //await Navigation.PushAsync(new WMS_Screen.Picking(((AppMenu)e.Item).name, ((AppMenu)e.Item).menuId));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                        break;
+                    case "PickingVerify":
                         await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
                         break;
                     case "InboundTrip":
@@ -305,7 +304,7 @@ namespace ASolute_Mobile
                             mainMenuItems.Category = "MainMenu";
 
                             List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
-
+                           
                             int index = 0;
                             foreach (clsCaptionValue summaryList in mainMenu.Summary)
                             {

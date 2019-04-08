@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.NewMainMenu"
+             xmlns:circleImage="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+     <ScrollView>
+        <Grid ColumnSpacing="0" RowSpacing="0" x:Name="mainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="AUTO" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="AUTO" />
+            </Grid.RowDefinitions>
+            <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
+            <!--  header background  -->
+            <Image Aspect="AspectFill" Source="headerBackground.png" />
+            <Image Aspect="Fill" Margin="0,-1,0,-1" Source="CurvedMask.png" VerticalOptions="End" />
+
+            <!--  profile image  -->
+            <circleImage:CircleImage x:Name="profilePicture" BorderColor="White"  HeightRequest="120" HorizontalOptions="Center" TranslationY="50" VerticalOptions="End" WidthRequest="120" Aspect="AspectFill" BorderThickness="3">
+                <circleImage:CircleImage.GestureRecognizers>
+                     <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                </circleImage:CircleImage.GestureRecognizers>
+            </circleImage:CircleImage>
+            
+            <!--  Profile Name  -->
+            <StackLayout Grid.Row="1" Padding="0,50,0,00" HorizontalOptions="Center" x:Name="userInfo"/>
+
+            <!-- Expiry Section  -->
+            <StackLayout  Margin="0,30" x:Name="expiryStack" IsVisible="false">
+                <Label x:Name="expiryLabel" Style="{StaticResource ProfileNameLabel}" />
+                <Grid  ColumnSpacing="0" RowSpacing="0" x:Name="expiryGrid"/>
+            </StackLayout>
+            
+           
+        </Grid>
+    </ScrollView>
+</ContentPage>

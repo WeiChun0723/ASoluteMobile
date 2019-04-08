@@ -24,6 +24,7 @@ namespace ASolute_Mobile.WMS_Screen
             pickingTitle = title;
             clsWhsItems = items;
 
+            //find the item index in the list
             index = items.FindIndex(a => a.PalletId == pickingSummary.PalletId);
 
             LoadPickingSummary(pickingSummary.Summary);

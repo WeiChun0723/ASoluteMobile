@@ -1,4 +1,5 @@
 ﻿using ASolute.Mobile.Models;
+using ASolute_Mobile.CommonScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Utils;
@@ -22,23 +23,28 @@ using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+
     public partial class RefuelEntry : ContentPage
-	{
-        public RefuelHistory previousPage;
+    {
         List<AppImage> images = new List<AppImage>();
         double imageWidth;
-        clsResponse json_reponse = new clsResponse();
+        
         clsFuelCostNew fuelCostNew = new clsFuelCostNew();         
         string recordID, imageEventID = "";
         int station_choice = 0, payment_choice;
         List<AppImage> recordImages = new List<AppImage>();
         byte[] scaledImageByte;
+        List<string> paymentMode = new List<string>();
+        List<string> stations = new List<string>();
 
-        public RefuelEntry (string title)
-		{
+        public RefuelEntry(string title)
+        {
             // this screen need to call web servvice to get the current date cost rate, so it do not allow user to enter new record when they is no internet to call the get cost rate web service.
-			InitializeComponent ();
+            InitializeComponent();
+
+            //initialized height for image grid row
+            imageWidth = App.DisplayScreenWidth / 3;
+            imageGridRow.Height = imageWidth;
 
             StackLayout main = new StackLayout();
 
@@ -59,35 +65,23 @@ namespace ASolute_Mobile
             main.Children.Add(title1);
             main.Children.Add(title2);
 
-            NavigationPage.SetTitleView(this, main); 
+            NavigationPage.SetTitleView(this, main);
 
             if (Ultis.Settings.Language.Equals("English"))
             {
                 Title = "Refuel Entry";
                 liter.Placeholder = "Maximum 500 liter.";
             }
-            else 
+            else
             {
                 Title = "Isi Minyak";
                 liter.Placeholder = "Maksimum 500 liter.";
-            } 
-
-
-            imageGrid.RowSpacing = 0;
-            imageGrid.ColumnSpacing = 0;
-            imageWidth = App.DisplayScreenWidth / 3;
-            imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(imageWidth) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
-            lblDateTime.Text = "Date & Time";           
+            }
 
             if (NetworkCheck.IsInternet())
             {
                 DownloadDefaultValue();
             }
-
 
             recordID = Guid.NewGuid().ToString();
         }
@@ -105,7 +99,8 @@ namespace ASolute_Mobile
                 this.ToolbarItems.Clear();
             }
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) =>
+            {
 
                 try
                 {
@@ -131,19 +126,42 @@ namespace ASolute_Mobile
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
-        public async void CaptureImage(object sender, EventArgs e)
+        async void Handle_Tapped(object sender, System.EventArgs e)
         {
-            await CommonFunction.StoreImages(recordID, this, "NormalImage");
-            DisplayImage();
+            var icon = sender as Image;
 
-            if(!(String.IsNullOrEmpty(imageEventID)))
+            switch (icon.StyleId)
             {
-                UploadImage();
+                case "fuelCardBarCode_icon":
+                    BarCodeScan("fuel");
+                    break;
+
+                case "voucherBarCode_icon":
+                    BarCodeScan("voucher");
+                    break;
+
+                case "otherBarCode_icon":
+                    BarCodeScan("otherRef");
+                    break;
+
+                case "camera_icon":
+                    await CommonFunction.StoreImages(recordID, this, "NormalImage");
+                    DisplayImage();
+
+                    if (!(String.IsNullOrEmpty(imageEventID)))
+                    {
+                        UploadImage();
+                    }
+                    break;
+
+                case "confirm_icon":
+                    UploadRefuelRecord();
+                    break;
             }
         }
 
-        public async void ConfirmRefuel(object sender, EventArgs e)
-        {            
+        public async void UploadRefuelRecord()
+        {
             try
             {
                 double fuelLiter = Convert.ToDouble(liter.Text);
@@ -159,15 +177,16 @@ namespace ASolute_Mobile
                             string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
 
                             clsFuelCost refuel_Data = new clsFuelCost();
-                            if ( paymentPicker.SelectedIndex != -1 && liter.Text != null && fuelCard.Text != null)
+                            if (paymentComboBox.Text != null && stationComboBox.Text != null && liter.Text != null && fuelCard.Text != null)
                             {
                                 try
                                 {
                                     refuel_Data.TruckId = Ultis.Settings.SessionUserItem.TruckId;
                                     refuel_Data.Odometer = Convert.ToInt32(odometer.Text);
                                     refuel_Data.DriverId = Ultis.Settings.SessionUserItem.DriverId;
-                                    refuel_Data.VendorCode = fuelCostNew.VendorList[station_choice].Key;
-                                    refuel_Data.PaymentMode = (paymentPicker.SelectedIndex == 1) ? clsFuelCost.PaymentModeEnum.Card : clsFuelCost.PaymentModeEnum.Cash;
+                                    //refuel_Data.VendorCode = fuelCostNew.VendorList[0].Key;
+                                    refuel_Data.VendorCode = fuelCostNew.VendorList[stations.FindIndex(x => x.Equals(stationComboBox.Text))].Key;
+                                    refuel_Data.PaymentMode = (paymentMode.FindIndex(x => x.Equals(paymentComboBox.Text)) == 1) ? clsFuelCost.PaymentModeEnum.Card : clsFuelCost.PaymentModeEnum.Cash;
                                     refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
                                     refuel_Data.Quantity = Convert.ToDouble(liter.Text);
                                     refuel_Data.FuelCardNo = (String.IsNullOrEmpty(fuelCard.Text)) ? "" : fuelCard.Text;
@@ -175,10 +194,10 @@ namespace ASolute_Mobile
                                     refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
                                     refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
 
-                                    var content = await CommonFunction.PostRequestAsync( refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
+                                    var content = await CommonFunction.PostRequestAsync(refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                                    if(response.IsGood)
+                                    if (response.IsGood)
                                     {
                                         imageEventID = response.Result["LinkId"];
                                         if (Ultis.Settings.Language.Equals("English"))
@@ -219,30 +238,16 @@ namespace ASolute_Mobile
                             }
                             else
                             {
-                                string check = "";
-                                if (Ultis.Settings.Language.Equals("English"))
-                                {
-                                    check = "Please fill in all the field.";
-                                }
-                                else
-                                {
-                                    check = "Sila isi semua data yang diperlukan.";
-                                }
+                                string check = (Ultis.Settings.Language.Equals("English")) ? "Please fill in all the field." : "Sila isi semua data yang diperlukan.";
+                        
                                 await DisplayAlert("Error", check, "OK");
                             }
                         }
                         else
                         {
 
-                            string check = "";
-                            if (Ultis.Settings.Language.Equals("English"))
-                            {
-                                check = "Odometer entered cannot less than default odometer value ";
-                            }
-                            else
-                            {
-                                check = "Odometer tidak boleh kurang daripda odometer asal";
-                            }
+                            string check = (Ultis.Settings.Language.Equals("English")) ? "Odometer entered cannot less than default odometer value " : "Odometer tidak boleh kurang daripda odometer asal";
+                         
                             await DisplayAlert("", check, "OK");
                         }
                     }
@@ -273,15 +278,15 @@ namespace ASolute_Mobile
 
         public async void PaymentSelected(object sender, SelectedPositionChangedEventArgs e)
         {
-            if (paymentPicker.SelectedIndex == -1)
+            if (paymentComboBox.SelectedIndex == -1)
             {
                 await DisplayAlert("Error", "Please choose payment method", "Ok");
             }
             else
             {
-                payment_choice = paymentPicker.SelectedIndex;
+                payment_choice = paymentComboBox.SelectedIndex;
 
-                if(paymentPicker.SelectedIndex == 0)
+                if(paymentComboBox.SelectedIndex == 0)
                 {
                     //voucher.BackgroundColor = Color.FromHex("#FFFFE0");
                     //voucher.LineColor = Color.LightYellow;
@@ -291,7 +296,7 @@ namespace ASolute_Mobile
 
         void StationSelected(object sender, System.EventArgs e)
         {
-            station_choice = stationPicker.SelectedIndex;
+            station_choice = stationComboBox.SelectedIndex;
         }
 
         public void LiterInput(object sender, TextChangedEventArgs e)
@@ -310,7 +315,7 @@ namespace ASolute_Mobile
 
                     double result = Convert.ToDouble(costPerLiter.Text) * fuelLiter;
 
-                    amount.Text = "RM" + Math.Round(result,2);
+                    amount.Text = "RM" + Math.Round(result, 2);
                 }
             }
             catch
@@ -343,57 +348,11 @@ namespace ASolute_Mobile
             {
 
             }
-           
-        }
 
-        public  void VoucherText(object sender, TextChangedEventArgs e)
-        {
-            string _vouchertext = voucher.Text.ToUpper();
-            
-            //Get Current Text
-            if (_vouchertext.Length > 20)       
-            {
-                _vouchertext = _vouchertext.Remove(_vouchertext.Length - 1);  
-               
-                voucher.Unfocus();
-            }
-            voucher.Text = _vouchertext;
-        }
-
-        public  void OtherText(object sender, TextChangedEventArgs e)
-        {
-            string _othertext = other.Text.ToUpper();     
-           
-            if (_othertext.Length > 15)      
-            {
-                _othertext = _othertext.Remove(_othertext.Length - 1); 
-                
-                other.Unfocus();
-            }
-
-            other.Text = _othertext;
-        }
-
-        public  void Fuelscan(object sender, EventArgs e)
-        {
-            string field_name = "fuel";
-            OnScanResult(field_name);
-        }
-
-        public  void Voucherscan(object sender, EventArgs e)
-        {
-            string field_name = "voucher";
-            OnScanResult(field_name);
-        }
-
-        public  void Otherscan(object sender, EventArgs e)
-        {
-            string field_name = "otherRef";
-            OnScanResult(field_name);
         }
 
         //function to handler scan function
-        public async void OnScanResult(string field)
+        public async void BarCodeScan(string field)
         {
             var scanPage = new ZXingScannerPage();
             await Navigation.PushAsync(scanPage);
@@ -407,18 +366,19 @@ namespace ASolute_Mobile
                 {
                     await Navigation.PopAsync();
 
-                    if (field == "fuel")
+                    switch(field)
                     {
-                        fuelCard.Text = result.Text;
-                    }
-                    else if (field == "voucher")
-                    {
+                        case "fuel":
+                            fuelCard.Text = result.Text;
+                            break;
 
-                        voucher.Text = result.Text;
-                    }
-                    else if (field == "otherRef")
-                    {
-                        other.Text = result.Text;
+                        case "voucher":
+                            voucher.Text = result.Text;
+                            break;
+
+                        case "otherRef":
+                            other.Text = result.Text;
+                            break;
                     }
                 });
             };
@@ -426,110 +386,115 @@ namespace ASolute_Mobile
 
         public async void DownloadDefaultValue()
         {
-            if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
+            try
             {
-                try
+                // get the data from server as json
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewFuelCostURL(), this);
+                clsResponse json_reponse = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (json_reponse.IsGood == true)
                 {
-                    // get the data from server as json
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var uri = ControllerUtil.getNewFuelCostURL();
-                    var response = await client.GetAsync(uri);
-                    var content = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(content);
-                    json_reponse = JsonConvert.DeserializeObject<clsResponse>(content);
+                    fuelCostNew = JObject.Parse(content)["Result"].ToObject<clsFuelCostNew>();
 
-                    if (json_reponse.IsGood == true)
+                    foreach (clsCaptionValue labelText in fuelCostNew.Captions)
                     {
-                        fuelCostNew = JObject.Parse(content)["Result"].ToObject<clsFuelCostNew>();
-                      
-                        foreach(clsCaptionValue language in fuelCostNew.Captions)
+                        switch (labelText.Caption)
                         {
-                            string lblCaption = language.Caption;
+                            case "Station":
+                                lblStation.Text = labelText.Value;
+                                break;
 
-                            if (lblStation.Text == lblCaption)
-                            {
-                                lblStation.Text = language.Value;
-                            }
-                            else if (lblDateTime.Text == lblCaption)
-                            {
-                                lblDateTime.Text = language.Value;
-                            }
-                            else if (lblPayment.Text == lblCaption)
-                            {
-                                lblPayment.Text = language.Value;
-                            }
-                            else if (lblLiter.Text == lblCaption)
-                            {
-                                lblLiter.Text = language.Value;
-                            }
-                            else if (lblCost.Text == lblCaption)
-                            {
-                                lblCost.Text = language.Value;
-                            }
-                            else if (lblOdometer.Text == lblCaption)
-                            {
-                                lblOdometer.Text = language.Value;
-                            }
-                            else if (lblFuelCard.Text == lblCaption)
-                            {
-                                lblFuelCard.Text = language.Value;
-                            }
-                            else if (lblVoucher.Text == lblCaption)
-                            {
-                                lblVoucher.Text = language.Value;
-                            }
-                            else if (lblOtherRef.Text == lblCaption)
-                            {
-                                lblOtherRef.Text = language.Value;
-                            }
+                            case "Date & Time":
+                                lblDateTime.Text = labelText.Value;
+                                break;
+
+                            case "Payment":
+                                lblPayment.Text = labelText.Value;
+                                break;
+
+                            case "Liter":
+                                lblLiter.Text = labelText.Value;
+                                break;
+
+                            case "Cost per Liter":
+                                lblCost.Text = labelText.Value;
+                                break;
+
+                            case "Odometer":
+                                lblOdometer.Text = labelText.Value;
+                                break;
+
+                            case "Fuel Card":
+                                lblFuelCard.Text = labelText.Value;
+                                break;
+
+                            case "Voucher":
+                                lblVoucher.Text = labelText.Value;
+                                break;
+
+                            case "Other Ref":
+                                lblOtherRef.Text = labelText.Value;
+                                break;
+
                         }
                     }
-                    else
-                    {
-                        await DisplayAlert("Json Error", json_reponse.Message, "OK");
-                    }
-
-
-                    timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
-
-                    costPerLiter.Text = String.Format("{0:0.00}", fuelCostNew.CostRate);
-                    odometer.Text = fuelCostNew.PreviousOdometer.ToString();
-                    if(fuelCostNew.FuelCardNo != "")
-                    {
-                        fuelCard.Text = fuelCostNew.FuelCardNo;
-                    }                    
-                    amount.Text = "RM 0.00";
-                    datePicker.MaximumDate = DateTime.Now;
-
-
-                    for (int i = 0; i < fuelCostNew.VendorList.Count; i++)
-                    {
-                        stationPicker.Items.Add(fuelCostNew.VendorList[i].Value.ToUpper());
-                    }
-
-                    for (int j = 0; j < fuelCostNew.PaymentModes.Count; j++)
-                    {
-                        paymentPicker.Items.Add(fuelCostNew.PaymentModes[j].Value.ToUpper());
-                    }
-
-                    paymentPicker.SelectedIndex = 1;
-
-                    if(fuelCostNew.VendorList.Count == 1)
-                    {
-                        stationPicker.SelectedIndex = 0;
-                    }
-
                 }
-                catch (HttpRequestException)
+                else
                 {
-                    await DisplayAlert("Unable to connect", "Please try again later", "Ok");
-                }
-                catch (Exception exception)
-                {
-                    await DisplayAlert("Download detail error", exception.Message, "Ok");
+                    await DisplayAlert("Json Error", json_reponse.Message, "OK");
                 }
 
+                //assign default time
+                timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
+                //assign default cost rate
+                costPerLiter.Text = String.Format("{0:0.00}", fuelCostNew.CostRate);
+                //assign default odometer
+                odometer.Text = fuelCostNew.PreviousOdometer.ToString();
+                //assign default fuel card number
+                fuelCard.Text = (fuelCostNew.FuelCardNo != "") ? fuelCostNew.FuelCardNo : "";
+                amount.Text = "RM 0.00";
+
+                //set maximum date that date picker can choose 
+                datePicker.MaximumDate = DateTime.Now;
+
+
+                foreach (clsKeyValue station in fuelCostNew.VendorList)
+                {
+                    stations.Add(station.Value.ToUpper());
+                }
+                /*for (int i = 0; i < fuelCostNew.VendorList.Count; i++)
+                {
+                    stationPicker.Items.Add(fuelCostNew.VendorList[i].Value.ToUpper());
+                }*/
+                stationComboBox.ComboBoxSource = stations;
+
+                //auto select deafult station if picker only 1 item
+                if (fuelCostNew.VendorList.Count == 1)
+                {
+                    stationComboBox.Text = stations[0];
+                }
+
+
+                foreach (clsKeyValue payment in fuelCostNew.PaymentModes)
+                {
+                    paymentMode.Add(payment.Value.ToUpper());
+                }
+                paymentComboBox.ComboBoxSource = paymentMode;
+                paymentComboBox.Text = paymentMode[1];
+                /*for (int j = 0; j < fuelCostNew.PaymentModes.Count; j++)
+                {
+                    paymentPicker.Items.Add(fuelCostNew.PaymentModes[j].Value.ToUpper());
+                }*/
+
+
+            }
+            catch (HttpRequestException)
+            {
+                await DisplayAlert("Unable to connect", "Please try again later", "Ok");
+            }
+            catch (Exception exception)
+            {
+                await DisplayAlert("Download detail error", exception.Message, "Ok");
             }
         }
 
@@ -559,7 +524,7 @@ namespace ASolute_Mobile
         {
             images.Clear();
             imageGrid.Children.Clear();
-            images = App.Database.GetUplodedRecordImagesAsync(recordID,"NormalImage");
+            images = App.Database.GetUplodedRecordImagesAsync(recordID, "NormalImage");
             foreach (AppImage Image in images)
             {
                 IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
@@ -591,12 +556,11 @@ namespace ASolute_Mobile
                     image.Content = scaledImageByte;
                     image.FileName = recordImage.photoFileName;
 
-                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID),this);
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(imageEventID), this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     recordImage.Uploaded = true;
                     App.Database.SaveRecordImageAsync(recordImage);
-
                 }
             }
             catch

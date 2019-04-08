@@ -21,17 +21,7 @@ namespace ASolute_Mobile.HaulageScreen
 		public CurrentLocation ()
 		{
 			InitializeComponent ();
-            if (Ultis.Settings.Language.Equals("English"))
-            {
-                Title = "Send Current Location";
-            }
-            else
-            {
-                Title = "Hantar Lokasi Semasa";
-            }
-            Ultis.Settings.App = "Haulage";
-
-  
+            Title = (Ultis.Settings.Language.Equals("English")) ? "Send Current Location": "Hantar Lokasi Semasa";
         }
 
         protected override void OnAppearing()
@@ -68,41 +58,20 @@ namespace ASolute_Mobile.HaulageScreen
         }
 
 
-        public void editorTextChanged(object sender, TextChangedEventArgs e)
-        {
-            string _editortext = locationName.Text.ToUpper();
-
-            //Get Current Text
-            if (_editortext.Length > 50)
-            {
-                _editortext = _editortext.Remove(_editortext.Length - 1);
-
-                locationName.Unfocus();
-            }
-
-            locationName.Text = _editortext;
-        }
-
         protected override bool OnBackButtonPressed()
         {
             Application.Current.MainPage = new MainPage();
             return true;
         }
 
-        public async void updateLocation(object sender, EventArgs e)
+        public async void UpdateLocation(object sender, EventArgs e)
         {
             if (!(String.IsNullOrEmpty(locationName.Text)))
             {
-                
                 try
                 {
                     activityIndicator.IsRunning = true;
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var uri = ControllerUtil.getLocationURL(locationName.Text);
-                    var response = await client.GetAsync(uri);
-                    var content = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(content);
+                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLocationURL(locationName.Text), this);
                     clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (json_response.IsGood)

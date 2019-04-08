@@ -135,10 +135,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\ChatRoom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -147,19 +143,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\Picking.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -167,23 +151,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\Packing.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PackingDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\PackingEntry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyOut.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyOutDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -224,6 +192,10 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\UserInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)NewMainMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -406,17 +378,11 @@
       <DependentUpon>EquipmentDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Planner\GridStyle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInList.xaml.cs">
-      <DependentUpon>TallyInList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)testing\ChatRoom.xaml.cs">
       <DependentUpon>ChatRoom.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml.cs">
       <DependentUpon>TallyInPalletEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInDetail.xaml.cs">
-      <DependentUpon>TallyInDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\Cmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\CustomQueue.cs" />
@@ -424,29 +390,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml.cs">
       <DependentUpon>PalletMovement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\Picking.xaml.cs">
-      <DependentUpon>Picking.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingDetail.xaml.cs">
-      <DependentUpon>PickingDetail.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PickingEntry.xaml.cs">
       <DependentUpon>PickingEntry.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\Packing.xaml.cs">
-      <DependentUpon>Packing.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PackingDetail.xaml.cs">
-      <DependentUpon>PackingDetail.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PackingEntry.xaml.cs">
       <DependentUpon>PackingEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyOut.xaml.cs">
-      <DependentUpon>TallyOut.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyOutDetail.xaml.cs">
-      <DependentUpon>TallyOutDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)StartUpScreen.xaml.cs">
       <DependentUpon>StartUpScreen.xaml</DependentUpon>
@@ -480,6 +428,9 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\UserInfo.xaml.cs">
       <DependentUpon>UserInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)NewMainMenu.xaml.cs">
+      <DependentUpon>NewMainMenu.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

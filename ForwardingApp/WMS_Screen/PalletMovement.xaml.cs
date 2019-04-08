@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
+using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
 
@@ -15,12 +17,15 @@ namespace ASolute_Mobile.WMS_Screen
         string fieldName;
         clsPalletTrx pallet;
         bool tapped = true;
+        ListItems record = new ListItems();
 
-        public PalletMovement(string screenTitle)
+        public PalletMovement(ListItems item)
         {
             InitializeComponent();
 
-            Title = screenTitle;
+            record = item;
+
+            Title = record.Name;
 
             pdEntry.Completed += PdEntry_Completed;
         }
@@ -89,6 +94,29 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
+        async void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            var button = sender as SfButton;
+
+            switch(button.StyleId)
+            {
+                case "btnVerify":
+                    var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletVerification(record.Id, pdEntry.Text), this);
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if(response.IsGood)
+                    {
+                        // see whether web service got return stuff
+                        await DisplayAlert("Success", "Pallet verified", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", response.Message, "OK");
+                    }
+                    break;
+            }
+        }
+
         async void PalletUpdate()
         {
             loading.IsVisible = true;
@@ -102,7 +130,7 @@ namespace ASolute_Mobile.WMS_Screen
                         pallet.CheckDigit = Convert.ToInt32(checkDigitEntry.Text);
                     }
 
-                    var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrx());
+                    var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrx(),this);
                     clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (update_response.IsGood)
@@ -184,9 +212,7 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     await DisplayAlert("Error", e.Message, "OK");
                 }
-
             }
-
         }
 
         async void GetPalletTrx(string palletID)
@@ -194,7 +220,7 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
             try
             {
-                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiry(palletID));
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiry(palletID),this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(newPallet_response.IsGood)
@@ -202,28 +228,36 @@ namespace ASolute_Mobile.WMS_Screen
                     pallet = JObject.Parse(content)["Result"].ToObject<clsPalletTrx>();
 
                     palletDesc.IsVisible = true;
-                    Title = "Putaway";
 
-                    if(pallet.Action.Equals("Pickup"))
+                    Title = (pallet.Action == "Pickup" || pallet.Action == "Dropoff") ? "Putaway" : record.Name;
+
+                    switch(pallet.Action)
                     {
-                        btnPickUp.IsVisible = true;
-                        btnDropOff.IsVisible = false;
-                        suggestView.IsVisible = false;
-                        confirmView.IsVisible = false;
-                        checkDigitView.IsVisible = false;
+                        case "Pickup":
+                            btnPickUp.IsVisible = true;
+                            btnDropOff.IsVisible = false;
+                            suggestView.IsVisible = false;
+                            confirmView.IsVisible = false;
+                            checkDigitView.IsVisible = false;
+                            break;
+
+                        case "Dropoff":
+                            if (!String.IsNullOrEmpty(pallet.NewLocation))
+                            {
+                                btnPickUp.IsVisible = false;
+                                btnDropOff.IsVisible = true;
+                                suggestView.IsVisible = true;
+                                confirmView.IsVisible = true;
+                                checkDigitView.IsVisible = true;
+                                suggestedEntry.Text = pallet.NewLocation;
+                            }
+                            break;
+
+                        default:
+                            btnVerify.IsVisible = true;
+                            break;
                     }
-                    else if (pallet.Action.Equals("Dropoff"))
-                    {
-                        if(!String.IsNullOrEmpty(pallet.NewLocation))
-                        {
-                            btnPickUp.IsVisible = false;
-                            btnDropOff.IsVisible = true;
-                            suggestView.IsVisible = true;
-                            confirmView.IsVisible = true;
-                            checkDigitView.IsVisible = true;
-                            suggestedEntry.Text = pallet.NewLocation;
-                        } 
-                    }
+                
 
                     palletDesc.Children.Clear();
 

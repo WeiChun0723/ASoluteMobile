@@ -34,8 +34,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
-            AppLabel.Text = "AILS Haulage Ver." + CrossDeviceInfo.Current.AppVersion;
-
+            AppLabel.Text = "AILS WMS Ver." + CrossDeviceInfo.Current.AppVersion;
 
             //set username entry maximum to 10 chars
             usernameEntry.TextChanged += (sender, args) =>
@@ -60,9 +59,8 @@ namespace ASolute_Mobile
             base.OnAppearing();
             try
             {
-                organization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.EnterpriseName))) ? Ultis.Settings.EnterpriseName : "Enterprise";
+                btnOrganization.Text = (!(String.IsNullOrEmpty(Ultis.Settings.EnterpriseName))) ? Ultis.Settings.EnterpriseName : "Enterprise";
                 await GetBaseURL();
-
             }
             catch
             {
@@ -71,29 +69,31 @@ namespace ASolute_Mobile
 
         }
 
-        void Handle_Clicked(object sender, System.EventArgs e)
+        async void Handle_Clicked(object sender, System.EventArgs e)
         {
             var button = sender as SfButton;
 
             switch (button.StyleId)
             {
-                case "clearCacheButton":
+                case "btnClearCache":
                     if (Device.RuntimePlatform == Device.Android)
                     {
                         DependencyService.Get<CloseApp>().close_app();
                     }
                     break;
+
+                case "btnOrganization":
+                    await Navigation.PushAsync(new SettingPage());
+                    break;
+
+                case "btnRegister":
+                    await Navigation.PushAsync(new HaulageScreen.Registration());
+                    break;
+
+                case "btnLogin":
+                    Login();
+                    break;
             }
-        }
-
-        async void Update_URL_Clicked(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingPage());
-        }
-
-        async void NewUser(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new HaulageScreen.Registration());
         }
 
         async Task GetBaseURL()
@@ -104,22 +104,17 @@ namespace ASolute_Mobile
 
                 if (json_response.IsGood)
                 {
-                    // Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
-                    Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
+                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    //Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
                 }
-
-
-
             }
             catch
             {
 
             }
-
-
         }
 
-        async void Login_Clicked(object sender, System.EventArgs e)
+        async void Login()
         {
             this.activityIndicator.IsRunning = true;
 

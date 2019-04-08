@@ -457,8 +457,11 @@
     <Reference Include="Syncfusion.SfBarcode.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfBarcode.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfBarcode.XForms.dll</HintPath>
     </Reference>
+    <Reference Include="ImageCircle.Forms.Plugin">
+      <HintPath>..\packages\Xam.Plugins.Forms.ImageCircle.3.0.0.5\lib\monoandroid71\ImageCircle.Forms.Plugin.dll</HintPath>
+    </Reference>
     <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\Droid\ASolute.Mobile.Models.dll</HintPath>
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -521,6 +524,8 @@
     <AndroidResource Include="Resources\layout\PinInfoWindow.axml" />
     <AndroidResource Include="Resources\drawable\cash.png" />
     <AndroidResource Include="Resources\drawable\myPic.png" />
+    <AndroidResource Include="Resources\drawable\CurvedMask.png" />
+    <AndroidResource Include="Resources\drawable\headerBackground.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

@@ -59,16 +59,16 @@ namespace ASolute_Mobile
 
         }
 
-        protected override  void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
             GetListData();
-           
+
         }
 
 
-         void Handle_Refreshing(object sender, System.EventArgs e)
+        void Handle_Refreshing(object sender, System.EventArgs e)
         {
             GetListData();
         }
@@ -90,7 +90,7 @@ namespace ASolute_Mobile
                     {
                         listView.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
                     }
-                    catch 
+                    catch
                     {
                         //await DisplayAlert("Error", error.Message, "OK");
                     }
@@ -106,7 +106,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                if(uri.Contains("FuelCost"))
+                if (uri.Contains("FuelCost"))
                 {
                     await Navigation.PushAsync(new RefuelEntry(menuItems.Name));
                 }
@@ -117,9 +117,9 @@ namespace ASolute_Mobile
 
                     scanPage.OnScanResult += (result) =>
                     {
-                        if (menuItems.Id == "JobList")
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            Device.BeginInvokeOnMainThread(async () =>
+                            if (menuItems.Id == "JobList")
                             {
                                 scanPage.PauseAnalysis();
 
@@ -145,25 +145,22 @@ namespace ASolute_Mobile
                                         await Navigation.PopAsync();
                                     }
                                 }
-                            });
-                        }
-                        else
-                        {
-                            Device.BeginInvokeOnMainThread(async () =>
+                            }
+                            else
                             {
                                 await Navigation.PopAsync();
 
                                 searchBar.Text = result.Text;
+                            }
 
-                            });
+                        });
 
-                        }
 
                     };
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
 
             }
@@ -192,30 +189,28 @@ namespace ASolute_Mobile
                 switch (type)
                 {
                     case "TallyIn":
-                        //await Navigation.PushAsync(new TallyInDetail(((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetail(((ListItems)e.Item).Id), ((ListItems)e.Item).Id, type));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetail(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                         break;
                     case "Packing":
-                        //await Navigation.PushAsync(new PackingDetail(((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((ListItems)e.Item).Id), ((ListItems)e.Item).Id, type));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                         break;
                     case "LoosePick":
-                        //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "LoosePick", name));
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item).Id, type));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item)));
                         break;
                     case "FullPick":
-                        //await Navigation.PushAsync(new PickingDetail(((AppMenu)e.Item).menuId, "FullPick", name));
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item).Id, type));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item)));
                         break;
                     case "TallyOut":
-                        //await Navigation.PushAsync(new TallyOutDetail(((AppMenu)e.Item).menuId));
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetail(((ListItems)e.Item).Id), ((ListItems)e.Item).Id, type));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetail(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                         break;
                     case "JobList":
                         Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
                         /*Ultis.Settings.Action = ((ListItems)e.Item).ActionId;
                         await Navigation.PushAsync(new JobDetails(((ListItems)e.Item).ActionId, ((ListItems)e.Item).ActionMessage));*/
                         await Navigation.PushAsync(new NewJobDetails());
+                        break;
+                    case "PickingVerify":
+                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                         break;
                 }
             }
@@ -252,6 +247,7 @@ namespace ASolute_Mobile
                             Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id,
                             Background = data.BackColor,
                             Category = menuItems.Id,
+                            Name = menuItems.Name
                         };
 
                         if (menuItems.Id == "JobList")
@@ -342,29 +338,36 @@ namespace ASolute_Mobile
             {
 
             }
-           
+
         }
 
-      
+
         public void loadTallyInList()
         {
-            Ultis.Settings.List = menuItems.Id;
-            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
-            listView.ItemsSource = Item;
-            listView.HasUnevenRows = true;
-            listView.Style = (Style)App.Current.Resources["recordListStyle"];
-            listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-
-            if (Item.Count == 0)
+            try
             {
-                noData.IsVisible = true;
-            }
-            else
-            {
-                noData.IsVisible = false;
-            }
+                Ultis.Settings.List = menuItems.Id;
+                Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
+                listView.ItemsSource = Item;
+                listView.HasUnevenRows = true;
+                listView.Style = (Style)App.Current.Resources["recordListStyle"];
+                listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-            listView.IsRefreshing = false;
+                if (Item.Count == 0)
+                {
+                    noData.IsVisible = true;
+                }
+                else
+                {
+                    noData.IsVisible = false;
+                }
+
+                listView.IsRefreshing = false;
+            }
+           catch
+            {
+
+            }
         }
     }
 }

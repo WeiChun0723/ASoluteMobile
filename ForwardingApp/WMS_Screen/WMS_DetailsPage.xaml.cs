@@ -18,60 +18,54 @@ namespace ASolute_Mobile.WMS_Screen
 {
     public partial class WMS_DetailsPage : ContentPage
     {
-        string uri,id, title, pickingID;
+        string uri,pickingID;
         clsWhsHeader recordDetails;
         double imageWidth;
         List<AppImage> images = new List<AppImage>();
         List<clsWhsItem> tallyOutItems = new List<clsWhsItem>();
+        ListItems record = new ListItems();
 
-        public WMS_DetailsPage(string recordUri,string recordId, string type)
+        public WMS_DetailsPage(string recordUri,ListItems tappedRecord)
         {
             InitializeComponent();
 
-            uri = recordUri;
-            id = recordId;
-            title = type;
+            //initialized height for image grid row
+            imageWidth = App.DisplayScreenWidth / 3;
+            imageGridRow.Height = imageWidth;
 
-            switch (type)
+            uri = recordUri;
+            record = tappedRecord;
+
+            switch (record.Category)
             {
-                case "Tally In":
+                case "TallyIn":
                     camera_icon.IsVisible = true;
                     imageGrid.IsVisible = true;
                     break;
                 case "Packing":
                     btnPackNow.IsVisible = true;
                     break;
-                case "Tally Out":
+                case "TallyOut":
                     camera_icon.IsVisible = true;
                     imageGrid.IsVisible = true;
                     barcode_icon.IsVisible = true;
                     break;
-             
             }
-
-            imageGrid.RowSpacing = 0;
-            imageGrid.ColumnSpacing = 0;
-            imageWidth = App.DisplayScreenWidth / 3;
-            imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(imageWidth) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
         }
 
+      
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
             GetRecordDetails();
 
-            if (tallyOutItems.Count != 0 && title.Equals("Tally Out"))
+            if (tallyOutItems.Count != 0 && record.Category == "TallyOut")
             {
                 dataGrid.IsVisible = true;
                 dataGrid.ItemsSource = tallyOutItems;
             }
         }
-
 
         public async void GetRecordDetails()
         {
@@ -98,7 +92,7 @@ namespace ASolute_Mobile.WMS_Screen
                         {
                             caption.Text = "    " + summary.Value;
                             caption.FontAttributes = FontAttributes.Bold;
-                            Title = title + " # " + summary.Value;
+                            Title = record.Name + " # " + summary.Value;
                         }
                         else
                         {
@@ -107,7 +101,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                         if (summary.Caption.Equals(""))
                         {
-                            Title = title + " # " + summary.Value;
+                            Title = record.Name + " # " + summary.Value;
                         }
 
                         desc.Children.Add(caption);
@@ -167,32 +161,27 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void Handle_GridTapped(object sender, GridTappedEventArgs e)
         {
-            if(title.Equals("Tally In") || title.Equals("Full Pick") || title.Equals("Loose Pick"))
+            if(record.Category == "TallyIn" || record.Category == "FullPick" || record.Category == "LoosePick")
             {
                 clsWhsItem product = new clsWhsItem();
                 product = ((clsWhsItem)e.RowData);
 
                 if (product != null)
                 {
-                    if(title.Equals("Tally In"))
+                    if(record.Category == "TallyIn")
                     {
-                        await Navigation.PushAsync(new TallyInPalletEntry(product, id));
+                        await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id));
                     }
                     else
                     {
-                        await Navigation.PushAsync(new PickingEntry(product, pickingID,title, recordDetails.Items));
+                        await Navigation.PushAsync(new PickingEntry(product, pickingID,record.Name, recordDetails.Items));
                     }
                    
                 }
             }
         }
 
-        async void Packing_Clicked(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new PackingEntry(id, Title));
-        }
-
-        async void scanBarCode(object sender, EventArgs e)
+        async void ScanBarCode()
         {
             try
             {
@@ -210,7 +199,7 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         clsPalletTrx tallyOutPallet = new clsPalletTrx
                         {
-                            LinkId = id,
+                            LinkId = record.Id,
                             Id = result.Text
                         };
 
@@ -261,11 +250,27 @@ namespace ASolute_Mobile.WMS_Screen
             UserDialogs.Instance.Toast(toastConfig);
         }
 
-        async void takeImage(object sender, EventArgs e)
+        async void Handle_Tapped(object sender, System.EventArgs e)
         {
-            await CommonFunction.StoreImages(recordDetails.EventRecordId.ToString(), this, "NormalImage");
-            DisplayImage();
-            BackgroundTask.StartTimer();
+            var image = sender as Image;
+
+            switch(image.StyleId)
+            {
+                case "camera_icon":
+                    await CommonFunction.StoreImages(recordDetails.EventRecordId.ToString(), this, "NormalImage");
+                    DisplayImage();
+                    BackgroundTask.StartTimer();
+                    break;
+
+                case "barcode_icon":
+                    ScanBarCode();
+                    break;
+            }
+        }
+
+        async void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new PackingEntry(record.Id, Title));
         }
 
         async void DisplayImage()
@@ -297,7 +302,7 @@ namespace ASolute_Mobile.WMS_Screen
             }
             catch
             {
-                await DisplayAlert("Error", "Record event id cannot be null", "OK");
+
             }
         }
 

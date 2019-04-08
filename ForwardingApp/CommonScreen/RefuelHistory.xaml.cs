@@ -201,7 +201,7 @@ namespace ASolute_Mobile
         public void addNewRecord(object sender, EventArgs e)
         {
             RefuelEntry addNewRecord = new RefuelEntry(screen_title);
-            addNewRecord.previousPage = this;
+
             Navigation.PushAsync(addNewRecord);
 
         }

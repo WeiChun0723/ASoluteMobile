@@ -8,6 +8,7 @@ using ASolute_Mobile.InputValidation;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.XForms.ComboBox;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
 
@@ -66,20 +67,50 @@ namespace ASolute_Mobile.WMS_Screen
             GetNewPalletList();
         }
 
+        void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
+        {
+            var picker = sender as SfComboBox;
+
+            if(picker.StyleId == "unitBox")
+            {
+                List<string> palletSizes = sizeBox.ComboBoxSource;
+
+                foreach (string size in palletSizes)
+                {
+                    string[] defaultSize = size.Split('(');
+                    if(defaultSize[1].Contains(unitBox.Text))
+                    {
+                        sizeBox.Text = size;
+                    }
+                   
+                }
+            }
+        }
+
         async void GetNewPalletList()
         {
             try
             {
-                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id, productPallet.ProductLinkId));
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id, productPallet.ProductLinkId),this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (newPallet_response.IsGood)
                 {
                     newPallet = JObject.Parse(content)["Result"].ToObject<clsPalletNew>();
+                    unitBox.Text = newPallet.DefaultProductUom;
+                    statusBox.Text = newPallet.DefaultStockStatus;
 
                     foreach (clsKeyValue size in newPallet.PalletSize)
                     {
                         sizes.Add(size.Value);
+
+                        string[] defaultSize = size.Value.Split('(');
+
+                        if (defaultSize[1].Contains(newPallet.DefaultProductUom))
+                        {
+                            sizeBox.Text = size.Value;
+                        }
+                      
                     }
 
                     foreach (clsKeyValue unit in newPallet.ProductUom)
@@ -95,8 +126,6 @@ namespace ASolute_Mobile.WMS_Screen
                     sizeBox.ComboBoxSource = sizes;
                     unitBox.ComboBoxSource = units;
                     statusBox.ComboBoxSource = status;
-
-                    statusBox.Text = newPallet.DefaultStockStatus;
 
                     int row = 4, column = 0;
                     foreach (clsAttribute attr in newPallet.Attribute)
@@ -116,7 +145,7 @@ namespace ASolute_Mobile.WMS_Screen
                             StyleId = attr.Key
                         };
 
-                        if (attr.Key.Equals("ExpiryDate") || attr.Key.Equals("MfgDate"))
+                        if (attr.Key == "ExpiryDate" || attr.Key == "MfgDate")
                         {
                             customDatePicker = new CustomDatePicker
                             {
@@ -141,13 +170,12 @@ namespace ASolute_Mobile.WMS_Screen
 
                             };
 
-                            customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 20 });
-
+                            customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 50 });
 
                             entryStack.Children.Add(customEntry);
                         }
 
-                        if (attr.Value.Equals("O") || attr.Value.Equals(""))
+                        if (attr.Value == "O" || attr.Value == "")
                         {
                             if (customEntry != null)
                             {
@@ -155,7 +183,7 @@ namespace ASolute_Mobile.WMS_Screen
                             }
 
                         }
-                        else if (attr.Value.Equals("M"))
+                        else if (attr.Value == "M")
                         {
                             if (customEntry != null)
                             {
@@ -191,13 +219,11 @@ namespace ASolute_Mobile.WMS_Screen
 
                         entryStack.Children.Add(scan);
 
-
                         grid.Children.Add(fieldLbl, column, row);
                         column++;
                         grid.Children.Add(entryStack, column, row);
                         row++;
                         column = 0;
-
                     }
 
                 }
@@ -289,7 +315,6 @@ namespace ASolute_Mobile.WMS_Screen
                                             picker = (CustomDatePicker)v;
                                             picker.Date = DateTime.Parse(result.Text);
                                         }
-
                                     }
                                 }
                             }
@@ -336,7 +361,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                 foreach (clsAttribute attr in newPallet.Attribute)
                 {
-                    if (attr.Value.Equals("M"))
+                    if (attr.Value == "M")
                     {
                         string test = (!(String.IsNullOrEmpty(SearchControl(attr.Key, "GetValue")))) ? SearchControl(attr.Key, "GetValue") : String.Empty;
 
@@ -355,20 +380,14 @@ namespace ASolute_Mobile.WMS_Screen
                     && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)) && !(checkField.Contains(false)))
                 {
 
-                    string[] size = sizeBox.Text.Split('(');
-
-                    string[] numbers = Regex.Split(size[1], @"\D+");
-
                     clsPallet pallet = new clsPallet
                     {
                         Id = id,
                         ProductCode = productPallet.ProductCode,
                         PalletId = (!(String.IsNullOrEmpty(palletNo.Text))) ? palletNo.Text : String.Empty,
-                        PalletSize = newPallet.PalletSize[sizeBox.SelectedIndex].Key,
-                        PalletTI = Convert.ToInt16(numbers[1]),
-                        PalletHI = Convert.ToInt16(numbers[2]),
+                        PalletSize = newPallet.PalletSize[sizes.FindIndex(x => x.Equals(sizeBox.Text))].Key,
                         Qty = Convert.ToInt32(quantity.Text),
-                        Uom = newPallet.ProductUom[unitBox.SelectedIndex].Key,
+                        Uom = newPallet.ProductUom[units.FindIndex(x => x.Equals(unitBox.Text))].Key,
                         StockStatus = statusBox.Text,
                         String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue")))) ? SearchControl("String01", "GetValue") : String.Empty,
                         String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue")))) ? SearchControl("String02", "GetValue") : String.Empty,
@@ -387,10 +406,7 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         await DisplayAlert("Success", "New pallet added.", "OK");
                         palletNo.Text = String.Empty;
-                        sizeBox.Text = String.Empty;
-                        quantity.Text = String.Empty;
-                        unitBox.Text = String.Empty;
-                        statusBox.Text = newPallet.DefaultStockStatus;
+                        quantity.Text = String.Empty;   
 
                         List<string> dynamicFields = new List<string>
                             {

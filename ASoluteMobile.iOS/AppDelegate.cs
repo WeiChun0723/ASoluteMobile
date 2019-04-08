@@ -10,7 +10,7 @@ using XLabs.Ioc;
 using XLabs.Ioc.Autofac;
 using XLabs.Platform.Services.Media;
 using ASolute_Mobile;
-
+using ImageCircle.Forms.Plugin.iOS;
 
 namespace ASolute_Mobile.iOS
 {
@@ -38,7 +38,7 @@ namespace ASolute_Mobile.iOS
             Syncfusion.SfPullToRefresh.XForms.iOS.SfPullToRefreshRenderer.Init();
             Syncfusion.ListView.XForms.iOS.SfListViewRenderer.Init();
             Syncfusion.XForms.iOS.Border.SfBorderRenderer.Init();
-
+            ImageCircleRenderer.Init();
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
 
             App.DisplayScreenWidth = UIScreen.MainScreen.Bounds.Width;

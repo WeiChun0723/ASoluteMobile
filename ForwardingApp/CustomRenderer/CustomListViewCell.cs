@@ -2,6 +2,7 @@
 using ASolute_Mobile.CustomerTracking;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
+using ImageCircle.Forms.Plugin.Abstractions;
 using Newtonsoft.Json;
 using PCLStorage;
 using Syncfusion.XForms.Border;
@@ -120,12 +121,14 @@ namespace ASolute_Mobile
                         VerticalOptions = LayoutOptions.FillAndExpand
                     };
 
+
                     StackLayout cellImageWrapper = new StackLayout()
                     {
                         //Padding = new Thickness(10, 10, 10, 10),
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         VerticalOptions = LayoutOptions.FillAndExpand
                     };
+
 
                     bool firstSummaryLine = true;
 
@@ -180,30 +183,21 @@ namespace ASolute_Mobile
                             {
                                 cellImageWrapper.Children.Clear();
 
-                                SfBorder sfBorder = new SfBorder
+                                CircleImage userImage = new CircleImage
                                 {
-                                    BorderColor = Color.Transparent,
-                                    HorizontalOptions = LayoutOptions.Center,
-                                    VerticalOptions = LayoutOptions.Center,
-                                    CornerRadius = 50,
-                                   
-                                };
-
-                                Image userPicture = new Image
-                                {
-                                    HorizontalOptions = LayoutOptions.FillAndExpand,
-                                    VerticalOptions = LayoutOptions.FillAndExpand,
+                                    BorderColor = Color.White,
+                                    BorderThickness = 3,
                                     HeightRequest = 120,
-                                    WidthRequest = 100,
-                                    Source = "user_icon.png"
-                                };
+                                    WidthRequest = 120,
+                                    Aspect = Aspect.AspectFill,
+                                    HorizontalOptions = LayoutOptions.Center,
 
-                                sfBorder.Content = userPicture;
+                                };
 
                                 var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
-                                userPicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+                                userImage.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
 
-                                cellImageWrapper.Children.Add(sfBorder);
+                                cellImageWrapper.Children.Add(userImage);
                                 count = 0;
                             }
 
@@ -252,7 +246,10 @@ namespace ASolute_Mobile
                     }
 
                     mainLayout.Children.Add(cellTextWrapper);
-                    mainLayout.Children.Add(cellImageWrapper);
+                    if (Ultis.Settings.List == "Main_Menu")
+                    {
+                        mainLayout.Children.Add(cellImageWrapper);
+                    }
 
                     View = new Frame
                     {

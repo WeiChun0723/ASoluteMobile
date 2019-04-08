@@ -27,8 +27,8 @@
             </StackLayout>
             <syncIndicator:SfBusyIndicator x:Name="print" AnimationType="Print" Title="Loading..." TextColor="Red" IsVisible="false" />
             <!--Haulage job details field-->
-           <!-- <inputLayout:SfTextInputLayout  Hint="TrailerId" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
-                    <Entry  x:Name="trailerIDEntry" >
+           <!--<inputLayout:SfTextInputLayout  Hint="TrailerId" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                    <Entry  x:Name="trailerIDEntryww" Text="Test" >
                         <Entry.Behaviors>
                             <local:MaxLengthValidation MaxLength="10" />
                         </Entry.Behaviors>

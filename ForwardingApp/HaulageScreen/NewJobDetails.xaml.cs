@@ -26,8 +26,9 @@ namespace ASolute_Mobile.HaulageScreen
         List<AppImage> images = new List<AppImage>();
         clsHaulageModel haulageJob = new clsHaulageModel();
         string jobCode, bookingCode;
-        bool connectedPrinter = false;
+        bool connectedPrinter = false, signed = false;
         double imageWidth;
+        
 
         public NewJobDetails()
         {
@@ -182,7 +183,6 @@ namespace ASolute_Mobile.HaulageScreen
                     string input = jobItem.ContainerNo;
                     contPrefix.Text = input.Substring(0, 4);
                     contNum.Text = input.Substring(4, 7);
-
                     contPrefix.IsEnabled = false;
                     contNum.IsEnabled = false;
                 }
@@ -249,6 +249,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             var image = sender as Image;
 
+            //indicate each icon function in this page
             switch (image.StyleId)
             {
                 case "phone_icon":
@@ -295,9 +296,14 @@ namespace ASolute_Mobile.HaulageScreen
 
                     if (signatureImage != null)
                     {
-                        await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
-                        done = true;
-                        BackgroundTask.StartTimer();
+                        if(signed == false)
+                        {
+                            await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
+                            done = true;
+                            BackgroundTask.StartTimer();
+
+                            signed = true;
+                        }
                     }
                     else
                     {
@@ -465,7 +471,7 @@ namespace ASolute_Mobile.HaulageScreen
                     AddThumbnailToImageGrid(image, Image);
                 }
             }
-            catch(Exception ex)
+            catch
             {
 
             }

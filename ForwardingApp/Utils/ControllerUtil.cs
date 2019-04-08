@@ -324,6 +324,11 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/Pallet/Get?SessionId={0}&GeoLoc={1}&PalletId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), palletID);
         }
 
+        public static String getPalletVerification(string id,string palletID)
+        {
+            return String.Format("Wms/Picking/Verify?SessionId={0}&GeoLoc={1}&Id={2}&PalletId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id, palletID);
+        }
+
         public static String postNewPalletTrx()
         {
             return String.Format("Wms/Pallet/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
@@ -332,6 +337,11 @@ namespace ASolute_Mobile.Utils
         public static String getPickingList(string menuId)
         {
             return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}&menuId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), menuId);
+        }
+
+        public static String getPickingList()
+        {
+            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String loadPickingDetail(string pickingID, string pickingType)
@@ -410,12 +420,12 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Haulage", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "WMS", CrossDeviceInfo.Current.AppVersion);
         }
 
         public static String getDownloadMenuURL(string firebase)
         {
-            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
+            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "WMS", CrossDeviceInfo.Current.AppVersion);
         }
 
         public static String getDownloadRefuelHistoryURL()

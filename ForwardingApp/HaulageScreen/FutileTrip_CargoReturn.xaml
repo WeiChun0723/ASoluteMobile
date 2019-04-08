@@ -8,7 +8,7 @@
             </StackLayout>
             <StackLayout Spacing="0" Padding="10,10,10,10">
                 <Label Text="Reason" FontAttributes="Bold" />
-                <combobox:SfComboBox HeightRequest="40" x:Name="reasonPicker" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
+                <combobox:SfComboBox x:Name="reasonPicker" Style="{StaticResource comboBoxStyle}" />
             </StackLayout>
             <StackLayout Spacing="0" Padding="10,10,10,10">
                 <Label Text="Remark" FontAttributes="Bold" />
@@ -18,12 +18,12 @@
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10,10,10,10" Spacing="15">
                 <Image Source="camera.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" x:Name="camera_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="TakeImage" NumberOfTapsRequired="1"/>
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1"/>
                     </Image.GestureRecognizers>
                 </Image>
                 <Image Source="confirm.png" WidthRequest="90" HeightRequest="90" VerticalOptions="Center" x:Name="confirm_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="UploadDetail" NumberOfTapsRequired="1"/>
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1"/>
                     </Image.GestureRecognizers>
                 </Image>
             </StackLayout>

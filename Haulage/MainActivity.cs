@@ -22,10 +22,11 @@ using Android.Net.Wifi;
 using Plugin.Geolocator;
 using Android;
 using Haulage.Droid.Services;
+using ImageCircle.Forms.Plugin.Droid;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -42,19 +43,17 @@ namespace ASolute_Mobile.Droid
 
                 base.OnCreate(bundle);
 
-                if(PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                if(PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
-                    // RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
-
+                     RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
                 }
 
-
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
-                //Xamarin.Essentials.Platform.Init(this, bundle);
                 global::Xamarin.Forms.Forms.Init(this, bundle);
                 Xamarin.FormsMaps.Init(this, bundle);
                 Xamarin.FormsGoogleMaps.Init(this, bundle);
                 UserDialogs.Init(this);
+                ImageCircleRenderer.Init();
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
                 LoadApplication(new App());
@@ -73,7 +72,7 @@ namespace ASolute_Mobile.Droid
                     }
                 }*/
 
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
                     StartLocationTracking();
                 }
@@ -110,10 +109,10 @@ namespace ASolute_Mobile.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             if (grantResults.Length > 0 && permissions.Length > 0)
             {
-                if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
                     StartLocationTracking();
                 }

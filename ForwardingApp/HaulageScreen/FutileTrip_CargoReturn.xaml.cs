@@ -21,7 +21,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+	
 	public partial class FutileTrip_CargoReturn : ContentPage
 	{
         public string uploadUri = "";
@@ -47,6 +47,24 @@ namespace ASolute_Mobile
             //jobItem = App.Database.GetItemAsync(Ultis.Settings.SessionCurrentJobId);
             jobItem = App.Database.GetJobRecordAsync(Ultis.Settings.SessionCurrentJobId);
         
+        }
+
+        async void Handle_Tapped(object sender, System.EventArgs e)
+        {
+            var icon = sender as Image;
+
+            switch(icon.StyleId)
+            {
+                case "camera_icon":
+                    await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this, "NormalImage");
+                    DisplayImage();
+                    BackgroundTask.StartTimer();
+                    break;
+
+                case "confirm_icon":
+                    UploadDetail();
+                    break;
+            }
         }
 
         async void GetPickerValue()
@@ -77,14 +95,7 @@ namespace ASolute_Mobile
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
         }
 
-        public async void TakeImage(object sender, EventArgs e)
-        {
-            await CommonFunction.StoreImages(jobItem.EventRecordId.ToString(), this, "NormalImage");
-            DisplayImage();
-            BackgroundTask.StartTimer();
-        }    
-
-        public async void UploadDetail(object sender, EventArgs e)
+        public async void UploadDetail()
         {
             try
             {

@@ -41,7 +41,7 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <controls:CustomEntry x:Name="quantity" HeightRequest="30" HorizontalOptions="FillAndExpand" LineColor="LightYellow" Keyboard="Numeric" />
-                    <combobox:SfComboBox HeightRequest="40" x:Name="unitBox" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
+                    <combobox:SfComboBox HeightRequest="40" x:Name="unitBox" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow"  SelectionChanged="Handle_SelectionChanged"/>
                 </StackLayout>
                 <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">
                     <Label Text="Status" FontAttributes="Bold" WidthRequest="150" />
@@ -52,7 +52,7 @@
                     <Label Text="Pallet Size " FontAttributes="Bold" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
-                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" />
+                    <combobox:SfComboBox HeightRequest="40" HorizontalOptions="FillAndExpand" x:Name="sizeBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="Handle_SelectionChanged"/>
                 </StackLayout>
                 
             </Grid>
