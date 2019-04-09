@@ -526,6 +526,9 @@
     <AndroidResource Include="Resources\drawable\myPic.png" />
     <AndroidResource Include="Resources\drawable\CurvedMask.png" />
     <AndroidResource Include="Resources\drawable\headerBackground.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\CurvedMask.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\CurvedMask.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\CurvedMask.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

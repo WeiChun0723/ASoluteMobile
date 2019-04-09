@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.MasterPage"
-             Title="Job Lists"
-             Icon="hamburger.png">
-     <StackLayout Orientation="Vertical">
-        
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.MasterPage" Title="Job Lists" Icon="hamburger.png" xmlns:circleImage="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin">
+    <StackLayout Orientation="Vertical">
         <!-- 
              This StackLayout you can use for other
              data that you want to have in your menu drawer
         -->
-        <StackLayout BackgroundColor="#DB4437"
+        <!--<StackLayout BackgroundColor="#DB4437"
                      HeightRequest="100"
                      Padding="0,20,0,20">
           <Image x:Name="LogoImage" Source="" HeightRequest="50" Aspect="AspectFit" />
@@ -29,37 +25,31 @@
                  TextColor="White"
                  HorizontalOptions="Center"
                    FontAttributes="Bold"/>
-        </StackLayout>
+        </StackLayout>-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200" />
+            </Grid.RowDefinitions>
+            <Image Source="container.png" Aspect="AspectFill" />
+            <StackLayout Padding="0,20,0,20" HorizontalOptions="CenterAndExpand" >
+                <Image  x:Name="LogoImage"  Aspect="AspectFill"  HeightRequest="100" BackgroundColor="White"/>
+                <Label x:Name="ownerName"  FontSize="15" VerticalOptions="CenterAndExpand" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" />
+                <Label x:Name="appVersion"  FontSize="15" VerticalOptions="CenterAndExpand" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold" />
+            </StackLayout>
+        </Grid>
 
-        <ListView x:Name="listView"
-                  RowHeight="60"
-                  SeparatorVisibility="None"
-                  BackgroundColor="#FFFFFF">
-
-          <ListView.ItemTemplate>
-            <DataTemplate>
-              <ViewCell>
-                
-                <!-- Main design for our menu items -->
-                <StackLayout VerticalOptions="FillAndExpand"
-                             Orientation="Horizontal"
-                             Padding="20,10,0,10"
-                             Spacing="20">
-
-                  <Image Source="{Binding IconSource}"
-                         WidthRequest="40"
-                         HeightRequest="40"
-                         VerticalOptions="Center" />
-
-                  <Label Text="{Binding Title}"
-                         FontSize="Small"
-                         VerticalOptions="Center"
-                         TextColor="Black"
-                         FontAttributes="Bold"/>
-                </StackLayout>
-              </ViewCell>
-            </DataTemplate>
-          </ListView.ItemTemplate>
+        <ListView x:Name="listView" RowHeight="60" SeparatorVisibility="None" BackgroundColor="#FFFFFF">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <!-- Main design for our menu items -->
+                        <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,10,0,10" Spacing="20">
+                            <Image Source="{Binding IconSource}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" />
+                            <Label Text="{Binding Title}" FontSize="Small" VerticalOptions="Center" TextColor="Black" FontAttributes="Bold" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
-      </StackLayout>
+    </StackLayout>
 </ContentPage>

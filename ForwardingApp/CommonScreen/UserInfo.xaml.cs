@@ -4,6 +4,7 @@ using System.IO;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Utils;
+using Java.IO;
 using PCLStorage;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -24,6 +25,7 @@ namespace ASolute_Mobile.CommonScreen
             userName.Text = "User Name: " + Ultis.Settings.SessionUserItem.UserName;
             userVehicle.Text = "User Vehicle: " + Ultis.Settings.SessionUserItem.TruckId;
 
+
             ShowProfilePicture();
         }
 
@@ -41,23 +43,87 @@ namespace ASolute_Mobile.CommonScreen
                     break;
 
                 case "chooseImageButton":
-                    ChooseProfilePicture();
+                    try
+                    {
+                        await CrossMedia.Current.Initialize();
+
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            //content page refer to the page that call this function (this)
+                            await DisplayAlert("No Camera", "No camera available", "OK");
+                            return;
+                        }
+
+                        var mediaOption = new PickMediaOptions()
+                        {
+                            PhotoSize = PhotoSize.Medium
+
+                        };
+
+                        var selectedImageFile = await CrossMedia.Current.PickPhotoAsync(mediaOption);
+
+                        if (selectedImageFile == null)
+                        {
+                            loading.IsVisible = false;
+                            return;
+                        }
+                        else
+                        {
+
+                            App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
+                            AppImage image = new AppImage();
+                            image.id = Ultis.Settings.SessionUserItem.DriverId;
+                            image.photoFileLocation = "";
+                            image.Uploaded = false;
+
+                            string photoFileName = HelperUtil.GetPhotoFileName(image.photoFileLocation);
+
+                            image.photoFileName = photoFileName;
+                            image.type = "ProfilePic";
+                            byte[] imagesAsBytes;
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                selectedImageFile.GetStream().CopyTo(memoryStream);
+                                selectedImageFile.Dispose();
+                                imagesAsBytes = memoryStream.ToArray();
+                            }
+
+                            //resize the photo and store in different directory 
+                            byte[] thumbnailByte;
+
+                            thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
+
+                            image.imageData = thumbnailByte;
+                            App.Database.SaveRecordImageAsync(image);
+                        }
+
+                        ShowProfilePicture();
+                    }
+                    catch (Exception ex)
+                    {
+                        // await DisplayAlert("Error", ex.Message, "OK");
+                    }
                     break;
             }
         }
 
-         void ShowProfilePicture()
+        void ShowProfilePicture()
         {
-           
-            try
+            Device.BeginInvokeOnMainThread(() =>
             {
-                AppImage image =  App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
-                profilePic.Source = (image != null && image.imageData != null) ? ImageSource.FromStream( () => new MemoryStream(image.imageData)) : "user_icon.png";
-            }
-            catch(Exception ex)
-            {
-               // await DisplayAlert("Error", ex.Message, "OK");
-            }
+
+                try
+                {
+                    AppImage image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
+                    profilePic.Source =(image != null ) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+                }
+                catch
+                {
+
+                }
+            });
+
+         
             loading.IsVisible = false;
         }
 
@@ -77,18 +143,19 @@ namespace ASolute_Mobile.CommonScreen
                 var mediaOption = new PickMediaOptions()
                 {
                     PhotoSize = PhotoSize.Medium
+           
                 };
 
                 var selectedImageFile = await CrossMedia.Current.PickPhotoAsync(mediaOption);
 
-                if(selectedImageFile == null)
+                if (selectedImageFile == null)
                 {
-                    //await DisplayAlert("Error", "Could not get the image, please try again.", "OK");
                     loading.IsVisible = false;
                     return;
                 }
                 else
                 {
+
                     App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
                     AppImage image = new AppImage();
                     image.id = Ultis.Settings.SessionUserItem.DriverId;
@@ -115,11 +182,12 @@ namespace ASolute_Mobile.CommonScreen
                     image.imageData = thumbnailByte;
                     App.Database.SaveRecordImageAsync(image);
                 }
+
                 ShowProfilePicture();
             }
             catch (Exception ex)
             {
-               // await DisplayAlert("Error", ex.Message, "OK");
+                // await DisplayAlert("Error", ex.Message, "OK");
             }
 
         }

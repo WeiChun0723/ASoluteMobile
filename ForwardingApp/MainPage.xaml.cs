@@ -203,13 +203,13 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                              
                                 var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL());
                                 clsResponse logoutResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (logoutResponse.IsGood == true)
                                 {
-                                    App.DropDatabase();
+                                    App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
+                                    //App.DropDatabase(); the app will crash
                                     BackgroundTask.Logout(this);
                                 }
                             }

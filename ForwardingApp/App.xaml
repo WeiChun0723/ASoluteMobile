@@ -52,7 +52,8 @@
                 <Setter Property="TextColor" Value="{StaticResource HeaderTextColor}" />
                 <Setter Property="FontFamily" Value="{StaticResource MediumFontFamily}" />
                 <Setter Property="FontSize" Value="{StaticResource TitleFontSize}" />
-                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalTextAlignment" Value="Center"/> 
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/> 
             </Style>
             
             <!-- Main Menu tag styles  -->
@@ -61,6 +62,7 @@
                 <Setter Property="FontFamily" Value="{StaticResource RegularFontFamily}" />
                 <Setter Property="FontSize" Value="{StaticResource TagTextFontSize}" />
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/> 
             </Style>
             
             <Style x:Key="StatsNumberLabel" TargetType="Label">
@@ -68,6 +70,7 @@
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="FontFamily" Value="{StaticResource LightFontFamily}" />
                 <Setter Property="FontSize" Value="{StaticResource StatsNumberFontSize}" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/> 
             </Style>
 
             <Style x:Key="StatsCaptionLabel" TargetType="Label">
@@ -76,6 +79,7 @@
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="FontFamily" Value="{StaticResource LightFontFamily}" />
                 <Setter Property="FontSize" Value="{StaticResource StatsCaptionFontSize}" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/> 
             </Style>
             
             <Style x:Key="inputStyle" TargetType="inputLayout:SfTextInputLayout">

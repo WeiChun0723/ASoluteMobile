@@ -110,6 +110,7 @@ namespace ASolute_Mobile.Droid
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
             if (grantResults.Length > 0 && permissions.Length > 0)
             {
                 if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
@@ -118,7 +119,6 @@ namespace ASolute_Mobile.Droid
                 }
 
             }
-
         }
 
         protected override void OnPause()

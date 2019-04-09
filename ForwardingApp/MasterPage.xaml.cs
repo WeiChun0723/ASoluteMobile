@@ -16,7 +16,7 @@ namespace ASolute_Mobile
             InitializeComponent();
 
             LogoImage.Source = (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))? ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation()) : "user_icon.png";
-           
+
             ownerName.Text = Ultis.Settings.SessionUserItem.UserId;
 
             appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppVersion;
@@ -24,11 +24,11 @@ namespace ASolute_Mobile
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
 
             var masterPageItems = new List<MasterPageItem>();
-
+            masterPageItems.Clear();
             foreach (SummaryItems item in contextMenu)
             {
                 string option;
-                if (item.Display && item.Id != "CurrentLoc")
+                if (item.Display)
                 {
                     MasterPageItem pageItem = new MasterPageItem();
 

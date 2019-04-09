@@ -21,7 +21,6 @@ namespace ASolute_Mobile.Utils
 
 
         #region Common url
-
         public static String getBaseURL(string enterpriseName)
         {
             return String.Format("host/handshake?Enterprise={0}", enterpriseName);
@@ -396,7 +395,6 @@ namespace ASolute_Mobile.Utils
             return String.Format("Trucking/CargoReturn?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-
         public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
         {
             return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", getPositionAsync(), ownerID, userID, password, ICNo);
@@ -411,7 +409,6 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Session/Login?UserId={0}&Pwd={1}&Eq={2}", encryptedUserId, encryptedPassword, equipment);
         }
-
 
         public static String getDownloadLogoAcknowledgementURL()
         {
@@ -443,10 +440,7 @@ namespace ASolute_Mobile.Utils
             return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNumber);
         }
 
-       
-
-
-
+      
         public static String addJobURL(string container)
         {
             return String.Format("haulage/plan?SessionId={0}&GeoLoc={1}&ContainerId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), container);
@@ -469,7 +463,6 @@ namespace ASolute_Mobile.Utils
         }
 
         #region getPosition
-
         public static String getPositionAsync()
         {
             var locator = CrossGeolocator.Current;
