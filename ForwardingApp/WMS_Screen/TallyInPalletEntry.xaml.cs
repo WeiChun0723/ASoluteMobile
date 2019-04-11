@@ -91,7 +91,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             try
             {
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPallet(id, productPallet.ProductLinkId),this);
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPalletURL(id, productPallet.ProductLinkId),this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (newPallet_response.IsGood)
@@ -399,7 +399,7 @@ namespace ASolute_Mobile.WMS_Screen
                         MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue")))) ? SearchControl("MfgDate", "GetValue") : String.Empty,
                     };
 
-                    var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPallet(id));
+                    var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id));
                     clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (upload_response.IsGood)

@@ -11,24 +11,24 @@ namespace ASolute_Mobile.Utils
 {
     public class ControllerUtil
     {
-        #region Common url
+        #region bus ticketing url
 
         public static String getBusStops(string list)
         {
-            return String.Format("Ticket/{0}",list);
+            return String.Format("Ticket/{0}", list);
         }
         #endregion
 
-
         #region Common url
+
+        public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
+        {
+            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", getPositionAsync(), ownerID, userID, password, ICNo);
+        }
+
         public static String getBaseURL(string enterpriseName)
         {
             return String.Format("host/handshake?Enterprise={0}", enterpriseName);
-        }
-
-        public static String postNewRecordURL()
-        {
-            return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String postCheckList(bool status, string remark, int odo)
@@ -80,11 +80,40 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("File/List?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), Id);
         }
+
+        //normal app
+        public static String getLoginURL(string encryptedUserId, string encryptedPassword)
+        {
+            return String.Format("Session/Login?UserId={0}&Pwd={1}", encryptedUserId, encryptedPassword);
+        }
+
+
+        //fleet app
+        public static String getLoginURL(string encryptedUserId, string encryptedPassword, string equipment)
+        {
+            return String.Format("Session/Login?UserId={0}&Pwd={1}&Eq={2}", encryptedUserId, encryptedPassword, equipment);
+        }
+
+        public static String getDownloadLogoAcknowledgementURL()
+        {
+            return String.Format("File/LogoUpdated?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String getDownloadMenuURL()
+        {
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Haulage", CrossDeviceInfo.Current.AppVersion);
+        }
+
+        public static String getDownloadMenuURL(string firebase)
+        {
+            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
+        }
+
         #endregion 
 
-        #region Customer Tracking url
+        #region Customer tracking url
 
-        public static String emailVerify(string email)
+        public static String emailVerifyURL(string email)
         {
             return String.Format("Account/VerifyEmail?Email={0}", email);
         }
@@ -114,59 +143,59 @@ namespace ASolute_Mobile.Utils
             return String.Format("Account/Resend?Id={0}", Ultis.Settings.DeviceUniqueID);
         }
 
-        public static String getAutoScan()
+        public static String getAutoScanURL()
         {
             return String.Format("Providers/AutoScan?SessionId={0}", Ultis.Settings.SessionSettingKey);
         }
 
-        public static String getProviderList()
+        public static String getProviderListURL()
         {
             return String.Format("Providers/List?SessionId={0}", Ultis.Settings.SessionSettingKey);
         }
 
-        public static String getAvailableProvider()
+        public static String getAvailableProviderURL()
         {
             return String.Format("Providers/New?SessionId={0}", Ultis.Settings.SessionSettingKey);
         }
 
-        public static String saveProvider()
+        public static String saveProviderURL()
         {
             return String.Format("Providers/Save?SessionId={0}", Ultis.Settings.SessionSettingKey);
         }
 
-        public static String deleteSavedProvider(string code)
+        public static String deleteSavedProviderURL(string code)
         {
             return String.Format("Providers/Delete?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey, code);
         }
 
-        public static String getCategoryList(string code)
+        public static String getCategoryListURL(string code)
         {
             return String.Format("Providers/ContainerSummary?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey, code);
         }
 
-        public static String getContainerList(string code, string category)
+        public static String getContainerListURL(string code, string category)
         {
             return String.Format("Providers/ContainerList?SessionId={0}&Code={1}&Category={2}", Ultis.Settings.SessionSettingKey, code, category);
         }
 
-        public static String getContainerDetail(string code, string container)
+        public static String getContainerDetailURL(string code, string container)
         {
             return String.Format("Providers/ContainerDetail?SessionId={0}&Code={1}&ContainerId={2}", Ultis.Settings.SessionSettingKey, code, container);
         }
 
-        public static String updateContainerRFC(string code, string value, string time, string remark)
+        public static String updateContainerRFCURL(string code, string value, string time, string remark)
         {
             return String.Format("Providers/UpdateRFC?SessionId={0}&Code={1}&ProcessId={2}&RequiredTime={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, code, value, time, remark);
         }
 
-        public static String getHaulageVolume(string dateTime)
+        public static String getHaulageVolumeURL(string dateTime)
         {
             return String.Format("Providers/HaulageVolume?SessionId={0}&ViewDate={1}", Ultis.Settings.SessionSettingKey, dateTime);
         }
 
         #endregion
 
-        #region Trucking url
+        #region trucking url
         public static String getPendingReceivingURL()
         {
             return String.Format("Cargo/InboundList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
@@ -244,6 +273,21 @@ namespace ASolute_Mobile.Utils
             return String.Format("Trip/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id);
         }
 
+
+        public static String getDownloadRefuelHistoryURL()
+        {
+            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getNewFuelCostURL()
+        {
+            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String postNewRecordURL()
+        {
+            return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
         #endregion
 
         #region haulage url
@@ -272,163 +316,13 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Haulage/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
-        #endregion
-
-
-        #region planner url
-        public static String getEqCategory()
-        {
-            return String.Format("Equipment/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String getEqList(string category)
-        {
-            return String.Format("Equipment/List?SessionId={0}&GeoLoc={1}&ViewType={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), category);
-        }
-
-        public static String getEqDetail(string equipment)
-        {
-            return String.Format("Equipment/Detail?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), equipment);
-        }
-
-        public static String GetAllEq()
-        {
-            return String.Format("Equipment/ListAll?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-        #endregion
-
-        #region warehouse url
-        public static String getTallyInList()
-        {
-            return String.Format("Wms/TallyIn/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String loadTallyInDetail(string tallyID)
-        {
-            return String.Format("Wms/TallyIn/Load?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
-        }
-
-        public static String loadNewPallet(string tallyID, string productLinkId)
-        {
-            return String.Format("Wms/TallyIn/NewPallet?SessionId={0}&GeoLoc={1}&id={2}&ProductLinkId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID, productLinkId);
-        }
-
-        public static String postNewPallet(string tallyID)
-        {
-            return String.Format("Wms/TallyIn/AddPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
-        }
-
-        public static String getPalletInquiry(string palletID)
-        {
-            return String.Format("Wms/Pallet/Get?SessionId={0}&GeoLoc={1}&PalletId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), palletID);
-        }
-
-        public static String getPalletVerification(string id,string palletID)
-        {
-            return String.Format("Wms/Picking/Verify?SessionId={0}&GeoLoc={1}&Id={2}&PalletId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id, palletID);
-        }
-
-        public static String postNewPalletTrx()
-        {
-            return String.Format("Wms/Pallet/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String getPickingList(string menuId)
-        {
-            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}&menuId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), menuId);
-        }
-
-        public static String getPickingList()
-        {
-            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String loadPickingDetail(string pickingID, string pickingType)
-        {
-            return String.Format("Wms/Picking/Load?SessionId={0}&GeoLoc={1}&Id={2}&menuId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), pickingID, pickingType);
-        }
-
-        public static String postPickingDetail()
-        {
-            return String.Format("Wms/Picking/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String getPackingList()
-        {
-            return String.Format("Wms/Packing/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String loadPackingDetail(string packingID)
-        {
-            return String.Format("Wms/Packing/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), packingID);
-        }
-
-        public static String postPackingDetail()
-        {
-            return String.Format("Wms/Packing/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String getTallyOutList()
-        {
-            return String.Format("Wms/TallyOut/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String loadTallyOutDetail(string tallyOutID)
-        {
-            return String.Format("Wms/TallyOut/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyOutID);
-        }
-
-        public static String postTallyOutDetail()
-        {
-            return String.Format("Wms/TallyOut/AddPallet?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String generatePallet(string linkid)
-        {
-            return String.Format("Wms/Picking/GenPallet?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), linkid);
-        }
-
-        #endregion
 
         public static String postCargoReturnURL()
         {
             return String.Format("Trucking/CargoReturn?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
-        {
-            return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", getPositionAsync(), ownerID, userID, password, ICNo);
-        }
 
-        public static String getLoginURL(string encryptedUserId, string encryptedPassword)
-        {
-            return String.Format("Session/Login?UserId={0}&Pwd={1}", encryptedUserId, encryptedPassword);
-        }
-
-        public static String getLoginURL(string encryptedUserId, string encryptedPassword, string equipment)
-        {
-            return String.Format("Session/Login?UserId={0}&Pwd={1}&Eq={2}", encryptedUserId, encryptedPassword, equipment);
-        }
-
-        public static String getDownloadLogoAcknowledgementURL()
-        {
-            return String.Format("File/LogoUpdated?SessionId={0}", Ultis.Settings.SessionSettingKey);
-        }
-
-        public static String getDownloadMenuURL()
-        {
-            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "WMS", CrossDeviceInfo.Current.AppVersion);
-        }
-
-        public static String getDownloadMenuURL(string firebase)
-        {
-            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "WMS", CrossDeviceInfo.Current.AppVersion);
-        }
-
-        public static String getDownloadRefuelHistoryURL()
-        {
-            return String.Format("FuelCost/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
 
         public static String getDownloadHaulageHistoryURL(string date)
         {
@@ -440,27 +334,132 @@ namespace ASolute_Mobile.Utils
             return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNumber);
         }
 
-      
+
         public static String addJobURL(string container)
         {
             return String.Format("haulage/plan?SessionId={0}&GeoLoc={1}&ContainerId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), container);
         }
 
-        public static String getDownloadFowardListURL()
-        {
-            return String.Format("Fwd/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-        public static String getNewFuelCostURL()
-        {
-            return String.Format("FuelCost/New?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
-        }
-
-
         public static String getEquipmentURL(string eqID)
         {
             return String.Format("Inquiry/EQ?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), eqID);
         }
+        #endregion
+
+        #region planner url
+        public static String getEqCategoryURL()
+        {
+            return String.Format("Equipment/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getEqListURL(string category)
+        {
+            return String.Format("Equipment/List?SessionId={0}&GeoLoc={1}&ViewType={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), category);
+        }
+
+        public static String getEqDetailURL(string equipment)
+        {
+            return String.Format("Equipment/Detail?SessionId={0}&GeoLoc={1}&Eq={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), equipment);
+        }
+
+        public static String getAllEqURL()
+        {
+            return String.Format("Equipment/ListAll?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+        #endregion
+
+        #region warehouse url
+        public static String getTallyInListURL()
+        {
+            return String.Format("Wms/TallyIn/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadTallyInDetailURL(string tallyID)
+        {
+            return String.Format("Wms/TallyIn/Load?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
+        }
+
+        public static String loadNewPalletURL(string tallyID, string productLinkId)
+        {
+            return String.Format("Wms/TallyIn/NewPallet?SessionId={0}&GeoLoc={1}&id={2}&ProductLinkId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID, productLinkId);
+        }
+
+        public static String postNewPalletURL(string tallyID)
+        {
+            return String.Format("Wms/TallyIn/AddPallet?SessionId={0}&GeoLoc={1}&id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyID);
+        }
+
+        public static String getPalletInquiryURL(string palletID)
+        {
+            return String.Format("Wms/Pallet/Get?SessionId={0}&GeoLoc={1}&PalletId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), palletID);
+        }
+
+        public static String getPalletVerificationURL(string id, string palletID)
+        {
+            return String.Format("Wms/Picking/Verify?SessionId={0}&GeoLoc={1}&Id={2}&PalletId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id, palletID);
+        }
+
+        public static String postNewPalletTrxURL()
+        {
+            return String.Format("Wms/Pallet/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getPickingListURL(string menuId)
+        {
+            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}&menuId={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), menuId);
+        }
+
+        public static String getPickingListURL()
+        {
+            return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadPickingDetailURL(string pickingID, string pickingType)
+        {
+            return String.Format("Wms/Picking/Load?SessionId={0}&GeoLoc={1}&Id={2}&menuId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), pickingID, pickingType);
+        }
+
+        public static String postPickingDetailURL()
+        {
+            return String.Format("Wms/Picking/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getPackingListURL()
+        {
+            return String.Format("Wms/Packing/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadPackingDetailURL(string packingID)
+        {
+            return String.Format("Wms/Packing/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), packingID);
+        }
+
+        public static String postPackingDetailURL()
+        {
+            return String.Format("Wms/Packing/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getTallyOutListURL()
+        {
+            return String.Format("Wms/TallyOut/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadTallyOutDetailURL(string tallyOutID)
+        {
+            return String.Format("Wms/TallyOut/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), tallyOutID);
+        }
+
+        public static String postTallyOutDetailURL()
+        {
+            return String.Format("Wms/TallyOut/AddPallet?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String generatePalletURL(string linkid)
+        {
+            return String.Format("Wms/Picking/GenPallet?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), linkid);
+        }
+
+        #endregion
 
         #region getPosition
         public static String getPositionAsync()
@@ -506,7 +505,6 @@ namespace ASolute_Mobile.Utils
             return "0,0";
         }
         #endregion
-
 
 
     }

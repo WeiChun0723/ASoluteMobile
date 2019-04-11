@@ -274,7 +274,7 @@ namespace ASolute_Mobile
 
         public async void callWebService(string code)
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProvider(code));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProviderURL(code));
             clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
         }
 

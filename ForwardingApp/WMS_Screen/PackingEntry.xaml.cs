@@ -139,7 +139,7 @@ namespace ASolute_Mobile.WMS_Screen
                 productList.Id = uploadID;
                 productList.Items = items;
 
-                var content = await CommonFunction.PostRequestAsync(productList, Ultis.Settings.SessionBaseURI, ControllerUtil.postPackingDetail());
+                var content = await CommonFunction.PostRequestAsync(productList, Ultis.Settings.SessionBaseURI, ControllerUtil.postPackingDetailURL());
                 clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (update_response.IsGood)

@@ -128,7 +128,7 @@ namespace ASolute_Mobile.HaulageScreen
                 {
                     await DisplayAlert("Success", "Registration successfully wait a moment the app will auto login.", "OK");
                     Ultis.Settings.EnterpriseName = enterpriseEntry.Text;
-                    Ultis.Settings.RefreshMenuItem = "Yes";
+                    Ultis.Settings.RefreshListView = "Yes";
                     DownloadLogo();
                 }
                 else

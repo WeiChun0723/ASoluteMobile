@@ -117,25 +117,25 @@ namespace ASolute_Mobile
                     case "TallyIn":
                         //Ultis.Settings.Title = ((AppMenu)e.Item).name;
                         //await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInListURL()));
                         break;
                     case "PalletTrx":
                         await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                         break;
                     case "Packing":
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingListURL()));
                         break;
                     case "TallyOut":
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutList()));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutListURL()));
                         break;
                     case "FullPick":
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                         break;
                     case "LoosePick":
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                         break;
                     case "PickingVerify":
-                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                         break;
                     case "InboundTrip":
                         await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
@@ -157,8 +157,8 @@ namespace ASolute_Mobile
             listView.Refreshing += (sender, e) =>
             {
                 GetMainMenu();
-                Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                Ultis.Settings.RefreshMenuItem = "NO";
+                Ultis.Settings.RefreshListView = "Yes";
+
                 listView.IsRefreshing = false;
             };
         }
@@ -210,11 +210,11 @@ namespace ASolute_Mobile
                 interval = DateTime.Now.Subtract(enteredDate);
             }
 
-            if (Ultis.Settings.RefreshMenuItem == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
+            if (Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
             {
                 GetMainMenu();
-                Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                Ultis.Settings.RefreshMenuItem = "No";
+                Ultis.Settings.RefreshListView = "No";
+
                 Ultis.Settings.UpdateTime = DateTime.Now.ToString();
             }
             else

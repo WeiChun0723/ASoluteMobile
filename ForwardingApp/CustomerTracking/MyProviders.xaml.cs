@@ -52,7 +52,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
 
                     Ultis.Settings.AppFirstInstall = "Second";
-                    var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan());
+                    var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL());
                     clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (autoScan_response.IsGood)
@@ -106,7 +106,7 @@ namespace ASolute_Mobile.CustomerTracking
     
         public async Task getProviderList()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderList());
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderListURL());
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(provider_response.IsGood)

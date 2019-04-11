@@ -48,7 +48,7 @@ namespace ASolute_Mobile
 
             NavigationPage.SetTitleView(this, main);
 
-            LoadMainMenu();
+
         }
 
         protected override void OnAppearing()
@@ -59,6 +59,7 @@ namespace ASolute_Mobile
             var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
             profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
 
+            LoadMainMenu();
         }
 
         async void Handle_Tapped(object sender, System.EventArgs e)
@@ -68,7 +69,6 @@ namespace ASolute_Mobile
 
         async void GetMainMenu()
         {
-
             try
             {
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
@@ -122,6 +122,10 @@ namespace ASolute_Mobile
                             //display expiry date info
                             case "Expiry":
                                 expiryStack.IsVisible = true;
+                                if (expiryGrid.IsVisible == true)
+                                {
+                                    expiryGrid.ColumnDefinitions.Clear();
+                                }
                                 mainGrid.Children.Add(expiryStack, 0, 2);
                                 expiryLabel.Text = mainMenu.Caption;
                                 expiryGrid.Children.Clear();
@@ -150,8 +154,7 @@ namespace ASolute_Mobile
                                         {
                                             Style = (Xamarin.Forms.Style)Application.Current.Resources["StatsCaptionLabel"],
                                             Text = expiryInfo.Caption,
-                                            TextColor = Color.FromHex("#696969"),
-
+                                            TextColor = Color.FromHex("#696969")
                                         };
 
                                         expiryInfoStack.Children.Add(date);
@@ -226,7 +229,6 @@ namespace ASolute_Mobile
                             App.Database.SaveSummarysAsync(summaryItem);
                             index++;
                         }
-
                     }
 
                     LoadMainMenu();
@@ -237,7 +239,6 @@ namespace ASolute_Mobile
                         NavigationPage.SetHasBackButton(chkList, false);
                         await Navigation.PushAsync(chkList);
                     }
-
 
                 }
 
@@ -260,13 +261,22 @@ namespace ASolute_Mobile
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
                 listView.HasUnevenRows = true;
-                listView.HeightRequest = Item.Count * 105;
+                listView.HeightRequest = Item.Count * 100;
                 listView.Style = (Style)App.Current.Resources["recordListStyle"];
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-                if(Item.Count == 0 || userInfo.Children.Count == 0)
+                System.TimeSpan interval = new System.TimeSpan();
+                if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
+                {
+                    DateTime enteredDate = DateTime.Parse(Ultis.Settings.UpdateTime);
+                    interval = DateTime.Now.Subtract(enteredDate);
+                }
+
+                if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
                 {
                     GetMainMenu();
+                    Ultis.Settings.RefreshListView = "No";
+                    Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                 }
             }
             catch
@@ -346,25 +356,25 @@ namespace ASolute_Mobile
                 case "TallyIn":
                     //Ultis.Settings.Title = ((AppMenu)e.Item).name;
                     //await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInList()));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInListURL()));
                     break;
                 case "PalletTrx":
                     await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                     break;
                 case "Packing":
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingList()));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingListURL()));
                     break;
                 case "TallyOut":
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutList()));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutListURL()));
                     break;
                 case "FullPick":
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                     break;
                 case "LoosePick":
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                     break;
                 case "PickingVerify":
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingList(((ListItems)e.Item).Id)));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                     break;
                 case "InboundTrip":
                     await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
@@ -388,10 +398,7 @@ namespace ASolute_Mobile
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
 
-            if(expiryGrid.IsVisible == true)
-            {
-                expiryGrid.ColumnDefinitions.Clear();
-            }
+
 
             GetMainMenu();
         }

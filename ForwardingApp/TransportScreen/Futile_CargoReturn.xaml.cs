@@ -149,7 +149,7 @@ namespace ASolute_Mobile.TransportScreen
                         futile.RefNo = ReferenceNo.Text;
                     }
 
-                    var content = await CommonFunction.PostRequestAsync(futile, Ultis.Settings.SessionBaseURI, ControllerUtil.postFutileTripURL());
+                    var content = await CommonFunction.CallWebService(1, futile, Ultis.Settings.SessionBaseURI, ControllerUtil.postFutileTripURL(),this);
                     clsResponse futile_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (futile_response.IsGood)

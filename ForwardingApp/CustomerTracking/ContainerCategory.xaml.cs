@@ -45,7 +45,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void getCategory()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryList(providerCode));
+            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryListURL(providerCode));
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (provider_response.IsGood)

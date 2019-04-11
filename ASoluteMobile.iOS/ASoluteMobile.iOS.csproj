@@ -543,13 +543,7 @@
     <BundleResource Include="Resources\organization.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="organization.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\enterprise.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="splashScreenlogo.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\splashScreenlogo.png" />

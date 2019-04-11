@@ -101,7 +101,7 @@ namespace ASolute_Mobile.WMS_Screen
             switch(button.StyleId)
             {
                 case "btnVerify":
-                    var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletVerification(record.Id, pdEntry.Text), this);
+                    var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletVerificationURL(record.Id, pdEntry.Text), this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if(response.IsGood)
@@ -130,7 +130,7 @@ namespace ASolute_Mobile.WMS_Screen
                         pallet.CheckDigit = Convert.ToInt32(checkDigitEntry.Text);
                     }
 
-                    var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrx(),this);
+                    var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletTrxURL(),this);
                     clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (update_response.IsGood)
@@ -220,7 +220,7 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
             try
             {
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiry(palletID),this);
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(palletID),this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(newPallet_response.IsGood)

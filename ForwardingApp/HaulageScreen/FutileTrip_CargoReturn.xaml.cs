@@ -99,8 +99,8 @@ namespace ASolute_Mobile
         {
             try
             {
-                Ultis.Settings.RefreshMenuItem = "Yes";
-                Ultis.Settings.UpdatedRecord = "RefreshJobList";
+
+                Ultis.Settings.RefreshListView = "Yes";
                 if (!(String.IsNullOrEmpty(reasonPicker.Text)))
                 {
                     try

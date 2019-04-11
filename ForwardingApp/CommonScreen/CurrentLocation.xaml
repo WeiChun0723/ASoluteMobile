@@ -9,7 +9,7 @@
     
     <StackLayout Spacing="15" Padding="15,15,15,15">
         <Image Source="map.png" HeightRequest="150" WidthRequest="50"/>
-        <inputLayout:SfTextInputLayout Hint="Company Name" Style="{StaticResource inputStyle}" BackgroundColor="LightYellow">
+        <inputLayout:SfTextInputLayout Hint="Company Name" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
                 <Entry x:Name="locationName" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="50" />

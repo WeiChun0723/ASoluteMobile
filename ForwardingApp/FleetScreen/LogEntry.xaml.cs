@@ -358,7 +358,7 @@ namespace ASolute_Mobile
                         }
                     }
 
-                    Ultis.Settings.RefreshMenuItem = "Yes";
+                    Ultis.Settings.RefreshListView = "Yes";
 
                     imageLinkID = response.Result["LinkId"];
                     trip.Id = response.Result["Id"];

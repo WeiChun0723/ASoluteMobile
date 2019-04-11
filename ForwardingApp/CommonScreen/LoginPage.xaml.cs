@@ -34,7 +34,7 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
-            AppLabel.Text = "AILS WMS Ver." + CrossDeviceInfo.Current.AppVersion;
+            AppLabel.Text = "AILS Haulage Ver." + CrossDeviceInfo.Current.AppVersion;
 
             //set username entry maximum to 10 chars
             usernameEntry.TextChanged += (sender, args) =>
@@ -132,8 +132,8 @@ namespace ASolute_Mobile
                     if (login_response.IsGood == true)
                     {
                         //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
-                        Ultis.Settings.UpdatedRecord = "RefreshJobList";
-                        Ultis.Settings.RefreshMenuItem = "Yes";
+                        Ultis.Settings.RefreshListView = "Yes";
+                       
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
 
                         var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
@@ -239,7 +239,6 @@ namespace ASolute_Mobile
                         }
 
                         Application.Current.MainPage = new MainPage();
-
                     }
                     else
                     {

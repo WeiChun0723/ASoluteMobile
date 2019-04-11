@@ -24,7 +24,7 @@ namespace ASolute_Mobile
             InitializeComponent();
 
             /* Master = masterPage;
-                Detail = new NavigationPage(new MyProviders());*/
+             * Detail = new NavigationPage(new MyProviders());*/
 
             masterPage.ListView.ItemSelected += OnItemSelected;
 
@@ -50,7 +50,7 @@ namespace ASolute_Mobile
                             try
                             {
                                
-                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScan(),this);
+                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL(),this);
                                 clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (autoScan_response.IsGood)
@@ -174,7 +174,7 @@ namespace ASolute_Mobile
 
                                 if (json_response.IsGood == true)
                                 {
-                                    Ultis.Settings.RefreshMenuItem = "Yes";
+                                    Ultis.Settings.RefreshListView = "Yes";
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Language had been changed." : "Bahasa telah diubah.";
                                     await DisplayAlert("", reply, "Okay");
                                     refreshMainPage();
@@ -203,12 +203,12 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL());
+                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL(),this);
                                 clsResponse logoutResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (logoutResponse.IsGood == true)
                                 {
-                                    App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
+
                                     //App.DropDatabase(); the app will crash
                                     BackgroundTask.Logout(this);
                                 }
@@ -236,7 +236,7 @@ namespace ASolute_Mobile
 
         public async void refreshMainPage()
         {
-            var context_content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL());
+            var context_content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(),this);
             clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
 
             var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();

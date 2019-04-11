@@ -8,7 +8,6 @@
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms">
 	
     <Application.Resources>
-        
 		<ResourceDictionary>
             
             <OnPlatform x:TypeArguments="Color" Android="#FFFFFF" iOS="#000000" WinPhone="#000000" x:Key="EntryTextColor" />

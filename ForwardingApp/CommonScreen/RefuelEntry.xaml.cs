@@ -209,7 +209,7 @@ namespace ASolute_Mobile
                                             await DisplayAlert("Berjaya", "Record baru ditambah", "OK");
                                         }
 
-                                        Ultis.Settings.RefreshMenuItem = "Yes";
+                                        Ultis.Settings.RefreshListView = "Yes";
                                         confirm_icon.IsEnabled = false;
                                         confirm_icon.Source = "confirmDisable.png";
                                         UploadImage();
@@ -224,15 +224,8 @@ namespace ASolute_Mobile
                                 }
                                 catch
                                 {
-                                    string check = "";
-                                    if (Ultis.Settings.Language.Equals("English"))
-                                    {
-                                        check = "Please fill in all the field.";
-                                    }
-                                    else
-                                    {
-                                        check = "Sila isi semua data yang diperlukan.";
-                                    }
+                                    string check = (Ultis.Settings.Language.Equals("English")) ? "Please fill in all the field." : "Sila isi semua data yang diperlukan.";
+                                 
                                     await DisplayAlert("Error", check, "OK");
                                 }
                             }

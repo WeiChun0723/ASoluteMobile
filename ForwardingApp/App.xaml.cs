@@ -91,8 +91,7 @@ namespace ASolute_Mobile
               }*/
 
             Ultis.Settings.NewJob = "Yes";
-            Ultis.Settings.UpdatedRecord = "RefreshJobList";
-            Ultis.Settings.RefreshMenuItem = "Yes";
+            Ultis.Settings.RefreshListView = "Yes";
             MessagingCenter.Send<App>((App)Application.Current, "Testing");
         }
 

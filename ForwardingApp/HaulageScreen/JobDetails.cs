@@ -1187,8 +1187,8 @@ namespace ASolute_Mobile
                 {
 
                     uploaded = true;
-                    Ultis.Settings.RefreshMenuItem = "Yes";
-                    Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                   
+                    Ultis.Settings.RefreshListView = "Yes";
 
                     /*if (signatureStackLayout.IsVisible)
                     {

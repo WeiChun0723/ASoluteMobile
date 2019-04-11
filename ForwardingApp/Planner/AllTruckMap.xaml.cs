@@ -50,7 +50,7 @@ namespace ASolute_Mobile.Planner
         {
             loading.IsVisible = true;
 
-             var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.GetAllEq());
+             var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getAllEqURL());
              clsResponse equipment_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
              if (equipment_response.IsGood)

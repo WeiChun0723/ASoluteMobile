@@ -146,27 +146,15 @@ namespace ASolute_Mobile.Ultis
             }
         }
 
-        public static string UpdatedRecord
+        public static string RefreshListView
         {
             get
             {
-                return AppSettings.GetValueOrDefault(UpdateRecord, "RefreshJobList");
+                return AppSettings.GetValueOrDefault(UpdateRecord, "Yes");
             }
             set
             {
                 AppSettings.AddOrUpdateValue(UpdateRecord, value);
-            }
-        }
-
-        public static string RefreshMenuItem
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(RefreshMenu, "Yes");
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(RefreshMenu, value);
             }
         }
 

@@ -32,7 +32,7 @@
                 </Entry.Behaviors>  
                 </Entry>
                 <inputLayout:SfTextInputLayout.LeadingView>
-                    <Image Source="password" />
+                    <Image Source="padlock" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
      <!-- <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}">

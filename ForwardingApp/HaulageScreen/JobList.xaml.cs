@@ -76,9 +76,9 @@ namespace ASolute_Mobile.HaulageScreen
                     scan_icon.IsEnabled = false;
                 }
 
-                if (NetworkCheck.IsInternet() && Ultis.Settings.UpdatedRecord.Equals("RefreshJobList"))
+                if (NetworkCheck.IsInternet() && Ultis.Settings.RefreshListView.Equals("RefreshJobList"))
                 {
-                    Ultis.Settings.UpdatedRecord = "No";
+                    Ultis.Settings.RefreshListView = "No";
                     GetJobList();
                 }
                 else
@@ -137,8 +137,8 @@ namespace ASolute_Mobile.HaulageScreen
 
                         if (jsonResponse.IsGood)
                         {
-                            Ultis.Settings.RefreshMenuItem = "Yes";
-                            Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                           
+                            Ultis.Settings.RefreshListView = "Yes";
                             GetJobList();
                             displayToast("Job added to job list.");                           
                             scanPage.ResumeAnalysis();

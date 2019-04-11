@@ -39,7 +39,7 @@
                     </Entry.Behaviors>
                 </Entry>
                 <inputLayout:SfTextInputLayout.LeadingView>
-                    <Image Source="password">
+                    <Image Source="padlock">
                     </Image>
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>

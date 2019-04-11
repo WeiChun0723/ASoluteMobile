@@ -15,6 +15,7 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
+
             LogoImage.Source = (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))? ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation()) : "user_icon.png";
 
             ownerName.Text = Ultis.Settings.SessionUserItem.UserId;
@@ -86,8 +87,8 @@ namespace ASolute_Mobile
             logoff.Title = (Ultis.Settings.Language.Equals("English")) ? "Log Off" : "Log Keluar";
             logoff.IconSource = "logout.png";
             masterPageItems.Add(logoff);
-            listView.ItemsSource = masterPageItems;
 
+            listView.ItemsSource = masterPageItems;
             listView.ItemTapped += (object sender, ItemTappedEventArgs e) =>
             {
                 // don't do anything if we just de-selected the row
@@ -95,7 +96,6 @@ namespace ASolute_Mobile
                 // do something with e.SelectedItem
                 ((ListView)sender).SelectedItem = null; // de-select the row
             };
-
             Icon = "hamburger.png";
         }
     }

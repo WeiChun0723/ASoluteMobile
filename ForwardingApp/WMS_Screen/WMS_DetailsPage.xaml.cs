@@ -203,7 +203,7 @@ namespace ASolute_Mobile.WMS_Screen
                             Id = result.Text
                         };
 
-                        var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetail());
+                        var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL());
                         clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (upload_response.IsGood)

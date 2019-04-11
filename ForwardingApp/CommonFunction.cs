@@ -106,15 +106,11 @@ namespace ASolute_Mobile.Utils
                     BackgroundTask.Logout(page);
                     await page.DisplayAlert("Error", reply.Message, "OK");
                 }
-                else if(reply.IsGood)
+                else 
                 {
                     return content;
                 }
-                else
-                {
-                    await page.DisplayAlert("Error", reply.Message, "OK");
-                    return null;
-                }
+               
             }
             catch(HttpRequestException requestEx)
             {

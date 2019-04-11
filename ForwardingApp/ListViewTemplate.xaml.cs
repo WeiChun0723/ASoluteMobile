@@ -63,14 +63,27 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
 
-            GetListData();
+            try
+            {
+                GetListData();
+            }
+            catch
+            {
 
+            }
         }
 
 
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
-            GetListData();
+             try
+            {
+                GetListData();
+            }
+            catch
+            {
+
+            }
         }
 
 
@@ -127,15 +140,18 @@ namespace ASolute_Mobile
                                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (response.IsGood)
                                 {
-                                    Ultis.Settings.RefreshMenuItem = "Yes";
-                                    Ultis.Settings.UpdatedRecord = "RefreshJobList";
+                                  
+                                    Ultis.Settings.RefreshListView = "Yes";
                                     GetListData();
                                     displayToast("Job added to job list.");
                                     scanPage.ResumeAnalysis();
                                 }
                                 else
                                 {
-                                    var answer = await DisplayAlert("Error", response.Message, "OK", "Cancel");
+                                    await DisplayAlert("Error", response.Message, "OK");
+                                    scanPage.ResumeAnalysis();
+
+                                    /* var answer = await DisplayAlert("Error", response.Message, "OK", "Cancel");
                                     if (answer.Equals(true))
                                     {
                                         scanPage.ResumeAnalysis();
@@ -143,7 +159,8 @@ namespace ASolute_Mobile
                                     else
                                     {
                                         await Navigation.PopAsync();
-                                    }
+                                        GetListData();
+                                    }*/
                                 }
                             }
                             else
@@ -154,8 +171,6 @@ namespace ASolute_Mobile
                             }
 
                         });
-
-
                     };
                 }
 
@@ -189,19 +204,19 @@ namespace ASolute_Mobile
                 switch (type)
                 {
                     case "TallyIn":
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetail(((ListItems)e.Item).Id), ((ListItems)e.Item)));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                         break;
                     case "Packing":
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetail(((ListItems)e.Item).Id), ((ListItems)e.Item)));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                         break;
                     case "LoosePick":
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item)));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item)));
                         break;
                     case "FullPick":
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetail(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item)));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item)));
                         break;
                     case "TallyOut":
-                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetail(((ListItems)e.Item).Id), ((ListItems)e.Item)));
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                         break;
                     case "JobList":
                         Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
@@ -218,14 +233,13 @@ namespace ASolute_Mobile
             {
 
             }
-
         }
 
         async void GetListData()
         {
             try
             {
-                loading.IsVisible = true;
+                //loading.IsVisible = true;
 
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -338,9 +352,7 @@ namespace ASolute_Mobile
             {
 
             }
-
         }
-
 
         public void loadTallyInList()
         {
@@ -353,15 +365,8 @@ namespace ASolute_Mobile
                 listView.Style = (Style)App.Current.Resources["recordListStyle"];
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-                if (Item.Count == 0)
-                {
-                    noData.IsVisible = true;
-                }
-                else
-                {
-                    noData.IsVisible = false;
-                }
-
+                noData.IsVisible = (Item.Count == 0) ? true : false;
+               
                 listView.IsRefreshing = false;
             }
            catch
