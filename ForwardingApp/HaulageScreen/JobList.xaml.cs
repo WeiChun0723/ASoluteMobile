@@ -102,7 +102,7 @@ namespace ASolute_Mobile.HaulageScreen
 
         protected void GetJobList()
         {
-            Task.Run(async () => { await  BackgroundTask.DownloadLatestRecord(this);}).Wait();
+           
 
             loadJobList();
         }
@@ -169,7 +169,7 @@ namespace ASolute_Mobile.HaulageScreen
         {       
             try
             {
-                Task.Run(async () => { await BackgroundTask.DownloadLatestRecord(this); }).Wait();
+
                 loadJobList();
                 jobList.IsRefreshing = false;
             }

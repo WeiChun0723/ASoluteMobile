@@ -8,6 +8,7 @@ using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.DeviceInfo;
+using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,7 +19,7 @@ namespace ASolute_Mobile.CustomerTracking
     {
         readonly Image splashImage;
         readonly CustomEntry entry;
-        readonly CustomButton submit;
+        readonly SfButton submit;
         string firebaseID = "business";
         ActivityIndicator loading;
 
@@ -58,12 +59,13 @@ namespace ASolute_Mobile.CustomerTracking
 
             };
 
-            submit = new CustomButton
+            submit = new SfButton
             {
                 TextColor = Color.White,
                 Text = "Submit",
                 HorizontalOptions = LayoutOptions.Fill,
-                IsVisible = false
+                IsVisible = false,
+                BackgroundColor = Color.FromHex("#6495ed")
             };
 
             loading = new ActivityIndicator();

@@ -11,6 +11,7 @@ using ASolute_Mobile.Utils;
 using ASolute_Mobile.WoosimPrinterService;
 using ASolute_Mobile.WoosimPrinterService.library.Cmds;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PCLStorage;
 using Rg.Plugins.Popup.Services;
 using SignaturePad.Forms;
@@ -36,13 +37,6 @@ namespace ASolute_Mobile.HaulageScreen
             //initialized height for image grid row
             imageWidth = App.DisplayScreenWidth / 3;
             imageGridRow.Height = imageWidth;
-
-            //get job info from db
-            if (jobItem == null)
-            {
-                jobItem = App.Database.GetJobRecordAsync(Ultis.Settings.SessionCurrentJobId);
-                jobDetails = App.Database.GetDetailsAsync(Ultis.Settings.SessionCurrentJobId);
-            }
 
             //display all the job details
             JobContent();
@@ -77,8 +71,89 @@ namespace ASolute_Mobile.HaulageScreen
             }
         }
 
-        void JobContent()
+        async void RefreshJobContent()
         {
+            App.Database.deleteRecords("JobList");
+            App.Database.deleteRecordSummary("JobList");
+            App.Database.deleteRecordDetails();
+
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageJobListURL(), this);
+            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if(response.IsGood)
+            {
+                var HaulageJobList = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
+
+                foreach (clsHaulageModel job in HaulageJobList)
+                {
+                    ListItems record = new ListItems
+                    {
+                        Id = job.Id,
+                        Background = job.BackColor,
+                        Category = "JobList",
+                        TruckId = job.TruckId,
+                        ReqSign = job.ReqSign,
+                        Latitude = job.Latitude,
+                        Longitude = job.Longitude,
+                        TelNo = job.TelNo,
+                        EventRecordId = job.EventRecordId,
+                        TrailerId = job.TrailerId,
+                        ContainerNo = job.ContainerNo,
+                        MaxGrossWeight = job.MaxGrossWeight,
+                        TareWeight = job.TareWeight,
+                        CollectSeal = job.CollectSeal,
+                        SealNo = job.SealNo,
+                        ActionId = job.ActionId.ToString(),
+                        ActionMessage = job.ActionMessage,
+                        Title = job.Title,
+                        SealMode = job.SealMode
+                    };
+
+                    App.Database.SaveMenuAsync(record);
+
+                    foreach (clsCaptionValue summaryList in job.Summary)
+                    {
+                        SummaryItems summaryItem = new SummaryItems();
+
+                        summaryItem.Id = job.Id;
+                        summaryItem.Caption = summaryList.Caption;
+                        summaryItem.Value = summaryList.Value;
+                        summaryItem.Display = summaryList.Display;
+                        summaryItem.Type = "JobList";
+                        summaryItem.BackColor = job.BackColor;
+                        App.Database.SaveSummarysAsync(summaryItem);
+                    }
+
+                    foreach (clsCaptionValue detailList in job.Details)
+                    {
+                        DetailItems detailItem = new DetailItems();
+
+                        detailItem.Id = job.Id;
+                        detailItem.Caption = detailList.Caption;
+                        detailItem.Value = detailList.Value;
+                        detailItem.Display = detailList.Display;
+                        App.Database.SaveDetailsAsync(detailItem);
+                    }
+
+                    if (job.Id.Equals(Ultis.Settings.SessionCurrentJobId))
+                    {
+                        Ultis.Settings.Action = job.ActionId.ToString();
+                        jobItem = null;
+                        JobContent();
+                    }
+                }
+            }
+        }
+
+        async void JobContent()
+        {
+            //get job info from db
+            if (jobItem == null)
+            {
+                jobItem = App.Database.GetJobRecordAsync(Ultis.Settings.SessionCurrentJobId);
+                jobDetails = App.Database.GetDetailsAsync(Ultis.Settings.SessionCurrentJobId);
+            }
+
             //display all the job details
             int count = 0;
             foreach (DetailItems detailItem in jobDetails)
@@ -135,6 +210,46 @@ namespace ASolute_Mobile.HaulageScreen
                         TrailerDetailGrid.IsVisible = false;
                         signatureStack.IsVisible = (jobItem.ReqSign) ? true : false;
                         SplitContainerNumber();
+                        break;
+
+                    case "Point1_In":
+                    case "Point2_In":
+                        try
+                        {
+                            var answer = await DisplayAlert("",jobItem.ActionMessage, "OK", "Cancel");
+                            if (answer.Equals(true))
+                            {
+                                clsHaulageModel pointIn = new clsHaulageModel
+                                {
+                                    Id = Ultis.Settings.SessionCurrentJobId,
+                                    ActionId = (jobItem.ActionId.Equals("Point1_In")) ? clsHaulageModel.HaulageActionEnum.Point1_In : clsHaulageModel.HaulageActionEnum.Point2_In
+                                };
+
+                                var content = await CommonFunction.CallWebService(1, pointIn, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
+                                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                                if (json_response.IsGood == true)
+                                {
+                                    RefreshJobContent();
+                                }
+                                else
+                                {
+                                    await DisplayAlert("Error", json_response.Message, "Okay");
+                                }
+                            }
+                            else
+                            {
+                                actionIconStack.IsVisible = false;
+                                remarkStack.IsVisible = false;
+                                TrailerDetailGrid.IsVisible = false;
+                                TrailerGrid.IsVisible = false;
+                            }
+                        }
+                        catch (Exception exception)
+                        {
+                            await DisplayAlert("Error", exception.Message, "OK");
+                        }
+
                         break;
                 }
             }

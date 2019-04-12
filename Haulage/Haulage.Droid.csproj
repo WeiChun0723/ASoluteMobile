@@ -466,7 +466,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseApplication.cs" />
-    <Compile Include="CustomRenderer\CustomButtonDroid.cs" />
     <Compile Include="CustomRenderer\CustomEditorDroid.cs" />
     <Compile Include="CustomRenderer\CustomEntryDroid.cs" />
     <Compile Include="CustomRenderer\CustomPickerDroid.cs" />
@@ -526,8 +525,9 @@
     <AndroidResource Include="Resources\drawable\CurvedMask.png" />
     <AndroidResource Include="Resources\drawable\headerBackground.png" />
     <AndroidResource Include="Resources\drawable\contextMenuBackground.png" />
-    <AndroidResource Include="Resources\drawable\sideMenuBackground.png" />
     <AndroidResource Include="Resources\drawable\padlock.png" />
+    <AndroidResource Include="Resources\drawable\sideMenuBackground.png" />
+    <AndroidResource Include="Resources\drawable\navigation.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

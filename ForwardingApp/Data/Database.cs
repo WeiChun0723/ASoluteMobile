@@ -27,7 +27,6 @@ namespace ASolute_Mobile.Data
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
             database.CreateTable<TruckModel>();
-            database.CreateTable<pickerValue>();
             database.CreateTable<FuelCostNew> ();
             database.CreateTable<AutoComplete>();
             database.CreateTable<JobItems>();
@@ -46,7 +45,6 @@ namespace ASolute_Mobile.Data
             database.DropTable<AppImage>();               
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
-            database.DropTable<pickerValue>();
             database.DropTable<FuelCostNew>();
             database.DropTable<ProviderInfo>();
             database.DropTable<JobItems>();
@@ -310,13 +308,6 @@ namespace ASolute_Mobile.Data
             return database.Query<AutoComplete>("SELECT * FROM [AutoComplete] WHERE [Type] = ?", type);
         }
 
-        public List<pickerValue> GetPickerValue(string picker)
-        {
-            return database.Query<pickerValue>("SELECT * FROM [pickerValue] WHERE [pickerType] = ?",picker);
-        }
-
-     
-
         public List<JobNoList> GetJobNo(string jobID, bool status)
         {
             return database.Query<JobNoList>("SELECT * FROM [JobNoList] WHERE [JobId] = ? AND [Uploaded] = ?", jobID, status);
@@ -384,11 +375,7 @@ namespace ASolute_Mobile.Data
             database.Query<JobNoList>("DELETE FROM [JobNoList]");
         }
 
-        public void deletePickerValue()
-        {
-            database.Query<pickerValue>("DELETE FROM [pickerValue]");
-        }
-
+      
         public void deleteMainMenu()
         {
             database.Query<ListItems>("DELETE FROM ListItems");
@@ -454,17 +441,7 @@ namespace ASolute_Mobile.Data
             database.Query<DetailItems>("DELETE FROM DetailItems");
         }
 
-        public void deleteLocationAutoComplete(string type)
-        {
-            database.Query<AutoComplete>("DELETE FROM AutoComplete WHERE [Type] = ?", type);
-        }
-
-   
-        public void deleteDonePending()
-        {
-            database.Query<JobItems>("DELETE FROM JobItems ");
-        }
-
+      
         public void deleteFuelCostNew()
         {
             database.Query<JobItems>("DELETE FROM JobItems ");
@@ -533,22 +510,6 @@ namespace ASolute_Mobile.Data
             {
 
                 return database.Insert(item);
-            }
-
-        }
-
-        public int SavePickerValue(pickerValue code)
-        {
-            code.owner = Ultis.Settings.SessionUserId;
-            if (code.tableID != 0)
-            {
-
-                return database.Update(code);
-            }
-            else
-            {
-
-                return database.Insert(code);
             }
 
         }

@@ -4,7 +4,7 @@
         <StackLayout Padding="10,10,10,10">
             <StackLayout x:Name="jobDesc" Padding="5,10,0,0" />
             <StackLayout Orientation="Horizontal" Padding="15,0,0,0" x:Name="iconStack">
-                <Image Source="map.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="map_icon" IsVisible="false">
+                <Image Source="navigation.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="map_icon" IsVisible="false">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="IconTapped" NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
@@ -100,7 +100,7 @@
                 </controls:CustomEntry>
             </Grid>
             <!--End-->
-            <StackLayout Spacing="0" Padding="5,10,0,0">
+            <StackLayout Spacing="0" Padding="5,10,0,0" x:Name="remarkStack">
                 <Label Text="Remark" FontAttributes="Bold" />
                 <controls:CustomEntry x:Name="remarkTextEditor" HeightRequest="100" LineColor="White" />
             </StackLayout>
@@ -109,7 +109,7 @@
                 <forms:SignaturePadView x:Name="signature" CaptionText="" StrokeColor="Black" BackgroundColor="White" StrokeWidth="3" WidthRequest="120" HeightRequest="240" PromptText="" SignatureLineColor="White" />
             </StackLayout>
             <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
-            <Grid RowSpacing="0" ColumnSpacing="0" Padding="15,0,0,0">
+            <Grid RowSpacing="0" ColumnSpacing="0" Padding="15,0,0,0" x:Name="actionIconStack">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>

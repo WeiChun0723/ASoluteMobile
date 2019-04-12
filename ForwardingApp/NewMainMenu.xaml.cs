@@ -354,8 +354,6 @@ namespace ASolute_Mobile
                     await Navigation.PushAsync(new AllTruckMap(((ListItems)e.Item).Name));
                     break;
                 case "TallyIn":
-                    //Ultis.Settings.Title = ((AppMenu)e.Item).name;
-                    //await Navigation.PushAsync(new WMS_Screen.TallyInList(((AppMenu)e.Item).name));
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInListURL()));
                     break;
                 case "PalletTrx":

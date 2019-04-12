@@ -191,7 +191,8 @@ namespace ASolute_Mobile
                                     refuel_Data.Quantity = Convert.ToDouble(liter.Text);
                                     refuel_Data.FuelCardNo = (String.IsNullOrEmpty(fuelCard.Text)) ? "" : fuelCard.Text;
                                     refuel_Data.VoucherNo = (String.IsNullOrEmpty(voucher.Text)) ? "" : voucher.Text;
-                                    refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
+                                    //refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
+                                    refuel_Data.OtherRef = "";
                                     refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
 
                                     var content = await CommonFunction.PostRequestAsync(refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
@@ -292,6 +293,13 @@ namespace ASolute_Mobile
             station_choice = stationComboBox.SelectedIndex;
         }
 
+        void Handle_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var entry = sender as Entry;
+
+
+        }
+
         public void LiterInput(object sender, TextChangedEventArgs e)
         {
             try
@@ -370,7 +378,7 @@ namespace ASolute_Mobile
                             break;
 
                         case "otherRef":
-                            other.Text = result.Text;
+                           // other.Text = result.Text;
                             break;
                     }
                 });
@@ -406,27 +414,32 @@ namespace ASolute_Mobile
                                 break;
 
                             case "Liter":
-                                lblLiter.Text = labelText.Value;
+                                //lblLiter.Text = labelText.Value;
+                                lblLiter.Hint = labelText.Value;
                                 break;
 
                             case "Cost per Liter":
-                                lblCost.Text = labelText.Value;
+                                //lblCost.Text = labelText.Value;
+                                lblCost.Hint = labelText.Value;
                                 break;
 
                             case "Odometer":
-                                lblOdometer.Text = labelText.Value;
+                                //lblOdometer.Text = labelText.Value;
+                                lblOdometer.Hint= labelText.Value;
                                 break;
 
                             case "Fuel Card":
-                                lblFuelCard.Text = labelText.Value;
+                                //lblFuelCard.Text = labelText.Value;
+                                lblFuelCard.Hint = labelText.Value;
                                 break;
 
                             case "Voucher":
-                                lblVoucher.Text = labelText.Value;
+                                //lblVoucher.Text = labelText.Value;
+                                lblVoucher.Hint = labelText.Value;
                                 break;
 
                             case "Other Ref":
-                                lblOtherRef.Text = labelText.Value;
+                                //lblOtherRef.Text = labelText.Value;
                                 break;
 
                         }

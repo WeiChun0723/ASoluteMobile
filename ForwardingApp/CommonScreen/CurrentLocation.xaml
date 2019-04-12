@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.HaulageScreen.CurrentLocation"
              BackgroundColor="#e8e5e5"
-             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
              xmlns:local="clr-namespace:ASolute_Mobile.InputValidation">
     
     <StackLayout Spacing="15" Padding="15,15,15,15">
-        <Image Source="map.png" HeightRequest="150" WidthRequest="50"/>
+        <Image Source="navigation.png" HeightRequest="150" WidthRequest="50"/>
         <inputLayout:SfTextInputLayout Hint="Company Name" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
                 <Entry x:Name="locationName" >
                     <Entry.Behaviors>
@@ -16,8 +16,7 @@
                     </Entry.Behaviors>
                 </Entry>
             </inputLayout:SfTextInputLayout>
-        <controls:CustomButton HorizontalOptions="Fill" Text="Submit" Clicked="UpdateLocation"/>
+        <buttons:SfButton Style="{StaticResource buttonStyle}" HorizontalOptions="Fill" Text="Submit" Clicked="UpdateLocation" />
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
     </StackLayout>
-    
 </ContentPage>

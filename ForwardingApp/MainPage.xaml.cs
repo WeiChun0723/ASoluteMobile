@@ -58,7 +58,6 @@ namespace ASolute_Mobile
                                     await DisplayAlert("Success", autoScan_response.Result, "OK");
                                     Ultis.Settings.AppFirstInstall = "Refresh";
                                     Application.Current.MainPage = new MainPage();
-
                                 }
                                 else
                                 {
@@ -85,15 +84,7 @@ namespace ASolute_Mobile
                                 clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (panic_response.IsGood == true)
                                 {
-                                    string reply = "";
-                                    if (Ultis.Settings.Language.Equals("English"))
-                                    {
-                                        reply = "Message sent successfully.";
-                                    }
-                                    else
-                                    {
-                                        reply = "Permintaan anda telah dihantar.";
-                                    }
+                                    string reply = (Ultis.Settings.Language.Equals("English")) ? "Message sent successfully." : "Permintaan anda telah dihantar.";
                                     await DisplayAlert("",reply , "Okay");
                                 }
                                 else

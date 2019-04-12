@@ -56,7 +56,6 @@ namespace ASolute_Mobile
 
             menuItems = items;
             uri = callUri;
-
         }
 
         protected override void OnAppearing()
@@ -85,7 +84,6 @@ namespace ASolute_Mobile
 
             }
         }
-
 
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -173,7 +171,6 @@ namespace ASolute_Mobile
                         });
                     };
                 }
-
             }
             catch(Exception ex)
             {
@@ -324,20 +321,17 @@ namespace ASolute_Mobile
                             summaryItem.Type = menuItems.Id;
                             summaryItem.BackColor = data.BackColor;
                             App.Database.SaveSummarysAsync(summaryItem);
-
                         }
 
                         foreach (clsCaptionValue detailList in data.Details)
                         {
                             DetailItems detailItem = new DetailItems();
-
                             detailItem.Id = data.Id;
                             detailItem.Caption = detailList.Caption;
                             detailItem.Value = detailList.Value;
                             detailItem.Display = detailList.Display;
                             App.Database.SaveDetailsAsync(detailItem);
                         }
-
                     }
 
                     loading.IsVisible = false;

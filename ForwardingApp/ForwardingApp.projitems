@@ -216,7 +216,6 @@
       <DependentUpon>CargoEntry.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomPicker.cs" />

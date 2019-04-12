@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.RefuelEntry" xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" BackgroundColor="#e8e5e5" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.RefuelEntry" 
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" 
+             BackgroundColor="#e8e5e5" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" 
+             xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation">
     <ScrollView>
-        <StackLayout Padding="15,15,15,15">
-            <Grid RowSpacing="5" ColumnSpacing="0">
+        <StackLayout Padding="15,15,15,15" Spacing="10">
+            <!--<Grid RowSpacing="5" ColumnSpacing="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -21,7 +28,7 @@
                     <Label Text="Station" FontAttributes="Bold" x:Name="lblStation" />
                 </StackLayout>
                 <combobox:SfComboBox x:Name="stationComboBox" Style="{StaticResource comboBoxStyle}" Grid.Row="0" Grid.Column="1" />
-                <!--<controls:CustomPicker x:Name="stationPicker" Image="ic_arrow_drop_down" Grid.Row="0" Grid.Column="1" HorizontalOptions="Fill" WidthRequest="130" BackgroundColor="LightYellow" SelectedIndexChanged="StationSelected" />-->
+            
                 <StackLayout Padding="0,10,0,0" Grid.Row="1" Grid.Column="0">
                     <Label Text="Date &amp; Time" FontAttributes="Bold" x:Name="lblDateTime" />
                 </StackLayout>
@@ -33,7 +40,7 @@
                     <Label Text="Payment" FontAttributes="Bold" x:Name="lblPayment" />
                 </StackLayout>
                 <combobox:SfComboBox x:Name="paymentComboBox" Style="{StaticResource comboBoxStyle}" Grid.Row="2" Grid.Column="1" />
-                <!--<controls:CustomPicker x:Name="paymentPicker" Grid.Row="2" Grid.Column="1" Image="ic_arrow_drop_down" SelectedIndexChanged="PaymentSelected" HorizontalOptions="Fill" WidthRequest="130" BackgroundColor="LightYellow" />-->
+               
                 <StackLayout Padding="0,10,0,0" Grid.Row="3" Grid.Column="0">
                     <Label Text="Liter" FontAttributes="Bold" WidthRequest="150" x:Name="lblLiter" />
                 </StackLayout>
@@ -90,11 +97,73 @@
                         </Image.GestureRecognizers>
                     </Image>
                 </StackLayout>
-            </Grid>
+            </Grid>-->
+            
+            <StackLayout>
+                 <Label Text="Station" FontAttributes="Bold" x:Name="lblStation" />
+                <combobox:SfComboBox x:Name="stationComboBox" Style="{StaticResource comboBoxStyle}"/>
+            </StackLayout>
+            
+             <StackLayout>
+                 <Label Text="Date &amp; Time" FontAttributes="Bold" x:Name="lblDateTime" />
+                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                    <DatePicker x:Name="datePicker" HorizontalOptions="FillAndExpand" Format="dd MMMM" BackgroundColor="LightYellow" />
+                    <TimePicker x:Name="timePicker" HorizontalOptions="FillAndExpand"  Format="HH:mm" BackgroundColor="LightYellow" />
+                </StackLayout>
+            </StackLayout>
+            
+            <StackLayout>
+                 <Label Text="Payment" FontAttributes="Bold" x:Name="lblPayment" />
+                <combobox:SfComboBox x:Name="paymentComboBox" Style="{StaticResource comboBoxStyle}"/>
+            </StackLayout>
+            
+            <inputLayout:SfTextInputLayout Padding="0,10" Hint="Liter" Style="{StaticResource inputStyle}"  x:Name="lblLiter" ContainerBackgroundColor="LightYellow" >
+                <Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"> 
+                 <Entry.Behaviors>
+                    <validation:MaxLengthValidation MaxLength="3"/>
+                </Entry.Behaviors>  
+                </Entry>
+            </inputLayout:SfTextInputLayout>
+            
+            <StackLayout Orientation="Horizontal" HeightRequest="60">
+             <inputLayout:SfTextInputLayout  Hint="Cost per Liter" Style="{StaticResource inputStyle}"  x:Name="lblCost"  ContainerBackgroundColor="LightYellow" >
+               <Entry  x:Name="costPerLiter" TextChanged="CostLiter" Keyboard="Numeric"/> 
+            </inputLayout:SfTextInputLayout>
+            <Label x:Name="amount" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" HeightRequest="20" BackgroundColor="LightGray"  FontAttributes="Bold" TextColor="Black" />
+            </StackLayout>
+            
+             <inputLayout:SfTextInputLayout Padding="0,10" Hint="Odometer" Style="{StaticResource inputStyle}"  x:Name="lblOdometer" ContainerBackgroundColor="LightYellow" >
+                <Entry  x:Name="odometer" Keyboard="Numeric"/> 
+            </inputLayout:SfTextInputLayout>
+            
+            <inputLayout:SfTextInputLayout Hint="Fuel Card" Style="{StaticResource inputStyle}" x:Name="lblFuelCard" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="fuelCard" /> 
+                <inputLayout:SfTextInputLayout.TrailingView>
+                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="fuelCardBarCode_icon">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout>
+            
+            <inputLayout:SfTextInputLayout  Hint="Voucher" Style="{StaticResource inputStyle}" x:Name="lblVoucher" >
+                <Entry x:Name="voucher" /> 
+                
+                <inputLayout:SfTextInputLayout.TrailingView>
+                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="voucherBarCode_icon">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout>
+            
+            
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="6">
                 <Image Source="camera.png" WidthRequest="55" HeightRequest="60" VerticalOptions="Center" x:Name="camera_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Handle_Tapped" />
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>
                 <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" x:Name="confirm_icon">

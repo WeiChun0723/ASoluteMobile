@@ -186,13 +186,6 @@ namespace ASolute_Mobile.Models
         public string Action { get; set; }
     }
 
-    public class pickerValue : Generic
-    {
-        public string Key { get; set; }
-        public string Value { get; set; }
-        public string pickerType { get; set; }
-    }
-
     public class FuelCostNew : Generic
     {
         public DateTime RefuelDateTime { get; set; }
