@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using PCLStorage;
 using Rg.Plugins.Popup.Services;
 using SignaturePad.Forms;
+using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
 
@@ -38,8 +39,9 @@ namespace ASolute_Mobile.HaulageScreen
             imageWidth = App.DisplayScreenWidth / 3;
             imageGridRow.Height = imageWidth;
 
+           
             //display all the job details
-            JobContent();
+           JobContent();
 
             //title and subtitle
             StackLayout main = new StackLayout();
@@ -80,7 +82,7 @@ namespace ASolute_Mobile.HaulageScreen
             var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageJobListURL(), this);
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            if(response.IsGood)
+            if (response.IsGood)
             {
                 var HaulageJobList = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
 
@@ -138,6 +140,7 @@ namespace ASolute_Mobile.HaulageScreen
                     if (job.Id.Equals(Ultis.Settings.SessionCurrentJobId))
                     {
                         Ultis.Settings.Action = job.ActionId.ToString();
+                        Ultis.Settings.SessionCurrentJobId = job.Id;
                         jobItem = null;
                         JobContent();
                     }
@@ -145,7 +148,7 @@ namespace ASolute_Mobile.HaulageScreen
             }
         }
 
-        async void JobContent()
+        void JobContent()
         {
             //get job info from db
             if (jobItem == null)
@@ -153,6 +156,14 @@ namespace ASolute_Mobile.HaulageScreen
                 jobItem = App.Database.GetJobRecordAsync(Ultis.Settings.SessionCurrentJobId);
                 jobDetails = App.Database.GetDetailsAsync(Ultis.Settings.SessionCurrentJobId);
             }
+
+            //reset the page design
+            jobDesc.Children.Clear();
+            pointInStack.IsVisible = false;
+            actionIconStack.IsVisible = true;
+            remarkStack.IsVisible = true;
+            TrailerDetailGrid.IsVisible = true;
+            TrailerGrid.IsVisible = true;
 
             //display all the job details
             int count = 0;
@@ -195,6 +206,7 @@ namespace ASolute_Mobile.HaulageScreen
             phone_icon.IsVisible = (!(String.IsNullOrEmpty(jobItem.TelNo))) ? true : false;
             trailerIDEntry.Text = jobItem.TrailerId;
             trailerIDEntry.IsEnabled = (!(String.IsNullOrEmpty(jobItem.TrailerId))) ? false : true;
+
             //indicate which control to be show
             if (!(String.IsNullOrEmpty(jobItem.ActionId)))
             {
@@ -214,42 +226,12 @@ namespace ASolute_Mobile.HaulageScreen
 
                     case "Point1_In":
                     case "Point2_In":
-                        try
-                        {
-                            var answer = await DisplayAlert("",jobItem.ActionMessage, "OK", "Cancel");
-                            if (answer.Equals(true))
-                            {
-                                clsHaulageModel pointIn = new clsHaulageModel
-                                {
-                                    Id = Ultis.Settings.SessionCurrentJobId,
-                                    ActionId = (jobItem.ActionId.Equals("Point1_In")) ? clsHaulageModel.HaulageActionEnum.Point1_In : clsHaulageModel.HaulageActionEnum.Point2_In
-                                };
-
-                                var content = await CommonFunction.CallWebService(1, pointIn, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
-                                clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                                if (json_response.IsGood == true)
-                                {
-                                    RefreshJobContent();
-                                }
-                                else
-                                {
-                                    await DisplayAlert("Error", json_response.Message, "Okay");
-                                }
-                            }
-                            else
-                            {
-                                actionIconStack.IsVisible = false;
-                                remarkStack.IsVisible = false;
-                                TrailerDetailGrid.IsVisible = false;
-                                TrailerGrid.IsVisible = false;
-                            }
-                        }
-                        catch (Exception exception)
-                        {
-                            await DisplayAlert("Error", exception.Message, "OK");
-                        }
-
+                        lblActionMessage.Text = jobItem.ActionMessage;
+                        pointInStack.IsVisible = true;
+                        actionIconStack.IsVisible = false;
+                        remarkStack.IsVisible = false;
+                        TrailerDetailGrid.IsVisible = false;
+                        TrailerGrid.IsVisible = false;
                         break;
                 }
             }
@@ -279,7 +261,6 @@ namespace ASolute_Mobile.HaulageScreen
                         break;
                 }
             }
-
         }
 
         void SplitContainerNumber()
@@ -299,7 +280,46 @@ namespace ASolute_Mobile.HaulageScreen
                     DisplayAlert("Sub string Error", exception.Message, "OK");
                 }
             }
+        }
 
+        async void button_Clicked(object sender, System.EventArgs e)
+        {
+            var button = sender as SfButton;
+
+            switch (button.StyleId)
+            {
+                case "btnArrived":
+                    try
+                    {
+                        clsHaulageModel pointIn = new clsHaulageModel
+                        {
+                            Id = Ultis.Settings.SessionCurrentJobId,
+                            ActionId = (jobItem.ActionId.Equals("Point1_In")) ? clsHaulageModel.HaulageActionEnum.Point1_In : clsHaulageModel.HaulageActionEnum.Point2_In
+                        };
+
+                        var content = await CommonFunction.CallWebService(1, pointIn, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
+                        clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (json_response.IsGood == true)
+                        {
+                            RefreshJobContent();
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", json_response.Message, "Okay");
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        await DisplayAlert("Error", exception.Message, "OK");
+                    }
+                    break;
+
+                case "btnNotArrived":
+                    await Navigation.PopAsync();
+                    break;
+
+            }
         }
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
@@ -334,7 +354,6 @@ namespace ASolute_Mobile.HaulageScreen
                     if (chkNo.Checked && chkYes.Checked)
                     {
                         chkNo.Checked = false;
-
                     }
                     if (TrailerDetailGrid.IsVisible)
                     {
@@ -349,7 +368,6 @@ namespace ASolute_Mobile.HaulageScreen
                     }
                     break;
             }
-
         }
 
         async void IconTapped(object sender, EventArgs e)
@@ -447,18 +465,16 @@ namespace ASolute_Mobile.HaulageScreen
                     else
                     {
                         await DisplayAlert("Error", "Please enter all mandatory field.", "OK");
-
                     }
                 }
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
-
             }
         }
 
-        async void InitializeObject()   
+        async void InitializeObject()
         {
             loading.IsVisible = true;
             try
@@ -467,7 +483,7 @@ namespace ASolute_Mobile.HaulageScreen
                 {
                     if (!(sealNoEntry.LineColor == Color.LightYellow) || (sealNoEntry.LineColor == Color.LightYellow && !(String.IsNullOrEmpty(sealNoEntry.Text))))
                     {
-                        if(!(TrailerDetailGrid.IsVisible) || (TrailerDetailGrid.IsVisible && (chkYes.Checked || chkNo.Checked)))
+                        if (!(TrailerDetailGrid.IsVisible) || (TrailerDetailGrid.IsVisible && (chkYes.Checked || chkNo.Checked)))
                         {
                             if (jobItem.ActionId == "EmptyPickup")
                             {
@@ -519,8 +535,6 @@ namespace ASolute_Mobile.HaulageScreen
                         {
                             await DisplayAlert("Error", "Please indicate collect seal.", "OK");
                         }
-
-                       
                     }
                     else
                     {
@@ -543,58 +557,45 @@ namespace ASolute_Mobile.HaulageScreen
         //add capture image to the image grid
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)
         {
-            try
-            {
-                image.HeightRequest = imageWidth;
-                image.HorizontalOptions = LayoutOptions.FillAndExpand;
-                image.VerticalOptions = LayoutOptions.FillAndExpand;
-                image.Aspect = Aspect.AspectFill;
 
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.CommandParameter = appImage;
-                tapGestureRecognizer.Tapped += async (sender, e) =>
-                {
-                    await Navigation.PushAsync(new ImageViewer((AppImage)((TappedEventArgs)e).Parameter));
-                };
-                //image.GestureRecognizers.Add(tapGestureRecognizer);
-                int noOfImages = imageGrid.Children.Count();
-                int noOfCols = imageGrid.ColumnDefinitions.Count();
-                int rowNo = noOfImages / noOfCols;
-                int colNo = noOfImages - (rowNo * noOfCols);
-                imageGrid.Children.Add(image, colNo, rowNo);
-            }
-            catch
-            {
+            image.HeightRequest = imageWidth;
+            image.HorizontalOptions = LayoutOptions.FillAndExpand;
+            image.VerticalOptions = LayoutOptions.FillAndExpand;
+            image.Aspect = Aspect.AspectFill;
 
-            }
+            var tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.CommandParameter = appImage;
+            tapGestureRecognizer.Tapped += async (sender, e) =>
+            {
+                await Navigation.PushAsync(new ImageViewer((AppImage)((TappedEventArgs)e).Parameter));
+            };
+            //image.GestureRecognizers.Add(tapGestureRecognizer);
+            int noOfImages = imageGrid.Children.Count();
+            int noOfCols = imageGrid.ColumnDefinitions.Count();
+            int rowNo = noOfImages / noOfCols;
+            int colNo = noOfImages - (rowNo * noOfCols);
+            imageGrid.Children.Add(image, colNo, rowNo);
         }
 
         public async Task DisplayImage()
         {
-            try
+            images.Clear();
+            imageGrid.Children.Clear();
+            images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
+            foreach (AppImage Image in images)
             {
-                images.Clear();
-                imageGrid.Children.Clear();
-                images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
-                foreach (AppImage Image in images)
+                IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
+                Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
+                var image = new Image();
+                byte[] imageByte;
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
-                    Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
-                    var image = new Image();
-                    byte[] imageByte;
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
-                        stream.CopyTo(ms);  // was empty without stream.Position = 0;
-                        imageByte = ms.ToArray();
-                    }
-                    image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
-                    AddThumbnailToImageGrid(image, Image);
+                    stream.Position = 0; // needed for WP (in iOS and Android it also works without it)!!
+                    stream.CopyTo(ms);  // was empty without stream.Position = 0;
+                    imageByte = ms.ToArray();
                 }
-            }
-            catch
-            {
-
+                image.Source = ImageSource.FromStream(() => new MemoryStream(imageByte));
+                AddThumbnailToImageGrid(image, Image);
             }
         }
 

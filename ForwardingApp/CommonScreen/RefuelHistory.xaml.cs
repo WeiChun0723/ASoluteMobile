@@ -57,7 +57,6 @@ namespace ASolute_Mobile
                 Title = "Isi Minyak";
             }
 
-            Ultis.Settings.App = "Haulage";
 
         }
 

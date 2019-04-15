@@ -27,7 +27,7 @@ namespace ASolute_Mobile
              * Detail = new NavigationPage(new MyProviders());*/
 
             masterPage.ListView.ItemSelected += OnItemSelected;
-
+           
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)

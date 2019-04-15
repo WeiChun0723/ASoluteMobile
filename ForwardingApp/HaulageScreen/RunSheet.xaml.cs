@@ -50,8 +50,6 @@ namespace ASolute_Mobile.HaulageScreen
 
             NavigationPage.SetTitleView(this, main);
 
-            Ultis.Settings.App = "Haulage";
-
             PageContent();
 
             downloadRunSheet(DateTime.Now.ToString("yyyy MM dd"));

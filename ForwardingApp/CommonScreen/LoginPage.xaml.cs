@@ -238,7 +238,7 @@ namespace ASolute_Mobile
                             }
                         }
 
-                        Application.Current.MainPage = new MainPage();
+                        Application.Current.MainPage = new MainPage() ;
                     }
                     else
                     {

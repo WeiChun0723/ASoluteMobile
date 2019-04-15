@@ -50,14 +50,22 @@ namespace ASolute_Mobile.Data
             database.DropTable<JobItems>();
         }
 
-        #region Common Query
+        #region get app image
+        public List<AppImage> GetRecordImagesAsync(string id, bool uploaded)
+        {
+            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [Uploaded] = ?", id, uploaded);
+        }
 
-        public List<AppImage> GetPendingRecordImages( bool uploaded)
+        public List<AppImage> GetUplodedRecordImagesAsync(string id, string type)
+        {
+            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [type] = ?", id, type);
+        }
+
+        public List<AppImage> GetPendingRecordImages(bool uploaded)
         {
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [Uploaded] = ?", uploaded);
         }
-        #endregion  
-
+        #endregion
 
         #region ChatApp
 
@@ -317,17 +325,6 @@ namespace ASolute_Mobile.Data
         {
             return database.Query<JobNoList>("SELECT * FROM [JobNoList] ");
         }
-
-        public List<AppImage> GetRecordImagesAsync(string id,bool uploaded)
-        {
-            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [Uploaded] = ?", id,uploaded);
-        }
-        
-        public List<AppImage> GetUplodedRecordImagesAsync(string id, string type)
-        {
-            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [type] = ?", id,type);
-        }
-
 
         public List<SummaryItems> GetSummarysAsync(string id,string type)
         {

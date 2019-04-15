@@ -24,11 +24,8 @@ namespace ASolute_Mobile.HaulageScreen
         public Shunting (string title)
 		{
 			InitializeComponent ();
-           
-            Ultis.Settings.App = "Haulage";
 
             StackLayout main = new StackLayout();
-
 
             Label title1 = new Label
             {

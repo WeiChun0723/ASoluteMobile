@@ -43,7 +43,7 @@ namespace ASolute_Mobile
 
             if (sessionKey != "")
             {
-                MainPage = new MainPage();
+                MainPage =new MainPage() ;
 
             }
             else

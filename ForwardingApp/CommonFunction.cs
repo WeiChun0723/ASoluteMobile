@@ -110,7 +110,6 @@ namespace ASolute_Mobile.Utils
                 {
                     return content;
                 }
-               
             }
             catch(HttpRequestException requestEx)
             {

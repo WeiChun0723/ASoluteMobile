@@ -47,8 +47,6 @@ namespace ASolute_Mobile
             main.Children.Add(title2);
 
             NavigationPage.SetTitleView(this, main);
-
-
         }
 
         protected override void OnAppearing()
@@ -321,9 +319,11 @@ namespace ASolute_Mobile
                     break;
 
                 case "JobList":
+                    Ultis.Settings.Title = ((ListItems)e.Item).Name;
                     //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
                     //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL())) ;
+                    //await Navigation.PushAsync(new CustomNavigationPage(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL())) );
                     // await Navigation.PushAsync(new ChatRoom());
                     break;
 

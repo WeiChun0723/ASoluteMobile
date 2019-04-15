@@ -56,6 +56,8 @@ namespace ASolute_Mobile.Droid
                 ImageCircleRenderer.Init();
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
+                Ultis.Settings.App = PackageName;
+
                 LoadApplication(new App());
 
                 /*if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
