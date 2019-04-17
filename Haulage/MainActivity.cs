@@ -26,7 +26,8 @@ using ImageCircle.Forms.Plugin.Droid;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+
+    [Activity(Label = "AILS Yard", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -43,9 +44,9 @@ namespace ASolute_Mobile.Droid
 
                 base.OnCreate(bundle);
 
-                if(PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                if (PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M )
                 {
-                     RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
+                   RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
                 }
 
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
@@ -74,15 +75,17 @@ namespace ASolute_Mobile.Droid
                     }
                 }*/
 
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M )
                 {
-                    StartLocationTracking();
+                   
+                        StartLocationTracking();
+  
                 }
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                 App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -94,17 +97,16 @@ namespace ASolute_Mobile.Droid
             LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
             {
                 Log.Debug(logTag, "ServiceConnected Event Raised");
-                 // notifies us of location changes from the system
-                        LocationApp.Current.LocationService.LocationChanged += HandleLocationChanged;
-                        //notifies us of user changes to the location provider (ie the user disables or enables GPS)
-                        LocationApp.Current.LocationService.ProviderDisabled += HandleProviderDisabled;
+                // notifies us of location changes from the system
+                LocationApp.Current.LocationService.LocationChanged += HandleLocationChanged;
+                //notifies us of user changes to the location provider (ie the user disables or enables GPS)
+                LocationApp.Current.LocationService.ProviderDisabled += HandleProviderDisabled;
                 LocationApp.Current.LocationService.ProviderEnabled += HandleProviderEnabled;
-                        // notifies us of the changing status of a provider (ie GPS no longer available)
-                        LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
+                // notifies us of the changing status of a provider (ie GPS no longer available)
+                LocationApp.Current.LocationService.StatusChanged += HandleStatusChanged;
             };
 
             LocationApp.StartLocationService();
-
         }
 
 
@@ -115,9 +117,9 @@ namespace ASolute_Mobile.Droid
 
             if (grantResults.Length > 0 && permissions.Length > 0)
             {
-                if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M )
                 {
-                    StartLocationTracking();
+                     StartLocationTracking();
                 }
 
             }

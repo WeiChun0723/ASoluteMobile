@@ -108,8 +108,14 @@ namespace ASolute_Mobile.Utils
                 }
                 else 
                 {
+                    if(!(reply.IsGood))
+                    {
+                        await page.DisplayAlert("Error", reply.Message, "OK");
+                    }
+
                     return content;
                 }
+              
             }
             catch(HttpRequestException requestEx)
             {

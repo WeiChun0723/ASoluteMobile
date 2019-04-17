@@ -17,13 +17,15 @@ namespace ASolute_Mobile
     public partial class MainPage : MasterDetailPage
     {
         public static int selection;
-        //MasterPage masterPage = new MasterPage();
+
 
         public MainPage()
         {
             InitializeComponent();
 
-            /* Master = masterPage;
+            /* 
+             * MasterPage masterPage = new MasterPage();
+             * Master = masterPage;
              * Detail = new NavigationPage(new MyProviders());*/
 
             masterPage.ListView.ItemSelected += OnItemSelected;

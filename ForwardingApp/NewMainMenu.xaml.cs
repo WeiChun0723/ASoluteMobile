@@ -12,12 +12,9 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace ASolute_Mobile
 {
-  
     public partial class NewMainMenu : ContentPage
     {
         Label title1, title2;
@@ -26,37 +23,30 @@ namespace ASolute_Mobile
         public NewMainMenu()
         {
             InitializeComponent();
-
             StackLayout main = new StackLayout();
-
             title1 = new Label
             {
                 FontSize = 15,
                 Text = (Ultis.Settings.Language.Equals("English")) ? "Main Menu" : "Menu Utama",
                 TextColor = Color.White
             };
-
             title2 = new Label
             {
                 FontSize = 10,
                 Text = Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
-
             main.Children.Add(title1);
             main.Children.Add(title2);
-
             NavigationPage.SetTitleView(this, main);
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             //get the latest store local profile image
             var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
             profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
-
             LoadMainMenu();
         }
 
@@ -75,7 +65,6 @@ namespace ASolute_Mobile
                 if (response != null)
                 {
                     var menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-
                     Ultis.Settings.SubTitle = menu.SubTitle;
                     title2.Text = Ultis.Settings.SubTitle;
 
@@ -166,16 +155,13 @@ namespace ASolute_Mobile
                                 break;
 
                             default:
-
                                 ListItems mainMenuItems = new ListItems();
-
                                 mainMenuItems.Id = mainMenu.Id;
                                 mainMenuItems.Name = mainMenu.Caption;
                                 mainMenuItems.Action = mainMenu.Action;
                                 mainMenuItems.Category = "MainMenu";
 
                                 List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
-
                                 int index = 0;
                                 foreach (clsCaptionValue summaryList in mainMenu.Summary)
                                 {
@@ -204,7 +190,6 @@ namespace ASolute_Mobile
                                     App.Database.SaveSummarysAsync(summaryItem);
                                     index++;
                                 }
-
                                 App.Database.SaveMenuAsync(mainMenuItems);
                                 break;
                         }
@@ -213,12 +198,10 @@ namespace ASolute_Mobile
                     foreach (clsDataRow contextMenu in menu.ContextMenu)
                     {
                         List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
-
                         int index = 0;
                         foreach (clsCaptionValue summaryList in contextMenu.Summary)
                         {
                             SummaryItems summaryItem = new SummaryItems();
-
                             summaryItem.Id = contextMenu.Id;
                             summaryItem.Caption = summaryList.Caption;
                             summaryItem.Value = summaryList.Value;
@@ -230,16 +213,13 @@ namespace ASolute_Mobile
                     }
 
                     LoadMainMenu();
-
                     if (checkItems.Count != 0)
                     {
                         CheckList chkList = new CheckList(checkItems, menu.CheckListLinkId);
                         NavigationPage.SetHasBackButton(chkList, false);
                         await Navigation.PushAsync(chkList);
                     }
-
                 }
-
                 loading.IsVisible = false;
                 pullToRefresh.IsRefreshing = false;
             }
@@ -254,7 +234,6 @@ namespace ASolute_Mobile
             try
             {
                 loading.IsVisible = true;
-
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
@@ -262,7 +241,6 @@ namespace ASolute_Mobile
                 listView.HeightRequest = Item.Count * 100;
                 listView.Style = (Style)App.Current.Resources["recordListStyle"];
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-
                 System.TimeSpan interval = new System.TimeSpan();
                 if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
                 {
@@ -286,10 +264,8 @@ namespace ASolute_Mobile
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
             string menuAction = ((ListItems)e.Item).Id;
-
             switch (menuAction)
             {
-              
                 case "LogBook":
                     LogHistory log = new LogHistory(((ListItems)e.Item).Name);
                     await Navigation.PushAsync(log);
@@ -395,9 +371,6 @@ namespace ASolute_Mobile
 
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
-
-
-
             GetMainMenu();
         }
        

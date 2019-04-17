@@ -39,7 +39,6 @@ namespace ASolute_Mobile.HaulageScreen
             imageWidth = App.DisplayScreenWidth / 3;
             imageGridRow.Height = imageWidth;
 
-           
             //display all the job details
            JobContent();
 
@@ -110,7 +109,6 @@ namespace ASolute_Mobile.HaulageScreen
                         Title = job.Title,
                         SealMode = job.SealMode
                     };
-
                     App.Database.SaveMenuAsync(record);
 
                     foreach (clsCaptionValue summaryList in job.Summary)
@@ -285,7 +283,6 @@ namespace ASolute_Mobile.HaulageScreen
         async void button_Clicked(object sender, System.EventArgs e)
         {
             var button = sender as SfButton;
-
             switch (button.StyleId)
             {
                 case "btnArrived":
@@ -318,7 +315,6 @@ namespace ASolute_Mobile.HaulageScreen
                 case "btnNotArrived":
                     await Navigation.PopAsync();
                     break;
-
             }
         }
 
@@ -575,6 +571,7 @@ namespace ASolute_Mobile.HaulageScreen
             int rowNo = noOfImages / noOfCols;
             int colNo = noOfImages - (rowNo * noOfCols);
             imageGrid.Children.Add(image, colNo, rowNo);
+
         }
 
         public async Task DisplayImage()

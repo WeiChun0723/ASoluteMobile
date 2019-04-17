@@ -49,17 +49,20 @@ namespace ASolute_Mobile
                 location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
             }
 
-            if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet())
+            if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet() )
             {
                 try
                 {
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var sendGPSURI = ControllerUtil.getGPSTracking(location, address);
-                    var content = await client.GetAsync(sendGPSURI);
-                    var response = await content.Content.ReadAsStringAsync();
-                    clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(response);
-                    Debug.WriteLine(response);
+                    if(Ultis.Settings.SessionUserItem.GetGPS)
+                    {
+                        var client = new HttpClient();
+                        client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                        var sendGPSURI = ControllerUtil.getGPSTracking(location, address);
+                        var content = await client.GetAsync(sendGPSURI);
+                        var response = await content.Content.ReadAsStringAsync();
+                        clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(response);
+                        Debug.WriteLine(response);
+                    }
                 }
                 catch
                 {

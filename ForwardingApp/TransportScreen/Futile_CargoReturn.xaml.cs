@@ -79,7 +79,8 @@ namespace ASolute_Mobile.TransportScreen
         public async void takeImage(object sender, EventArgs e)
         {
             await CommonFunction.StoreImages(jobID, this, "NormalImage");
-            UploadImage(jobID);
+            //UploadImage(jobID);
+            BackgroundTask.StartTimer();
 
             try
             {
@@ -127,7 +128,8 @@ namespace ASolute_Mobile.TransportScreen
                     if (signatureImage != null)
                     {
                         await CommonFunction.StoreSignature(jobID, signatureImage, this);
-                        UploadImage(jobID);
+                        //UploadImage(jobID);
+                        BackgroundTask.StartTimer();
                         done = true;
                     }
                     else
@@ -169,7 +171,7 @@ namespace ASolute_Mobile.TransportScreen
             }
         }
 
-        public async void UploadImage(string imageID)
+       /* public async void UploadImage(string imageID)
         {
             int uploadedImage = 0;
             List<AppImage> recordImages = App.Database.GetRecordImagesAsync(imageID, false);
@@ -200,7 +202,7 @@ namespace ASolute_Mobile.TransportScreen
                     App.Database.SaveRecordImageAsync(recordImage);
                 }
             }
-        }
+        }*/
 
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)
         {

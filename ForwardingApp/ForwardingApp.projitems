@@ -199,6 +199,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Yard\YardListPopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -431,6 +435,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)NewMainMenu.xaml.cs">
       <DependentUpon>NewMainMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Yard\YardListPopUp.xaml.cs">
+      <DependentUpon>YardListPopUp.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -445,6 +452,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\" />
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
     <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Yard\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogHistory.xaml">

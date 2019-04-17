@@ -35,7 +35,7 @@
                     <Image Source="padlock" />
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
-     <!-- <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}" x:Name="equipmentEntryLayout">
+            <inputLayout:SfTextInputLayout Hint="Equipment" Style="{StaticResource inputStyle}" x:Name="equipmentEntryLayout" IsVisible="false">
                 <Entry x:Name="equipmentEntry" >
                     <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="20" />
@@ -44,7 +44,7 @@
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="truck" />
                 </inputLayout:SfTextInputLayout.LeadingView>
-            </inputLayout:SfTextInputLayout>-->
+            </inputLayout:SfTextInputLayout>
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnLogin" Text="Login" FontSize="30" Clicked="Handle_Clicked" HeightRequest="100"/>
             
             <StackLayout Orientation="Horizontal">

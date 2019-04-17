@@ -50,7 +50,7 @@ namespace ASolute_Mobile.Data
             database.DropTable<JobItems>();
         }
 
-        #region get app image
+        #region get/store app image
         public List<AppImage> GetRecordImagesAsync(string id, bool uploaded)
         {
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [Uploaded] = ?", id, uploaded);
@@ -64,6 +64,41 @@ namespace ASolute_Mobile.Data
         public List<AppImage> GetPendingRecordImages(bool uploaded)
         {
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [Uploaded] = ?", uploaded);
+        }
+
+        //delete user previous profile picture
+        public void DeleteUserImage(string userId)
+        {
+            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [id] = ?", userId);
+        }
+
+        public AppImage GetUserProfilePicture(string id)
+        {
+            return database.Table<AppImage>().Where(i => i.id == id).FirstOrDefault();
+        }
+
+        public void deleteAppImage()
+        {
+            database.Query<AppImage>("DELETE FROM AppImage");
+        }
+
+        public int SaveRecordImageAsync(AppImage item)
+        {
+            if (item.tableID != 0)
+            {
+
+                return database.Update(item);
+            }
+            else
+            {
+
+                return database.Insert(item);
+            }
+        }
+
+        public int DeleteJobImage(AppImage item)
+        {
+            return database.Delete(item);
         }
         #endregion
 
@@ -357,15 +392,7 @@ namespace ASolute_Mobile.Data
             return database.Table<FuelCostNew>().FirstOrDefault();
         }
 
-        //delete user previous profile picture
-        public void DeleteUserImage(string userId){
-            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [id] = ?", userId);
-        }
-
-        public AppImage GetUserProfilePicture (string id)
-        {
-            return database.Table<AppImage>().Where(i => i.id == id).FirstOrDefault();
-        }
+       
 
         public void deleteJobNo()
         {
@@ -444,10 +471,7 @@ namespace ASolute_Mobile.Data
             database.Query<JobItems>("DELETE FROM JobItems ");
         }
 
-        public void deleteAppImage()
-        {
-            database.Query<AppImage>("DELETE FROM AppImage");
-        }
+       
 
         public int SaveFuelCostNew(FuelCostNew fuelCost)
         {
@@ -527,19 +551,6 @@ namespace ASolute_Mobile.Data
 
         }
 
-        public int SaveRecordImageAsync(AppImage item)
-        {
-            if (item.tableID != 0)
-            {
-                
-                return database.Update(item);
-            }
-            else
-            {
-                
-                return database.Insert(item);
-            }
-        }
 
        
         public int SaveSummarysAsync(SummaryItems item)
@@ -583,11 +594,6 @@ namespace ASolute_Mobile.Data
 
                 return database.Insert(value);
             }
-        }
-
-        public int DeleteJobImage(AppImage item)
-        {
-            return database.Delete(item);
         }
 
         public int DeleteSummaryItem(SummaryItems item){

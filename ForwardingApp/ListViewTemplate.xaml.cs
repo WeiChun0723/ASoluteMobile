@@ -8,8 +8,10 @@ using ASolute_Mobile.HaulageScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using ASolute_Mobile.WMS_Screen;
+using ASolute_Mobile.Yard;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
 
@@ -20,6 +22,7 @@ namespace ASolute_Mobile
 
         ListItems menuItems;
         ObservableCollection<ListItems> Item;
+        List<clsHaulageModel> records;
         string uri;
 
         public ListViewTemplate(ListItems items, string callUri)
@@ -78,13 +81,33 @@ namespace ASolute_Mobile
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
+
                     listView.ItemsSource = Item;
+
+                    /*if (menuItems.Id == "Yard")
+                    {
+                        listView.ItemsSource = records;
+                    }
+                    else
+                    {
+
+                    }*/
+
                 }
                 else
                 {
                     try
                     {
                         listView.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
+
+                        /*if (menuItems.Id == "Yard")
+                        {
+                            listView.ItemsSource = records.Where(x => x.Caption.Contains(searchKey));
+                        }
+                        else
+                        {
+
+                        }*/
                     }
                     catch
                     {
@@ -197,6 +220,9 @@ namespace ASolute_Mobile
                 case "PickingVerify":
                     await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                     break;
+                case "Yard":
+                    await PopupNavigation.Instance.PushAsync(new YardListPopUp(((ListItems)e.Item)));
+                    break;
             }
         }
 
@@ -216,7 +242,7 @@ namespace ASolute_Mobile
                     App.Database.deleteRecordDetails();
 
                     //clsHaulageModel inherit clsDataRow
-                    var records = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
+                    records = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
 
                     foreach (clsHaulageModel data in records)
                     {
@@ -327,6 +353,25 @@ namespace ASolute_Mobile
                 listView.Style = (Style)App.Current.Resources["recordListStyle"];
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 noData.IsVisible = (Item.Count == 0) ? true : false;
+            
+
+               /* if (menuItems.Id == "Yard")
+                {
+                    listView.ItemsSource = records;
+                    listView.HasUnevenRows = true;
+                    listView.Style = (Style)App.Current.Resources["recordListStyle"];
+                }
+                else
+                {
+                    Ultis.Settings.List = menuItems.Id;
+                    Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
+                    listView.ItemsSource = Item;
+                    listView.HasUnevenRows = true;
+                    listView.Style = (Style)App.Current.Resources["recordListStyle"];
+                    listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+                    noData.IsVisible = (Item.Count == 0) ? true : false;
+                }*/
+
                 listView.IsRefreshing = false;
             }
             catch

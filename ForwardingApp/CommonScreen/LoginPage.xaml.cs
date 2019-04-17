@@ -34,7 +34,29 @@ namespace ASolute_Mobile
                 logoImageHolder.Source = ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation());
             }
 
-            AppLabel.Text = "AILS Haulage Ver." + CrossDeviceInfo.Current.AppVersion;
+            //indicate app name
+            string name = "";
+            switch (Ultis.Settings.App)
+            {
+                case "asolute.Mobile.AILSHaulage":
+                    name = "AILS Haulage Ver.";
+                    break;
+
+                case "asolute.Mobile.AILSWMS":
+                    name = "AILS WMS Ver.";
+                    break;
+
+                case "asolute.Mobile.ASOLUTEFLEET":
+                    name = "ASolute Fleet Ver.";
+                    equipmentEntryLayout.IsVisible = true;
+                    break;
+
+                case "asolute.Mobile.AILSYard":
+                    name = "AILS Yard Ver.";
+                    break;
+            }
+
+            AppLabel.Text = name + CrossDeviceInfo.Current.AppVersion;
 
             //set username entry maximum to 10 chars
             usernameEntry.TextChanged += (sender, args) =>
@@ -104,8 +126,8 @@ namespace ASolute_Mobile
 
                 if (json_response.IsGood)
                 {
-                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
-                    //Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
+                   // Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
+                    Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
                 }
             }
             catch
@@ -125,15 +147,16 @@ namespace ASolute_Mobile
                 string encryptedPassword = System.Net.WebUtility.UrlEncode(clsCommonFunc.AES_Encrypt(passwordEntry.Text));
                 try
                 {
-                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
-                    //var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword,equipmentEntry.Text));
+                    var content = (Ultis.Settings.App == "asolute.Mobile.ASOLUTEFLEET") ?
+                                    await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword, equipmentEntry.Text), this)
+                                    : await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
                     clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (login_response.IsGood == true)
                     {
                         //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
                         Ultis.Settings.RefreshListView = "Yes";
-                       
+
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
 
                         var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
@@ -238,7 +261,7 @@ namespace ASolute_Mobile
                             }
                         }
 
-                        Application.Current.MainPage = new MainPage() ;
+                        Application.Current.MainPage = new MainPage();
                     }
                     else
                     {

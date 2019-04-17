@@ -11,6 +11,24 @@ namespace ASolute_Mobile.Utils
 {
     public class ControllerUtil
     {
+        #region AILS Yard
+        public static String getPendingStorage()
+        {
+            return String.Format("Yard/PendingStorage?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey,getPositionAsync());
+        }
+
+        public static String getBlockList()
+        {
+            return String.Format("Yard/BlockList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String confirmBlock(string id, string location)
+        {
+            return String.Format("Yard/ConfirmLocation?SessionId={0}&GeoLoc={1}&Id={2}&LocationId={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id, location);
+        }
+
+        #endregion
+
         #region bus ticketing url
 
         public static String getBusStops(string list)
@@ -101,15 +119,35 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadMenuURL()
         {
-            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, "Haulage", CrossDeviceInfo.Current.AppVersion);
+            string name = "";
+            switch (Ultis.Settings.App)
+            {
+                case "asolute.Mobile.AILSHaulage":
+                    name = "Haulage";
+                    break;
+
+                case "asolute.Mobile.AILSWMS":
+                    name = "WMS";
+                    break;
+
+                case "asolute.Mobile.ASOLUTEFLEET":
+                    name = "Fleet";
+                    break;
+
+                case "asolute.Mobile.AILSYard":
+                    name = "Yard";
+                    break;
+            }
+
+            return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, name, CrossDeviceInfo.Current.AppVersion);
         }
 
-        public static String getDownloadMenuURL(string firebase)
-        {
-            return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
-        }
+        /* public static String getDownloadMenuURL(string firebase)
+         {
+             return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, firebase, "Haulage", CrossDeviceInfo.Current.AppVersion);
+         }*/
 
-        #endregion 
+        #endregion
 
         #region Customer tracking url
 

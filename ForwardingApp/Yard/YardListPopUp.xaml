@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                 x:Class="ASolute_Mobile.Yard.YardListPopUp" 
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+                 xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+                 xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup" BackgroundColor="Transparent">
+    
+     <pages:PopupPage.Animation>
+        <animations:ScaleAnimation PositionIn="Center" PositionOut="Center" ScaleIn="1.2" ScaleOut="0.8" DurationIn="400" DurationOut="300" EasingIn="SinOut" EasingOut="SinIn" HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Padding="10, 10, 10, 10">
+        <Frame CornerRadius="10" BackgroundColor="#87ceeb">
+            <StackLayout Spacing="20">
+            <combobox:SfComboBox x:Name="blockComboBox" Style="{StaticResource comboBoxStyle}" Text="Block" SelectionChanged="Handle_SelectionChanged"/>
+            <combobox:SfComboBox x:Name="bayComboBox" Style="{StaticResource comboBoxStyle}" Text="Bay"/>
+            <combobox:SfComboBox x:Name="levelComboBox" Style="{StaticResource comboBoxStyle}" Text="Level"/>
+            <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Confirm"  x:Name="btnConfirm" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</pages:PopupPage>

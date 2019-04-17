@@ -41,27 +41,41 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            if (sessionKey != "")
+            if (Ultis.Settings.App == "asolute.Mobile.AILSPlanner" && Ultis.Settings.App == "asolute.Mobile.AILSTracking")
             {
-                MainPage =new MainPage() ;
-
+                /* Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+                MainPage = new CustomNavigationPage(new AppNavigation());*/
             }
             else
             {
-                if (Ultis.Settings.AppFirstInstall == "First")
-                {
+                 ListItems test = new ListItems
+                 {
+                     Id = "Yard",
+                     Name = "Pending Storage"
+                 };
 
-                    MainPage = new CustomNavigationPage(new StartUpScreen());
+                 MainPage = new ListViewTemplate(test, "Yard/PendingStorage?SessionId=20390E48-A7D6-43E5-ACED-FA8B37F96A96&GeoLoc=2.9249113,101.6512138");
+
+                /*if (sessionKey != "")
+                {
+                    MainPage = new MainPage();
+
                 }
                 else
                 {
-                    MainPage = new CustomNavigationPage(new LoginPage());
-                }
+                    if (Ultis.Settings.AppFirstInstall == "First")
+                    {
+
+                        MainPage = new CustomNavigationPage(new StartUpScreen());
+                    }
+                    else
+                    {
+                        MainPage = new CustomNavigationPage(new LoginPage());
+                    }
+
+                }*/
 
             }
-
-              /* Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-           MainPage = new CustomNavigationPage(new AppNavigation());
 
             /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
                        .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
