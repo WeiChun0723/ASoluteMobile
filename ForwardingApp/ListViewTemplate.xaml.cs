@@ -149,13 +149,10 @@ namespace ASolute_Mobile
                                     Ultis.Settings.RefreshListView = "Yes";
                                     GetListData();
                                     displayToast("Job added to job list.");
-                                    scanPage.ResumeAnalysis();
+
                                 }
-                                else
-                                {
-                                    await DisplayAlert("Error", response.Message, "OK");
-                                    scanPage.ResumeAnalysis();
-                                }
+
+                                scanPage.ResumeAnalysis();
                             }
                             else
                             {
@@ -220,7 +217,7 @@ namespace ASolute_Mobile
                 case "PickingVerify":
                     await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                     break;
-                case "Yard":
+                case "PendingStorage":
                     await PopupNavigation.Instance.PushAsync(new YardListPopUp(((ListItems)e.Item)));
                     break;
             }

@@ -43,20 +43,12 @@ namespace ASolute_Mobile
 
             if (Ultis.Settings.App == "asolute.Mobile.AILSPlanner" && Ultis.Settings.App == "asolute.Mobile.AILSTracking")
             {
-                /* Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-                MainPage = new CustomNavigationPage(new AppNavigation());*/
+                Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
+                MainPage = new CustomNavigationPage(new AppNavigation());
             }
             else
             {
-                 ListItems test = new ListItems
-                 {
-                     Id = "Yard",
-                     Name = "Pending Storage"
-                 };
-
-                 MainPage = new ListViewTemplate(test, "Yard/PendingStorage?SessionId=20390E48-A7D6-43E5-ACED-FA8B37F96A96&GeoLoc=2.9249113,101.6512138");
-
-                /*if (sessionKey != "")
+                if (sessionKey != "")
                 {
                     MainPage = new MainPage();
 
@@ -73,8 +65,7 @@ namespace ASolute_Mobile
                         MainPage = new CustomNavigationPage(new LoginPage());
                     }
 
-                }*/
-
+                }
             }
 
             /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")

@@ -115,14 +115,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\TestingOCR.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\OCRPopUp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Planner\EqCategory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -208,10 +200,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobList.xaml.cs">
-      <DependentUpon>JobList.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -232,7 +220,6 @@
       <DependentUpon>Shunting.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\JobDetails.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomListViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Database.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\EquipmentInquiry.xaml.cs">
@@ -350,11 +337,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\Logout.xaml.cs">
       <DependentUpon>Logout.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ListViewCommonScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\DriverRFC.xaml.cs">
       <DependentUpon>DriverRFC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MainMenuItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\ChangePasswordPage.xaml.cs">
       <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
     </Compile>
@@ -364,13 +349,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatRoomObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PropertyChange.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)testing\TestingClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)testing\TestingOCR.xaml.cs">
-      <DependentUpon>TestingOCR.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)testing\OCRPopUp.xaml.cs">
-      <DependentUpon>OCRPopUp.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Planner\EqCategory.xaml.cs">
       <DependentUpon>EqCategory.xaml</DependentUpon>
     </Compile>
@@ -498,12 +476,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\Registration.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\JobList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

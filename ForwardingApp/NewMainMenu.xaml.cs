@@ -295,12 +295,9 @@ namespace ASolute_Mobile
                     break;
 
                 case "JobList":
-                    Ultis.Settings.Title = ((ListItems)e.Item).Name;
                     //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
                     //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL())) ;
-                    //await Navigation.PushAsync(new CustomNavigationPage(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL())) );
-                    // await Navigation.PushAsync(new ChatRoom());
                     break;
 
                 case "MasterJobList":
@@ -358,6 +355,11 @@ namespace ASolute_Mobile
                     break;
                 case "DailyCash":
                     await Navigation.PushAsync(new CheckOut());
+                    break;
+                case "PendingStorage":
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPendingStorage()));
+                    break;
+                case "ContainerInquiry":
                     break;
             }
 

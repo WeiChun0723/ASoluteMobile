@@ -61,10 +61,7 @@ namespace ASolute_Mobile
                                     Ultis.Settings.AppFirstInstall = "Refresh";
                                     Application.Current.MainPage = new MainPage();
                                 }
-                                else
-                                {
-                                    await DisplayAlert("Success", autoScan_response.Message, "OK");
-                                }
+                               
 
                             }
                             catch
@@ -89,10 +86,7 @@ namespace ASolute_Mobile
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Message sent successfully." : "Permintaan anda telah dihantar.";
                                     await DisplayAlert("",reply , "Okay");
                                 }
-                                else
-                                {
-                                    await DisplayAlert("Json Error", panic_response.Message, "Okay");
-                                }
+                               
                             }
                             catch(Exception exception)
                             {
@@ -127,10 +121,6 @@ namespace ASolute_Mobile
                                 {
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Your request has been attended" : "Permintaan anda telah dihantar."; 
                                     await DisplayAlert("", reply, "Okay");
-                                }
-                                else
-                                {
-                                    await DisplayAlert("Json_Error", callMe_response.Message, "Okay");
                                 }
 
                             }
@@ -172,10 +162,7 @@ namespace ASolute_Mobile
                                     await DisplayAlert("", reply, "Okay");
                                     refreshMainPage();
                                 }
-                                else
-                                {
-                                    await DisplayAlert("Failed", json_response.Message, "Okay");
-                                }
+
 
                             }
                             catch (Exception exception)

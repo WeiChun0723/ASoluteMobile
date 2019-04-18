@@ -78,10 +78,7 @@ namespace ASolute_Mobile.HaulageScreen
                     {
                         await DisplayAlert("Success", "Message sent successfully.", "OK");
                     }
-                    else
-                    {
-                        await DisplayAlert("Error", json_response.Message, "OK");
-                    }
+                   
                     activityIndicator.IsRunning = false;
                 }
                 catch(Exception exception)

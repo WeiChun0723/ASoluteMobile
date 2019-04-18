@@ -56,11 +56,7 @@ namespace ASolute_Mobile
                     }
                    
                 }
-                else
-                {
-                await DisplayAlert("Error", json_response.Message, "OK");
-                }   
-
+              
                 this.activityIndicator.IsRunning = false;
                 submitButton.IsEnabled = true;
         }

@@ -522,10 +522,7 @@ namespace ASolute_Mobile.HaulageScreen
                                 futile_icon.IsEnabled = false;
                                 futile_icon.Source = "futileDisable.png";
                             }
-                            else
-                            {
-                                await DisplayAlert("Error", response.Message, "OK");
-                            }
+
                         }
                         else
                         {

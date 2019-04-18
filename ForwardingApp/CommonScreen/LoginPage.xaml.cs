@@ -265,7 +265,7 @@ namespace ASolute_Mobile
                     }
                     else
                     {
-                        await DisplayAlert("Error", login_response.Message, "OK");
+
                         this.activityIndicator.IsRunning = false;
                     }
                 }

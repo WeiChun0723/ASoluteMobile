@@ -62,11 +62,7 @@ namespace ASolute_Mobile
                         Ultis.Settings.EnterpriseName = enterpriseEntry.Text.ToUpper();
                         Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                     }
-                    else
-                    {
-                        await DisplayAlert("Json Error", json_response.Message, "OK");
-                    }
-
+                   
                     Application.Current.MainPage = new NavigationPage(new LoginPage());
 
                 }

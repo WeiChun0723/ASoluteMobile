@@ -49,31 +49,6 @@ namespace ASolute_Mobile.Utils
             return reply;
         }
 
-        public static  string ScanBarCode(ContentPage contentPage)
-        {
-            try
-            {
-                var scanPage = new ZXingScannerPage();
-                contentPage.Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
-                {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        await contentPage.Navigation.PopAsync();
-                        returnResult = result.Text;
-                    });
-                };
-                return returnResult;
-            }
-            catch (Exception e)
-            {
-                contentPage.DisplayAlert("Error", e.Message, "OK");
-            }
-            return "";
-        }
-
-
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri, Page page)
         {
@@ -233,8 +208,6 @@ namespace ASolute_Mobile.Utils
             {
                 await contentPage.DisplayAlert("Reminder", "Please sign the job.", "OK");
             }
-
-            
         }
 
         //prompt notification when receive new job notification
@@ -279,7 +252,7 @@ namespace ASolute_Mobile.Utils
                 {
                     Ultis.Settings.NewJob = "No";
                     pages.ToolbarItems.Clear();
-                    await pages.Navigation.PushAsync(new HaulageScreen.JobList("Job List"));
+                   
                 };
 
                 contentPage.ToolbarItems.Add(item);

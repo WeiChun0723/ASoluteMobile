@@ -109,10 +109,7 @@ namespace ASolute_Mobile.WMS_Screen
                         // see whether web service got return stuff
                         await DisplayAlert("Success", "Pallet verified", "OK");
                     }
-                    else
-                    {
-                        await DisplayAlert("Error", response.Message, "OK");
-                    }
+                   
                     break;
             }
         }

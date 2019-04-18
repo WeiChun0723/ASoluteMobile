@@ -82,10 +82,6 @@ namespace ASolute_Mobile
                             BackgroundTask.Logout(this);
 
                         }
-                        else
-                        {
-                            await DisplayAlert("Fail", json_response.Message, "OK");
-                        }
 
                     }
                     else

@@ -444,54 +444,52 @@ namespace ASolute_Mobile
 
                         }
                     }
+
+
+                    //assign default time
+                    timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
+                    //assign default cost rate
+                    costPerLiter.Text = String.Format("{0:0.00}", fuelCostNew.CostRate);
+                    //assign default odometer
+                    odometer.Text = fuelCostNew.PreviousOdometer.ToString();
+                    //assign default fuel card number
+                    fuelCard.Text = (fuelCostNew.FuelCardNo != "") ? fuelCostNew.FuelCardNo : "";
+                    amount.Text = "RM 0.00";
+
+                    //set maximum date that date picker can choose 
+                    datePicker.MaximumDate = DateTime.Now;
+
+
+                    foreach (clsKeyValue station in fuelCostNew.VendorList)
+                    {
+                        stations.Add(station.Value.ToUpper());
+                    }
+                    /*for (int i = 0; i < fuelCostNew.VendorList.Count; i++)
+                    {
+                        stationPicker.Items.Add(fuelCostNew.VendorList[i].Value.ToUpper());
+                    }*/
+                    stationComboBox.ComboBoxSource = stations;
+
+                    //auto select deafult station if picker only 1 item
+                    if (fuelCostNew.VendorList.Count == 1)
+                    {
+                        stationComboBox.Text = stations[0];
+                    }
+
+
+                    foreach (clsKeyValue payment in fuelCostNew.PaymentModes)
+                    {
+                        paymentMode.Add(payment.Value.ToUpper());
+                    }
+                    paymentComboBox.ComboBoxSource = paymentMode;
+                    paymentComboBox.Text = paymentMode[1];
+                    /*for (int j = 0; j < fuelCostNew.PaymentModes.Count; j++)
+                    {
+                        paymentPicker.Items.Add(fuelCostNew.PaymentModes[j].Value.ToUpper());
+                    }*/
+
+
                 }
-                else
-                {
-                    await DisplayAlert("Json Error", json_reponse.Message, "OK");
-                }
-
-                //assign default time
-                timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
-                //assign default cost rate
-                costPerLiter.Text = String.Format("{0:0.00}", fuelCostNew.CostRate);
-                //assign default odometer
-                odometer.Text = fuelCostNew.PreviousOdometer.ToString();
-                //assign default fuel card number
-                fuelCard.Text = (fuelCostNew.FuelCardNo != "") ? fuelCostNew.FuelCardNo : "";
-                amount.Text = "RM 0.00";
-
-                //set maximum date that date picker can choose 
-                datePicker.MaximumDate = DateTime.Now;
-
-
-                foreach (clsKeyValue station in fuelCostNew.VendorList)
-                {
-                    stations.Add(station.Value.ToUpper());
-                }
-                /*for (int i = 0; i < fuelCostNew.VendorList.Count; i++)
-                {
-                    stationPicker.Items.Add(fuelCostNew.VendorList[i].Value.ToUpper());
-                }*/
-                stationComboBox.ComboBoxSource = stations;
-
-                //auto select deafult station if picker only 1 item
-                if (fuelCostNew.VendorList.Count == 1)
-                {
-                    stationComboBox.Text = stations[0];
-                }
-
-
-                foreach (clsKeyValue payment in fuelCostNew.PaymentModes)
-                {
-                    paymentMode.Add(payment.Value.ToUpper());
-                }
-                paymentComboBox.ComboBoxSource = paymentMode;
-                paymentComboBox.Text = paymentMode[1];
-                /*for (int j = 0; j < fuelCostNew.PaymentModes.Count; j++)
-                {
-                    paymentPicker.Items.Add(fuelCostNew.PaymentModes[j].Value.ToUpper());
-                }*/
-
 
             }
             catch (HttpRequestException)

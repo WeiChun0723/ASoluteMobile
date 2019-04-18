@@ -38,7 +38,7 @@ namespace ASolute_Mobile.Yard
         {
             try
             {
-                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, "Yard/BlockList?SessionId=20390E48-A7D6-43E5-ACED-FA8B37F96A96&GeoLoc=2.9249113,101.6512138", this);
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getBlockList(), this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (response.IsGood)
@@ -57,7 +57,6 @@ namespace ASolute_Mobile.Yard
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
-
         }
 
         //refresh bay and level drop down list value when choose other block
@@ -67,12 +66,12 @@ namespace ASolute_Mobile.Yard
             levels.Clear();
 
             var selectedBay = yardBlocks.Find(item => item.Id == blockComboBox.SelectedValue.ToString());
-
-            for (int bayCount = 01; bayCount <= selectedBay.TotalBay; bayCount++)
+            for (int bayCount = 1; bayCount <= selectedBay.TotalBay; bayCount++)
             {
-                bays.Add(bayCount.ToString());
+                string number = (bayCount < 10) ? "0" + bayCount : bayCount.ToString();
+                bays.Add(number);
             }
-
+            
             bayComboBox.Text = "Bay";
             bayComboBox.ComboBoxSource = null;
             bayComboBox.ComboBoxSource = bays;
@@ -89,11 +88,21 @@ namespace ASolute_Mobile.Yard
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
+            if(blockComboBox.SelectedIndex != -1 && bayComboBox.SelectedIndex != -1 && levelComboBox.SelectedIndex != -1)
+            {
+                string locationId = blockComboBox.Text + "-" + bayComboBox.Text + "-" + levelComboBox.Text;
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.confirmBlock(recordId, locationId), this);
+                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            string locationId = blockComboBox.Text + "-" +  bayComboBox.Text + "-" + levelComboBox.Text;
-
-            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.confirmBlock(recordId, locationId), this);
-            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                if (response.IsGood)
+                {
+                    await DisplayAlert("Success", "Location confirmed.", "OK");
+                }
+            }
+            else
+            {
+                await DisplayAlert("Missing field", "Please provide valid location.", "OK");
+            }
         }
     }
 }
