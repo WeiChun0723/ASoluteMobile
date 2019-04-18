@@ -19,35 +19,26 @@ namespace ASolute_Mobile.Data
             database.CreateTable<ChatRecord>();
             database.CreateTable<ProviderInfo>();
             database.CreateTable<UserItem>();
-            database.CreateTable<RefuelHistoryData>();
             database.CreateTable<SummaryItems>();
             database.CreateTable<DetailItems>();
-            database.CreateTable<ListItems>();                        
-            database.CreateTable<Log>();          
+            database.CreateTable<ListItems>();                            
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
             database.CreateTable<TruckModel>();
-            database.CreateTable<FuelCostNew> ();
             database.CreateTable<AutoComplete>();
-            database.CreateTable<JobItems>();
-           
         }
 
 		public void DropDB()
 		{
             database.DropTable<ChatRecord>();
             database.DropTable<UserItem>();
-            database.DropTable<RefuelHistoryData>();
             database.DropTable<SummaryItems>();
             database.DropTable<DetailItems>();
-            database.DropTable<ListItems>();
-            database.DropTable<Log>();           
+            database.DropTable<ListItems>();          
             database.DropTable<AppImage>();               
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
-            database.DropTable<FuelCostNew>();
             database.DropTable<ProviderInfo>();
-            database.DropTable<JobItems>();
         }
 
         #region get/store app image
@@ -252,16 +243,6 @@ namespace ASolute_Mobile.Data
             database.CreateTable<UserItem>();
         }
 
-        public List<RefuelHistoryData> GetRecordAsync()
-        {
-            return toList<RefuelHistoryData>(database.Table<RefuelHistoryData>());
-        }
-
-        public List<JobItems> GetPendingRecordAsync()
-        {
-            return toList<JobItems>(database.Table<JobItems>());
-        }
-
         private List<T> toList<T>(TableQuery<T> tableQuery){
             List<T> list = new List<T>();
             foreach (var item in tableQuery)
@@ -269,34 +250,6 @@ namespace ASolute_Mobile.Data
                 list.Add(item);
             }
             return list;
-        }
-    
-        public RefuelHistoryData GetRecordAsync(string id)
-        {
-            return database.Table<RefuelHistoryData>().Where(i => i.recordId == id).FirstOrDefault();
-        }
-
-       
-        public JobItems GetPendingRecordAsync(string id)
-        {
-            return database.Table<JobItems>().Where(i => i.Id == id).FirstOrDefault();
-        }
-
-
-
-        public Log GetLogRecordAsync(int id)
-        {
-            return database.Table<Log>().Where(i => i.OrderNo == id).FirstOrDefault();
-        }
-
-        public Log GetLogRecordAsync(string id)
-        {
-            return database.Table<Log>().Where(i => i.logId == id).FirstOrDefault();
-        }
-
-        public clsFuelCost GetHistoryAsync(long id)
-        {
-            return database.Table<clsFuelCost>().Where(i => i.RecordId == id).FirstOrDefault();
         }
 
         public AutoComplete GetAutoCompleteValue(string value)
@@ -308,21 +261,6 @@ namespace ASolute_Mobile.Data
         {
             return database.Table<JobNoList>().Where(i => i.JobNoValue == id).FirstOrDefault();
         }
-
-        public List<JobItems> GetJobItems(int doneStatus, string type)
-        {
-            return database.Query<JobItems>("SELECT * FROM [JobItems] WHERE [Done] = ? AND [JobType] = ?", doneStatus, type);
-        }
-
-        public List<JobItems> GetDoneJobItems(int doneStatus)
-        {
-            return database.Query<JobItems>("SELECT * FROM [JobItems] WHERE [Done] = ? ", doneStatus);
-        }
-
-        public List<RefuelHistoryData> GetRecordItems()
-        {
-            return database.Query<RefuelHistoryData>("SELECT * FROM [RefuelHistoryData] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
-        }     
 
         public List<ListItems> GetMainMenuItems()
         {
@@ -339,12 +277,6 @@ namespace ASolute_Mobile.Data
             return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ? AND [StopId] = ?", category, stopId);
         }
 
-        public List<Log> GetLogItems()
-        {
-            return database.Query<Log>("SELECT * FROM [Log] WHERE [owner] = ? ", Ultis.Settings.SessionUserId);
-        }
-
-      
 
         public List<AutoComplete> GetAutoCompleteValues(string type)
         {
@@ -377,23 +309,12 @@ namespace ASolute_Mobile.Data
             //return database.Table<SummaryItem>().ToListAsync();
         }
 
-        public JobItems GetItemAsync(string id)
-        {
-            return database.Table<JobItems>().Where(i => i.Id == id).FirstOrDefault();
-        }
-
         public ListItems GetJobRecordAsync(string id)
         {
             return database.Table<ListItems>().Where(i => i.Id == id).FirstOrDefault();
         }
 
-        public FuelCostNew GetFuelCostNew()
-        {
-            return database.Table<FuelCostNew>().FirstOrDefault();
-        }
-
-       
-
+    
         public void deleteJobNo()
         {
             database.Query<JobNoList>("DELETE FROM [JobNoList]");
@@ -408,11 +329,6 @@ namespace ASolute_Mobile.Data
         public void deleteRecords(string category)
         {
             database.Query<ListItems>("DELETE FROM ListItems WHERE [Category] = ?", category);
-        }
-
-        public void deleteHistory()
-        {
-            database.Query<RefuelHistoryData>("DELETE FROM RefuelHistoryData ");
         }
 
         public void deleteRecordSummary(string type)
@@ -430,31 +346,6 @@ namespace ASolute_Mobile.Data
             database.Query<DetailItems>("DELETE FROM DetailItems WHERE [id] = ?",id);
         }
 
-        public void deleteLogHistory()
-        {
-            database.Query<Log>("DELETE FROM Log");
-        }
-
-        public void deletePending(string type)
-        {
-            database.Query<JobItems>("DELETE FROM JobItems WHERE [Done] = 0 AND [JobType] = ?",type);
-        }
-
-        public void deleteDoneJob(string id)
-        {
-            database.Query<JobItems>("DELETE FROM JobItems WHERE [Id] = ?", id);
-        }
-
-        public void deleteHaulage()
-        {
-            database.Query<JobItems>("DELETE FROM JobItems ");
-        }
-
-        public void deleteHaulage(string type)
-        {
-            database.Query<JobItems>("DELETE FROM JobItems WHERE [JobType] = ?", type);
-        }
-
         public void deleteHaulageSummary(string type)
         {
             database.Query<SummaryItems>("DELETE FROM SummaryItems WHERE [Type] = ?", type);
@@ -466,59 +357,6 @@ namespace ASolute_Mobile.Data
         }
 
       
-        public void deleteFuelCostNew()
-        {
-            database.Query<JobItems>("DELETE FROM JobItems ");
-        }
-
-       
-
-        public int SaveFuelCostNew(FuelCostNew fuelCost)
-        {
-            if (fuelCost.tableID != 0)
-            {
-
-                return database.Update(fuelCost);
-            }
-            else
-            {         
-                return database.Insert(fuelCost);
-            }
-        }
-
-        public int SaveHistoryAsync(RefuelHistoryData history)
-        {
-            history.owner = Ultis.Settings.SessionUserId;
-            if (history.tableID != 0)
-            {
-               
-                return database.Update(history);
-            }
-            else
-            {
-                
-                return database.Insert(history);
-            }
-
-        }
-
-     
-        public int SaveJobsAsync(JobItems job)
-        {
-            job.owner = Ultis.Settings.SessionUserId;
-            if (job.tableID != 0)
-            {
-
-                return database.Update(job);
-            }
-            else
-            {
-
-                return database.Insert(job);
-            }
-
-        }
-
         public int SaveMenuAsync(ListItems item)
         {
             item.owner = Ultis.Settings.SessionUserId;
@@ -535,24 +373,7 @@ namespace ASolute_Mobile.Data
 
         }
 
-        public int SaveLogAsync(Log log)
-        {
-            log.owner = Ultis.Settings.SessionUserId;
-            if (log.tableID != 0)
-            {
-
-                return database.Update(log);
-            }
-            else
-            {
-
-                return database.Insert(log);
-            }
-
-        }
-
-
-       
+      
         public int SaveSummarysAsync(SummaryItems item)
         {
             if (item.tableID != 0)

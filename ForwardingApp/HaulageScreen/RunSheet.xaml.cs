@@ -24,17 +24,20 @@ namespace ASolute_Mobile.HaulageScreen
         Image previous_icon, next_icon, noData;
         ActivityIndicator activityIndicator;
         DateTime currentDate;
+        ListItems runSheetItem = new ListItems();
 
-        public RunSheet(string title)
+        public RunSheet(ListItems item)
         {
             InitializeComponent();
+
+            runSheetItem = item;
 
             StackLayout main = new StackLayout();
 
             Label title1 = new Label
             {
                 FontSize = 15,
-                Text = title,
+                Text = item.Name,
                 TextColor = Color.White
             };
 
@@ -55,6 +58,8 @@ namespace ASolute_Mobile.HaulageScreen
             downloadRunSheet(DateTime.Now.ToString("yyyy MM dd"));
 
             SelectedItem = Children[1];
+
+
         }
 
         protected override void OnCurrentPageChanged()
@@ -303,62 +308,49 @@ namespace ASolute_Mobile.HaulageScreen
 
                     var JobList = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
 
-                    App.Database.deleteHaulage("HaulageHistory");
-                    foreach (clsHaulageModel job in JobList)
+                    App.Database.deleteRecords(runSheetItem.Id);
+                    App.Database.deleteRecordSummary(runSheetItem.Id);
+                    //App.Database.deleteHaulage("HaulageHistory");
+
+                    foreach (clsHaulageModel data in JobList)
                     {
-                        JobItems existingRecord = App.Database.GetPendingRecordAsync(job.Id);
-
-                        existingRecord = new JobItems();
-                        existingRecord.TruckId = job.TruckId;
-                        existingRecord.ReqSign = job.ReqSign;
-                        existingRecord.Id = job.Id;
-                        existingRecord.Done = 0;
-                        existingRecord.JobType = "HaulageHistory";
-                        existingRecord.Latitude = job.Latitude;
-                        existingRecord.Longitude = job.Longitude;
-                        existingRecord.TelNo = job.TelNo;
-                        existingRecord.EventRecordId = job.EventRecordId;
-                        existingRecord.TrailerId = job.TrailerId;
-                        existingRecord.ContainerNo = job.ContainerNo;
-                        existingRecord.MaxGrossWeight = job.MaxGrossWeight;
-                        existingRecord.TareWeight = job.TareWeight;
-                        existingRecord.CollectSeal = job.CollectSeal;
-                        existingRecord.SealNo = job.SealNo;
-                        existingRecord.ActionId = job.ActionId.ToString();
-                        existingRecord.ActionMessage = job.ActionMessage;
-                        App.Database.SaveJobsAsync(existingRecord);
-
-                        List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(job.Id, "HaulageHistory");
-
-                        int index = 0;
-                        foreach (clsCaptionValue summaryList in job.Summary)
+                        ListItems record = new ListItems
                         {
-                            SummaryItems summaryItem = null;
-                            if (index < existingSummaryItems.Capacity)
-                            {
-                                summaryItem = existingSummaryItems.ElementAt(index);
-                            }
+                            Id = data.Id,
+                            Background = data.BackColor,
+                            Category = runSheetItem.Id,
+                            Name = runSheetItem.Name,
+                            TruckId = data.TruckId,
+                            ReqSign = data.ReqSign,
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            TelNo = data.TelNo,
+                            EventRecordId = data.EventRecordId,
+                            TrailerId = data.TrailerId,
+                            ContainerNo = data.ContainerNo,
+                            MaxGrossWeight = data.MaxGrossWeight,
+                            TareWeight = data.TareWeight,
+                            CollectSeal = data.CollectSeal,
+                            SealNo = data.SealNo,
+                            ActionId = data.ActionId.ToString(),
+                            ActionMessage = data.ActionMessage,
+                            Title = data.Title,
+                            SealMode = data.SealMode,
+                        };
 
-                            if (summaryItem == null)
-                            {
-                                summaryItem = new SummaryItems();
-                            }
+                        App.Database.SaveMenuAsync(record);
 
-                            summaryItem.Id = job.Id;
+                        foreach (clsCaptionValue summaryList in data.Summary)
+                        {
+                            SummaryItems summaryItem = new SummaryItems();
+
+                            summaryItem.Id =  data.Id;
                             summaryItem.Caption = summaryList.Caption;
                             summaryItem.Value = summaryList.Value;
                             summaryItem.Display = summaryList.Display;
-                            summaryItem.Type = "HaulageHistory";
+                            summaryItem.Type = runSheetItem.Id;
+                            summaryItem.BackColor = data.BackColor;
                             App.Database.SaveSummarysAsync(summaryItem);
-                            index++;
-                        }
-
-                        if (existingSummaryItems != null)
-                        {
-                            for (; index < existingSummaryItems.Count; index++)
-                            {
-                                App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
-                            }
                         }
 
                     }
@@ -367,10 +359,7 @@ namespace ASolute_Mobile.HaulageScreen
                     refreshRunSheetHistory();
 
                 }
-                else
-                {
-                    await DisplayAlert("Error", json_response.Message, "Ok");
-                }
+
             }
             catch (Exception exception)
             {
@@ -386,8 +375,10 @@ namespace ASolute_Mobile.HaulageScreen
                 runSheetHistory.RowHeight = 150;
             }
 
-            Ultis.Settings.List = "Run_Sheet";
-            ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
+            Ultis.Settings.List = runSheetItem.Id;
+           // ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
+            ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(runSheetItem.Id));
+            //Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("runsheet"));
             runSheetHistory.ItemsSource = Item;
             runSheetHistory.HasUnevenRows = true;
             runSheetHistory.Style = (Style)App.Current.Resources["recordListStyle"];

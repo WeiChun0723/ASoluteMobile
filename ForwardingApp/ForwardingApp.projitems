@@ -94,10 +94,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelHistory.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\SettingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -234,10 +230,6 @@
       <DependentUpon>LogEntry.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)FleetScreen\LogHistory.xaml.cs">
-      <DependentUpon>LogHistory.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Models\Database_Model.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MasterPageItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCheck.cs" />
@@ -325,10 +317,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelEntry.xaml.cs">
       <DependentUpon>RefuelEntry.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\RefuelHistory.xaml.cs">
-      <DependentUpon>RefuelHistory.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\SettingPage.xaml.cs">
@@ -431,12 +419,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
     <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Yard\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogHistory.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

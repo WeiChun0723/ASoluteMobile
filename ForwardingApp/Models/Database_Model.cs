@@ -41,12 +41,6 @@ namespace ASolute_Mobile.Models
         public string Url { get; set; }
     } 
 
-    public class RefuelHistoryData : Generic
-    {
-        public string recordId { get; set; }
-        public int Done { get; set; }  
-    }
-
     public class SummaryItems : Generic
     {
         public string Id { get; set; }
@@ -122,41 +116,6 @@ namespace ASolute_Mobile.Models
         public string SealMode { get; set; }
     }
 
-    public class JobItems : Generic
-    {
-        public string TrailerId { get; set; }
-        public string ContainerNo { get; set; }
-        public float MaxGrossWeight { get; set; }
-        public float TareWeight { get; set; }
-        public bool CollectSeal { get; set; }
-        public string SealNo { get; set; }
-        public string ActionId { get; set; }
-        public string ActionMessage { get; set; }
-        public string Title { get; set; }
-        public string TruckId { get; set; }
-        public string Id { get; set; }
-        public string TelNo { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public bool ReqSign { get; set; }
-        public long EventRecordId { get; set; }
-        public int Done { get; set; }
-        public string Remark { get; set; }
-        public string RefNo { get; set; }
-        public string ReasonCode { get; set; }
-        public string JobType { get; set; }
-        public string SealMode { get; set; }
-        public string Summary { get; set; }
-
-    }
-
-    public class Log : Generic
-    {
-        public string logId { get; set; }
-        public int Done { get; set; }
-        public int OrderNo { get; set; }
-    }
-
     public class JobNoList : Generic
     {
         public string menuId { get; set; }
@@ -164,8 +123,6 @@ namespace ASolute_Mobile.Models
         public string JobNoValue { get; set; }
         public bool Uploaded { get; set; }
     }
-
-
 
     public class TruckModel : Generic
     {
@@ -186,14 +143,6 @@ namespace ASolute_Mobile.Models
         public string Action { get; set; }
     }
 
-    public class FuelCostNew : Generic
-    {
-        public DateTime RefuelDateTime { get; set; }
-        public int PreviousOdometer { get; set; }
-        public double CostRate { get; set; }
-        public string FuelCardNo { get; set; }     
-    }
-    
     public class AutoComplete : Generic
     {
         public string Value { get; set; }

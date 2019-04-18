@@ -16,7 +16,6 @@ namespace ASolute_Mobile
 {
 	public partial class LogEntry : ContentPage
 	{
-        public LogHistory previousPage;
         List<AppImage> images = new List<AppImage>();
         clsResponse newLogResponse = new clsResponse();        
         clsTrip trip = new clsTrip();

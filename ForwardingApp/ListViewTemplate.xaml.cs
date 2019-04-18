@@ -29,11 +29,19 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-            if (callUri.Contains("FuelCost"))
+            if (callUri.Contains("FuelCost/List"))
             {
                 icon.Source = "refuel.png";
                 icon.WidthRequest = 70;
                 icon.HeightRequest = 70;
+            }
+            else if(callUri.Contains("Trip/List"))
+            {
+                icon.Source = "truck.png";
+                icon.WidthRequest = 70;
+                icon.HeightRequest = 70;
+                logBookDate.IsVisible = true;
+                searchBar.IsVisible = false;
             }
 
             StackLayout main = new StackLayout();
@@ -84,15 +92,6 @@ namespace ASolute_Mobile
 
                     listView.ItemsSource = Item;
 
-                    /*if (menuItems.Id == "Yard")
-                    {
-                        listView.ItemsSource = records;
-                    }
-                    else
-                    {
-
-                    }*/
-
                 }
                 else
                 {
@@ -100,14 +99,7 @@ namespace ASolute_Mobile
                     {
                         listView.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
 
-                        /*if (menuItems.Id == "Yard")
-                        {
-                            listView.ItemsSource = records.Where(x => x.Caption.Contains(searchKey));
-                        }
-                        else
-                        {
-
-                        }*/
+                       
                     }
                     catch
                     {
@@ -121,13 +113,20 @@ namespace ASolute_Mobile
             }
         }
 
+        //icon in screen and decide what to do by check the call uri
         public async void IconTapped(object sender, EventArgs e)
         {
+            loading.IsVisible = true;
             try
             {
-                if (uri.Contains("FuelCost"))
+
+                if(uri.Contains("FuelCost/List"))
                 {
                     await Navigation.PushAsync(new RefuelEntry(menuItems.Name));
+                }
+                else if(uri.Contains("Trip/List"))
+                {
+                    await Navigation.PushAsync(new LogEntry("", menuItems.Name));
                 }
                 else
                 {
@@ -164,6 +163,7 @@ namespace ASolute_Mobile
                         });
                     };
                 }
+                loading.IsVisible = false;
             }
             catch (Exception ex)
             {
@@ -171,6 +171,8 @@ namespace ASolute_Mobile
             }
         }
 
+
+        //display scan result (success / error) in scan page
         public void displayToast(string message)
         {
             var toastConfig = new ToastConfig(message);
@@ -185,9 +187,15 @@ namespace ASolute_Mobile
             UserDialogs.Instance.Toast(toastConfig);
         }
 
-        public async void SelectList(object sender, ItemTappedEventArgs e)
+        //for fleet app log history only
+        void Handle_DateSelected(object sender, Xamarin.Forms.DateChangedEventArgs e)
         {
+            uri = ControllerUtil.getLogHistoryURL(e.NewDate.ToString("yyyy-MM-dd"));
+            GetListData();
+        }
 
+        async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        {
             string type = menuItems.Id;
 
             switch (type)
@@ -210,8 +218,6 @@ namespace ASolute_Mobile
                 case "JobList":
                     Ultis.Settings.Title = ((ListItems)e.Item).Title;
                     Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
-                    /*Ultis.Settings.Action = ((ListItems)e.Item).ActionId;
-                    await Navigation.PushAsync(new JobDetails(((ListItems)e.Item).ActionId, ((ListItems)e.Item).ActionMessage));*/
                     await Navigation.PushAsync(new NewJobDetails());
                     break;
                 case "PickingVerify":
@@ -220,8 +226,21 @@ namespace ASolute_Mobile
                 case "PendingStorage":
                     await PopupNavigation.Instance.PushAsync(new YardListPopUp(((ListItems)e.Item)));
                     break;
+                case "LogBook":
+                    string logId = ((ListItems)e.Item).Id;
+                    if (logId != "")
+                    {
+                        await Navigation.PushAsync(new LogEntry(logId,menuItems.Name));
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    break;
             }
         }
+
+       
 
         async void GetListData()
         {
@@ -341,8 +360,6 @@ namespace ASolute_Mobile
 
         public void loadTallyInList()
         {
-            try
-            {
                 Ultis.Settings.List = menuItems.Id;
                 Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
                 listView.ItemsSource = Item;
@@ -350,31 +367,8 @@ namespace ASolute_Mobile
                 listView.Style = (Style)App.Current.Resources["recordListStyle"];
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 noData.IsVisible = (Item.Count == 0) ? true : false;
-            
-
-               /* if (menuItems.Id == "Yard")
-                {
-                    listView.ItemsSource = records;
-                    listView.HasUnevenRows = true;
-                    listView.Style = (Style)App.Current.Resources["recordListStyle"];
-                }
-                else
-                {
-                    Ultis.Settings.List = menuItems.Id;
-                    Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
-                    listView.ItemsSource = Item;
-                    listView.HasUnevenRows = true;
-                    listView.Style = (Style)App.Current.Resources["recordListStyle"];
-                    listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-                    noData.IsVisible = (Item.Count == 0) ? true : false;
-                }*/
 
                 listView.IsRefreshing = false;
-            }
-            catch
-            {
-
-            }
         }
     }
 }

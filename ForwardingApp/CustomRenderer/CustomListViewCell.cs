@@ -37,53 +37,7 @@ namespace ASolute_Mobile
                 if (this.BindingContext != null)
                 {
 
-                    if (Ultis.Settings.List == "Job_List")
-                    {
-                        JobItems model = (JobItems)this.BindingContext;
-
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "JobItem");
-
-                    }
-                    else if (Ultis.Settings.List == "HaulageJob_List")
-                    {
-                        JobItems model = (JobItems)this.BindingContext;
-
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageJob");
-                    }
-                    else if (Ultis.Settings.List == "Receiving_List")
-                    {
-                        JobItems model = (JobItems)this.BindingContext;
-
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingReceiving");
-                    }
-                    else if (Ultis.Settings.List == "Loading_List")
-                    {
-                        JobItems model = (JobItems)this.BindingContext;
-
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "PendingLoad");
-                    }
-                    else if (Ultis.Settings.List == "refuel_List")
-                    {
-                        RefuelHistoryData model = (RefuelHistoryData)this.BindingContext;
-
-                        summaryRecord = App.Database.GetSummarysAsync(model.recordId, "Refuel");
-                    }
-                    else if (Ultis.Settings.List == "Main_Menu")
-                    {
-                        ListItems model = (ListItems)this.BindingContext;
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "MainMenu");
-                    }
-                    else if (Ultis.Settings.List == "Log_History")
-                    {
-                        Log model = (Log)this.BindingContext;
-                        summaryRecord = App.Database.GetSummarysAsync(model.logId, "Log");
-                    }
-                    else if (Ultis.Settings.List == "Run_Sheet")
-                    {
-                        JobItems model = (JobItems)this.BindingContext;
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "HaulageHistory");
-                    }
-                    else if (Ultis.Settings.List == "provider_List")
+                    if (Ultis.Settings.List == "provider_List")
                     {
                         ListItems model = (ListItems)this.BindingContext;
                         providers = App.Database.Providers(model.Id);
@@ -98,6 +52,11 @@ namespace ASolute_Mobile
                     {
                         ListItems model = (ListItems)this.BindingContext;
                         summaryRecord = App.Database.GetSummarysAsync(model.Id, "Category");
+                    }
+                    else if (Ultis.Settings.List == "Main_Menu")
+                    {
+                        ListItems model = (ListItems)this.BindingContext;
+                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "MainMenu");
                     }
                     else
                     {

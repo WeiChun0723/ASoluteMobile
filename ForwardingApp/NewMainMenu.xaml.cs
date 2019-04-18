@@ -238,7 +238,7 @@ namespace ASolute_Mobile
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
                 listView.HasUnevenRows = true;
-                listView.HeightRequest = Item.Count * 100;
+                listView.HeightRequest = Item.Count * 140;
                 listView.Style = (Style)App.Current.Resources["recordListStyle"];
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 System.TimeSpan interval = new System.TimeSpan();
@@ -267,13 +267,11 @@ namespace ASolute_Mobile
             switch (menuAction)
             {
                 case "LogBook":
-                    LogHistory log = new LogHistory(((ListItems)e.Item).Name);
-                    await Navigation.PushAsync(log);
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("yyyy-MM-dd"))));
                     break;
 
                 case "FuelCost":
-                    /* RefuelHistory refuel = new RefuelHistory(((ListItems)e.Item).Name);
-                     await Navigation.PushAsync(refuel);*/
+                   
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getDownloadRefuelHistoryURL()));
                     break;
 
@@ -308,7 +306,7 @@ namespace ASolute_Mobile
                     break;
 
                 case "RunSheet":
-                    await Navigation.PushAsync(new HaulageScreen.RunSheet(((ListItems)e.Item).Name));
+                    await Navigation.PushAsync(new HaulageScreen.RunSheet(((ListItems)e.Item)));
                     break;
 
                 case "Shunting":
