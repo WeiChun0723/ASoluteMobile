@@ -16,6 +16,14 @@ namespace ASolute_Mobile.CustomerTracking
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContainerCategory : ContentPage
     {
+        public class TrackingCategory
+        {
+            public string Name { get; set; }
+
+            public string CategoryCode { get; set; }
+
+            public int Amount { get; set; }
+        }
 
         string providerCode;
         List<clsCaptionValue> categories;

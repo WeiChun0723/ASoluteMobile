@@ -358,6 +358,7 @@ namespace ASolute_Mobile
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPendingStorage()));
                     break;
                 case "ContainerInquiry":
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getCollectionInquiry()));
                     break;
             }
 

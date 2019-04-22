@@ -45,11 +45,11 @@ namespace ASolute_Mobile
 
         public void LoadChat()
         {
-            ObservableCollection<ChatRecord> Item = new ObservableCollection<ChatRecord>(App.Database.Chats());
+            /*ObservableCollection<ChatRecord> Item = new ObservableCollection<ChatRecord>(App.Database.Chats());
 
             chatList.ItemsSource = Item;
             chatList.HasUnevenRows = true;
-            chatList.ScrollTo(Item[Item.Count - 1],ScrollToPosition.End,false);
+            chatList.ScrollTo(Item[Item.Count - 1],ScrollToPosition.End,false);*/
 
         }
 
@@ -85,7 +85,7 @@ namespace ASolute_Mobile
                 var testing = JObject.Parse(webservice_content);
                 int result = Convert.ToInt32(testing["recipients"].ToString());
 
-                ChatRecord sentChat = new ChatRecord
+                /*ChatRecord sentChat = new ChatRecord
                 {
                     Content = chatEntry.Text,
                     Sender = "Self",
@@ -93,7 +93,7 @@ namespace ASolute_Mobile
                     BackgroundColor = "#FFB6C1"
                 };
 
-                App.Database.SaveChat(sentChat);
+                App.Database.SaveChat(sentChat);*/
 
                 LoadChat();
 

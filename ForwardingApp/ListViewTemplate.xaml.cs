@@ -20,49 +20,65 @@ namespace ASolute_Mobile
     public partial class ListViewTemplate : ContentPage
     {
 
+        //use for AILS Yard container inquiry
+        List<string> blocksID = new List<string>();
+        List<string> dateOption = new List<string>
+        {
+            "All",
+            "Closing <= 1 Day",
+            "Closing = 2 Days",
+            "Closing > 2 Days"
+        };
         ListItems menuItems;
         ObservableCollection<ListItems> Item;
         List<clsHaulageModel> records;
         string uri;
+        //record more than 100 store in this and popuplate to list view
+        ObservableCollection<ListItems> overloadRecord = new ObservableCollection<ListItems>();
 
         public ListViewTemplate(ListItems items, string callUri)
         {
             InitializeComponent();
 
-            if (callUri.Contains("FuelCost/List"))
+            //some of the list view require special control for filtering purpose
+            switch (items.Id)
             {
-                icon.Source = "refuel.png";
-                icon.WidthRequest = 70;
-                icon.HeightRequest = 70;
-            }
-            else if(callUri.Contains("Trip/List"))
-            {
-                icon.Source = "truck.png";
-                icon.WidthRequest = 70;
-                icon.HeightRequest = 70;
-                logBookDate.IsVisible = true;
-                searchBar.IsVisible = false;
+                case "FuelCost":
+                    icon.Source = "refuel.png";
+                    break;
+
+                //ASolute Fleet funtion control
+                case "LogBook":
+                    icon.Source = "truck.png";
+                    logBookDate.IsVisible = true;
+                    searchBar.IsVisible = false;
+                    break;
+
+                //AILS Yard function control
+                case "ContainerInquiry":
+                    icon.IsVisible = false;
+                    searchBar.IsVisible = false;
+                    blockComboBox.IsVisible = true;
+                    dateComboBox.IsVisible = true;
+                    break;
             }
 
+            //define title for and subtitle for the screen
             StackLayout main = new StackLayout();
-
             Label title1 = new Label
             {
                 FontSize = 15,
                 Text = items.Name,
                 TextColor = Color.White
             };
-
             Label title2 = new Label
             {
                 FontSize = 10,
                 Text = Ultis.Settings.SubTitle,
                 TextColor = Color.White
             };
-
             main.Children.Add(title1);
             main.Children.Add(title2);
-
             NavigationPage.SetTitleView(this, main);
 
             menuItems = items;
@@ -73,14 +89,20 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
             GetListData();
-        }
 
+            if (blockComboBox.IsVisible == true)
+            {
+                GetComboBoxData(ControllerUtil.getBlockList());
+            }
+        }
 
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
+            loading.IsVisible = true;
             GetListData();
         }
 
+        //filter list by using search bar
         private async void OnFilterTextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -89,22 +111,11 @@ namespace ASolute_Mobile
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
-
-                    listView.ItemsSource = Item;
-
+                    listView.ItemsSource = (overloadRecord.Count == 0) ? Item : overloadRecord;
                 }
                 else
                 {
-                    try
-                    {
-                        listView.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
-
-                       
-                    }
-                    catch
-                    {
-                        //await DisplayAlert("Error", error.Message, "OK");
-                    }
+                    listView.ItemsSource = (overloadRecord.Count == 0) ? Item.Where(x => x.Summary.Contains(searchKey)) : overloadRecord.Where(x => x.Summary.Contains(searchKey));
                 }
             }
             catch
@@ -114,17 +125,17 @@ namespace ASolute_Mobile
         }
 
         //icon in screen and decide what to do by check the call uri
-        public async void IconTapped(object sender, EventArgs e)
+        async void IconTapped(object sender, EventArgs e)
         {
             loading.IsVisible = true;
             try
             {
 
-                if(uri.Contains("FuelCost/List"))
+                if (menuItems.Id == "FuelCost")
                 {
                     await Navigation.PushAsync(new RefuelEntry(menuItems.Name));
                 }
-                else if(uri.Contains("Trip/List"))
+                else if (menuItems.Id == "LogBook")
                 {
                     await Navigation.PushAsync(new LogEntry("", menuItems.Name));
                 }
@@ -140,7 +151,6 @@ namespace ASolute_Mobile
                             if (menuItems.Id == "JobList")
                             {
                                 scanPage.PauseAnalysis();
-
                                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.addJobURL(result.Text), this);
                                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (response.IsGood)
@@ -150,13 +160,11 @@ namespace ASolute_Mobile
                                     displayToast("Job added to job list.");
 
                                 }
-
                                 scanPage.ResumeAnalysis();
                             }
                             else
                             {
                                 await Navigation.PopAsync();
-
                                 searchBar.Text = result.Text;
                             }
 
@@ -230,7 +238,7 @@ namespace ASolute_Mobile
                     string logId = ((ListItems)e.Item).Id;
                     if (logId != "")
                     {
-                        await Navigation.PushAsync(new LogEntry(logId,menuItems.Name));
+                        await Navigation.PushAsync(new LogEntry(logId, menuItems.Name));
                     }
                     else
                     {
@@ -240,14 +248,11 @@ namespace ASolute_Mobile
             }
         }
 
-       
-
         async void GetListData()
         {
             try
             {
-                //loading.IsVisible = true;
-
+                overloadRecord.Clear();
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -266,9 +271,10 @@ namespace ASolute_Mobile
                         ListItems record = new ListItems
                         {
                             Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id,
-                            Background = data.BackColor,
+                            Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
                             Category = menuItems.Id,
-                            Name = menuItems.Name
+                            Name = menuItems.Name,
+
                         };
 
                         if (menuItems.Id == "JobList")
@@ -291,8 +297,8 @@ namespace ASolute_Mobile
                             record.SealMode = data.SealMode;
                         }
 
-                        string summary = "";
-
+                        //store summary of the record for search 
+                        string summary = "", closingTime = "";
                         int count = 0;
                         foreach (clsCaptionValue summaryItem in data.Summary)
                         {
@@ -302,7 +308,7 @@ namespace ASolute_Mobile
                             {
                                 if (count == data.Summary.Count)
                                 {
-                                    summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine;
+                                    summary += summaryItem.Caption + " :  " + summaryItem.Value;
                                 }
                                 else
                                 {
@@ -310,65 +316,166 @@ namespace ASolute_Mobile
                                 }
                             }
 
-                            if (summaryItem.Caption.Equals(""))
+                            if (summaryItem.Caption == "")
                             {
                                 summary += summaryItem.Value;
                             }
+                            else if (summaryItem.Caption == "Closing Date")
+                            {
+                                closingTime = summaryItem.Value;
+                            }
                         }
-
                         record.Summary = summary;
+                        record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : Convert.ToDateTime(closingTime);
 
-                        App.Database.SaveMenuAsync(record);
-
-                        foreach (clsCaptionValue summaryList in data.Summary)
+                        if (records.Count < 100)
                         {
-                            SummaryItems summaryItem = new SummaryItems();
+                            App.Database.SaveMenuAsync(record);
 
-                            summaryItem.Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id;
-                            summaryItem.Caption = summaryList.Caption;
-                            summaryItem.Value = summaryList.Value;
-                            summaryItem.Display = summaryList.Display;
-                            summaryItem.Type = menuItems.Id;
-                            summaryItem.BackColor = data.BackColor;
-                            App.Database.SaveSummarysAsync(summaryItem);
+                            foreach (clsCaptionValue summaryList in data.Summary)
+                            {
+                                SummaryItems summaryItem = new SummaryItems();
+
+                                summaryItem.Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id;
+                                summaryItem.Caption = summaryList.Caption;
+                                summaryItem.Value = summaryList.Value;
+                                summaryItem.Display = summaryList.Display;
+                                summaryItem.Type = menuItems.Id;
+                                summaryItem.BackColor = data.BackColor;
+                                App.Database.SaveSummarysAsync(summaryItem);
+                            }
+
+                            foreach (clsCaptionValue detailList in data.Details)
+                            {
+                                DetailItems detailItem = new DetailItems();
+                                detailItem.Id = data.Id;
+                                detailItem.Caption = detailList.Caption;
+                                detailItem.Value = detailList.Value;
+                                detailItem.Display = detailList.Display;
+                                App.Database.SaveDetailsAsync(detailItem);
+                            }
                         }
-
-                        foreach (clsCaptionValue detailList in data.Details)
+                        else
                         {
-                            DetailItems detailItem = new DetailItems();
-                            detailItem.Id = data.Id;
-                            detailItem.Caption = detailList.Caption;
-                            detailItem.Value = detailList.Value;
-                            detailItem.Display = detailList.Display;
-                            App.Database.SaveDetailsAsync(detailItem);
+                            overloadRecord.Add(record);
                         }
                     }
 
+                    if (records.Count < 100)
+                    {
+                        LoadListData();
+                    }
+                    else
+                    {
+                        listView.ItemsSource = overloadRecord;
+                        listView.RowHeight = 130;
+                        listView.HasUnevenRows = true;
+                        listView.Style = (Style)App.Current.Resources["recordListStyle"];
+                        listView.IsRefreshing = false;
+                    }
+
                     loading.IsVisible = false;
-                    loadTallyInList();
-                }
-                else
-                {
-                    await DisplayAlert("Error", response.Message, "OK");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
         }
 
-        public void loadTallyInList()
+        void LoadListData()
         {
-                Ultis.Settings.List = menuItems.Id;
-                Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
-                listView.ItemsSource = Item;
-                listView.HasUnevenRows = true;
-                listView.Style = (Style)App.Current.Resources["recordListStyle"];
-                listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
-                noData.IsVisible = (Item.Count == 0) ? true : false;
+            Ultis.Settings.List = menuItems.Id;
+            Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
+            listView.ItemsSource = Item;
+            listView.HasUnevenRows = true;
+            listView.Style = (Style)App.Current.Resources["recordListStyle"];
+            listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+            noData.IsVisible = (Item.Count == 0) ? true : false;
+            listView.IsRefreshing = false;
+        }
 
-                listView.IsRefreshing = false;
+        //AILS Yrad container inquiry combo box data
+        async void GetComboBoxData(string getBlockIdUri)
+        {
+            try
+            {
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, getBlockIdUri, this);
+                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (response.IsGood)
+                {
+                    blocksID.Clear();
+
+                    List<clsYardBlock> yardBlocks = JObject.Parse(content)["Result"].ToObject<List<clsYardBlock>>();
+
+                    blocksID.Add("All");
+
+                    foreach (clsYardBlock yardBlock in yardBlocks)
+                    {
+                        blocksID.Add(yardBlock.Id);
+                    }
+
+                    blockComboBox.ComboBoxSource = blocksID;
+                    dateComboBox.ComboBoxSource = dateOption;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
+
+        //AILS Yard filtering by block id
+        async void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var filterOption = sender as Syncfusion.XForms.ComboBox.SfComboBox;
+
+                switch (filterOption.StyleId)
+                {
+                    case "blockComboBox":
+                        if (blockComboBox.Text == "All")
+                        {
+                            listView.ItemsSource = overloadRecord;
+                        }
+                        else
+                        {
+                            listView.ItemsSource = overloadRecord.Where(x => x.Summary.Contains(blockComboBox.Text + "-"));
+                        }
+                        break;
+
+                    case "dateComboBox":
+                        if (dateComboBox.Text == "All")
+                        {
+                            listView.ItemsSource = overloadRecord;
+                        }
+                        else
+                        {
+                            switch(dateComboBox.Text)
+                            {
+                                case "Closing <= 1 Day":
+                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate <= DateTime.Now.AddDays(-1));
+                                    break;
+
+                                case "Closing = 2 Days":
+                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate == DateTime.Now.AddDays(2));
+                                    break;
+
+                                case "Closing > 2 Days":
+                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate > DateTime.Now.AddDays(2));
+                                    break;
+                            }
+                        }
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
         }
     }
 }

@@ -12,12 +12,6 @@ namespace ASolute_Mobile.Yard
 {
     public partial class YardListPopUp : PopupPage
     {
-        class clsYardBlock
-        {
-            public string Id { get; set; }
-            public int TotalBay { get; set; }
-            public int TotalLevel { get; set; }
-        }
 
         List<clsYardBlock> yardBlocks;
         List<string> blocks = new List<string>();

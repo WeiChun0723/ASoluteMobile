@@ -24,15 +24,14 @@ namespace ASolute_Mobile.Models
         public string DocumentNo { get; set; }
         public string ContainerNo { get; set; }
         public string Principal { get; set; }
-    }*/
+    }
 
     public class ChatRecord : Generic
     {
         public string Content { get; set; }
         public string Sender { get; set; }
         public string BackgroundColor { get; set; }
-    }
-
+    }*/
 
     public class ProviderInfo : Generic
     {
@@ -88,6 +87,9 @@ namespace ASolute_Mobile.Models
         public string Summary { get; set; }
         public string Background { get; set; }
         public string Action { get; set; }
+
+        //Yard
+        public DateTime? ClosingDate { get; set; }
 
         //Bus property
         public string StopId { get; set; }
@@ -152,10 +154,14 @@ namespace ASolute_Mobile.Models
     public class HaulageVolume
     {
         public string Entity { get; set; }
-
         public string Job { get; set; }
-
         public string Revenue { get; set; }
+    }
 
+    public class clsYardBlock
+    {
+        public string Id { get; set; }
+        public int TotalBay { get; set; }
+        public int TotalLevel { get; set; }
     }
 }

@@ -20,7 +20,6 @@ namespace ASolute_Mobile
     {
         public static List<SummaryItems> summaryRecord;
         public static List<ProviderInfo> providers;
-        int count = 0;
         string color;
 
         public CustomListViewCell()
@@ -65,13 +64,6 @@ namespace ASolute_Mobile
                     }
 
 
-                    StackLayout mainLayout = new StackLayout()
-                    {
-                        //Padding = new Thickness(10, 10, 10, 10),
-                        HorizontalOptions = LayoutOptions.FillAndExpand,
-                        VerticalOptions = LayoutOptions.FillAndExpand,
-                        Orientation = StackOrientation.Horizontal
-                    };
 
                     StackLayout cellTextWrapper = new StackLayout()
                     {
@@ -81,14 +73,7 @@ namespace ASolute_Mobile
                     };
 
 
-                    StackLayout cellImageWrapper = new StackLayout()
-                    {
-                        //Padding = new Thickness(10, 10, 10, 10),
-                        HorizontalOptions = LayoutOptions.FillAndExpand,
-                        VerticalOptions = LayoutOptions.FillAndExpand
-                    };
-
-
+                   
                     bool firstSummaryLine = true;
 
                     if (Ultis.Settings.List == "provider_List")
@@ -137,30 +122,6 @@ namespace ASolute_Mobile
                                 cellTextWrapper.BackgroundColor = Color.FromHex(items.BackColor);
                                 color = items.BackColor;
                             }
-
-                            if (items.Id == "Info" && count >= summaryRecord.Count - 1)
-                            {
-                                cellImageWrapper.Children.Clear();
-
-                                CircleImage userImage = new CircleImage
-                                {
-                                    BorderColor = Color.White,
-                                    BorderThickness = 3,
-                                    HeightRequest = 120,
-                                    WidthRequest = 120,
-                                    Aspect = Aspect.AspectFill,
-                                    HorizontalOptions = LayoutOptions.Center,
-
-                                };
-
-                                var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
-                                userImage.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
-
-                                cellImageWrapper.Children.Add(userImage);
-                                count = 0;
-                            }
-
-                            count++;
                         }
                     }
 
@@ -204,15 +165,9 @@ namespace ASolute_Mobile
                         this.ContextActions.Add(menuItem);
                     }
 
-                    mainLayout.Children.Add(cellTextWrapper);
-                    if (Ultis.Settings.List == "Main_Menu")
-                    {
-                        mainLayout.Children.Add(cellImageWrapper);
-                    }
-
                     View = new Frame
                     {
-                        Content = mainLayout,
+                        Content = cellTextWrapper,
                         HasShadow = true,
                         Margin = 5
 

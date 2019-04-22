@@ -16,7 +16,7 @@ namespace ASolute_Mobile.Data
 		public Database(string dbPath)
 		{
             database = new SQLiteConnection(dbPath);
-            database.CreateTable<ChatRecord>();
+            //database.CreateTable<ChatRecord>();
             database.CreateTable<ProviderInfo>();
             database.CreateTable<UserItem>();
             database.CreateTable<SummaryItems>();
@@ -30,7 +30,7 @@ namespace ASolute_Mobile.Data
 
 		public void DropDB()
 		{
-            database.DropTable<ChatRecord>();
+            //database.DropTable<ChatRecord>();
             database.DropTable<UserItem>();
             database.DropTable<SummaryItems>();
             database.DropTable<DetailItems>();
@@ -93,7 +93,7 @@ namespace ASolute_Mobile.Data
         }
         #endregion
 
-        #region ChatApp
+       /* #region ChatApp
 
         public int SaveChat(ChatRecord record)
         {
@@ -115,7 +115,7 @@ namespace ASolute_Mobile.Data
             return database.Query<ChatRecord>("SELECT * FROM [ChatRecord] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }
 
-        #endregion
+        #endregion*/
 
 
         #region Customer Tracking table function

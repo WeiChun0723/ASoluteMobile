@@ -276,7 +276,6 @@
       <DependentUpon>ClickChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\Person.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\TrackingCategory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\PendingReceiving_Loading.xaml.cs">
       <DependentUpon>PendingReceiving_Loading.xaml</DependentUpon>
     </Compile>
