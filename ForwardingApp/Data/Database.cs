@@ -63,14 +63,14 @@ namespace ASolute_Mobile.Data
             database.Query<AppImage>("DELETE FROM [AppImage] WHERE [id] = ?", userId);
         }
 
+        public void DeleteImage(string imageType)
+        {
+            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [type] = ?" , imageType);
+        }
+
         public AppImage GetUserProfilePicture(string id)
         {
             return database.Table<AppImage>().Where(i => i.id == id).FirstOrDefault();
-        }
-
-        public void deleteAppImage()
-        {
-            database.Query<AppImage>("DELETE FROM AppImage");
         }
 
         public int SaveRecordImageAsync(AppImage item)

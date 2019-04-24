@@ -3,11 +3,11 @@
     <StackLayout Padding="5,10,5,10">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
         <combobox:SfComboBox x:Name="blockComboBox" Watermark="Filter by Block..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
-        <combobox:SfComboBox x:Name="dateComboBox" Watermark="Filter by Date..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
+        <combobox:SfComboBox x:Name="dateComboBox" Watermark="Filter by Closing Date..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
         <DatePicker x:Name="logBookDate" IsVisible="false"  HorizontalOptions="FillAndExpand" DateSelected="Handle_DateSelected" BackgroundColor="LightYellow"/>
         <SearchBar x:Name="searchBar" IsVisible="true" Placeholder="Search here to Filter" TextChanged="OnFilterTextChanged" HeightRequest="50" />
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData" />
-        <ListView x:Name="listView" ItemTapped="Handle_ItemTapped"  Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true">
+        <ListView x:Name="listView" ItemTapped="Handle_ItemTapped"  Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true" Style="{StaticResource recordListStyle}" HasUnevenRows="true" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

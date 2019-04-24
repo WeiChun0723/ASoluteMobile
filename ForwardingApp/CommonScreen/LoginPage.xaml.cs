@@ -126,8 +126,7 @@ namespace ASolute_Mobile
 
                 if (json_response.IsGood)
                 {
-                   // Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
-                    Ultis.Settings.SessionBaseURI = "https://mobile.asolute.com/devmobile/api/";
+                    Ultis.Settings.SessionBaseURI = json_response.Result + "api/";
                 }
             }
             catch

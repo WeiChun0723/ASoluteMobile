@@ -41,7 +41,7 @@
                             <Grid ColumnSpacing="0" RowSpacing="0" x:Name="expiryGrid" />
                         </StackLayout>
                     </Grid>
-                    <ListView x:Name="listView" ItemTapped="Handle_ItemTapped" SeparatorColor="White" IsPullToRefreshEnabled="true" />
+                    <ListView x:Name="listView" ItemTapped="Handle_ItemTapped"   Style="{StaticResource recordListStyle}" HasUnevenRows="true" />
                 </StackLayout>
             </ScrollView>
         </syncRefresh:SfPullToRefresh.PullableContent>

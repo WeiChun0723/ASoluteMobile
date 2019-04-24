@@ -33,11 +33,8 @@
                 </inputLayout:SfTextInputLayout.LeadingView>
             </inputLayout:SfTextInputLayout>
             <inputLayout:SfTextInputLayout Hint="Password" Style="{StaticResource inputStyle}" x:Name="passwordView" EnablePasswordVisibilityToggle="true">
-                <Entry IsPassword="True" x:Name="passwordEntry">
-                    <Entry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="100" />
-                    </Entry.Behaviors>
-                </Entry>
+                <Entry IsPassword="True" x:Name="passwordEntry"/>
+                    
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="padlock">
                     </Image>

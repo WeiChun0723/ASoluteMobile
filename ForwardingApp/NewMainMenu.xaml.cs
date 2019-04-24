@@ -225,11 +225,11 @@ namespace ASolute_Mobile
             }
             catch (Exception ex)
             {
-                // await DisplayAlert("Exception", ex.Message, "OK");
+                 await DisplayAlert("Exception", ex.Message, "OK");
             }
         }
 
-        public void LoadMainMenu()
+        async void LoadMainMenu()
         {
             try
             {
@@ -237,9 +237,7 @@ namespace ASolute_Mobile
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
-                listView.HasUnevenRows = true;
-                listView.HeightRequest = Item.Count * 140;
-                listView.Style = (Style)App.Current.Resources["recordListStyle"];
+                listView.HeightRequest = (expiryStack.IsVisible) ? Item.Count * 100 : Item.Count * 80;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 System.TimeSpan interval = new System.TimeSpan();
                 if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
@@ -255,9 +253,9 @@ namespace ASolute_Mobile
                     Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                await DisplayAlert("Error", ex.Message, "OK");
             }
         }
 

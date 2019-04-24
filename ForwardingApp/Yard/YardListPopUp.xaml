@@ -14,9 +14,9 @@
     <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Padding="10, 10, 10, 10">
         <Frame CornerRadius="10" BackgroundColor="#87ceeb">
             <StackLayout Spacing="20">
-            <combobox:SfComboBox x:Name="blockComboBox"  Style="{StaticResource comboBoxStyle}" Text="Block" Watermark="Block" SelectionChanged="Handle_SelectionChanged" HeightRequest="100" WidthRequest="220" HorizontalOptions="Center" TextSize="40"  />
-            <combobox:SfComboBox x:Name="bayComboBox" Style="{StaticResource comboBoxStyle}" Text="Bay" HeightRequest="100" WidthRequest="200" HorizontalOptions="Center" TextSize="40" />
-            <combobox:SfComboBox x:Name="levelComboBox" Style="{StaticResource comboBoxStyle}" Text="Level" HeightRequest="100" WidthRequest="200" HorizontalOptions="Center" TextSize="40" />
+            <combobox:SfComboBox x:Name="blockComboBox"  Style="{StaticResource comboBoxStyle}" Text="Block" Watermark="Block" SelectionChanged="Handle_SelectionChanged" HeightRequest="100"  TextSize="40"  />
+            <combobox:SfComboBox x:Name="bayComboBox" Style="{StaticResource comboBoxStyle}" Text="Bay" HeightRequest="100"   TextSize="40" />
+            <combobox:SfComboBox x:Name="levelComboBox" Style="{StaticResource comboBoxStyle}" Text="Level" HeightRequest="100"   TextSize="40" />
             <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Confirm"  x:Name="btnConfirm" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" />
             </StackLayout>
         </Frame>

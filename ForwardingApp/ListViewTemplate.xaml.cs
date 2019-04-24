@@ -25,9 +25,9 @@ namespace ASolute_Mobile
         List<string> dateOption = new List<string>
         {
             "All",
-            "Closing <= 1 Day",
-            "Closing = 2 Days",
-            "Closing > 2 Days"
+            "Closing Today",
+            "Closing Tomorrow",
+            "Closing After Tomorrow"
         };
         ListItems menuItems;
         ObservableCollection<ListItems> Item;
@@ -55,6 +55,9 @@ namespace ASolute_Mobile
                     break;
 
                 //AILS Yard function control
+                case "PendingStorage":
+                    icon.IsVisible = false;
+                    break;
                 case "ContainerInquiry":
                     icon.IsVisible = false;
                     searchBar.IsVisible = false;
@@ -90,6 +93,7 @@ namespace ASolute_Mobile
             base.OnAppearing();
             GetListData();
 
+            //if the combo box is visible get value from webservice and populate using the control
             if (blockComboBox.IsVisible == true)
             {
                 GetComboBoxData(ControllerUtil.getBlockList());
@@ -130,7 +134,6 @@ namespace ASolute_Mobile
             loading.IsVisible = true;
             try
             {
-
                 if (menuItems.Id == "FuelCost")
                 {
                     await Navigation.PushAsync(new RefuelEntry(menuItems.Name));
@@ -167,7 +170,6 @@ namespace ASolute_Mobile
                                 await Navigation.PopAsync();
                                 searchBar.Text = result.Text;
                             }
-
                         });
                     };
                 }
@@ -178,7 +180,6 @@ namespace ASolute_Mobile
                 await DisplayAlert("Error", ex.Message, "OK");
             }
         }
-
 
         //display scan result (success / error) in scan page
         public void displayToast(string message)
@@ -273,8 +274,7 @@ namespace ASolute_Mobile
                             Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id,
                             Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
                             Category = menuItems.Id,
-                            Name = menuItems.Name,
-
+                            Name = menuItems.Name
                         };
 
                         if (menuItems.Id == "JobList")
@@ -369,11 +369,10 @@ namespace ASolute_Mobile
                     {
                         listView.ItemsSource = overloadRecord;
                         listView.RowHeight = 130;
-                        listView.HasUnevenRows = true;
-                        listView.Style = (Style)App.Current.Resources["recordListStyle"];
-                        listView.IsRefreshing = false;
+
                     }
 
+                    listView.IsRefreshing = false;
                     loading.IsVisible = false;
                 }
             }
@@ -388,11 +387,8 @@ namespace ASolute_Mobile
             Ultis.Settings.List = menuItems.Id;
             Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(menuItems.Id));
             listView.ItemsSource = Item;
-            listView.HasUnevenRows = true;
-            listView.Style = (Style)App.Current.Resources["recordListStyle"];
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
             noData.IsVisible = (Item.Count == 0) ? true : false;
-            listView.IsRefreshing = false;
         }
 
         //AILS Yrad container inquiry combo box data
@@ -419,6 +415,9 @@ namespace ASolute_Mobile
                     blockComboBox.ComboBoxSource = blocksID;
                     dateComboBox.ComboBoxSource = dateOption;
                 }
+
+                string test = "";
+
             }
             catch (Exception ex)
             {
@@ -426,7 +425,7 @@ namespace ASolute_Mobile
             }
         }
 
-        //AILS Yard filtering by block id
+        //AILS Yard filtering list by block id and closing date
         async void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
         {
             try
@@ -455,22 +454,21 @@ namespace ASolute_Mobile
                         {
                             switch(dateComboBox.Text)
                             {
-                                case "Closing <= 1 Day":
-                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate <= DateTime.Now.AddDays(-1));
+                                case "Closing Today":
+                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate <= DateTime.Now.AddDays(-1) || x.ClosingDate.Value.Day == DateTime.Now.Day);
                                     break;
 
-                                case "Closing = 2 Days":
-                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate == DateTime.Now.AddDays(2));
+                                case "Closing Tomorrow":
+                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate.Value.Day == DateTime.Now.AddDays(1).Day);
                                     break;
 
-                                case "Closing > 2 Days":
-                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate > DateTime.Now.AddDays(2));
+                                case "Closing After Tomorrow":
+                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate >= DateTime.Now.AddDays(2));
                                     break;
                             }
                         }
                         break;
                 }
-
             }
             catch (Exception ex)
             {

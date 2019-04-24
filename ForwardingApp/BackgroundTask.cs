@@ -129,7 +129,8 @@ namespace ASolute_Mobile
                 contentPage.IsBusy = true;
             }
 
-            App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
+            //App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
+            App.Database.DeleteImage("NormalImage");
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";
             
