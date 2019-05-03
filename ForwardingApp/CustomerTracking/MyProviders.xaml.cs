@@ -15,7 +15,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+  
     public partial class MyProviders : ContentPage
     {
 
@@ -23,6 +23,7 @@ namespace ASolute_Mobile.CustomerTracking
         {
             InitializeComponent();
             Title = "Home";
+
             loading.IsRunning = true;
             loading.IsVisible = true;
             loading.IsEnabled = true;
@@ -113,7 +114,6 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 var providers = JObject.Parse(content)["Result"].ToObject<List<clsProvider>>();
 
-              
                 App.Database.deleteRecords("ProviderList");
                 App.Database.DeleteProvider();
                 
@@ -134,7 +134,6 @@ namespace ASolute_Mobile.CustomerTracking
 
                     App.Database.SaveProvider(available_provider);
                 }
-               
                  LoadProviderList();
             }
             else

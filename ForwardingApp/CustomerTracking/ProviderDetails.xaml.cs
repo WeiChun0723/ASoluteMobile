@@ -44,11 +44,8 @@ namespace ASolute_Mobile.CustomerTracking
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-
         }
        
-
         protected async void refreshContainerList(object sender, EventArgs e)
         {
             App.Database.deleteMainMenu();

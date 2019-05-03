@@ -110,7 +110,6 @@ namespace ASolute_Mobile
                         if (item.IsSelected == false)
                         {
                             checkingList.Add(new clsKeyValue(item.Category, item.Name));
-
                         }
 
                     }

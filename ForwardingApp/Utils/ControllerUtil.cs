@@ -108,7 +108,6 @@ namespace ASolute_Mobile.Utils
             return String.Format("Session/Login?UserId={0}&Pwd={1}", encryptedUserId, encryptedPassword);
         }
 
-
         //fleet app
         public static String getLoginURL(string encryptedUserId, string encryptedPassword, string equipment)
         {
@@ -139,6 +138,10 @@ namespace ASolute_Mobile.Utils
 
                 case "asolute.Mobile.AILSYard":
                     name = "Yard";
+                    break;
+
+                case "asolute.Mobile.AILSBUS":
+                    name = "Bus";
                     break;
             }
 
@@ -453,6 +456,11 @@ namespace ASolute_Mobile.Utils
         public static String getPickingListURL()
         {
             return String.Format("Wms/Picking/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String loadPickingDetailURL(string pickingID)
+        {
+            return String.Format("Wms/Picking/Load?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), pickingID);
         }
 
         public static String loadPickingDetailURL(string pickingID, string pickingType)

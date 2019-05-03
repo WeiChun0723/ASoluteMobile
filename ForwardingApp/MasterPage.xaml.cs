@@ -15,11 +15,8 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-
             LogoImage.Source = (File.Exists(Ultis.Settings.GetAppLogoFileLocation())) ? ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation()) : "user_icon.png";
-
-            ownerName.Text = Ultis.Settings.SessionUserItem.UserId;
-
+            ownerName.Text = Ultis.Settings.SessionUserId;
             appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppVersion;
 
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
@@ -27,7 +24,7 @@ namespace ASolute_Mobile
             var masterPageItems = new List<MasterPageItem>();
             masterPageItems.Clear();
 
-            if (Ultis.Settings.App == "asolute.Mobile.AILSPlanner" && Ultis.Settings.App == "asolute.Mobile.AILSTracking")
+            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking")
             {
                 MasterPageItem provider = new MasterPageItem();
                 provider.Id = "AddProvider";
@@ -37,6 +34,7 @@ namespace ASolute_Mobile
             }
             else
             {
+                ownerName.Text = Ultis.Settings.SessionUserItem.UserId;
 
                 foreach (SummaryItems item in contextMenu)
                 {

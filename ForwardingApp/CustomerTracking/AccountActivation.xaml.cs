@@ -19,7 +19,6 @@ namespace ASolute_Mobile.CustomerTracking
             InitializeComponent();
         }
 
-
         public async void Submit_Clicked(object sender, EventArgs e)
         {
             var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL(ActivationEntry.Text));

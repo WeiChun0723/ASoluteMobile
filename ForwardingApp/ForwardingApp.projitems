@@ -191,14 +191,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CommonScreen\Registration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)HaulageScreen\Registration.xaml.cs">
-      <DependentUpon>Registration.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\CargoEntry.xaml.cs">
       <DependentUpon>CargoEntry.xaml</DependentUpon>
@@ -403,6 +403,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Yard\YardListPopUp.xaml.cs">
       <DependentUpon>YardListPopUp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\Registration.xaml.cs">
+      <DependentUpon>Registration.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -418,6 +422,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
     <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Yard\" />
+    <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">
@@ -451,12 +456,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\Shunting.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HaulageScreen\Registration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

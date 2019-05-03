@@ -14,7 +14,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+
     public partial class AppNavigation: ContentPage
     {
         readonly Image splashImage;
@@ -61,11 +61,13 @@ namespace ASolute_Mobile.CustomerTracking
 
             submit = new SfButton
             {
+                Style = (Style)App.Current.Resources["buttonStyle"],
                 TextColor = Color.White,
                 Text = "Submit",
                 HorizontalOptions = LayoutOptions.Fill,
                 IsVisible = false,
-                BackgroundColor = Color.FromHex("#6495ed")
+                BackgroundColor = Color.FromHex("#6495ed"),
+                HeightRequest = 60
             };
 
             loading = new ActivityIndicator();
@@ -217,7 +219,6 @@ namespace ASolute_Mobile.CustomerTracking
                             case "Register":
                                 entry.IsVisible = true;
                                 submit.IsVisible = true;
-
                                 break;
 
                             case "Activate":
@@ -225,9 +226,9 @@ namespace ASolute_Mobile.CustomerTracking
                                 break;
 
                             case "Home":
-
                                 Application.Current.MainPage = new MainPage();
                                 break;
+
                             case "HaulageVolume":
                                 //Application.Current.MainPage = new CustomNavigationPage(new LoadingScreen());
                                 Application.Current.MainPage = new MainPage();
@@ -236,7 +237,6 @@ namespace ASolute_Mobile.CustomerTracking
 
                     }
                 }
-
                 else
                 {
                     await DisplayAlert("JsonError", login_response.Message, "OK");

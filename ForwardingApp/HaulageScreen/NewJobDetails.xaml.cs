@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomRenderer;
 using ASolute_Mobile.Models;
@@ -16,6 +17,7 @@ using PCLStorage;
 using Rg.Plugins.Popup.Services;
 using SignaturePad.Forms;
 using Syncfusion.XForms.Buttons;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
 
@@ -60,6 +62,7 @@ namespace ASolute_Mobile.HaulageScreen
             main.Children.Add(title2);
             NavigationPage.SetTitleView(this, main);
         }
+
 
         protected override void OnDisappearing()
         {
@@ -194,6 +197,21 @@ namespace ASolute_Mobile.HaulageScreen
                 }
 
                 label.FontAttributes = FontAttributes.Bold;
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += async (sender, e) =>
+                {
+
+                    await Clipboard.SetTextAsync(label.Text);
+
+                    var toastConfig = new ToastConfig("Text Copied");
+                    toastConfig.SetDuration(2000);
+                    toastConfig.Position = 0;
+                    toastConfig.SetMessageTextColor(System.Drawing.Color.FromArgb(0, 0, 0));
+                    toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(0, 128, 0));
+                    UserDialogs.Instance.Toast(toastConfig);
+                };
+                label.GestureRecognizers.Add(tapGestureRecognizer);
+
 
                 StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 5, 0, 5) };
                 stackLayout.Children.Add(label);
@@ -451,11 +469,7 @@ namespace ASolute_Mobile.HaulageScreen
                             {
                                 InitializeObject();
                             }
-                            else
-                            {
-                                contNum.Text = String.Empty;
-                                contPrefix.Text = String.Empty;
-                            }
+                           
                         }
                     }
                     else
@@ -578,7 +592,7 @@ namespace ASolute_Mobile.HaulageScreen
             images = App.Database.GetUplodedRecordImagesAsync(jobItem.EventRecordId.ToString(), "NormalImage");
             foreach (AppImage Image in images)
             {
-                IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
+                IFile actualFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
                 Stream stream = await actualFile.OpenAsync(PCLStorage.FileAccess.Read);
                 var image = new Image();
                 byte[] imageByte;

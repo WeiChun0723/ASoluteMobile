@@ -41,7 +41,7 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            if (Ultis.Settings.App == "asolute.Mobile.AILSPlanner" && Ultis.Settings.App == "asolute.Mobile.AILSTracking")
+            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking")
             {
                 Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
                 MainPage = new CustomNavigationPage(new AppNavigation());

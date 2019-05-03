@@ -6,7 +6,7 @@ using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(CustomButton), typeof(CustomButtonIOS))]
+//[assembly: ExportRenderer(typeof(CustomButton), typeof(CustomButtonIOS))]
 namespace HaulageApp.iOS.CustomRenderer
 {
 

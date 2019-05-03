@@ -9,6 +9,7 @@ using ASolute_Mobile.CommonScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.Utils;
+using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
@@ -19,10 +20,27 @@ namespace ASolute_Mobile
     {
         Label title1, title2;
         List<clsKeyValue> checkItems = new List<clsKeyValue>();
+        string firebaseID = "";
 
         public NewMainMenu()
         {
             InitializeComponent();
+
+            switch(Ultis.Settings.App)
+            {
+                case "asolute.Mobile.AILSBUS":
+                    headerImage.Source = "busticketingheader.png";
+                    break;
+
+                case "asolute.Mobile.AILSWMS":
+                    headerImage.Source = "warehouseheader.png";
+                    break;
+
+                case "asolute.Mobile.AILSHaulage":
+                    headerImage.Source = "headerBackground.png";
+                    break;
+            }
+
             StackLayout main = new StackLayout();
             title1 = new Label
             {
@@ -74,7 +92,6 @@ namespace ASolute_Mobile
                     {
                         string itemKey = response.Result["Checklist"][check]["Key"];
                         string itemValue = response.Result["Checklist"][check]["Value"];
-
                         checkItems.Add(new clsKeyValue(itemKey, itemValue));
                     }
 
@@ -82,7 +99,6 @@ namespace ASolute_Mobile
                     App.Database.deleteRecords("MainMenu");
                     App.Database.deleteRecordSummary("MainMenu");
                     App.Database.deleteRecordSummary("ContextMenu");
-
                     foreach (clsDataRow mainMenu in menu.MainMenu)
                     {
                         switch (mainMenu.Id)
@@ -128,7 +144,6 @@ namespace ASolute_Mobile
                                             BackgroundColor = Color.FromHex(mainMenu.BackColor),
                                             Padding = new Thickness(0, 10, 0, 10)
                                         };
-
 
                                         Label date = new Label
                                         {
@@ -213,6 +228,7 @@ namespace ASolute_Mobile
                     }
 
                     LoadMainMenu();
+
                     if (checkItems.Count != 0)
                     {
                         CheckList chkList = new CheckList(checkItems, menu.CheckListLinkId);
@@ -237,7 +253,7 @@ namespace ASolute_Mobile
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
-                listView.HeightRequest = (expiryStack.IsVisible) ? Item.Count * 100 : Item.Count * 80;
+                listView.HeightRequest =  Item.Count * 100;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 System.TimeSpan interval = new System.TimeSpan();
                 if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
@@ -269,13 +285,11 @@ namespace ASolute_Mobile
                     break;
 
                 case "FuelCost":
-                   
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getDownloadRefuelHistoryURL()));
                     break;
 
                 case "EqInquiry":
-                    EquipmentInquiry equipment = new EquipmentInquiry();
-                    await Navigation.PushAsync(equipment);
+                    await Navigation.PushAsync(new EquipmentInquiry());
                     break;
 
                 case "CargoRec":
@@ -293,14 +307,14 @@ namespace ASolute_Mobile
                 case "JobList":
                     //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
                     //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL())) ;
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
                     break;
 
                 case "MasterJobList":
                     await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
                     break;
-                case "CargoReturn":
 
+                case "CargoReturn":
                     break;
 
                 case "RunSheet":
@@ -310,51 +324,71 @@ namespace ASolute_Mobile
                 case "Shunting":
                     await Navigation.PushAsync(new HaulageScreen.Shunting(((ListItems)e.Item).Name));
                     break;
+
                 case "PendingCollection":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPendingCollectionURL()));
                     break;
+
                 case "DriverRFC":
                     await Navigation.PushAsync(new HaulageScreen.DriverRFC(((ListItems)e.Item).Name));
                     break;
+
                 case "EqList":
                     await Navigation.PushAsync(new Planner.EqCategory());
                     break;
+
                 case "MapView":
                     await Navigation.PushAsync(new AllTruckMap(((ListItems)e.Item).Name));
                     break;
+
                 case "TallyIn":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyInListURL()));
                     break;
+
                 case "PalletTrx":
                     await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
                     break;
+
                 case "Packing":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPackingListURL()));
                     break;
+
                 case "TallyOut":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTallyOutListURL()));
                     break;
+
+                case "Picking":
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
+                    break;
+
                 case "FullPick":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                     break;
+
                 case "LoosePick":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                     break;
+
                 case "PickingVerify":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPickingListURL(((ListItems)e.Item).Id)));
                     break;
+
                 case "InboundTrip":
                     await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
                     break;
+
                 case "OutboundTrip":
                     await Navigation.PushAsync(new StopsList(((ListItems)e.Item).Name));
                     break;
+
                 case "DailyCash":
                     await Navigation.PushAsync(new CheckOut());
                     break;
+
                 case "PendingStorage":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPendingStorage()));
                     break;
+
                 case "ContainerInquiry":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getCollectionInquiry()));
                     break;

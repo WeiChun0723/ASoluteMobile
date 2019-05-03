@@ -161,7 +161,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void Handle_GridTapped(object sender, GridTappedEventArgs e)
         {
-            if(record.Category == "TallyIn" || record.Category == "FullPick" || record.Category == "LoosePick")
+            if(record.Category == "TallyIn" || record.Category == "FullPick" || record.Category == "LoosePick" || record.Category == "Picking")
             {
                 clsWhsItem product = new clsWhsItem();
                 product = ((clsWhsItem)e.RowData);
@@ -170,7 +170,7 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     if(record.Category == "TallyIn")
                     {
-                        await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id));
+                        await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id,recordDetails.Action));
                     }
                     else
                     {

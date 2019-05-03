@@ -13,9 +13,9 @@
                 <DataTemplate>
                      <ViewCell >
                             
-                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding background}">
-                       <StackLayout BackgroundColor="{Binding background}">
-                                <Label Text="{Binding summary}" FontAttributes="Bold" />
+                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
+                       <StackLayout BackgroundColor="{Binding Background}">
+                                <Label Text="{Binding Summary}" FontAttributes="Bold" />
                         </StackLayout>
                     </Frame>
                          

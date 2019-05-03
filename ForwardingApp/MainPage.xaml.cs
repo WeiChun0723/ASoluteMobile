@@ -17,19 +17,23 @@ namespace ASolute_Mobile
     public partial class MainPage : MasterDetailPage
     {
         public static int selection;
-
-
+        MasterPage masterPage = new MasterPage();
         public MainPage()
         {
             InitializeComponent();
 
-            /* 
-             * MasterPage masterPage = new MasterPage();
-             * Master = masterPage;
-             * Detail = new NavigationPage(new MyProviders());*/
+            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking")
+            {
+                Master = masterPage;
+                Detail = new CustomNavigationPage(new MyProviders());
+            }
+            else
+            {
+                Master = masterPage;
+                Detail = new CustomNavigationPage(new NewMainMenu());
+            }
 
             masterPage.ListView.ItemSelected += OnItemSelected;
-           
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -51,8 +55,8 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                               
-                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL(),this);
+
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL(), this);
                                 clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (autoScan_response.IsGood)
@@ -61,7 +65,7 @@ namespace ASolute_Mobile
                                     Ultis.Settings.AppFirstInstall = "Refresh";
                                     Application.Current.MainPage = new MainPage();
                                 }
-                               
+
 
                             }
                             catch
@@ -69,9 +73,9 @@ namespace ASolute_Mobile
                                 await DisplayAlert("Error", "Problem occur", "OK");
                             }
                         }
-                       
+
                     }
-                    else if(item.Id.Equals("Panic"))
+                    else if (item.Id.Equals("Panic"))
                     {
                         string panic = (Ultis.Settings.Language.Equals("English")) ? "Send panic message ?" : "Pasti ?";
                         var answer = await DisplayAlert("", panic, "Yes", "No");
@@ -79,47 +83,11 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL(),this);
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL(), this);
                                 clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
                                 if (panic_response.IsGood == true)
                                 {
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Message sent successfully." : "Permintaan anda telah dihantar.";
-                                    await DisplayAlert("",reply , "Okay");
-                                }
-                               
-                            }
-                            catch(Exception exception)
-                            {
-                                await DisplayAlert("Error", exception.Message, "OK");
-                            }
-                   
-                        }
-                    }
-                    else if (item.Id.Equals("CallOffice"))
-                    {
-                        try
-                        {
-                            Device.OpenUri(new Uri(String.Format("tel:{0}", Ultis.Settings.SessionUserItem.OperationPhone)));
-                        }
-                        catch(Exception exception)
-                        {
-                            await DisplayAlert("Error", exception.Message, "OK");
-                        }
-                    }
-                    else if (item.Id.Equals("CallMe"))
-                    {
-                        string callMe = (Ultis.Settings.Language.Equals("English")) ? "Request controller to call you ?" : "Pasti ?";
-                        var answer = await DisplayAlert("",callMe , "Yes", "No");
-                        if (answer.Equals(true))
-                        {
-                            try
-                            {
-                              
-                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getCallOperatorURL(),this);
-                                clsResponse callMe_response = JsonConvert.DeserializeObject<clsResponse>(content);
-                                if (callMe_response.IsGood == true)
-                                {
-                                    string reply = (Ultis.Settings.Language.Equals("English")) ? "Your request has been attended" : "Permintaan anda telah dihantar."; 
                                     await DisplayAlert("", reply, "Okay");
                                 }
 
@@ -128,22 +96,58 @@ namespace ASolute_Mobile
                             {
                                 await DisplayAlert("Error", exception.Message, "OK");
                             }
-                           
+
+                        }
+                    }
+                    else if (item.Id.Equals("CallOffice"))
+                    {
+                        try
+                        {
+                            Device.OpenUri(new Uri(String.Format("tel:{0}", Ultis.Settings.SessionUserItem.OperationPhone)));
+                        }
+                        catch (Exception exception)
+                        {
+                            await DisplayAlert("Error", exception.Message, "OK");
+                        }
+                    }
+                    else if (item.Id.Equals("CallMe"))
+                    {
+                        string callMe = (Ultis.Settings.Language.Equals("English")) ? "Request controller to call you ?" : "Pasti ?";
+                        var answer = await DisplayAlert("", callMe, "Yes", "No");
+                        if (answer.Equals(true))
+                        {
+                            try
+                            {
+
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getCallOperatorURL(), this);
+                                clsResponse callMe_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                                if (callMe_response.IsGood == true)
+                                {
+                                    string reply = (Ultis.Settings.Language.Equals("English")) ? "Your request has been attended" : "Permintaan anda telah dihantar.";
+                                    await DisplayAlert("", reply, "Okay");
+                                }
+
+                            }
+                            catch (Exception exception)
+                            {
+                                await DisplayAlert("Error", exception.Message, "OK");
+                            }
+
                         }
                     }
                     else if (item.Id.Equals("Language"))
                     {
                         string language = (Ultis.Settings.Language.Equals("English")) ? "Please choose prefer language" : "Sila pilih bahasa ";
-                        var answer = await DisplayActionSheet(language, "",null,"English", "Malay");
+                        var answer = await DisplayActionSheet(language, "", null, "English", "Malay");
                         string uri = "";
-                        if(answer != null)
+                        if (answer != null)
                         {
-                            if(answer.Equals("English"))
+                            if (answer.Equals("English"))
                             {
                                 uri = ControllerUtil.getLanguageURL(0);
                                 Ultis.Settings.Language = "English";
                             }
-                            else if(answer.Equals("Malay") )
+                            else if (answer.Equals("Malay"))
                             {
                                 uri = ControllerUtil.getLanguageURL(1);
                                 Ultis.Settings.Language = "Malay";
@@ -152,7 +156,7 @@ namespace ASolute_Mobile
                             try
                             {
 
-                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, uri,this);
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
                                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (json_response.IsGood == true)
@@ -174,8 +178,8 @@ namespace ASolute_Mobile
                         {
 
                         }
-                    }                   
-                    else if(item.Id.Equals("LogOff"))
+                    }
+                    else if (item.Id.Equals("LogOff"))
                     {
                         string logoff = (Ultis.Settings.Language.Equals("English")) ? "Are you sure?" : "Pasti ?";
                         var answer = await DisplayAlert("", logoff, "Yes", "No");
@@ -183,7 +187,7 @@ namespace ASolute_Mobile
                         {
                             try
                             {
-                                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL(),this);
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL(), this);
                                 clsResponse logoutResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                 if (logoutResponse.IsGood == true)
@@ -216,7 +220,7 @@ namespace ASolute_Mobile
 
         public async void refreshMainPage()
         {
-            var context_content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(),this);
+            var context_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
             clsResponse context_return = JsonConvert.DeserializeObject<clsResponse>(context_content);
 
             var contextMenuItems = JObject.Parse(context_content)["Result"].ToObject<clsLogin>();
@@ -258,6 +262,6 @@ namespace ASolute_Mobile
 
             Application.Current.MainPage = new MainPage();
         }
-      
+
     }
 }

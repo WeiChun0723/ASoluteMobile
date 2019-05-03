@@ -4,7 +4,8 @@
              xmlns:chkBox="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
              x:Class="ASolute_Mobile.CustomerTracking.CustomerRegistration"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
-             BackgroundColor = "#9A2116">
+             BackgroundColor = "#9A2116"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     
  
      <ScrollView>
@@ -18,7 +19,7 @@
         <StackLayout Padding = "0, 15"></StackLayout>
 
        
-        <controls:CustomEntry Placeholder="User Name" x:Name = "userNameEntry" Image="user" Style="{StaticResource entryStyle}" TextChanged="userNameTextChange"/>
+        <controls:CustomEntry Placeholder="User Name" x:Name = "userNameEntry" Image="controller" Style="{StaticResource entryStyle}" TextChanged="userNameTextChange"/>
         <controls:CustomEntry Placeholder="Email Address" x:Name = "emailAddressEntry" Image="pass" Style="{StaticResource entryStyle}" TextChanged="emailTextChange" Keyboard="Email"/>
         <controls:CustomEntry Placeholder="Mobile No."  x:Name = "phoneEntry" Image="pass" Style="{StaticResource entryStyle}" Keyboard="Numeric" TextChanged="mobileTextChange"/>
         <controls:CustomEntry Placeholder="Business Reg No."  x:Name = "businessRegEntry" Image="organization" Style="{StaticResource entryStyle}" TextChanged="businessTextChange"/>
@@ -26,7 +27,7 @@
         
         <chkBox:CheckBox DefaultText="I agreed with the term and condition." HorizontalOptions="FillAndExpand" FontSize="10" IsVisible="false" x:Name="term"/>
         
-        <Button Style="{StaticResource buttonStyle}" x:Name="RegisterButton" Text = "Next" Clicked="Register_Clicked" />
+        <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="RegisterButton" Text = "Next" Clicked="Register_Clicked" />
 
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
 

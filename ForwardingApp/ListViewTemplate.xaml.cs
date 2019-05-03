@@ -215,6 +215,9 @@ namespace ASolute_Mobile
                 case "Packing":
                     await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
                     break;
+                case "Picking":
+                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id,"Picking"), ((ListItems)e.Item)));
+                    break;
                 case "LoosePick":
                     await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item)));
                     break;
@@ -253,6 +256,8 @@ namespace ASolute_Mobile
         {
             try
             {
+                loading.IsVisible = true;
+
                 overloadRecord.Clear();
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);

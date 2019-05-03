@@ -25,7 +25,7 @@
                         </Grid.RowDefinitions>
                         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
                         <!--  header background  -->
-                        <Image Aspect="AspectFill" Source="headerBackground.png" />
+                        <Image Aspect="AspectFill" x:Name="headerImage" />
                         <Image Aspect="Fill" Margin="0,-1,0,-1" Source="CurvedMask.png" VerticalOptions="End" />
                         <!--  profile image  -->
                         <circleImage:CircleImage x:Name="profilePicture" BorderColor="White" HeightRequest="120" HorizontalOptions="Center" TranslationY="50" VerticalOptions="End" WidthRequest="120" Aspect="AspectFill" BorderThickness="3">

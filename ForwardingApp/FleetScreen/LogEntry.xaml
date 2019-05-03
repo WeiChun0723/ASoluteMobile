@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
             <Label Text="Start" FontAttributes="Bold" TextColor="Red" Grid.Row="0" Grid.Column="0"   VerticalOptions="Center" x:Name="lblStart"/>
-            <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" x:Name="lblStartDateTime"/>
+            <Label Text="Date &amp; Time" FontAttributes="Bold" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" x:Name="lblStartDateTime"/>
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
             <DatePicker x:Name="startDate" HorizontalOptions="Fill" WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow"/>
              <TimePicker x:Name="startTime" HorizontalOptions="Fill" WidthRequest="100" Format="HH:mm"  BackgroundColor="LightYellow"/>
@@ -42,7 +42,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Text="End" FontAttributes="Bold" TextColor="Red" Grid.Row="0" Grid.Column="0"   VerticalOptions="Center"  x:Name="lblEnd"/>
-            <Label Text="" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"  VerticalOptions="Center" x:Name="lblEndDateTime"/>
+            <Label Text="Date &amp; Time" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"  VerticalOptions="Center" x:Name="lblEndDateTime"/>
             <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                 <DatePicker x:Name="endDate" HorizontalOptions="Fill" WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow"/>
                 <TimePicker x:Name="endTime" HorizontalOptions="Fill" WidthRequest="100" Format="HH:mm" BackgroundColor="LightYellow"/>
@@ -56,15 +56,15 @@
 
 
             <StackLayout Orientation="Horizontal" Spacing="6" HorizontalOptions="Center">
-              <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center"   x:Name="camera_icon" >
+              <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center"   x:Name="camera_icon" IsEnabled="false" >
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="captureImage"/>
+                        <TapGestureRecognizer Tapped="Handle_Tapped"/>
                     </Image.GestureRecognizers>
                 </Image>
 
                 <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"  x:Name="confirm_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="confirmLog"/>
+                        <TapGestureRecognizer Tapped="Handle_Tapped"/>
                     </Image.GestureRecognizers>
                 </Image>
              </StackLayout>
@@ -72,7 +72,15 @@
       
          
             <Label x:Name="successUploaded" IsVisible="False"/>
-            <Grid  x:Name="imageGrid">
+             <Grid x:Name="imageGrid" RowSpacing="0" ColumnSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition x:Name="imageGridRow" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
             </Grid>
         </StackLayout>
     </ScrollView>

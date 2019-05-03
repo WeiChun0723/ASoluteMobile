@@ -101,91 +101,98 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void Register_Clicked(object sender, EventArgs e)
         {
-            if(RegisterButton.Text.Equals("Next"))
+            try
             {
-                if(emailAddressEntry.Text.Contains("@") && emailAddressEntry.Text.Contains(".com"))
+                if (RegisterButton.Text.Equals("Next"))
                 {
-                    var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text));
-                    clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if(company_response.IsGood)
+                    if (emailAddressEntry.Text.Contains("@") && emailAddressEntry.Text.Contains("."))
                     {
-                        companyEntry.IsVisible = true;
-                        term.IsVisible = true;
+                        var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text));
+                        clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        companyEntry.Text = company_response.Result;
-                        RegisterButton.Text = "Confirm";
-                    }
-                    else
-                    {
-                        await DisplayAlert("Json Error", company_response.Message, "OK");
-                    }
-
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Email address must in example@mail.com format", "OK");
-                }
-
-            }
-            else
-            {
-                if(term.Checked)
-                {
-                    if(!(String.IsNullOrEmpty(emailAddressEntry.Text)) && !(String.IsNullOrEmpty(userNameEntry.Text)) && !(String.IsNullOrEmpty(phoneEntry.Text))
-                      && !(String.IsNullOrEmpty(businessRegEntry.Text)) && !(String.IsNullOrEmpty(companyEntry.Text)))
-                    {
-                        try
+                        if (company_response.IsGood)
                         {
-                            OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+                            companyEntry.IsVisible = true;
+                            term.IsVisible = true;
 
-                            Ultis.Settings.FireID = firebaseID;
-                        }
-                        catch
-                        {
-
-                        }
-
-                        clsRegister register = new clsRegister();
-
-                        register.DeviceId = Ultis.Settings.DeviceUniqueID;
-                        register.UserName = userNameEntry.Text;
-                        register.Email = emailAddressEntry.Text;
-                        register.MobileNo = phoneEntry.Text;
-                        register.RegNo = businessRegEntry.Text;
-                        register.CompanyName = companyEntry.Text;
-                        register.FirebaseId = firebaseID;
-                        register.DeviceIdiom = CrossDeviceInfo.Current.Idiom.ToString();
-                        register.DeviceMfg = CrossDeviceInfo.Current.Manufacturer;
-                        register.DeviceModel = CrossDeviceInfo.Current.Model;
-                        register.OSPlatform = CrossDeviceInfo.Current.Platform.ToString();
-                        register.OSVer = CrossDeviceInfo.Current.VersionNumber.ToString();
-                        register.AppVer = CrossDeviceInfo.Current.AppVersion;
-
-                        var content = await CommonFunction.PostRequestAsync(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
-                        clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                        if (register_response.IsGood)
-                        {
-                          
-                            Application.Current.MainPage = new AccountActivation();
+                            companyEntry.Text = company_response.Result;
+                            RegisterButton.Text = "Confirm";
                         }
                         else
                         {
-                            await DisplayAlert("Json Error", register_response.Message, "OK");
+                            await DisplayAlert("Json Error", company_response.Message, "OK");
                         }
+
                     }
                     else
                     {
-                        await DisplayAlert("Error", "Please enter all the field .", "OK");
+                        await DisplayAlert("Error", "Email address must in example@mail.com format", "OK");
                     }
-                   
+
                 }
                 else
                 {
-                    await DisplayAlert("Reminder", "Please tick the check box to continue", "OK");
-                }
+                    if (term.Checked)
+                    {
+                        if (!(String.IsNullOrEmpty(emailAddressEntry.Text)) && !(String.IsNullOrEmpty(userNameEntry.Text)) && !(String.IsNullOrEmpty(phoneEntry.Text))
+                          && !(String.IsNullOrEmpty(businessRegEntry.Text)) && !(String.IsNullOrEmpty(companyEntry.Text)))
+                        {
+                            try
+                            {
+                                OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
 
+                                Ultis.Settings.FireID = firebaseID;
+                            }
+                            catch
+                            {
+
+                            }
+
+                            clsRegister register = new clsRegister();
+
+                            register.DeviceId = Ultis.Settings.DeviceUniqueID;
+                            register.UserName = userNameEntry.Text;
+                            register.Email = emailAddressEntry.Text;
+                            register.MobileNo = phoneEntry.Text;
+                            register.RegNo = businessRegEntry.Text;
+                            register.CompanyName = companyEntry.Text;
+                            register.FirebaseId = firebaseID;
+                            register.DeviceIdiom = CrossDeviceInfo.Current.Idiom.ToString();
+                            register.DeviceMfg = CrossDeviceInfo.Current.Manufacturer;
+                            register.DeviceModel = CrossDeviceInfo.Current.Model;
+                            register.OSPlatform = CrossDeviceInfo.Current.Platform.ToString();
+                            register.OSVer = CrossDeviceInfo.Current.VersionNumber.ToString();
+                            register.AppVer = CrossDeviceInfo.Current.AppVersion;
+
+                            var content = await CommonFunction.PostRequestAsync(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
+                            clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if (register_response.IsGood)
+                            {
+
+                                Application.Current.MainPage = new AccountActivation();
+                            }
+                            else
+                            {
+                                await DisplayAlert("Json Error", register_response.Message, "OK");
+                            }
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", "Please enter all the field .", "OK");
+                        }
+
+                    }
+                    else
+                    {
+                        await DisplayAlert("Reminder", "Please tick the check box to continue", "OK");
+                    }
+
+                }
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
             }
         }
 

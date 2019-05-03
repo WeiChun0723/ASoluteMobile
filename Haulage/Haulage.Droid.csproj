@@ -22,6 +22,8 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <AndroidKeyStore>false</AndroidKeyStore>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +44,7 @@
 <AndroidSigningStorePass>723996</AndroidSigningStorePass>
 <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>
 <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
+<JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -57,6 +60,8 @@
     <AndroidSigningStorePass>723996</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64;armeabi</AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AndHUD, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -460,6 +465,18 @@
     <Reference Include="ImageCircle.Forms.Plugin">
       <HintPath>..\packages\Xam.Plugins.Forms.ImageCircle.3.0.0.5\lib\monoandroid71\ImageCircle.Forms.Plugin.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\monoandroid81\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="LinkOS.Plugin.Abstractions">
+      <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\MonoAndroid\LinkOS.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="LinkOS.Plugin">
+      <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\MonoAndroid\LinkOS.Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="ZSDK_ANDROIDX">
+      <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\MonoAndroid\ZSDK_ANDROIDX.dll</HintPath>
+    </Reference>
     <Reference Include="ASolute.Mobile.Models">
       <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
@@ -527,6 +544,8 @@
     <AndroidResource Include="Resources\drawable\padlock.png" />
     <AndroidResource Include="Resources\drawable\navigation.png" />
     <AndroidResource Include="Resources\drawable\contextMenuBackground.png" />
+    <AndroidResource Include="Resources\drawable\warehouseheader.png" />
+    <AndroidResource Include="Resources\drawable\busticketingheader.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

@@ -4,7 +4,6 @@ using System.IO;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Utils;
-using Java.IO;
 using PCLStorage;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -123,7 +122,6 @@ namespace ASolute_Mobile.CommonScreen
                 }
             });
 
-         
             loading.IsVisible = false;
         }
 

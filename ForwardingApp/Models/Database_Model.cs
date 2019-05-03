@@ -158,10 +158,10 @@ namespace ASolute_Mobile.Models
         public string Revenue { get; set; }
     }
 
-    public class clsYardBlock
+    /*public class clsYardBlock
     {
         public string Id { get; set; }
         public int TotalBay { get; set; }
         public int TotalLevel { get; set; }
-    }
+    }*/
 }

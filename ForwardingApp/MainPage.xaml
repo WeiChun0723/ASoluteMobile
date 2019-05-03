@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:local="clr-namespace:ASolute_Mobile" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.MainPage">
-    <MasterDetailPage.Master>
+    <!--<MasterDetailPage.Master>
         <local:MasterPage x:Name="masterPage" />
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
@@ -9,5 +9,5 @@
                 <local:NewMainMenu />
             </x:Arguments>
         </local:CustomNavigationPage>
-    </MasterDetailPage.Detail>
+    </MasterDetailPage.Detail>-->
 </MasterDetailPage>

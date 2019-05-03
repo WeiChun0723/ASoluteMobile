@@ -16,14 +16,21 @@ using Plugin.Geolocator;
 using Plugin.Media;
 using System.Threading.Tasks;
 using Syncfusion.XForms.Buttons;
+using Com.OneSignal;
 
 namespace ASolute_Mobile
 {
     public partial class LoginPage : ContentPage
     {
+        string firebaseID = "";
+
         public LoginPage()
         {
             InitializeComponent();
+
+            //OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
+            //string test = firebaseID;
 
             //hide the navigation bar
             NavigationPage.SetHasNavigationBar(this, false);
@@ -53,6 +60,10 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.AILSYard":
                     name = "AILS Yard Ver.";
+                    break;
+
+                case "asolute.Mobile.AILSBUS":
+                    name = "AILS Bus Ver.";
                     break;
             }
 

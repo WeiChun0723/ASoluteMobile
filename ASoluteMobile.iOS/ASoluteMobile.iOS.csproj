@@ -402,6 +402,18 @@
     <Reference Include="ASolute.Mobile.Models">
       <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+    <Reference Include="LinkOS.Plugin.Abstractions">
+      <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\Xamarin.iOS10\LinkOS.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="LinkOS.Plugin">
+      <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\Xamarin.iOS10\LinkOS.Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="zsdk_iosx">
+      <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\Xamarin.iOS10\zsdk_iosx.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -460,6 +472,13 @@
     <BundleResource Include="Resources\edit.png" />
     <BundleResource Include="Resources\angleLeft.png" />
     <BundleResource Include="Resources\angleRight.png" />
+    <BundleResource Include="Resources\barcode_scanner.png" />
+    <BundleResource Include="Resources\contextMenuBackground.png" />
+    <BundleResource Include="Resources\CurvedMask.png" />
+    <BundleResource Include="Resources\headerBackground.png" />
+    <BundleResource Include="Resources\padlock.png" />
+    <BundleResource Include="Resources\user_icon.png" />
+    <BundleResource Include="Resources\warehouseheader.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\refuel.png" />

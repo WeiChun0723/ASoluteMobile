@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.CustomerTracking.AccountActivation"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
-             BackgroundColor = "#9A2116">
+             BackgroundColor = "#9A2116"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     
     <ScrollView>
     <StackLayout Padding = "20, 0, 20, 20" >
@@ -19,8 +20,8 @@
         <StackLayout Padding = "0, 15"></StackLayout>
         <controls:CustomEntry Placeholder="Enter Activation code" x:Name = "ActivationEntry" Image="user" Style="{StaticResource entryStyle}" Keyboard="Numeric"/>
         
-        <Button Style="{StaticResource buttonStyle}" x:Name="SubmitButton" Text = "Submit" Clicked="Submit_Clicked" />
-        <Button Style="{StaticResource buttonStyle}" x:Name="ResendButton" Text = "Resend Activation Code" Clicked="Resend_Clicked" />
+        <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="SubmitButton" Text = "Submit" Clicked="Submit_Clicked" />
+        <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="ResendButton" Text = "Resend Activation Code" Clicked="Resend_Clicked" />
 
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         

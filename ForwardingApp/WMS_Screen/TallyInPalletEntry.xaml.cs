@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.CustomRenderer;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.XForms.ComboBox;
 using Xamarin.Forms;
+using ZXing.Mobile;
 using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.WMS_Screen
@@ -17,7 +19,7 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class TallyInPalletEntry : ContentPage
     {
         clsWhsItem productPallet = new clsWhsItem();
-        string id, fieldName;
+        string id, productSKU, actionID;
         clsPalletNew newPallet;
         List<string> sizes = new List<string>();
         List<string> units = new List<string>();
@@ -26,29 +28,31 @@ namespace ASolute_Mobile.WMS_Screen
         CustomDatePicker customDatePicker;
         List<bool> checkField = new List<bool>();
 
-        public TallyInPalletEntry(clsWhsItem product, string tallyInID)
+
+        public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
             InitializeComponent();
 
             id = tallyInID;
 
+            actionID = action;
+
             productPallet = product;
 
-            Title = "Tally In # " + product.ProductCode;
+            Title = "Tally In # " + productPallet.ProductCode;
 
             palletDesc.Children.Clear();
 
             Label topBlank = new Label();
             palletDesc.Children.Add(topBlank);
 
-            string[] descs = (product.Description.Replace("\r\n", "t")).Split('t');
+            string[] descs = (productPallet.Description.Replace("\r\n", "t")).Split('t');
 
             foreach (string desc in descs)
             {
                 Label caption = new Label();
 
-
-                if (desc.Equals(""))
+                if (desc == "")
                 {
                     caption.Text = "    " + desc;
                     caption.FontAttributes = FontAttributes.Bold;
@@ -65,6 +69,16 @@ namespace ASolute_Mobile.WMS_Screen
             palletDesc.Children.Add(bottomBlank);
 
             GetNewPalletList();
+        }
+
+        protected override  void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if(this != null)
+            {
+                //MessagingCenter.Send(this, "preventLandScape");
+            }
         }
 
         void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
@@ -271,16 +285,87 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        void PalletScan(object sender, EventArgs e)
+        async void PalletScan(object sender, EventArgs e)
         {
-            fieldName = "PalletScan";
-            BarCodeScan(fieldName);
+            try
+            {
+                var scanPage = new ZXingScannerPage();
+                scanPage.AutoFocus();
+                await Navigation.PushAsync(scanPage);
+
+                scanPage.OnScanResult += (result) =>
+                  {
+                      Device.BeginInvokeOnMainThread(async () =>
+                      {
+                          scanPage.PauseAnalysis();
+                          try
+                          {
+                              if (!(actionID == "BARRY"))
+                              {
+                                  await Navigation.PopAsync();
+                                  palletNo.Text = result.Text;
+                              }
+                              else
+                              {
+                                  string productCode = result.Text.Substring(0, 13);
+                                  string productRef = result.Text.Substring(16, 10);
+                                  string productQTY = result.Text.Substring(26, 2);
+
+                                  if (productCode == productPallet.ProductCode)
+                                  {
+                                      palletNo.Text = productRef;
+                                      quantity.Text = productQTY;
+                                      DisplayScanStatus(result.Text + " scanned");
+                                  }
+                                  else
+                                  {
+                                      DisplayScanStatus("Product not matched.");
+                                  }
+
+                                  if (scanPage != null)
+                                  {
+                                      scanPage.ResumeAnalysis();
+                                  }
+                              }
+                          }
+                         catch
+                          {
+                              DisplayScanStatus("Please scan again");
+                          }
+
+                      });
+                  };
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
         }
+
+        void DisplayScanStatus(string scanStatus)
+        {
+            var toastConfig = new ToastConfig(scanStatus);
+            toastConfig.SetDuration(4000);
+            toastConfig.Position = 0;
+            toastConfig.SetMessageTextColor(System.Drawing.Color.Black);
+
+            if(scanStatus.Contains("scanned"))
+            {
+                toastConfig.SetBackgroundColor(System.Drawing.Color.Green);
+            }
+            else
+            {
+                toastConfig.SetBackgroundColor(System.Drawing.Color.Red);
+            }
+            UserDialogs.Instance.Toast(toastConfig);
+        }
+
 
         async void EntryScan(Image image)
         {
             try
             {
+
                 var scanPage = new ZXingScannerPage();
                 await Navigation.PushAsync(scanPage);
 
@@ -326,30 +411,6 @@ namespace ASolute_Mobile.WMS_Screen
             catch
             {
 
-            }
-        }
-
-        async void BarCodeScan(string field)
-        {
-            try
-            {
-                var scanPage = new ZXingScannerPage();
-                await Navigation.PushAsync(scanPage);
-
-                scanPage.OnScanResult += (result) =>
-                {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        await Navigation.PopAsync();
-
-                        palletNo.Text = result.Text;
-
-                    });
-                };
-            }
-            catch (Exception e)
-            {
-                await DisplayAlert("Error", e.Message, "OK");
             }
         }
 

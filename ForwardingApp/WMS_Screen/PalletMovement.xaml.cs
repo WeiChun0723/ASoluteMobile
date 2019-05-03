@@ -27,70 +27,68 @@ namespace ASolute_Mobile.WMS_Screen
 
             Title = record.Name;
 
-            pdEntry.Completed += PdEntry_Completed;
+            palletIdEntry.Completed += PdEntry_Completed;
         }
 
         void PdEntry_Completed(object sender, EventArgs e)
         {
-            GetPalletTrx(pdEntry.Text);
+            GetPalletTrx(palletIdEntry.Text);
         }
 
-
-        void PalletIDScan(object sender, EventArgs e)
+        public void Handle_Tapped(object sender, EventArgs e)
         {
+            var image = sender as Image;
 
-            fieldName = "PalletIDScan";
-            BarCodeScan(fieldName);
-        }
-
-        void ConfirmScan(object sender, EventArgs e)
-        {
-            fieldName = "ConfirmScan";
-            BarCodeScan(fieldName);
-        }
-
-        void PickUpPallet(object sender, System.EventArgs e)
-        {
-            PalletUpdate();
-        }
-
-        void DropUpPallet(object sender, EventArgs e)
-        {
-
-            PalletUpdate();
-        }
-
-        void ClearPdEntry(object sender, System.EventArgs e)
-        {
-            pdEntry.Text = "";
-        }
-
-        void PdEntry_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
-        {
-            if (!(String.IsNullOrEmpty(pdEntry.Text)))
+            switch(image.StyleId)
             {
-                pdCancel.IsVisible = true;
-            }
-            else
-            {
-                pdCancel.IsVisible = false;
+                case "palletScan":
+                    fieldName = "PalletIDScan";
+                    BarCodeScan(fieldName);
+                    break;
+
+                case "confirmScan":
+                    fieldName = "ConfirmScan";
+                    BarCodeScan(fieldName);
+                    break;
+
+                case "palletEntryCancel":
+                    palletIdEntry.Text = "";
+                    break;
+
+                case "confirmEntryCancel":
+                    confirmEntry.Text = "";
+                    break;
             }
         }
 
-        void ClearConfirmEntry(object sender, System.EventArgs e)
-        {
-            confirmEntry.Text = "";
-        }
 
-        void ConfirmEntry_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
-            if (!(String.IsNullOrEmpty(pdEntry.Text)))
+            var entry = sender as Entry;
+
+            switch(entry.StyleId)
             {
-                confirmCancel.IsVisible = true;
-            }
-            else
-            {
-                confirmCancel.IsVisible = false;
+                case "palletIdEntry":
+                    if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
+                    {
+                        palletEntryCancel.IsVisible = true;
+                    }
+                    else
+                    {
+                        palletEntryCancel.IsVisible = false;
+                    }
+                    break;
+
+                case "confirmEntry":
+                    if (!(String.IsNullOrEmpty(confirmEntry.Text)))
+                    {
+                        confirmEntryCancel.IsVisible = true;
+                    }
+                    else
+                    {
+                        confirmEntryCancel.IsVisible = false;
+                    }
+                    break;
             }
         }
 
@@ -101,16 +99,25 @@ namespace ASolute_Mobile.WMS_Screen
             switch(button.StyleId)
             {
                 case "btnVerify":
-                    var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletVerificationURL(record.Id, pdEntry.Text), this);
+                    var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletVerificationURL(record.Id, palletIdEntry.Text), this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if(response.IsGood)
                     {
                         // see whether web service got return stuff
                         await DisplayAlert("Success", "Pallet verified", "OK");
+
+                        palletIdEntry.Text = "";
+                        palletDesc.Children.Clear();
                     }
-                   
                     break;
+
+                case "btnDropOff":
+                case "btnPickUp":
+                    PalletUpdate();
+                    break;
+
+                
             }
         }
 
@@ -119,7 +126,7 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
             try
             {
-                if (!(String.IsNullOrEmpty(pdEntry.Text)))
+                if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
                 {
                     pallet.NewLocation = !(String.IsNullOrEmpty(confirmEntry.Text)) ? confirmEntry.Text : "";
                     if (!(String.IsNullOrEmpty(checkDigitEntry.Text)))
@@ -135,7 +142,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                         if (pallet.Action.Equals("Pickup"))
                         {
-                            GetPalletTrx(pdEntry.Text);
+                            GetPalletTrx(palletIdEntry.Text);
                         }
                         else if (pallet.Action.Equals("Dropoff"))
                         {
@@ -148,16 +155,13 @@ namespace ASolute_Mobile.WMS_Screen
                             checkDigitView.IsVisible = false;
                             palletDesc.IsVisible = false;
 
-                            pdEntry.Text = String.Empty;
+                            palletIdEntry.Text = String.Empty;
                             confirmEntry.Text = String.Empty;
                             checkDigitEntry.Text = String.Empty;
                         }
 
                     }
-                    else
-                    {
-                        await DisplayAlert("Error", update_response.Message, "OK");
-                    }
+
                 }
                 else
                 {
@@ -192,7 +196,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                             if (field == "PalletIDScan")
                             {
-                                pdEntry.Text = result.Text;
+                                palletIdEntry.Text = result.Text;
                                 GetPalletTrx(result.Text);
                             }
                             else if (field == "ConfirmScan")
@@ -285,10 +289,7 @@ namespace ASolute_Mobile.WMS_Screen
                     palletDesc.Children.Add(btmblank);
 
                 }
-                else
-                {
-                    await DisplayAlert("Error", newPallet_response.Message, "OK");
-                }
+               
 
                 loading.IsVisible = false;
             }

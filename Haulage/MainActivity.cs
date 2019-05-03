@@ -8,26 +8,14 @@ using Android.Util;
 using Android.Locations;
 using Acr.UserDialogs;
 using Xamarin.Forms.Platform.Android;
-using Autofac;
-using XLabs.Platform.Services.Media;
-using XLabs.Ioc;
-using XLabs.Ioc.Autofac;
-using Plugin.CurrentActivity;
-using System.Net;
-using Xamarin.Forms;
-using System.Threading.Tasks;
-using Haulage.Droid;
 using ASolute_Mobile.Droid.Services;
-using Android.Net.Wifi;
-using Plugin.Geolocator;
 using Android;
-using Haulage.Droid.Services;
 using ImageCircle.Forms.Plugin.Droid;
 
 namespace ASolute_Mobile.Droid
 {
 
-    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
 
@@ -39,16 +27,10 @@ namespace ASolute_Mobile.Droid
             try
             {
                 TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
-
                 ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
-
                 base.OnCreate(bundle);
-
-                if (PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M )
-                {
-                   RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
-                }
-
+               
+                Xamarin.Essentials.Platform.Init(this, bundle);
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
                 global::Xamarin.Forms.Forms.Init(this, bundle);
                 Xamarin.FormsMaps.Init(this, bundle);
@@ -56,34 +38,30 @@ namespace ASolute_Mobile.Droid
                 UserDialogs.Init(this);
                 ImageCircleRenderer.Init();
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
-
+                ZXing.Mobile.MobileBarcodeScanner.Initialize(Application);
                 Ultis.Settings.App = PackageName;
 
-                LoadApplication(new App());
-
-                /*if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                if ( Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
-                    Intent intent = new Intent();
-                    String packageName = PackageName;
-                    PowerManager pm = (PowerManager)GetSystemService(PowerService);
-                    if (!pm.IsIgnoringBatteryOptimizations(packageName))
+                    if (PackageName.Equals("asolute.Mobile.AILSHaulage"))
                     {
-                        intent.SetAction(Android.Provider.Settings.ActionRequestIgnoreBatteryOptimizations);
-
-                        intent.SetData(Android.Net.Uri.Parse("package:" + packageName));
-                        StartActivity(intent);
+                        RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
                     }
-                }*/
 
-                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M )
-                {
-                   
+                    if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                    {
                         StartLocationTracking();
-  
+                    }
                 }
+
+               // var mainDisplayInfo = Xamarin.Essentials.DeviceDisplay.MainDisplayInfo;
+               // var test = mainDisplayInfo.Width; ;
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                 App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
+
+                LoadApplication(new App());
+
             }
             catch (Exception ex)
             {
@@ -114,32 +92,31 @@ namespace ASolute_Mobile.Droid
         {
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-            if (grantResults.Length > 0 && permissions.Length > 0)
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
-                if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage") && Build.VERSION.SdkInt >= BuildVersionCodes.M )
+                if (grantResults.Length > 0 && permissions.Length > 0)
                 {
-                     StartLocationTracking();
+                    if (permissions[0].Equals(Manifest.Permission.AccessFineLocation) && PackageName.Equals("asolute.Mobile.AILSHaulage"))
+                    {
+                        StartLocationTracking();
+                    }
                 }
-
             }
+           
         }
 
         protected override void OnPause()
         {
-
             Log.Debug(logTag, "OnPause: Location app is moving to background");
             base.OnPause();
-
         }
 
 
         protected override void OnResume()
         {
-
             Log.Debug(logTag, "OnResume: Location app is moving into foreground");
             base.OnResume();
-
         }
 
         protected override void OnDestroy()

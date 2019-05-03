@@ -114,70 +114,77 @@ namespace ASolute_Mobile
 
         public async void takeImage(object sender, EventArgs e)
         {
-           
-            lblReminder.IsVisible = false;
-            await CommonFunction.StoreImages(linkId, this, "NormalImage");
-
-            displayImage();
-
-            List<AppImage> uploadImages = App.Database.GetRecordImagesAsync(linkId,false);
-           
-            foreach (AppImage uploadImage in uploadImages)
+            try
             {
-                clsFileObject capturedImage = new clsFileObject();
-                if (uploadImage.photoScaledFileLocation == null)
+                lblReminder.IsVisible = false;
+                await CommonFunction.StoreImages(linkId, this, "NormalImage");
+
+                displayImage();
+
+                BackgroundTask.StartTimer();
+
+                /*List<AppImage> uploadImages = App.Database.GetRecordImagesAsync(linkId, false);
+
+                foreach (AppImage uploadImage in uploadImages)
                 {
-                    byte[] originalPhotoImageBytes = File.ReadAllBytes(uploadImage.photoFileLocation);
-                    byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
-
-                    capturedImage.Content = scaledImageByte;
-                    capturedImage.FileName = uploadImage.photoFileName;
-
-                    string scaledFolder = HelperUtil.GetScaledFolder(uploadImage.photoFileLocation);
-
-                    if (!Directory.Exists(scaledFolder))
+                    clsFileObject capturedImage = new clsFileObject();
+                    if (uploadImage.photoScaledFileLocation == null)
                     {
-                        Directory.CreateDirectory(scaledFolder);
+                        byte[] originalPhotoImageBytes = File.ReadAllBytes(uploadImage.photoFileLocation);
+                        byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
+
+                        capturedImage.Content = scaledImageByte;
+                        capturedImage.FileName = uploadImage.photoFileName;
+
+                        string scaledFolder = HelperUtil.GetScaledFolder(uploadImage.photoFileLocation);
+
+                        if (!Directory.Exists(scaledFolder))
+                        {
+                            Directory.CreateDirectory(scaledFolder);
+                        }
+                        uploadImage.photoScaledFileLocation = Path.Combine(scaledFolder, HelperUtil.GetPhotoFileName(uploadImage.photoFileLocation));
+                        File.WriteAllBytes(uploadImage.photoScaledFileLocation, scaledImageByte);
+                        App.Database.SaveRecordImageAsync(uploadImage);
                     }
-                    uploadImage.photoScaledFileLocation = Path.Combine(scaledFolder, HelperUtil.GetPhotoFileName(uploadImage.photoFileLocation));
-                    File.WriteAllBytes(uploadImage.photoScaledFileLocation, scaledImageByte);
-                    App.Database.SaveRecordImageAsync(uploadImage);
-                }
 
-                try
-                {
-                    var imageClient = new HttpClient();
-                    imageClient.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var imageUri = ControllerUtil.UploadImageURL(linkId);                   
-                    var content = JsonConvert.SerializeObject(capturedImage);
-                    var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-
-                    HttpResponseMessage imageResponse = await imageClient.PostAsync(imageUri, httpContent);
-                    var Imagereply = await imageResponse.Content.ReadAsStringAsync();
-                    Debug.WriteLine(Imagereply);
-                    clsResponse Imageresult = JsonConvert.DeserializeObject<clsResponse>(Imagereply);
-
-                    if (Imageresult.IsGood == true)
-                    {                       
-                        uploadImage.Uploaded = true;
-                        App.Database.SaveRecordImageAsync(uploadImage);                       
-                        await DisplayAlert("Success", "Images uploaded", "Ok");
-                    }
-                    else
+                    try
                     {
-                        await DisplayAlert("Error", Imageresult.Message, "OK");
+                        var imageClient = new HttpClient();
+                        imageClient.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                        var imageUri = ControllerUtil.UploadImageURL(linkId);
+                        var content = JsonConvert.SerializeObject(capturedImage);
+                        var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage imageResponse = await imageClient.PostAsync(imageUri, httpContent);
+                        var Imagereply = await imageResponse.Content.ReadAsStringAsync();
+                        Debug.WriteLine(Imagereply);
+                        clsResponse Imageresult = JsonConvert.DeserializeObject<clsResponse>(Imagereply);
+
+                        if (Imageresult.IsGood == true)
+                        {
+                            uploadImage.Uploaded = true;
+                            App.Database.SaveRecordImageAsync(uploadImage);
+                            await DisplayAlert("Success", "Images uploaded", "Ok");
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", Imageresult.Message, "OK");
+                        }
                     }
-                }
-                catch (HttpRequestException)
-                {
-                    await DisplayAlert("Unable to connect", "Please try again later", "Ok");
-                }
-                catch (Exception exception)
-                {
-                    await DisplayAlert("Error", exception.Message, "Ok");
-                }
+                    catch (HttpRequestException)
+                    {
+                        await DisplayAlert("Unable to connect", "Please try again later", "Ok");
+                    }
+                    catch (Exception exception)
+                    {
+                        await DisplayAlert("Error", exception.Message, "Ok");
+                    }
+                }*/
             }
-         
+            catch
+            {
+
+            }
         }
 
         public async void displayImage()
