@@ -15,7 +15,8 @@ using ASolute_Mobile.Data;
 using ASolute.Mobile.Models;
 using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
-
+using static ASolute_Mobile.BusTicketing.StopsList;
+using System.Collections.ObjectModel;
 
 namespace ASolute_Mobile
 {
@@ -30,9 +31,15 @@ namespace ASolute_Mobile
 
         public static async Task GetGPS()
         {
-            Getlocation();
+            var locator = CrossGeolocator.Current;
+            position = await locator.GetPositionAsync();
 
-            if(App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0))
+            if (position.Equals(null))
+            {
+                position = await locator.GetLastKnownLocationAsync();
+            }
+
+            if (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0))
             {
                 if (position != null)
                 {
@@ -68,55 +75,216 @@ namespace ASolute_Mobile
                 {
 
                 }
-               
+
             }
         }
 
-        public static async void Getlocation()
+        //download the bus stop list and store locally 
+        public static async Task DownloadBusStopList()
         {
             try
             {
-                var locator = CrossGeolocator.Current;
-                position = await locator.GetPositionAsync();
+                var localStoredOutboundStops = new ObservableCollection<ListItems>(App.Database.GetMainMenu("OutboundList"));
+                var localStoredInboundStops = new ObservableCollection<ListItems>(App.Database.GetMainMenu("InboundList"));
 
-                if (position.Equals(null))
+                if (NetworkCheck.IsInternet())
                 {
-                    position = await locator.GetLastKnownLocationAsync();
-
-                    /*var getAddress = await locator.GetAddressesForPositionAsync(position);
-                    var addressDetail = getAddress.FirstOrDefault();
-
-
-                    address = addressDetail.Thoroughfare;
-
-                    if (!String.IsNullOrEmpty(addressDetail.Locality) && addressDetail.Locality != "????")
+                    if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
                     {
-                        address += "," + addressDetail.Locality;
+                        if(localStoredOutboundStops.Count == 0)
+                        {
+                            var outbound_content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/host/api/", ControllerUtil.getBusStops("OutboundList"), null);
+                            clsResponse outbound_response = JsonConvert.DeserializeObject<clsResponse>(outbound_content);
+
+                            if (outbound_response.IsGood)
+                            {
+                                StoreData(outbound_content, "OutboundList");
+
+                            }
+                        }
+
+                        if (localStoredInboundStops.Count == 0)
+                        {
+                            var inbound_content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/host/api/", ControllerUtil.getBusStops("InboundList"), null);
+                            clsResponse inbound_response = JsonConvert.DeserializeObject<clsResponse>(inbound_content);
+
+                            if (inbound_response.IsGood)
+                            {
+                                StoreData(inbound_content, "InboundList");
+
+                            }
+                        }
+                           
                     }
-
-                    if (!String.IsNullOrEmpty(addressDetail.PostalCode) && addressDetail.PostalCode != "????")
-                    {
-                        address += "," + addressDetail.PostalCode;
-                    }
-
-                    if (!String.IsNullOrEmpty(addressDetail.AdminArea) && addressDetail.AdminArea != "????")
-                    {
-                        address += "," + addressDetail.AdminArea;
-                    }
-
-                    if (!String.IsNullOrEmpty(addressDetail.CountryName) && addressDetail.CountryName != "????")
-                    {
-                        address += "," + addressDetail.CountryName;
-                    }*/
                 }
-
             }
-            catch (Exception ex)
+            catch
             {
-                // Unable to get location
+
             }
         }
-       
+
+        public static void StoreData(string content,string action)
+        {
+            List<clsBusTicket> stops = JObject.Parse(content)["Result"].ToObject<List<clsBusTicket>>();
+
+            App.Database.deleteRecords(action);
+            App.Database.deleteRecordSummary(action);
+
+            foreach (clsBusTicket stop in stops)
+            {
+                ListItems items = new ListItems
+                {
+                    StopId = stop.StopId,
+                    StopName = stop.StopName,
+                    Rate = stop.Rate,
+                    Category = action
+                };
+
+                App.Database.SaveMenuAsync(items);
+
+                foreach (ListItems station in stop.Stops)
+                {
+                    SummaryItems summaryItem = new SummaryItems
+                    {
+                        Id = stop.StopId,
+                        StopId = station.StopId,
+                        StopName = station.StopName,
+                        Rate = station.Rate,
+                        BackColor = "#ffffff"
+                    };
+                    summaryItem.Type = action;
+
+
+                    App.Database.SaveSummarysAsync(summaryItem);
+                }
+            }
+        }
+
+
+        //search database for pending bus trip and sync to server
+        public  static async Task UploadPendingRecord()
+        {
+            try
+            {
+                if (NetworkCheck.IsInternet())
+                {
+                    if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
+                    {
+                        //upload bus trip record
+                        var pendingBusTrip = App.Database.GetPendingTrip();
+
+                        List<clsTrip> completeTrips = new List<clsTrip>();
+
+                        foreach(BusTrip busTrip in pendingBusTrip)
+                        {
+                            if(busTrip.EndTime != null && busTrip.Uploaded == false)
+                            {
+                                clsTrip trip = new clsTrip
+                                {
+                                    Id = busTrip.Id,
+                                    TruckId = busTrip.TruckId,
+                                    DriverId = busTrip.DriverId,
+                                    StartTime = busTrip.StartTime,
+                                    StartOdometer = 0,
+                                    StartLocationName = "",
+                                    StartGeoLoc = busTrip.StartGeoLoc,
+                                    EndTime = busTrip.EndTime,
+                                    EndOdometer = 0,
+                                    EndLocationName = "",
+                                    EndGeoLoc = busTrip.EndGeoLoc,
+                                    TrxStatus = 5,
+                                    LinkId = "",
+                                    LocationList = {},
+                                    Captions = {}
+                                };
+
+                                completeTrips.Add(trip);
+                            }
+                        }
+
+                        if(completeTrips.Count != 0)
+                        {
+                            var content = await CommonFunction.CallWebService(1, completeTrips, Ultis.Settings.SessionBaseURI, ControllerUtil.postTrips(), null);
+                            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if (response.IsGood)
+                            {
+                                /*foreach (clsTrip uploadedTrip in completeTrips)
+                                {
+                                    var completedTrip = App.Database.GetUploadedTrip(uploadedTrip.Id);
+
+                                    if (completedTrip != null)
+                                    {
+                                        completedTrip.Uploaded = true;
+
+                                        App.Database.SaveBusTrip(completedTrip);
+                                    }
+                                }*/
+
+                                App.Database.DeleteBusTrip();
+
+                                //upload bus ticket record
+                                var pendingTicket = App.Database.GetSoldTicket();
+                                List<clsTicket> tickets = new List<clsTicket>();
+                                foreach (SoldTicket soldTicket in pendingTicket)
+                                {
+                                    if (!(String.IsNullOrEmpty(soldTicket.TripId)))
+                                    {
+                                        clsTicket ticket = new clsTicket
+                                        {
+                                            TrxTime = soldTicket.TrxTime,
+                                            TruckId = soldTicket.TruckId,
+                                            DriverId = soldTicket.DriverId,
+                                            TripId = soldTicket.TripId,
+                                            RouteId = soldTicket.RouteId,
+                                            StopId = soldTicket.StopId,
+                                            TicketType = soldTicket.TicketType,
+                                            PaymentType = soldTicket.PaymentType,
+                                            Amount = soldTicket.Amount
+                                        };
+
+                                        tickets.Add(ticket);
+                                    }
+                                }
+
+                                if (tickets.Count != 0)
+                                {
+                                    var ticket_content = await CommonFunction.CallWebService(1, tickets, Ultis.Settings.SessionBaseURI, ControllerUtil.postTickets(), null);
+                                    clsResponse ticket_response = JsonConvert.DeserializeObject<clsResponse>(ticket_content);
+
+                                    if (ticket_response.IsGood)
+                                    {
+                                        /*foreach (clsTicket ticket in tickets)
+                                        {
+                                            var completeTicket = App.Database.GetUploadedTicket(ticket.);
+
+                                            if (completeTicket != null)
+                                            {
+                                                completeTicket.Uploaded = true;
+
+                                                App.Database.SaveTicketTransaction(completeTicket);
+                                            }
+                                        }*/
+
+                                        App.Database.DeleteTicket();
+
+                                        var test = App.Database.gettesting();
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
         public static void Logout()
         {
             Logout(null);
@@ -131,6 +299,8 @@ namespace ASolute_Mobile
 
             //App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
             App.Database.DeleteImage("NormalImage");
+            App.Database.DeleteBusTrip();
+            App.Database.DeleteTicket();
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";
             

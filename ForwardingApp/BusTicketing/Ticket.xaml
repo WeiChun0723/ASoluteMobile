@@ -7,6 +7,7 @@
              xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
              xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
     
+    <ScrollView>
     <StackLayout Padding="10,10,10,10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
         <syncIndicator:SfBusyIndicator x:Name="print" AnimationType="Print" Title="Printing..." TextColor="Red" IsVisible="false" />
         
@@ -29,8 +30,13 @@
 
             </inputLayout:SfTextInputLayout>
         
+        <Label x:Name="lblPrice" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" FontSize="Large"/>
+        
         <buttons:SfButton Padding="0,10"  HorizontalOptions="CenterAndExpand"  BackgroundColor="#ED1C24" CornerRadius="20" 
-                          HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnPrintTicket" Clicked="PrintBusTicket"/>
+                          HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnPublic" Text="Public" Clicked="PrintBusTicket"/>
+        
+        <buttons:SfButton Padding="0,10"  HorizontalOptions="CenterAndExpand"  BackgroundColor="#ED1C24" CornerRadius="20" 
+                          HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnStudent" Text="Student" Clicked="PrintBusTicket"/>
     </StackLayout>
-   
+   </ScrollView>
 </ContentPage>

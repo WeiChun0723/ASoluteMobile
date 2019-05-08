@@ -1,6 +1,8 @@
 ﻿using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
+using ASolute_Mobile.WoosimPrinterService;
+using ASolute_Mobile.WoosimPrinterService.library.Cmds;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -9,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,6 +28,8 @@ namespace ASolute_Mobile.HaulageScreen
         ActivityIndicator activityIndicator;
         DateTime currentDate;
         ListItems runSheetItem = new ListItems();
+        List<clsHaulageModel> history;
+        bool connectedPrinter = false;
 
         public RunSheet(ListItems item)
         {
@@ -128,6 +133,12 @@ namespace ASolute_Mobile.HaulageScreen
             base.OnDisappearing();
 
             MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
+            //disconnect printer when this screen not visible
+            if (connectedPrinter == true)
+            {
+                DependencyService.Get<IBthService>().disconnBTDevice();
+            }
+
         }
 
         public void recordDate(object sender, DateChangedEventArgs e)
@@ -236,6 +247,8 @@ namespace ASolute_Mobile.HaulageScreen
 
             runSheetHistory.Refreshing += runSheetRefresh;
 
+            runSheetHistory.ItemTapped += Handle_ItemTapped;
+
             mainLayout.Children.Add(optionStack);
             mainLayout.Children.Add(runSheetHistory);
             mainLayout.Children.Add(noData);
@@ -252,6 +265,66 @@ namespace ASolute_Mobile.HaulageScreen
                 datePicker.Date = DateTime.Now;
             }
 
+        }
+
+        async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        {
+            string recordId = ((ListItems)e.Item).Id;
+
+            try
+            {
+                if (history.Count != 0)
+                {
+                    var recordContent = history.FirstOrDefault(item => item.Id == recordId);
+
+                    if (recordContent != null)
+                    {
+                        if (connectedPrinter == false)
+                        {
+                            bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+
+                            if (!x)
+                            {
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    DisplayAlert("Error", "Unable connect", "OK");
+                                });
+                            }
+                            else
+                            {
+                                connectedPrinter = true;
+                            }
+                        }
+
+                        System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
+                        WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, false, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                        foreach (clsCaptionValue summaryList in recordContent.Summary)
+                        {
+                            string detail = "";
+
+                            detail = (summaryList.Caption == "") ? summaryList.Value : summaryList.Caption + " : " + summaryList.Value;
+
+                            WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(detail + "\r\n\r\n"));
+                        }
+
+                        WriteMemoryStream(buffer, WoosimPageMode.print());
+
+                        DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
+                    }
+
+                }
+            }
+            catch (Exception error)
+            {
+                await DisplayAlert("Error", error.Message, "OK");
+            }
+
+
+        }
+
+        async private void WriteMemoryStream(System.IO.MemoryStream stream, byte[] data)
+        {
+            await stream.WriteAsync(data, 0, data.Length);
         }
 
         public void PreviousDate(object sender, EventArgs e)
@@ -288,7 +361,9 @@ namespace ASolute_Mobile.HaulageScreen
                 firstLoad = false;
                 CurrentPage = Children[1];
 
-                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadHaulageHistoryURL(date), this);
+                string url = (runSheetItem.Id == "RunSheet") ? ControllerUtil.getDownloadHaulageHistoryURL(date) : ControllerUtil.getBusTripHistory(date);
+
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, url, this);
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood == true)
@@ -305,14 +380,13 @@ namespace ASolute_Mobile.HaulageScreen
                             break;
                     }
 
-
-                    var JobList = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
+                    history = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
 
                     App.Database.deleteRecords(runSheetItem.Id);
                     App.Database.deleteRecordSummary(runSheetItem.Id);
                     //App.Database.deleteHaulage("HaulageHistory");
 
-                    foreach (clsHaulageModel data in JobList)
+                    foreach (clsHaulageModel data in history)
                     {
                         ListItems record = new ListItems
                         {
@@ -344,7 +418,7 @@ namespace ASolute_Mobile.HaulageScreen
                         {
                             SummaryItems summaryItem = new SummaryItems();
 
-                            summaryItem.Id =  data.Id;
+                            summaryItem.Id = data.Id;
                             summaryItem.Caption = summaryList.Caption;
                             summaryItem.Value = summaryList.Value;
                             summaryItem.Display = summaryList.Display;
@@ -376,7 +450,7 @@ namespace ASolute_Mobile.HaulageScreen
             }
 
             Ultis.Settings.List = runSheetItem.Id;
-           // ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
+            // ObservableCollection<JobItems> Item = new ObservableCollection<JobItems>(App.Database.GetJobItems(0, "HaulageHistory"));
             ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu(runSheetItem.Id));
             //Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("runsheet"));
             runSheetHistory.ItemsSource = Item;

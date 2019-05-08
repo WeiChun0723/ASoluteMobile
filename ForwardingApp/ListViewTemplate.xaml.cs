@@ -20,6 +20,11 @@ namespace ASolute_Mobile
     public partial class ListViewTemplate : ContentPage
     {
 
+        ListItems menuItems;
+        ObservableCollection<ListItems> Item;
+        List<clsHaulageModel> records;
+        string uri;
+
         //use for AILS Yard container inquiry
         List<string> blocksID = new List<string>();
         List<string> dateOption = new List<string>
@@ -29,10 +34,7 @@ namespace ASolute_Mobile
             "Closing Tomorrow",
             "Closing After Tomorrow"
         };
-        ListItems menuItems;
-        ObservableCollection<ListItems> Item;
-        List<clsHaulageModel> records;
-        string uri;
+      
         //record more than 100 store in this and popuplate to list view
         ObservableCollection<ListItems> overloadRecord = new ObservableCollection<ListItems>();
 
@@ -86,6 +88,11 @@ namespace ASolute_Mobile
 
             menuItems = items;
             uri = callUri;
+
+            //if AILS YARD updated the container position refresh the list
+            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshYard", (sender) => {
+                GetListData();
+            });
         }
 
         protected override void OnAppearing()

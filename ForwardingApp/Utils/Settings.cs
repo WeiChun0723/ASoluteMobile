@@ -45,8 +45,37 @@ namespace ASolute_Mobile.Ultis
         private const string SubTitles = "sub_Titles";
         private const string Titles = "title";
         private const string UpdateTimes = "update_time";
+        private const string StartEndTrip = "startEnd_Trip";
+        private const string TripID = "trip_ID";
         #endregion
 
+        #region AILS Bus setting 
+        //id gen to link trip with ticket record
+        public static string TripRecordID
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(TripID, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(TripID, value);
+            }
+        }
+
+        //indicate the trip started or end
+        public static string StartEndStatus
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(StartEndTrip, SettingsDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(StartEndTrip, value);
+            }
+        }
+        #endregion
 
         public static string UpdateTime
         {

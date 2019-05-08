@@ -6,6 +6,7 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Pages;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile.Yard
@@ -98,6 +99,8 @@ namespace ASolute_Mobile.Yard
                 if (response.IsGood)
                 {
                     await DisplayAlert("Success", "Location confirmed.", "OK");
+                    await PopupNavigation.Instance.PopAsync(true);
+                    MessagingCenter.Send<App>((App)Application.Current, "RefreshYard");
                 }
             }
             else

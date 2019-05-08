@@ -21,9 +21,10 @@ namespace ASolute_Mobile.Droid
             {
                 wakeLock.Acquire();
 
-                Task.Run( () => { BackgroundTask.GetGPS(); });
+                //Task.Run(async () => { await BackgroundTask.DownloadBusStopList(); });
+                Task.Run( async () => {await BackgroundTask.UploadPendingRecord(); });
 
-                //wakeLock.Release();
+                wakeLock.Release();
             }
 
         } 

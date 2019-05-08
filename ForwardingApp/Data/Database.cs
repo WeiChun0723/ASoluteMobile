@@ -26,6 +26,8 @@ namespace ASolute_Mobile.Data
             database.CreateTable<JobNoList>();
             database.CreateTable<TruckModel>();
             database.CreateTable<AutoComplete>();
+            database.CreateTable<BusTrip>();
+            database.CreateTable<SoldTicket>();
         }
 
 		public void DropDB()
@@ -39,7 +41,140 @@ namespace ASolute_Mobile.Data
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
             database.DropTable<ProviderInfo>();
+            database.DropTable<BusTrip>();
+            database.DropTable<SoldTicket>();
         }
+
+        #region user table
+        public int SaveUserItem(UserItem userItem)
+        {
+            userItem.owner = Ultis.Settings.SessionUserId;
+            if (userItem.tableID != 0)
+            {
+                userItem.updatedDate = DateTime.Now;
+                return database.Update(userItem);
+            }
+            else
+            {
+                UserItem userItemFromDB = GetUserItemAsync();
+                if (userItemFromDB != null)
+                {
+                    userItem.tableID = userItemFromDB.tableID;
+                    return SaveUserItem(userItem);
+                }
+
+                return database.Insert(userItem);
+            }
+        }
+
+        public UserItem GetUserItemAsync()
+        {
+            List<UserItem> userItems = database.Query<UserItem>("SELECT * FROM [UserItem]");
+            if (userItems.Count > 0)
+            {
+                return userItems[0];
+            }
+            return null;
+        }
+
+        public void DeleteUserItem()
+        {
+            database.DropTable<UserItem>();
+            database.CreateTable<UserItem>();
+        }
+
+        private List<T> toList<T>(TableQuery<T> tableQuery)
+        {
+            List<T> list = new List<T>();
+            foreach (var item in tableQuery)
+            {
+                list.Add(item);
+            }
+            return list;
+        }
+        #endregion
+
+        #region general 
+        public int SaveMenuAsync(ListItems item)
+        {
+            item.owner = Ultis.Settings.SessionUserId;
+            if (item.tableID != 0)
+            {
+
+                return database.Update(item);
+            }
+            else
+            {
+
+                return database.Insert(item);
+            }
+
+        }
+
+
+        public int SaveSummarysAsync(SummaryItems item)
+        {
+            if (item.tableID != 0)
+            {
+
+                return database.Update(item);
+            }
+            else
+            {
+
+                return database.Insert(item);
+            }
+        }
+
+        public List<ListItems> GetMainMenu(string category)
+        {
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ?", category);
+        }
+
+        public void deleteRecords(string category)
+        {
+            database.Query<ListItems>("DELETE FROM ListItems WHERE [Category] = ?", category);
+        }
+
+
+        public void deleteRecordSummary(string type)
+        {
+            database.Query<SummaryItems>("DELETE FROM SummaryItems WHERE [type] = ?", type);
+        }
+
+        public void deleteRecordDetails()
+        {
+            database.Query<DetailItems>("DELETE FROM DetailItems");
+        }
+
+        public int DeleteSummaryItem(SummaryItems item)
+        {
+            return database.Delete(item);
+        }
+
+        public int DeleteDetailItem(DetailItems item)
+        {
+            return database.Delete(item);
+        }
+
+        public List<SummaryItems> GetSummarysAsync(string type)
+        {
+            return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Type] = ?", type);
+        }
+
+        public List<SummaryItems> GetSummarysAsync(string id, string type)
+        {
+            return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Id] = ? AND [Type] = ?", id, type);
+        }
+
+        public List<DetailItems> GetDetailsAsync(string id)
+        {
+            return database.Query<DetailItems>("SELECT * FROM [DetailItems] WHERE [Id] = ?", id);
+            //return database.Table<SummaryItem>().ToListAsync();
+        }
+
+     
+        #endregion
 
         #region get/store app image
         public List<AppImage> GetRecordImagesAsync(string id, bool uploaded)
@@ -93,30 +228,98 @@ namespace ASolute_Mobile.Data
         }
         #endregion
 
-       /* #region ChatApp
-
-        public int SaveChat(ChatRecord record)
+        #region AILS Bus
+        public int SaveBusTrip(BusTrip trip)
         {
-            record.owner = Ultis.Settings.SessionUserId;
-            if (record.tableID != 0)
+            trip.owner = Ultis.Settings.SessionUserId;
+            if (trip.tableID != 0)
             {
-
-                return database.Update(record);
+                return database.Update(trip);
             }
             else
             {
 
-                return database.Insert(record);
+                return database.Insert(trip);
             }
         }
 
-        public List<ChatRecord> Chats()
+        public int SaveTicketTransaction(SoldTicket ticket)
         {
-            return database.Query<ChatRecord>("SELECT * FROM [ChatRecord] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
+            ticket.owner = Ultis.Settings.SessionUserId;
+            if (ticket.tableID != 0)
+            {
+                return database.Update(ticket);
+            }
+            else
+            {
+
+                return database.Insert(ticket);
+            }
         }
 
-        #endregion*/
+        public BusTrip GetBusTrip()
+        {
+            return database.Table<BusTrip>().OrderByDescending(i => i.tableID).FirstOrDefault();
+        }
 
+        public BusTrip GetUploadedTrip(string id)
+        {
+            return database.Table<BusTrip>().Where(i => i.Id == id).FirstOrDefault();
+        }
+
+        public SoldTicket GetUploadedTicket(string id)
+        {
+            return database.Table<SoldTicket>().Where(i => i.TripId == id).FirstOrDefault();
+        }
+
+        public List<BusTrip> GetPendingTrip()
+        {
+            return database.Query<BusTrip>("SELECT * FROM [BusTrip]");
+        }
+
+        public List<SoldTicket> GetSoldTicket()
+        {
+            return database.Query<SoldTicket>("SELECT * FROM [SoldTicket]");
+        }
+
+        public void DeleteBusTrip()
+        {
+            database.Query<BusTrip>("DELETE FROM BusTrip" );
+        }
+
+        public void DeleteTicket()
+        {
+            database.Query<SoldTicket>("DELETE FROM SoldTicket");
+        }
+
+        public List<SoldTicket> gettesting()
+        {
+            return database.Query<SoldTicket>("SELECT * FROM [SoldTicket] WHERE [Uploaded]= ?", true);
+        }
+
+        #endregion
+
+        /* #region ChatApp
+         public int SaveChat(ChatRecord record)
+         {
+             record.owner = Ultis.Settings.SessionUserId;
+             if (record.tableID != 0)
+             {
+
+                 return database.Update(record);
+             }
+             else
+             {
+
+                 return database.Insert(record);
+             }
+         }
+
+         public List<ChatRecord> Chats()
+         {
+             return database.Query<ChatRecord>("SELECT * FROM [ChatRecord] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
+         }
+         #endregion*/
 
         #region Customer Tracking table function
 
@@ -206,51 +409,7 @@ namespace ASolute_Mobile.Data
         }
         #endregion 
 
-        public int SaveUserItem(UserItem userItem)
-        {
-            userItem.owner = Ultis.Settings.SessionUserId;
-            if (userItem.tableID != 0)
-            {
-                userItem.updatedDate = DateTime.Now;
-                return database.Update(userItem);
-            }
-            else
-            {
-                UserItem userItemFromDB = GetUserItemAsync();
-                if (userItemFromDB != null)
-                {
-                    userItem.tableID = userItemFromDB.tableID;
-                    return SaveUserItem(userItem);
-                }
-                
-                return database.Insert(userItem);
-            }
-        }
 
-        public UserItem GetUserItemAsync()
-        {
-            List<UserItem> userItems = database.Query<UserItem>("SELECT * FROM [UserItem]");
-            if (userItems.Count > 0)
-            {
-                return userItems[0];
-            }
-            return null;
-        }
-
-        public void DeleteUserItem()
-        {
-            database.DropTable<UserItem>();
-            database.CreateTable<UserItem>();
-        }
-
-        private List<T> toList<T>(TableQuery<T> tableQuery){
-            List<T> list = new List<T>();
-            foreach (var item in tableQuery)
-            {
-                list.Add(item);
-            }
-            return list;
-        }
 
         public AutoComplete GetAutoCompleteValue(string value)
         {
@@ -267,16 +426,11 @@ namespace ASolute_Mobile.Data
             return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
         }
 
-        public List<ListItems> GetMainMenu(string category)
-        {
-            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ?", category);
-        }
-
+      
         public List<ListItems> GetStops(string category,string stopId)
         {
             return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ? AND [StopId] = ?", category, stopId);
         }
-
 
         public List<AutoComplete> GetAutoCompleteValues(string type)
         {
@@ -293,21 +447,9 @@ namespace ASolute_Mobile.Data
             return database.Query<JobNoList>("SELECT * FROM [JobNoList] ");
         }
 
-        public List<SummaryItems> GetSummarysAsync(string id,string type)
-        {
-            return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Id] = ? AND [Type] = ?", id,type);          
-        }
 
-        public List<SummaryItems> GetSummarysAsync(string type)
-        {
-            return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Type] = ?", type);
-        }
 
-        public List<DetailItems> GetDetailsAsync(string id)
-        {
-            return database.Query<DetailItems>("SELECT * FROM [DetailItems] WHERE [Id] = ?", id);
-            //return database.Table<SummaryItem>().ToListAsync();
-        }
+
 
         public ListItems GetJobRecordAsync(string id)
         {
@@ -325,70 +467,6 @@ namespace ASolute_Mobile.Data
         {
             database.Query<ListItems>("DELETE FROM ListItems");
         }
-
-        public void deleteRecords(string category)
-        {
-            database.Query<ListItems>("DELETE FROM ListItems WHERE [Category] = ?", category);
-        }
-
-        public void deleteRecordSummary(string type)
-        {
-            database.Query<SummaryItems>("DELETE FROM SummaryItems WHERE [type] = ?" , type);
-        }
-        
-        public void deleteSummaryFleet(string id)
-        {
-            database.Query<SummaryItems>("DELETE FROM SummaryItems WHERE [id] = ?", id);
-        }
-
-        public void deleteDetail(string id)
-        {
-            database.Query<DetailItems>("DELETE FROM DetailItems WHERE [id] = ?",id);
-        }
-
-        public void deleteHaulageSummary(string type)
-        {
-            database.Query<SummaryItems>("DELETE FROM SummaryItems WHERE [Type] = ?", type);
-        }
-
-        public void deleteRecordDetails()
-        {
-            database.Query<DetailItems>("DELETE FROM DetailItems");
-        }
-
-      
-        public int SaveMenuAsync(ListItems item)
-        {
-            item.owner = Ultis.Settings.SessionUserId;
-            if (item.tableID != 0)
-            {
-
-                return database.Update(item);
-            }
-            else
-            {
-
-                return database.Insert(item);
-            }
-
-        }
-
-      
-        public int SaveSummarysAsync(SummaryItems item)
-        {
-            if (item.tableID != 0)
-            {
-               
-                return database.Update(item);
-            }
-            else
-            {
-               
-                return database.Insert(item);
-            }
-        }
-
-       
 
         public int SaveJobNoAsync(JobNoList item)
         {
@@ -417,14 +495,7 @@ namespace ASolute_Mobile.Data
             }
         }
 
-        public int DeleteSummaryItem(SummaryItems item){
-            return database.Delete(item);
-        }
-
-        public int DeleteDetailItem(DetailItems item)
-        {
-            return database.Delete(item);
-        }
+       
         
     }
 }

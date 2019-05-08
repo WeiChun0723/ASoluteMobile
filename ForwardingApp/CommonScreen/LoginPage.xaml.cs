@@ -64,6 +64,7 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.AILSBUS":
                     name = "AILS Bus Ver.";
+                    //Task.Run(async () => { await BackgroundTask.DownloadBusStopList(); });
                     break;
             }
 
@@ -99,7 +100,6 @@ namespace ASolute_Mobile
             {
 
             }
-
         }
 
         async void Handle_Clicked(object sender, System.EventArgs e)

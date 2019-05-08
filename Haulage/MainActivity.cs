@@ -11,14 +11,15 @@ using Xamarin.Forms.Platform.Android;
 using ASolute_Mobile.Droid.Services;
 using Android;
 using ImageCircle.Forms.Plugin.Droid;
+using Haulage.Droid.MobilePrinter;
 
 namespace ASolute_Mobile.Droid
 {
 
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS BUS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
-
+        private static Activity activity;
         readonly string logTag = "MainActivity";
 
         protected override void OnCreate(Bundle bundle)
@@ -54,8 +55,12 @@ namespace ASolute_Mobile.Droid
                     }
                 }
 
-               // var mainDisplayInfo = Xamarin.Essentials.DeviceDisplay.MainDisplayInfo;
-               // var test = mainDisplayInfo.Width; ;
+                if(PackageName.Equals("asolute.Mobile.AILSBUS"))
+                {
+                    var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
+                    var alarmManagerBackgroundDataSync = GetSystemService(AlarmService).JavaCast<AlarmManager>();
+                    alarmManagerBackgroundDataSync.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), 60000, backgroundDataSyncPendingIntent);
+                }
 
                 App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                 App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
@@ -63,10 +68,15 @@ namespace ASolute_Mobile.Droid
                 LoadApplication(new App());
 
             }
-            catch (Exception ex)
+            catch
             {
 
             }
+        }
+
+        internal static Activity GetActivity()
+        {
+            return activity;
         }
 
         public void StartLocationTracking()
@@ -93,7 +103,23 @@ namespace ASolute_Mobile.Droid
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            switch (requestCode)
+            {
+                case PrinterDiscoveryImplementation.RequestLocationId:
+                    if (grantResults[0] == Permission.Granted)
+                    {
+                        //Permission granted
+                        PrinterDiscoveryImplementation discoveryImp = new PrinterDiscoveryImplementation();
+                        discoveryImp.FindBluetoothPrinters(PrinterDiscoveryImplementation.TempHandler);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Location permission denied. Cannot do Bluetooth discovery.");
+                    }
+                    break;
+            }
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 if (grantResults.Length > 0 && permissions.Length > 0)
                 {

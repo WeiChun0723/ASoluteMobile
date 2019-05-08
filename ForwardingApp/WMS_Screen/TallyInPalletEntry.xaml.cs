@@ -27,7 +27,7 @@ namespace ASolute_Mobile.WMS_Screen
         CustomEntry customEntry;
         CustomDatePicker customDatePicker;
         List<bool> checkField = new List<bool>();
-
+        string userInput = "";
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
@@ -71,15 +71,6 @@ namespace ASolute_Mobile.WMS_Screen
             GetNewPalletList();
         }
 
-        protected override  void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if(this != null)
-            {
-                //MessagingCenter.Send(this, "preventLandScape");
-            }
-        }
 
         void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
         {
@@ -285,7 +276,111 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        async void PalletScan(object sender, EventArgs e)
+        async void Handle_Tapped(object sender, System.EventArgs e)
+        {
+            var image = sender as Image;
+
+            switch(image.StyleId)
+            {
+                case "barcode_icon":
+                    PalletScan();
+                    break;
+
+                case "confirm_icon":
+                    try
+                    {
+                        checkField.Clear();
+
+                        foreach (clsAttribute attr in newPallet.Attribute)
+                        {
+                            if (attr.Value == "M")
+                            {
+                                string test = (!(String.IsNullOrEmpty(SearchControl(attr.Key, "GetValue")))) ? SearchControl(attr.Key, "GetValue") : String.Empty;
+
+                                if (String.IsNullOrEmpty(test))
+                                {
+                                    checkField.Add(false);
+                                }
+                                else
+                                {
+                                    checkField.Add(true);
+                                }
+                            }
+                        }
+
+                        if (!(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
+                            && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)) && !(checkField.Contains(false)))
+                        {
+
+                            clsPallet pallet = new clsPallet
+                            {
+                                Id = id,
+                                ProductCode = productPallet.ProductCode,
+                                PalletId = (!(String.IsNullOrEmpty(palletNo.Text))) ? palletNo.Text : String.Empty,
+                                PalletSize = newPallet.PalletSize[sizes.FindIndex(x => x.Equals(sizeBox.Text))].Key,
+                                Qty = Convert.ToInt32(quantity.Text),
+                                Uom = newPallet.ProductUom[units.FindIndex(x => x.Equals(unitBox.Text))].Key,
+                                StockStatus = statusBox.Text,
+                                String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue")))) ? SearchControl("String01", "GetValue") : String.Empty,
+                                String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue")))) ? SearchControl("String02", "GetValue") : String.Empty,
+                                String03 = (!(String.IsNullOrEmpty(SearchControl("String03", "GetValue")))) ? SearchControl("String03", "GetValue") : String.Empty,
+                                String04 = (!(String.IsNullOrEmpty(SearchControl("String04", "GetValue")))) ? SearchControl("String04", "GetValue") : String.Empty,
+                                String05 = (!(String.IsNullOrEmpty(SearchControl("String05", "GetValue")))) ? SearchControl("String05", "GetValue") : String.Empty,
+                                String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue")))) ? SearchControl("String06", "GetValue") : String.Empty,
+                                ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue")))) ? SearchControl("ExpiryDate", "GetValue") : String.Empty,
+                                MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue")))) ? SearchControl("MfgDate", "GetValue") : String.Empty,
+                            };
+
+                            var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id));
+                            clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if (upload_response.IsGood)
+                            {
+                                await DisplayAlert("Success", "New pallet added.", "OK");
+                                palletNo.Text = String.Empty;
+                                quantity.Text = String.Empty;
+
+                                List<string> dynamicFields = new List<string>
+                            {
+                            "String01",
+                            "String02",
+                            "String03",
+                            "String04",
+                            "String05",
+                            "String06",
+                            "ExpiryDate",
+                            "MfgDate"
+                            };
+
+                                foreach (string field in dynamicFields)
+                                {
+                                    SearchControl(field, "ClearValue");
+                                }
+
+                                if(actionID == "BARRY")
+                                {
+                                    PalletScan();
+                                }
+                            }
+                            else
+                            {
+                                await DisplayAlert("Error", upload_response.Message, "OK");
+                            }
+                        }
+                        else
+                        {
+                            await DisplayAlert("Missing field", "Please fill in all mandatory field.", "OK");
+                        }
+                    }
+                    catch (Exception error)
+                    {
+                        await DisplayAlert("Error", error.Message, "OK");
+                    }
+                    break;
+            }
+        }
+
+        async void PalletScan()
         {
             try
             {
@@ -294,47 +389,48 @@ namespace ASolute_Mobile.WMS_Screen
                 await Navigation.PushAsync(scanPage);
 
                 scanPage.OnScanResult += (result) =>
-                  {
-                      Device.BeginInvokeOnMainThread(async () =>
-                      {
-                          scanPage.PauseAnalysis();
-                          try
-                          {
-                              if (!(actionID == "BARRY"))
-                              {
-                                  await Navigation.PopAsync();
-                                  palletNo.Text = result.Text;
-                              }
-                              else
-                              {
-                                  string productCode = result.Text.Substring(0, 13);
-                                  string productRef = result.Text.Substring(16, 10);
-                                  string productQTY = result.Text.Substring(26, 2);
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        scanPage.PauseAnalysis();
+                        try
+                        {
+                            if (!(actionID == "BARRY"))
+                            {
+                                await Navigation.PopAsync();
+                                palletNo.Text = result.Text;
+                            }
+                            else
+                            {
+                                string productCode = result.Text.Substring(0, 13);
+                                string productRef = result.Text.Substring(16, 10);
+                                string productQTY = result.Text.Substring(26, 2);
 
-                                  if (productCode == productPallet.ProductCode)
-                                  {
-                                      palletNo.Text = productRef;
-                                      quantity.Text = productQTY;
-                                      DisplayScanStatus(result.Text + " scanned");
-                                  }
-                                  else
-                                  {
-                                      DisplayScanStatus("Product not matched.");
-                                  }
+                                if (productCode == productPallet.ProductCode)
+                                {
+                                    palletNo.Text = productRef;
+                                    quantity.Text = productQTY;
+                                    DisplayScanStatus(result.Text + " scanned");
+                                    await Navigation.PopAsync();
+                                }
+                                else
+                                {
+                                    DisplayScanStatus("Product not matched.");
+                                }
 
-                                  if (scanPage != null)
-                                  {
-                                      scanPage.ResumeAnalysis();
-                                  }
-                              }
-                          }
-                         catch
-                          {
-                              DisplayScanStatus("Please scan again");
-                          }
+                                if (scanPage != null)
+                                {
+                                    scanPage.ResumeAnalysis();
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            DisplayScanStatus("Please scan again");
+                        }
 
-                      });
-                  };
+                    });
+                };
             }
             catch (Exception ex)
             {
@@ -414,94 +510,6 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        async void ConfirmAddPallet(object sender, EventArgs e)
-        {
-            try
-            {
-                checkField.Clear();
-
-                foreach (clsAttribute attr in newPallet.Attribute)
-                {
-                    if (attr.Value == "M")
-                    {
-                        string test = (!(String.IsNullOrEmpty(SearchControl(attr.Key, "GetValue")))) ? SearchControl(attr.Key, "GetValue") : String.Empty;
-
-                        if (String.IsNullOrEmpty(test))
-                        {
-                            checkField.Add(false);
-                        }
-                        else
-                        {
-                            checkField.Add(true);
-                        }
-                    }
-                }
-
-                if (!(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
-                    && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)) && !(checkField.Contains(false)))
-                {
-
-                    clsPallet pallet = new clsPallet
-                    {
-                        Id = id,
-                        ProductCode = productPallet.ProductCode,
-                        PalletId = (!(String.IsNullOrEmpty(palletNo.Text))) ? palletNo.Text : String.Empty,
-                        PalletSize = newPallet.PalletSize[sizes.FindIndex(x => x.Equals(sizeBox.Text))].Key,
-                        Qty = Convert.ToInt32(quantity.Text),
-                        Uom = newPallet.ProductUom[units.FindIndex(x => x.Equals(unitBox.Text))].Key,
-                        StockStatus = statusBox.Text,
-                        String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue")))) ? SearchControl("String01", "GetValue") : String.Empty,
-                        String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue")))) ? SearchControl("String02", "GetValue") : String.Empty,
-                        String03 = (!(String.IsNullOrEmpty(SearchControl("String03", "GetValue")))) ? SearchControl("String03", "GetValue") : String.Empty,
-                        String04 = (!(String.IsNullOrEmpty(SearchControl("String04", "GetValue")))) ? SearchControl("String04", "GetValue") : String.Empty,
-                        String05 = (!(String.IsNullOrEmpty(SearchControl("String05", "GetValue")))) ? SearchControl("String05", "GetValue") : String.Empty,
-                        String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue")))) ? SearchControl("String06", "GetValue") : String.Empty,
-                        ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue")))) ? SearchControl("ExpiryDate", "GetValue") : String.Empty,
-                        MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue")))) ? SearchControl("MfgDate", "GetValue") : String.Empty,
-                    };
-
-                    var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id));
-                    clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if (upload_response.IsGood)
-                    {
-                        await DisplayAlert("Success", "New pallet added.", "OK");
-                        palletNo.Text = String.Empty;
-                        quantity.Text = String.Empty;   
-
-                        List<string> dynamicFields = new List<string>
-                            {
-                            "String01",
-                            "String02",
-                            "String03",
-                            "String04",
-                            "String05",
-                            "String06",
-                            "ExpiryDate",
-                            "MfgDate"
-                            };
-
-                        foreach (string field in dynamicFields)
-                        {
-                            SearchControl(field, "ClearValue");
-                        }
-                    }
-                    else
-                    {
-                        await DisplayAlert("Error", upload_response.Message, "OK");
-                    }
-                }
-                else
-                {
-                    await DisplayAlert("Missing field", "Please fill in all mandatory field.", "OK");
-                }
-            }
-            catch (Exception error)
-            {
-                await DisplayAlert("Error", error.Message, "OK");
-            }
-        }
-
         string SearchControl(string controlID, string action)
         {
             foreach (View t in grid.Children)
@@ -563,5 +571,41 @@ namespace ASolute_Mobile.WMS_Screen
             return null;
         }
 
+        void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+
+            try
+            {
+
+                if (actionID == "BARRY"  )
+                {
+                    userInput = palletNo.Text;
+                   
+                    string productCode = userInput.Substring(0, 13);
+                    string productRef = userInput.Substring(16, 10);
+                    string productQTY = userInput.Substring(26, 2);
+
+                    if (productCode == productPallet.ProductCode)
+                    {
+                        palletNo.Text = "";
+                        quantity.Text = "";
+
+                        palletNo.Text = productRef;
+                        quantity.Text = productQTY;
+                        DisplayScanStatus(userInput + " scanned");
+
+                    }
+                    else
+                    {
+                        DisplayScanStatus("Product not matched.");
+                        palletNo.Text = "";
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

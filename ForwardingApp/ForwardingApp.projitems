@@ -407,6 +407,7 @@
       <DependentUpon>Registration.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\IPrinterDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -423,6 +424,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Yard\" />
     <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
+    <Folder Include="$(MSBuildThisFileDirectory)ZebraPrinter\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

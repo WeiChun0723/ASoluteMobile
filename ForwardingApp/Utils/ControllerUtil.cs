@@ -6,6 +6,7 @@ using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using ASolute_Mobile.Models;
 using Plugin.DeviceInfo;
+using Xamarin.Essentials;
 
 namespace ASolute_Mobile.Utils
 {
@@ -38,10 +39,24 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Ticket/{0}", list);
         }
+
+        public static String getBusTripHistory(string date)
+        {
+            return String.Format("Trip/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), date);
+        }
+
+        public static String postTrips()
+        {
+            return String.Format("Trip/SaveMultiple?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String postTickets()
+        {
+            return String.Format("Ticket/Save?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
         #endregion
 
         #region Common url
-
         public static String getRegistrationURL(string ownerID, string userID, string password, string ICNo)
         {
             return String.Format("Util/Register?GeoLoc={0}&OwnerId={1}&UserId={2}&Password={3}&ICNo={4}", getPositionAsync(), ownerID, userID, password, ICNo);
@@ -519,14 +534,14 @@ namespace ASolute_Mobile.Utils
             {
                 if (App.gpsLocationLat == 0 || App.gpsLocationLong == 0)
                 {
-                    Position position = null;
-                    Boolean latestPosition = false;
+                    Location location = new Location();
+                    //Position position = null;
                     if (locator != null && locator.IsGeolocationEnabled)
                     {
                         try
                         {
-                            Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(15)); });
-                            latestPosition = true;
+                            //Task.Run(async () => { position = await locator.GetPositionAsync(TimeSpan.FromSeconds(15)); });
+                            Task.Run(async () => { location = await Geolocation.GetLastKnownLocationAsync(); });
                         }
                         catch (TaskCanceledException exception)
                         {
@@ -534,16 +549,19 @@ namespace ASolute_Mobile.Utils
                         }
                     }
 
-                    if (position == null)
+                    /*if (position == null)
                     {
                         Task.Run(async () => { position = await locator.GetLastKnownLocationAsync(); });
 
-                    }
+                    }*/
 
-                    if (position != null)
+                    if (location != null)
                     {
-                        App.gpsLocationLat = position.Latitude;
-                        App.gpsLocationLong = position.Longitude;
+                        //App.gpsLocationLat = position.Latitude;
+                        //App.gpsLocationLong = position.Longitude;
+
+                        App.gpsLocationLat = location.Latitude;
+                        App.gpsLocationLong = location.Longitude;
                     }
 
                 }

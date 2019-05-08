@@ -15,23 +15,69 @@ namespace ASolute_Mobile.Models
         [PrimaryKey, AutoIncrement]
         public int tableID { get; set; }
         public string owner { get; set; }
-        public DateTime? updatedDate { get; set; }      
+        public DateTime? updatedDate { get; set; }
+        public bool Uploaded { get; set; }
     }
 
-    /*public class TallyIn
+
+    /* public class ChatRecord : Generic
+     {
+         public string Content { get; set; }
+         public string Sender { get; set; }
+         public string BackgroundColor { get; set; }
+     }*/
+
+
+    #region AILS BUS offline model
+    public class BusTrip : Generic
     {
         public string Id { get; set; }
-        public string DocumentNo { get; set; }
-        public string ContainerNo { get; set; }
-        public string Principal { get; set; }
+
+        public string TruckId { get; set; }
+
+        public string DriverId { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public int? StartOdometer { get; set; }
+
+        public string StartLocationName { get; set; }
+
+        public string StartGeoLoc { get; set; }
+
+        public DateTime? EndTime { get; set; }
+
+        public int? EndOdometer { get; set; }
+
+        public string EndLocationName { get; set; }
+
+        public string EndGeoLoc { get; set; }
     }
 
-    public class ChatRecord : Generic
+    public class SoldTicket : Generic
     {
-        public string Content { get; set; }
-        public string Sender { get; set; }
-        public string BackgroundColor { get; set; }
-    }*/
+        public DateTime TrxTime { get; set; }
+
+        public string SerialNumber { get; set; }
+
+        public string TruckId { get; set; }
+
+        public string DriverId { get; set; }
+
+        public string TripId { get; set; }
+
+        public string RouteId { get; set; }
+
+        public string StopId { get; set; }
+
+        public string TicketType { get; set; }
+
+        public string PaymentType { get; set; }
+
+        public double Amount { get; set; }
+    }
+    #endregion 
+
 
     public class ProviderInfo : Generic
     {
@@ -72,7 +118,6 @@ namespace ASolute_Mobile.Models
         public string photoThumbnailFileLocation { get; set; }
         public string photoScaledFileLocation { get; set; }
         public int scaleResolution { get; set; }
-        public bool Uploaded { get; set; }
         public string type { get; set; }
         
     }
@@ -123,7 +168,6 @@ namespace ASolute_Mobile.Models
         public string menuId { get; set; }
         public string JobId { get; set; }
         public string JobNoValue { get; set; }
-        public bool Uploaded { get; set; }
     }
 
     public class TruckModel : Generic
@@ -158,10 +202,4 @@ namespace ASolute_Mobile.Models
         public string Revenue { get; set; }
     }
 
-    /*public class clsYardBlock
-    {
-        public string Id { get; set; }
-        public int TotalBay { get; set; }
-        public int TotalLevel { get; set; }
-    }*/
 }

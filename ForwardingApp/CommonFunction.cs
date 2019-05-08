@@ -76,21 +76,23 @@ namespace ASolute_Mobile.Utils
 
                 clsResponse reply = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if(reply.Message == "Invalid Session !")
+                if(page != null)
                 {
-                    BackgroundTask.Logout(page);
-                    await page.DisplayAlert("Error", reply.Message, "OK");
-                }
-                else 
-                {
-                    if(!(reply.IsGood))
+                    if (reply.Message == "Invalid Session !")
                     {
+                        BackgroundTask.Logout(page);
                         await page.DisplayAlert("Error", reply.Message, "OK");
                     }
-
-                    return content;
+                    else
+                    {
+                        if (!(reply.IsGood))
+                        {
+                            await page.DisplayAlert("Error", reply.Message, "OK");
+                        }
+                    }
                 }
-              
+
+                return content;
             }
             catch(HttpRequestException requestEx)
             {
@@ -163,7 +165,6 @@ namespace ASolute_Mobile.Utils
                 File.WriteAllBytes(image.photoThumbnailFileLocation, thumbnailByte);
                 image.imageData = thumbnailByte;
                 App.Database.SaveRecordImageAsync(image);
-
             }
             catch(Exception ex)
             {
@@ -248,7 +249,7 @@ namespace ASolute_Mobile.Utils
 
                 };
 
-                item.Clicked += async (sender, e) =>
+                item.Clicked +=  (sender, e) =>
                 {
                     Ultis.Settings.NewJob = "No";
                     pages.ToolbarItems.Clear();

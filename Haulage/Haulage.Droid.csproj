@@ -37,7 +37,6 @@
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <PlatformTarget>x86</PlatformTarget>
     <AndroidSupportedAbis />
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 <AndroidTlsProvider>btls</AndroidTlsProvider>
 <AndroidKeyStore>True</AndroidKeyStore>
 <AndroidSigningKeyStore>/Users/asolute/Library/Developer/Xamarin/Keystore/asolute/asolute.keystore</AndroidSigningKeyStore>
@@ -501,10 +500,9 @@
     <Compile Include="Services\LocationServiceBinder.cs" />
     <Compile Include="Services\LocationServiceConnection.cs" />
     <Compile Include="Services\ServiceConnectedEventArgs.cs" />
-    <Compile Include="Services\BackgroundCleanUpReceiver.cs" />
     <Compile Include="Services\BluetoothService_test.cs" />
-    <Compile Include="Services\GPS_Service.cs" />
     <Compile Include="CustomRenderer\PinCustomRenderer.cs" />
+    <Compile Include="MobilePrinter\PrinterDiscoveryImplementation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -546,6 +544,7 @@
     <AndroidResource Include="Resources\drawable\contextMenuBackground.png" />
     <AndroidResource Include="Resources\drawable\warehouseheader.png" />
     <AndroidResource Include="Resources\drawable\busticketingheader.png" />
+    <AndroidResource Include="Resources\drawable\yardheader.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />
@@ -639,6 +638,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\barcode_scanner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MobilePrinter\" />
   </ItemGroup>
   <Import Project="..\ForwardingApp\ForwardingApp.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

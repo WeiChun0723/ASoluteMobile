@@ -12,6 +12,8 @@ using ASolute_Mobile.Utils;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.XForms.Buttons;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -24,12 +26,16 @@ namespace ASolute_Mobile
 
         public NewMainMenu()
         {
+
+           
+
             InitializeComponent();
 
             switch(Ultis.Settings.App)
             {
                 case "asolute.Mobile.AILSBUS":
                     headerImage.Source = "busticketingheader.png";
+                    StartEndButton.IsVisible = true;
                     break;
 
                 case "asolute.Mobile.AILSWMS":
@@ -38,6 +44,10 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.AILSHaulage":
                     headerImage.Source = "headerBackground.png";
+                    break;
+
+                case "asolute.Mobile.AILSYard":
+                    headerImage.Source = "yardheader.png";
                     break;
             }
 
@@ -57,6 +67,11 @@ namespace ASolute_Mobile
             main.Children.Add(title1);
             main.Children.Add(title2);
             NavigationPage.SetTitleView(this, main);
+
+            if(!(String.IsNullOrEmpty(Ultis.Settings.StartEndStatus)))
+            {
+                StartEndButton.Text = Ultis.Settings.StartEndStatus;
+            }
         }
 
         protected override void OnAppearing()
@@ -98,30 +113,12 @@ namespace ASolute_Mobile
                     // clear the db before insert to it to prevent duplicate
                     App.Database.deleteRecords("MainMenu");
                     App.Database.deleteRecordSummary("MainMenu");
+                    App.Database.deleteRecordSummary("UserInfo");
                     App.Database.deleteRecordSummary("ContextMenu");
                     foreach (clsDataRow mainMenu in menu.MainMenu)
                     {
                         switch (mainMenu.Id)
                         {
-                            //display user info
-                            case "Info":
-                                userInfo.Children.Clear();
-                                foreach (clsCaptionValue userSummary in mainMenu.Summary)
-                                {
-                                    string labelStyle = (userSummary.Caption == "") ? "ProfileNameLabel" : "ProfileTagLabel";
-
-                                    Label info = new Label
-                                    {
-                                        Style = (Xamarin.Forms.Style)Application.Current.Resources[labelStyle],
-                                        HorizontalTextAlignment = TextAlignment.Center
-                                    };
-
-                                    info.Text = (userSummary.Caption == "") ? userSummary.Value : userSummary.Caption + ": " + userSummary.Value;
-
-                                    userInfo.Children.Add(info);
-                                }
-                                break;
-
                             //display expiry date info
                             case "Expiry":
                                 expiryStack.IsVisible = true;
@@ -174,9 +171,9 @@ namespace ASolute_Mobile
                                 mainMenuItems.Id = mainMenu.Id;
                                 mainMenuItems.Name = mainMenu.Caption;
                                 mainMenuItems.Action = mainMenu.Action;
-                                mainMenuItems.Category = "MainMenu";
+                                mainMenuItems.Category = (mainMenu.Id == "Info") ? "UserInfo" : "MainMenu";
 
-                                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, "MainMenu");
+                                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, mainMenuItems.Category);
                                 int index = 0;
                                 foreach (clsCaptionValue summaryList in mainMenu.Summary)
                                 {
@@ -200,7 +197,7 @@ namespace ASolute_Mobile
                                     summaryItem.Caption = summaryList.Caption;
                                     summaryItem.Value = summaryList.Value;
                                     summaryItem.Display = summaryList.Display;
-                                    summaryItem.Type = "MainMenu";
+                                    summaryItem.Type = mainMenuItems.Category;
                                     summaryItem.BackColor = mainMenu.BackColor;
                                     App.Database.SaveSummarysAsync(summaryItem);
                                     index++;
@@ -249,11 +246,31 @@ namespace ASolute_Mobile
         {
             try
             {
+
+                //load user account info
+                List<SummaryItems> information = App.Database.GetSummarysAsync("Info", "UserInfo");
+                userInfo.Children.Clear();
+                foreach (SummaryItems userSummary in information)
+                {
+                    string labelStyle = (userSummary.Caption == "") ? "ProfileNameLabel" : "ProfileTagLabel";
+
+                    Label info = new Label
+                    {
+                        Style = (Xamarin.Forms.Style)Application.Current.Resources[labelStyle],
+                        HorizontalTextAlignment = TextAlignment.Center
+                    };
+
+                    info.Text = (userSummary.Caption == "") ? userSummary.Value : userSummary.Caption + ": " + userSummary.Value;
+
+                    userInfo.Children.Add(info);
+                }
+
+                //load menu item with custom template
                 loading.IsVisible = true;
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
-                listView.HeightRequest =  Item.Count * 100;
+                listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 80 : Item.Count * 100;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
                 System.TimeSpan interval = new System.TimeSpan();
                 if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
@@ -262,12 +279,16 @@ namespace ASolute_Mobile
                     interval = DateTime.Now.Subtract(enteredDate);
                 }
 
-                if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
+                if(NetworkCheck.IsInternet())
                 {
-                    GetMainMenu();
-                    Ultis.Settings.RefreshListView = "No";
-                    Ultis.Settings.UpdateTime = DateTime.Now.ToString();
+                    if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
+                    {
+                        GetMainMenu();
+                        Ultis.Settings.RefreshListView = "No";
+                        Ultis.Settings.UpdateTime = DateTime.Now.ToString();
+                    }
                 }
+
             }
             catch(Exception ex)
             {
@@ -392,6 +413,10 @@ namespace ASolute_Mobile
                 case "ContainerInquiry":
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getCollectionInquiry()));
                     break;
+
+                case "TicketHistory":
+                    await Navigation.PushAsync(new HaulageScreen.RunSheet(((ListItems)e.Item)));
+                    break;
             }
 
             listView.SelectedItem = null;
@@ -411,5 +436,77 @@ namespace ASolute_Mobile
         {
             
         }
+
+        #region AILS BUS function
+        //visible for bus ticketing app for record start time and end time of the trip
+        void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            var button = sender as SfButton;
+
+            switch (button.Text)
+            {
+                case "Start":
+                    Ultis.Settings.StartEndStatus = "End";
+                    SaveOfflineTrip("Start");
+                    break;
+
+                case "End":
+                    Ultis.Settings.StartEndStatus = "Start";
+                    SaveOfflineTrip("End");
+                    break;
+            }
+
+            StartEndButton.Text = Ultis.Settings.StartEndStatus;
+        }
+
+        async void SaveOfflineTrip(string startEnd)
+        {
+            try
+            {
+                BusTrip busTrip;
+
+                var trip = App.Database.GetBusTrip();
+
+                if (trip == null || trip.EndTime != null)
+                {
+                    busTrip = new BusTrip();
+                    Guid randomID = Guid.NewGuid();
+                    busTrip.Id = randomID.ToString();
+                    busTrip.DriverId = Ultis.Settings.SessionUserItem.DriverId;
+                    busTrip.TruckId = Ultis.Settings.SessionUserItem.TruckId;
+                    busTrip.Uploaded = false;
+
+                    Ultis.Settings.TripRecordID = randomID.ToString();
+                }
+                else
+                {
+                    busTrip = trip;
+                }
+
+                var location = await Geolocation.GetLastKnownLocationAsync();
+
+                switch (startEnd)
+                {
+                    case "Start":
+                        busTrip.StartTime = DateTime.Now;
+                        busTrip.StartGeoLoc = location.Latitude.ToString() + "," + location.Longitude.ToString();
+
+                        break;
+
+                    case "End":
+                        busTrip.EndTime = DateTime.Now;
+                        busTrip.EndGeoLoc = location.Latitude.ToString() + "," + location.Longitude.ToString();
+                        break;
+                }
+
+                App.Database.SaveBusTrip(busTrip);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+
+        }
+        #endregion
     }
 }

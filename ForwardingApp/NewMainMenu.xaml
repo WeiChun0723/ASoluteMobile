@@ -5,7 +5,7 @@
              xmlns:circleImage="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin" 
              xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" 
              xmlns:syncRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
-             >
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <syncRefresh:SfPullToRefresh x:Name="pullToRefresh" 
                                  IsRefreshing="False" 
                                  PullingThreshold="100" 
@@ -33,6 +33,7 @@
                                 <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
                             </circleImage:CircleImage.GestureRecognizers>
                         </circleImage:CircleImage>
+                       
                         <!--  Profile Name  -->
                         <StackLayout Grid.Row="1" Padding="0,50,0,00" HorizontalOptions="Center" x:Name="userInfo" />
                         <!-- Expiry Section  -->
@@ -41,6 +42,7 @@
                             <Grid ColumnSpacing="0" RowSpacing="0" x:Name="expiryGrid" />
                         </StackLayout>
                     </Grid>
+                    <buttons:SfButton x:Name="StartEndButton" Text="Start" Clicked="Handle_Clicked" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" IsVisible="false" FontSize="30" HeightRequest="100"/>
                     <ListView x:Name="listView" ItemTapped="Handle_ItemTapped"   Style="{StaticResource recordListStyle}" HasUnevenRows="true" />
                 </StackLayout>
             </ScrollView>

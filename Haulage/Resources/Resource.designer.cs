@@ -7224,26 +7224,26 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f020057
 			public const int avd_hide_password = 2130837591;
 			
-			// aapt resource value: 0x7f02018b
-			public const int avd_hide_password_1 = 2130837899;
-			
 			// aapt resource value: 0x7f02018c
-			public const int avd_hide_password_2 = 2130837900;
+			public const int avd_hide_password_1 = 2130837900;
 			
 			// aapt resource value: 0x7f02018d
-			public const int avd_hide_password_3 = 2130837901;
+			public const int avd_hide_password_2 = 2130837901;
+			
+			// aapt resource value: 0x7f02018e
+			public const int avd_hide_password_3 = 2130837902;
 			
 			// aapt resource value: 0x7f020058
 			public const int avd_show_password = 2130837592;
 			
-			// aapt resource value: 0x7f02018e
-			public const int avd_show_password_1 = 2130837902;
-			
 			// aapt resource value: 0x7f02018f
-			public const int avd_show_password_2 = 2130837903;
+			public const int avd_show_password_1 = 2130837903;
 			
 			// aapt resource value: 0x7f020190
-			public const int avd_show_password_3 = 2130837904;
+			public const int avd_show_password_2 = 2130837904;
+			
+			// aapt resource value: 0x7f020191
+			public const int avd_show_password_3 = 2130837905;
 			
 			// aapt resource value: 0x7f020059
 			public const int barCode = 2130837593;
@@ -8091,11 +8091,11 @@ namespace Haulage.Droid
 			// aapt resource value: 0x7f020172
 			public const int notification_icon_background = 2130837874;
 			
-			// aapt resource value: 0x7f020189
-			public const int notification_template_icon_bg = 2130837897;
-			
 			// aapt resource value: 0x7f02018a
-			public const int notification_template_icon_low_bg = 2130837898;
+			public const int notification_template_icon_bg = 2130837898;
+			
+			// aapt resource value: 0x7f02018b
+			public const int notification_template_icon_low_bg = 2130837899;
 			
 			// aapt resource value: 0x7f020173
 			public const int notification_tile_bg = 2130837875;
@@ -8162,6 +8162,9 @@ namespace Haulage.Droid
 			
 			// aapt resource value: 0x7f020188
 			public const int warehouseheader = 2130837896;
+			
+			// aapt resource value: 0x7f020189
+			public const int yardheader = 2130837897;
 			
 			static Drawable()
 			{

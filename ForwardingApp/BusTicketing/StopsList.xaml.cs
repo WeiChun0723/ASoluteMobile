@@ -23,14 +23,14 @@ namespace ASolute_Mobile.BusTicketing
             public string BackColor { get; set; }
         }
 
+        ObservableCollection<ListItems> localStoredStops ;
         List<clsBusTicket> stops;
         //List<SummaryItems> listViewStops = new List<SummaryItems>();
         ListView BusStopList;
-        int OutCount = 0, InCount = 0;
+        int OutCount = 0;
         ActivityIndicator activityIndicator;
         bool firstLoad = true;
         string action;
-        List<SummaryItems> items = new List<SummaryItems>();
 
         public StopsList(string name)
         {
@@ -43,8 +43,16 @@ namespace ASolute_Mobile.BusTicketing
 
             PageContent();
 
-            GetStopList();
+            localStoredStops = new ObservableCollection<ListItems>(App.Database.GetMainMenu(action));
 
+            if (NetworkCheck.IsInternet() && localStoredStops.Count == 0)
+            {
+                GetStopList();
+            }
+            else
+            {
+                LoadStoplist();
+            }
         }
 
         protected override void OnCurrentPageChanged()
@@ -76,7 +84,7 @@ namespace ASolute_Mobile.BusTicketing
                     else if (index == 2)
                     {
 
-                        if (OutCount < stops.Count)
+                        if (OutCount < localStoredStops.Count)
                         {
 
                             OutCount++;
@@ -91,7 +99,7 @@ namespace ASolute_Mobile.BusTicketing
             }
         }
 
-        public void PageContent()
+        public async void PageContent()
         {
             try
             {
@@ -104,7 +112,6 @@ namespace ASolute_Mobile.BusTicketing
 
                 BusStopList = new ListView
                 {
-
                     SeparatorColor = Color.White,
                     BackgroundColor = Color.White,
                     HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -120,12 +127,6 @@ namespace ASolute_Mobile.BusTicketing
                     IsVisible = true
                 };
 
-                /*DataTemplate dt = new DataTemplate(typeof(TextCell));
-                dt.SetBinding(TextCell.TextProperty, new Binding("StopName"));
-                dt.SetBinding(TextCell.TextColorProperty, new Binding("BackColor"));
-                BusStopList.ItemTemplate = dt;
-                BusStopList.IsPullToRefreshEnabled = false;
-                //BusStopList.Refreshing += BusStopList_Refreshing;*/
 
                 DataTemplate dt = new DataTemplate(() =>
                {
@@ -161,36 +162,39 @@ namespace ASolute_Mobile.BusTicketing
 
                 BusStopList.RowHeight = 100;
                 BusStopList.ItemTemplate = dt;
+                BusStopList.Refreshing += BusStopList_Refreshing;
 
                 mainLayout.Children.Add(activityIndicator);
                 mainLayout.Children.Add(BusStopList);
 
                 CurrentPage.Content = mainLayout;
             }
-            catch
+            catch(Exception ex)
             {
-
+                await DisplayAlert("Error", ex.Message, "OK");
             }
         }
 
         void BusStopList_Refreshing(object sender, EventArgs e)
         {
-            GetStopList();
+            if(NetworkCheck.IsInternet())
+            {
+                GetStopList();
+            }
+
         }
 
         async void BusStopList_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            string menuAction = ((SummaryItems)e.Item).StopName;
+            //string menuAction = ((SummaryItems)e.Item).StopName;
 
-            await Navigation.PushAsync(new Ticket(stops[OutCount].StopName, ((SummaryItems)e.Item).StopName, ((SummaryItems)e.Item).Rate.ToString()));
+            await Navigation.PushAsync(new Ticket(localStoredStops[OutCount], ((SummaryItems)e.Item).StopName, ((SummaryItems)e.Item).Rate));
         }
-
 
         public async void GetStopList()
         {
             try
             {
-
                 string listtype = (action == "Inbound Trip") ? "InboundList" : "OutboundList";
 
                 var content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/host/api/", ControllerUtil.getBusStops(listtype), this);
@@ -201,8 +205,8 @@ namespace ASolute_Mobile.BusTicketing
                     stops = JObject.Parse(content)["Result"].ToObject<List<clsBusTicket>>();
 
 
-                    App.Database.deleteRecords("BusTicketing");
-                    App.Database.deleteRecordSummary("BusTicketing");
+                    App.Database.deleteRecords(action);
+                    App.Database.deleteRecordSummary(action);
 
 
                     foreach (clsBusTicket stop in stops)
@@ -213,7 +217,7 @@ namespace ASolute_Mobile.BusTicketing
                             StopId = stop.StopId,
                             StopName = stop.StopName,
                             Rate = stop.Rate,
-                            Category = "BusTicketing"
+                            Category = action
                         };
 
                         App.Database.SaveMenuAsync(items);
@@ -228,14 +232,14 @@ namespace ASolute_Mobile.BusTicketing
                                 Rate = station.Rate,
                                 BackColor = "#ffffff"
                             };
-                            summaryItem.Type = "BusTicketing";
+                            summaryItem.Type = action;
 
-                            //listViewStops.Add(summaryItem);
+                           
                             App.Database.SaveSummarysAsync(summaryItem);
                         }
                     }
 
-                    var test = App.Database.GetMainMenu("BusTicketing");
+                    var test = App.Database.GetMainMenu(action);
 
                     LoadStoplist();
                 }
@@ -258,13 +262,13 @@ namespace ASolute_Mobile.BusTicketing
                 Ultis.Settings.List = "BusTicketing";
                 string id = "";
 
-                id = stops[OutCount].StopId;
+
+                id = localStoredStops[OutCount].StopId;
 
                 Title = "Route: " + id;
-                var Item = new List<SummaryItems>(App.Database.GetSummarysAsync(stops[OutCount].StopId, "BusTicketing"));
-               
-               
-                Item.Insert(0, new SummaryItems { StopId = stops[OutCount].StopId, StopName = stops[OutCount].StopName, Rate = stops[OutCount].Rate, BackColor = "#32cd32" });
+                var Item = new List<SummaryItems>(App.Database.GetSummarysAsync(localStoredStops[OutCount].StopId, action));
+
+                Item.Insert(0, new SummaryItems { StopId = localStoredStops[OutCount].StopId, StopName = localStoredStops[OutCount].StopName, Rate = localStoredStops[OutCount].Rate, BackColor = "#32cd32" });
 
                 BusStopList.ItemsSource = Item;
                 activityIndicator.IsVisible = false;
