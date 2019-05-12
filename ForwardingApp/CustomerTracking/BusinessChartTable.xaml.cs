@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Xamarin.Forms;
-using System.Linq;
-using Syncfusion.SfDataGrid.XForms;
 using Syncfusion.SfChart.XForms;
+using Syncfusion.SfDataGrid.XForms;
+using Xamarin.Forms;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-
-    public partial class DataGrid : CarouselPage
+    public partial class BusinessChartTable : CarouselPage
     {
+        //model for the table data
         public class HaulageVolume
         {
             public string Entity { get; set; }
@@ -30,7 +28,7 @@ namespace ASolute_Mobile.CustomerTracking
         List<clsVolume> volumes;
         List<HaulageVolume> data = new List<HaulageVolume>();
 
-        public DataGrid()
+        public BusinessChartTable()
         {
             InitializeComponent();
 
@@ -46,10 +44,10 @@ namespace ASolute_Mobile.CustomerTracking
         {
             base.OnCurrentPageChanged();
 
-          
+
 
             int index = Children.IndexOf(CurrentPage);
-            if(!firstLoad)
+            if (!firstLoad)
             {
                 if (index == 0)
                 {
@@ -57,7 +55,7 @@ namespace ASolute_Mobile.CustomerTracking
                     dataTime = previousTime.AddMonths(-1);
                     GetHaulageVolume(dataTime.ToString("yyyy-MM-dd"));
                 }
-               
+
                 else if (index == 2)
                 {
                     previousTime = dataTime;
@@ -72,7 +70,7 @@ namespace ASolute_Mobile.CustomerTracking
         {
             data.Clear();
 
-            var volume_content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageVolumeURL(date));
+            var volume_content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getHaulageVolumeURL(date),this);
             clsResponse volume_response = JsonConvert.DeserializeObject<clsResponse>(volume_content);
 
             if (volume_response.IsGood)
@@ -85,7 +83,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 volumes = JObject.Parse(volume_content)["Result"].ToObject<List<clsVolume>>();
 
-                foreach(clsVolume volume in volumes)
+                foreach (clsVolume volume in volumes)
                 {
                     double revenue = Convert.ToDouble(volume.Revenue) / 1000;
 
@@ -101,7 +99,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 gridHeight = 0;
 
-                if(volumes.Count == 1)
+                if (volumes.Count == 1)
                 {
                     gridHeight = 100;
                 }
@@ -135,7 +133,7 @@ namespace ASolute_Mobile.CustomerTracking
                 IsVisible = false
             };
 
-          
+
             ActivityIndicator activityIndicator = new ActivityIndicator
             {
                 IsRunning = true,
@@ -181,7 +179,7 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 MappingName = "Revenue",
                 Width = 100,
-            
+
             };
 
             revenueColumn.HeaderTemplate = new DataTemplate(() =>
@@ -232,7 +230,7 @@ namespace ASolute_Mobile.CustomerTracking
 
             BarSeries revenue = new BarSeries()
             {
-               
+
                 EnableAnimation = true,
                 Color = Color.Green
             };
@@ -244,17 +242,17 @@ namespace ASolute_Mobile.CustomerTracking
                 chart.IsVisible = false;
                 category.IsVisible = false;
             }
-            else if(data.Count == 1)
+            else if (data.Count == 1)
             {
                 job.Width = 0.3;
                 revenue.Width = 0.3;
             }
-            else if(data.Count == 2 )
+            else if (data.Count == 2)
             {
                 job.Width = 0.35;
                 revenue.Width = 0.35;
             }
-            else if(data.Count == 3)
+            else if (data.Count == 3)
             {
                 job.Width = 0.45;
                 revenue.Width = 0.45;
@@ -264,8 +262,7 @@ namespace ASolute_Mobile.CustomerTracking
                 job.Width = 0.7;
                 revenue.Width = 0.7;
             }
-
-
+             
             chart.Series.Add(job);
             chart.Series.Add(revenue);
 
@@ -279,7 +276,7 @@ namespace ASolute_Mobile.CustomerTracking
 
             List<HaulageVolume> chartData = new List<HaulageVolume>();
 
-            foreach(HaulageVolume haulageVolume in data)
+            foreach (HaulageVolume haulageVolume in data)
             {
                 string[] number = haulageVolume.Revenue.Split(' ');
 

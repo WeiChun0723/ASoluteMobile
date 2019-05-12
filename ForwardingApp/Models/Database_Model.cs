@@ -75,6 +75,10 @@ namespace ASolute_Mobile.Models
         public string PaymentType { get; set; }
 
         public double Amount { get; set; }
+
+        public string From { get; set; }
+
+        public string To { get; set; }
     }
     #endregion 
 
@@ -193,13 +197,6 @@ namespace ASolute_Mobile.Models
     {
         public string Value { get; set; }
         public string Type { get; set; }
-    }
-
-    public class HaulageVolume
-    {
-        public string Entity { get; set; }
-        public string Job { get; set; }
-        public string Revenue { get; set; }
     }
 
 }

@@ -131,7 +131,12 @@ namespace ASolute_Mobile.CustomerTracking
              category_list.Style = (Style)App.Current.Resources["recordListStyle"];
              category_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-             activityIndicator.IsEnabled = false;
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                category_list.RowHeight = 100;
+            }
+
+            activityIndicator.IsEnabled = false;
              activityIndicator.IsVisible = false;
              activityIndicator.IsRunning = false;
          }

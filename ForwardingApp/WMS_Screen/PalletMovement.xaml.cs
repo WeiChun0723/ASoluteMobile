@@ -221,7 +221,9 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
             try
             {
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(palletID),this);
+                string encodePalletId = System.Net.WebUtility.UrlEncode(palletID);
+
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(encodePalletId),this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(newPallet_response.IsGood)
@@ -290,7 +292,6 @@ namespace ASolute_Mobile.WMS_Screen
 
                 }
                
-
                 loading.IsVisible = false;
             }
             catch

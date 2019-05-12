@@ -60,7 +60,7 @@ namespace ASolute_Mobile.CustomerTracking
         {
             try
             {
-                string searchKey = e.NewTextValue.ToUpper();
+                string searchKey = e.NewTextValue;
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
@@ -72,18 +72,18 @@ namespace ASolute_Mobile.CustomerTracking
                     try
                     {
                         List<ListItems> test = new List<ListItems>(App.Database.GetMainMenuItems());
-                        container_list.ItemsSource = test.Where(x => x.Id.Contains(searchKey) || x.Name.Contains(searchKey) || x.Summary.Contains(searchKey));
+                        container_list.ItemsSource = test.Where(x => x.Id.Contains(searchKey.ToUpper()) || x.Name.Contains(searchKey.ToUpper()) || x.Summary.Contains(searchKey.ToUpper()));
 
                     }
                     catch
                     {
-                        await DisplayAlert("Error", "Please try again", "OK");
+                        //await DisplayAlert("Error", "Please try again", "OK");
                     }
                 }
             }
             catch
             {
-                await DisplayAlert("Error", "Please try again", "OK");
+                //await DisplayAlert("Error", "Please try again", "OK");
             }
 
         }
@@ -180,6 +180,11 @@ namespace ASolute_Mobile.CustomerTracking
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;
    
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                container_list.RowHeight = 300;
+            }
+
             loading.IsRunning = false;
             loading.IsVisible = false;
             loading.IsEnabled = false;

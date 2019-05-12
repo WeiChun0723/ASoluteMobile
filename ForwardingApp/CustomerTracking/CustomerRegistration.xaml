@@ -19,11 +19,11 @@
         <StackLayout Padding = "0, 15"></StackLayout>
 
        
-        <controls:CustomEntry Placeholder="User Name" x:Name = "userNameEntry" Image="controller" Style="{StaticResource entryStyle}" TextChanged="userNameTextChange"/>
-        <controls:CustomEntry Placeholder="Email Address" x:Name = "emailAddressEntry" Image="pass" Style="{StaticResource entryStyle}" TextChanged="emailTextChange" Keyboard="Email"/>
-        <controls:CustomEntry Placeholder="Mobile No."  x:Name = "phoneEntry" Image="pass" Style="{StaticResource entryStyle}" Keyboard="Numeric" TextChanged="mobileTextChange"/>
-        <controls:CustomEntry Placeholder="Business Reg No."  x:Name = "businessRegEntry" Image="organization" Style="{StaticResource entryStyle}" TextChanged="businessTextChange"/>
-        <controls:CustomEntry Placeholder="Company Name"  x:Name = "companyEntry" Image="organization" Style="{StaticResource entryStyle}" TextChanged="companyTextChange" IsVisible="false"/>
+        <Entry Placeholder="User Name" PlaceholderColor="Black" x:Name = "userNameEntry"  Style="{StaticResource entryStyle}" TextChanged="userNameTextChange" BackgroundColor="LightYellow"/>
+        <Entry Placeholder="Email Address" PlaceholderColor="Black" x:Name = "emailAddressEntry"  Style="{StaticResource entryStyle}" TextChanged="emailTextChange" Keyboard="Email" BackgroundColor="LightYellow"/>
+        <Entry Placeholder="Mobile No." PlaceholderColor="Black" x:Name = "phoneEntry"  Style="{StaticResource entryStyle}" Keyboard="Numeric" TextChanged="mobileTextChange" BackgroundColor="LightYellow"/>
+        <Entry Placeholder="Business Reg No." PlaceholderColor="Black" x:Name = "businessRegEntry"  Style="{StaticResource entryStyle}" TextChanged="businessTextChange" BackgroundColor="LightYellow"/>
+        <Entry Placeholder="Company Name" PlaceholderColor="Black" x:Name = "companyEntry"  Style="{StaticResource entryStyle}" TextChanged="companyTextChange" IsVisible="false" BackgroundColor="LightYellow"/>
         
         <chkBox:CheckBox DefaultText="I agreed with the term and condition." HorizontalOptions="FillAndExpand" FontSize="10" IsVisible="false" x:Name="term"/>
         

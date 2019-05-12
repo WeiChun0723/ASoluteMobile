@@ -262,6 +262,7 @@ namespace ASolute_Mobile.BusTicketing
                 Ultis.Settings.List = "BusTicketing";
                 string id = "";
 
+                localStoredStops = new ObservableCollection<ListItems>(App.Database.GetMainMenu(action));
 
                 id = localStoredStops[OutCount].StopId;
 

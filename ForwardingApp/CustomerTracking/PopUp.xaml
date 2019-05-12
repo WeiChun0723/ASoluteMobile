@@ -48,7 +48,7 @@
   
             </Grid>
                 
-                <controls:CustomEntry Placeholder="Remarks" x:Name="remarks" HeightRequest="100" LineColor="White" HorizontalOptions="FillAndExpand"/>
+                <Entry Placeholder="Remarks" x:Name="remarks" HeightRequest="100" BackgroundColor="WhiteSmoke" TextColor="Black" HorizontalOptions="FillAndExpand"/>
                 
                 <Button Text="Confirm" HorizontalOptions="End" Clicked="updateRFC"/>
             </StackLayout>

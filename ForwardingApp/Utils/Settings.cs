@@ -155,7 +155,7 @@ namespace ASolute_Mobile.Ultis
         {
             get
             {
-                return AppSettings.GetValueOrDefault(DeviceID, "testing");
+                return AppSettings.GetValueOrDefault(DeviceID, "DeviceID");
             }
             set
             {

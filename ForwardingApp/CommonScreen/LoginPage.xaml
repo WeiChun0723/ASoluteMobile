@@ -48,6 +48,7 @@
                 <buttons:SfButton Style="{StaticResource buttonStyle}"  x:Name="btnOrganization" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnClearCache" Text="Clear Cache" Clicked="Handle_Clicked" />
+           
             <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
     </ScrollView>

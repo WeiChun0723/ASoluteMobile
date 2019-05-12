@@ -24,7 +24,6 @@ namespace ASolute_Mobile.Droid
 
         protected override void OnCreate(Bundle bundle)
         {
-
             try
             {
                 TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;

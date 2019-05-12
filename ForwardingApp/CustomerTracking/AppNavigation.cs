@@ -18,9 +18,9 @@ namespace ASolute_Mobile.CustomerTracking
     public partial class AppNavigation: ContentPage
     {
         readonly Image splashImage;
-        readonly CustomEntry entry;
+        readonly Entry entry;
         readonly SfButton submit;
-        string firebaseID = "business";
+        string firebaseID = "tracking";
         ActivityIndicator loading;
 
         public AppNavigation()
@@ -46,15 +46,14 @@ namespace ASolute_Mobile.CustomerTracking
 
             };
 
-            entry = new CustomEntry
+            entry = new Entry
             {
                 Style = (Style)App.Current.Resources["entryStyle"],
-                TextColor = Color.White,
-                LineColor = Color.CornflowerBlue,
+                TextColor = Color.Black,
+                BackgroundColor = Color.LightYellow,
                 Placeholder = "Email address",
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.Fill,
-                Image = "organization",
                 IsVisible = false
 
             };
@@ -107,9 +106,7 @@ namespace ASolute_Mobile.CustomerTracking
             this.Content = scroll;
 
 
-            string test = CrossDeviceInfo.Current.AppVersion;
-
-            if (Ultis.Settings.DeviceUniqueID.Equals("testing"))
+            if (Ultis.Settings.DeviceUniqueID.Equals("DeviceID"))
             {
                 Ultis.Settings.DeviceUniqueID = Guid.NewGuid().ToString("N");
             }
@@ -230,7 +227,7 @@ namespace ASolute_Mobile.CustomerTracking
                                 break;
 
                             case "HaulageVolume":
-                                //Application.Current.MainPage = new CustomNavigationPage(new LoadingScreen());
+                               
                                 Application.Current.MainPage = new MainPage();
                                 break;
                         }

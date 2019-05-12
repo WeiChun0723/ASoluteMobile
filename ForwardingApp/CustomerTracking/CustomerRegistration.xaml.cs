@@ -45,7 +45,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public void userNameTextChange(object sender, TextChangedEventArgs e)
         {
-            string _name = userNameEntry.Text.ToUpper(); ;
+            string _name = userNameEntry.Text.ToUpper(); 
             if (_name.Length > 50)
             {
                 _name = _name.Remove(_name.Length - 1);
@@ -107,7 +107,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
                     if (emailAddressEntry.Text.Contains("@") && emailAddressEntry.Text.Contains("."))
                     {
-                        var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text));
+                        var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text),this);
                         clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (company_response.IsGood)
@@ -132,8 +132,7 @@ namespace ASolute_Mobile.CustomerTracking
                 }
                 else
                 {
-                    if (term.Checked)
-                    {
+
                         if (!(String.IsNullOrEmpty(emailAddressEntry.Text)) && !(String.IsNullOrEmpty(userNameEntry.Text)) && !(String.IsNullOrEmpty(phoneEntry.Text))
                           && !(String.IsNullOrEmpty(businessRegEntry.Text)) && !(String.IsNullOrEmpty(companyEntry.Text)))
                         {
@@ -164,7 +163,7 @@ namespace ASolute_Mobile.CustomerTracking
                             register.OSVer = CrossDeviceInfo.Current.VersionNumber.ToString();
                             register.AppVer = CrossDeviceInfo.Current.AppVersion;
 
-                            var content = await CommonFunction.PostRequestAsync(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postRegisterURL());
+                            var content = await CommonFunction.PostRequestAsync(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postBusinessRegisterURL());
                             clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                             if (register_response.IsGood)
@@ -182,11 +181,13 @@ namespace ASolute_Mobile.CustomerTracking
                             await DisplayAlert("Error", "Please enter all the field .", "OK");
                         }
 
+                    /*if (term.Checked)
+                    {
                     }
                     else
                     {
                         await DisplayAlert("Reminder", "Please tick the check box to continue", "OK");
-                    }
+                    }*/
 
                 }
             }

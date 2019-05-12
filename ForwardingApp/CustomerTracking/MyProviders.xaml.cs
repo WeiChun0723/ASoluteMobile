@@ -150,6 +150,11 @@ namespace ASolute_Mobile.CustomerTracking
             provide_list.HasUnevenRows = true;          
             provide_list.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                provide_list.RowHeight = 80;
+            }
+
             loading.IsRunning = false;
             loading.IsVisible = false;
             loading.IsEnabled = false;

@@ -44,10 +44,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\ClickChart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\PendingReceiving_Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -69,10 +65,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\SubJobList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\DataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -195,6 +187,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ZebraPrinter\ZebraPrinterList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\ClickChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\BusinessChartTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -272,10 +276,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\ClickChart.xaml.cs">
-      <DependentUpon>ClickChart.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\Person.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\PendingReceiving_Loading.xaml.cs">
       <DependentUpon>PendingReceiving_Loading.xaml</DependentUpon>
     </Compile>
@@ -295,9 +295,6 @@
       <DependentUpon>SubJobList.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)InputValidation\MaxLengthValidation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\DataGrid.xaml.cs">
-      <DependentUpon>DataGrid.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CheckList.xaml.cs">
       <DependentUpon>CheckList.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -408,6 +405,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\IPrinterDiscovery.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\ZebraPrinterList.xaml.cs">
+      <DependentUpon>ZebraPrinterList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\ConnectionType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\TicketTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)testing\ClickChart.xaml.cs">
+      <DependentUpon>ClickChart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\Person.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\BusinessChartTable.xaml.cs">
+      <DependentUpon>BusinessChartTable.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

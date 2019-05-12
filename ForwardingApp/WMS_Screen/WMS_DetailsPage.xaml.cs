@@ -49,6 +49,7 @@ namespace ASolute_Mobile.WMS_Screen
                     camera_icon.IsVisible = true;
                     imageGrid.IsVisible = true;
                     barcode_icon.IsVisible = true;
+                    tallyOutEntry.IsVisible = true;
                     break;
             }
         }
@@ -195,42 +196,50 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     scanPage.PauseAnalysis();
 
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        clsPalletTrx tallyOutPallet = new clsPalletTrx
-                        {
-                            LinkId = record.Id,
-                            Id = result.Text
-                        };
+                    TallyOut(result.Text);
 
-                        var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL());
-                        clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                        if (upload_response.IsGood)
-                        {
-                            DisplayToast("Success");
-                            clsWhsItem item = new clsWhsItem
-                            {
-                                PalletId = result.Text,
-                                Description = Ultis.Settings.SessionUserId
-                            };
-
-                            tallyOutItems.Add(item);
-                            scanPage.ResumeAnalysis();
-                        }
-                        else
-                        {
-                            DisplayToast(upload_response.Message);
-                            scanPage.ResumeAnalysis();
-                        }
-                    });
-
+                    scanPage.ResumeAnalysis();
                 };
             }
             catch
             {
 
             }
+        }
+
+        async void TallyOut(string result)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                clsPalletTrx tallyOutPallet = new clsPalletTrx
+                {
+                    LinkId = record.Id,
+                    Id = result
+                };
+
+                var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL());
+                clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (upload_response.IsGood)
+                {
+                    DisplayToast("Success");
+                    clsWhsItem item = new clsWhsItem
+                    {
+                        PalletId = result,
+                        Description = Ultis.Settings.SessionUserId
+                    };
+
+                    tallyOutItems.Add(item);
+
+                    palletIdEntry.Text = "";
+                }
+                else
+                {
+                    DisplayToast(palletIdEntry.Text + " " +  upload_response.Message);
+
+                }
+            });
+
         }
 
         public void DisplayToast(string message)
@@ -264,6 +273,11 @@ namespace ASolute_Mobile.WMS_Screen
 
                 case "barcode_icon":
                     ScanBarCode();
+                    break;
+
+                case "cancel_icon":
+                    palletIdEntry.Text = "";
+                    palletIdEntry.Focus();
                     break;
             }
         }
@@ -325,6 +339,16 @@ namespace ASolute_Mobile.WMS_Screen
             int rowNo = noOfImages / noOfCols;
             int colNo = noOfImages - (rowNo * noOfCols);
             imageGrid.Children.Add(image, colNo, rowNo);
+        }
+
+        void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+
+            if(!(String.IsNullOrEmpty(palletIdEntry.Text)))
+            {
+                TallyOut(palletIdEntry.Text);
+            }
+
         }
     }
 }

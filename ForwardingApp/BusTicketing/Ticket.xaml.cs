@@ -5,6 +5,7 @@ using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.WoosimPrinterService;
 using ASolute_Mobile.WoosimPrinterService.library.Cmds;
+using ASolute_Mobile.ZebraPrinter;
 using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 
@@ -79,11 +80,23 @@ namespace ASolute_Mobile.BusTicketing
                 ticket.Amount = ticketRate;
                 ticket.Uploaded = false;
                 ticket.SerialNumber = "T30B-" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                ticket.From = fromEntry.Text;
+                ticket.To = toEntry.Text;
                 App.Database.SaveTicketTransaction(ticket);
 
                 try
                 {
-                    if (connectedPrinter == false)
+                    TicketTemplate test = new TicketTemplate();
+
+                    if(App.myPrinter!= null)
+                    {
+                        test.PrintLineMode(ticket);
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new ZebraPrinterList());
+                    }
+                    /*if (connectedPrinter == false)
                     {
 
                         bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
@@ -102,36 +115,6 @@ namespace ASolute_Mobile.BusTicketing
                     }
 
                     System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
-
-                    /*WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("PERAK TRANSIT BERHAD\r\n\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Date & Time:\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(DateTime.UtcNow.ToString("dd/MM/yyyy h:mm:ss tt") + "\r\n\r\n"));
-
-                   WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                   WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(lblPrice.Text + "   " + ticketType + "\r\n\r\n"));
-
-                   WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("From:\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(fromEntry.Text + "\r\n\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("To:\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(toEntry.Text + "\r\n\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Bus Fare:\r\n"));
-
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes( btnPrintTicket.Text +  "\r\n\r\n"));*/
 
                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("PERAK TRANSIT BERHAD\r\n\r\n"));
@@ -174,7 +157,7 @@ namespace ASolute_Mobile.BusTicketing
 
                     WriteMemoryStream(buffer, WoosimPageMode.print());
 
-                    DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
+                    DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());*/
 
                 }
                 catch (Exception ex)

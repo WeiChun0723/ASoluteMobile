@@ -17,6 +17,7 @@ using Plugin.Media;
 using System.Threading.Tasks;
 using Syncfusion.XForms.Buttons;
 using Com.OneSignal;
+using ASolute_Mobile.ZebraPrinter;
 
 namespace ASolute_Mobile
 {
@@ -126,6 +127,8 @@ namespace ASolute_Mobile
                 case "btnLogin":
                     Login();
                     break;
+
+               
             }
         }
 
@@ -273,11 +276,7 @@ namespace ASolute_Mobile
 
                         Application.Current.MainPage = new MainPage();
                     }
-                    else
-                    {
-
-                        this.activityIndicator.IsRunning = false;
-                    }
+                   
                 }
                 catch (HttpRequestException exception)
                 {
@@ -289,6 +288,8 @@ namespace ASolute_Mobile
                 {
                     await DisplayAlert("Error", exception.Message, "Ok");
                 }
+
+                this.activityIndicator.IsRunning = false;
             }
             else
             {

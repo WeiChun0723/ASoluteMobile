@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.ZebraPrinter.ZebraPrinterList"  xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+    
+    
+    <StackLayout Padding="10,10,10,10" Spacing="20">
+        
+       <!--<buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnTestPrinter" Text="Check status" Clicked="Handle_Clicked" />
+       <Label x:Name="printerLbl" FontAttributes="Bold" FontSize="Medium"/>
+        <Label x:Name="checkStatus" FontAttributes="Bold" FontSize="Medium"/>-->
+        <Label x:Name="statusLbl" FontAttributes="Bold" FontSize="Large"/>
+        <ListView x:Name="printerList" ItemSelected="Handle_ItemSelected">
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell >
+
+                       <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Address}" FontAttributes="Bold" />
+                                <Label Text="{Binding FriendlyName}" FontAttributes="Bold" />
+                        </StackLayout>
+
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

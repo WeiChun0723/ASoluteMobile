@@ -46,8 +46,8 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
-    <CodesignProvision>ASolute Fleet</CodesignProvision>
-    <AssemblyName>ASoluteFleet.iOS</AssemblyName>
+    <CodesignProvision>AILS Tracking</CodesignProvision>
+    <AssemblyName>AILSTracking.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>

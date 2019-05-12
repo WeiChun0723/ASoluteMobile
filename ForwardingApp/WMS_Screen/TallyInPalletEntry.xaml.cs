@@ -27,7 +27,7 @@ namespace ASolute_Mobile.WMS_Screen
         CustomEntry customEntry;
         CustomDatePicker customDatePicker;
         List<bool> checkField = new List<bool>();
-        string userInput = "";
+        string userInput = "", productID;
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
@@ -180,15 +180,8 @@ namespace ASolute_Mobile.WMS_Screen
                             entryStack.Children.Add(customEntry);
                         }
 
-                        if (attr.Value == "O" || attr.Value == "")
-                        {
-                            if (customEntry != null)
-                            {
-                                customEntry.LineColor = Color.WhiteSmoke;
-                            }
-
-                        }
-                        else if (attr.Value == "M")
+                       
+                        if (attr.Value == "M")
                         {
                             if (customEntry != null)
                             {
@@ -197,6 +190,13 @@ namespace ASolute_Mobile.WMS_Screen
                             if (customDatePicker != null)
                             {
                                 customDatePicker.BackgroundColor = Color.LightYellow;
+                            }
+                        }
+                        else
+                        {
+                            if (customEntry != null)
+                            {
+                                customEntry.LineColor = Color.WhiteSmoke;
                             }
                         }
 
@@ -295,7 +295,7 @@ namespace ASolute_Mobile.WMS_Screen
                         {
                             if (attr.Value == "M")
                             {
-                                string test = (!(String.IsNullOrEmpty(SearchControl(attr.Key, "GetValue")))) ? SearchControl(attr.Key, "GetValue") : String.Empty;
+                                string test = (!(String.IsNullOrEmpty(SearchControl(attr.Key, "GetValue", "")))) ? SearchControl(attr.Key, "GetValue", "") : String.Empty;
 
                                 if (String.IsNullOrEmpty(test))
                                 {
@@ -321,14 +321,14 @@ namespace ASolute_Mobile.WMS_Screen
                                 Qty = Convert.ToInt32(quantity.Text),
                                 Uom = newPallet.ProductUom[units.FindIndex(x => x.Equals(unitBox.Text))].Key,
                                 StockStatus = statusBox.Text,
-                                String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue")))) ? SearchControl("String01", "GetValue") : String.Empty,
-                                String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue")))) ? SearchControl("String02", "GetValue") : String.Empty,
-                                String03 = (!(String.IsNullOrEmpty(SearchControl("String03", "GetValue")))) ? SearchControl("String03", "GetValue") : String.Empty,
-                                String04 = (!(String.IsNullOrEmpty(SearchControl("String04", "GetValue")))) ? SearchControl("String04", "GetValue") : String.Empty,
-                                String05 = (!(String.IsNullOrEmpty(SearchControl("String05", "GetValue")))) ? SearchControl("String05", "GetValue") : String.Empty,
-                                String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue")))) ? SearchControl("String06", "GetValue") : String.Empty,
-                                ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue")))) ? SearchControl("ExpiryDate", "GetValue") : String.Empty,
-                                MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue")))) ? SearchControl("MfgDate", "GetValue") : String.Empty,
+                                String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue","")))) ? SearchControl("String01", "GetValue", "") : String.Empty,
+                                String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue","")))) ? SearchControl("String02", "GetValue", "") : String.Empty,
+                                String03 = (!(String.IsNullOrEmpty(SearchControl("String03", "GetValue", "")))) ? SearchControl("String03", "GetValue", "") : String.Empty,
+                                String04 = (!(String.IsNullOrEmpty(SearchControl("String04", "GetValue", "")))) ? SearchControl("String04", "GetValue", "") : String.Empty,
+                                String05 = (!(String.IsNullOrEmpty(SearchControl("String05", "GetValue", "")))) ? SearchControl("String05", "GetValue", "") : String.Empty,
+                                String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue", "")))) ? SearchControl("String06", "GetValue", "") : String.Empty,
+                                ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue", "")))) ? SearchControl("ExpiryDate", "GetValue", "") : String.Empty,
+                                MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue", "")))) ? SearchControl("MfgDate", "GetValue", "") : String.Empty,
                             };
 
                             var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id));
@@ -354,12 +354,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                                 foreach (string field in dynamicFields)
                                 {
-                                    SearchControl(field, "ClearValue");
-                                }
-
-                                if(actionID == "BARRY")
-                                {
-                                    PalletScan();
+                                    SearchControl(field, "ClearValue","");
                                 }
                             }
                             else
@@ -445,7 +440,7 @@ namespace ASolute_Mobile.WMS_Screen
             toastConfig.Position = 0;
             toastConfig.SetMessageTextColor(System.Drawing.Color.Black);
 
-            if(scanStatus.Contains("scanned"))
+            if(scanStatus.Contains("scanned") || scanStatus.Contains("scanning"))
             {
                 toastConfig.SetBackgroundColor(System.Drawing.Color.Green);
             }
@@ -510,7 +505,7 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        string SearchControl(string controlID, string action)
+        string SearchControl(string controlID, string action, string content)
         {
             foreach (View t in grid.Children)
             {
@@ -531,6 +526,10 @@ namespace ASolute_Mobile.WMS_Screen
                                 if (action == "GetValue")
                                 {
                                     return entry.Text;
+                                }
+                                else if(action == "SetValue")
+                                {
+                                    entry.Text = content;
                                 }
                                 else
                                 {
@@ -573,25 +572,29 @@ namespace ASolute_Mobile.WMS_Screen
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
-
             try
             {
-
                 if (actionID == "BARRY"  )
                 {
-                    userInput = palletNo.Text;
-                   
+                    userInput = scanEntry.Text;
+
                     string productCode = userInput.Substring(0, 13);
-                    string productRef = userInput.Substring(16, 10);
-                    string productQTY = userInput.Substring(26, 2);
+                    string productPackageCode = userInput.Substring(16, 8);
+                    string productRunningNo = userInput.Substring(25, 1);
+                    string productQTY = userInput.Substring(27, 2);
 
                     if (productCode == productPallet.ProductCode)
                     {
                         palletNo.Text = "";
                         quantity.Text = "";
 
-                        palletNo.Text = productRef;
+                        scanEntry.Text = productPackageCode;
+                        palletNo.Text = userInput;
                         quantity.Text = productQTY;
+
+                        SearchControl("String01", "SetValue", productPackageCode);
+                        SearchControl("String02", "SetValue", productRunningNo);
+
                         DisplayScanStatus(userInput + " scanned");
 
                     }
@@ -606,6 +609,14 @@ namespace ASolute_Mobile.WMS_Screen
             {
 
             }
+        }
+
+        void Handle_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
+        {
+
+            scanEntry.Focus();
+
+            DisplayScanStatus( "Start scanning....");
         }
     }
 }

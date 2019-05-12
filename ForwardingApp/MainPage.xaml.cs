@@ -22,15 +22,23 @@ namespace ASolute_Mobile
         {
             InitializeComponent();
 
-            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking")
+            Master = masterPage;
+
+            switch(Ultis.Settings.App)
             {
-                Master = masterPage;
-                Detail = new CustomNavigationPage(new MyProviders());
-            }
-            else
-            {
-                Master = masterPage;
-                Detail = new CustomNavigationPage(new NewMainMenu());
+                case "asolute.Mobile.AILSTracking":
+                case "com.asolute.AILSTracking":
+                    Detail = new CustomNavigationPage(new MyProviders());
+                    break;
+
+                case "asolute.Mobile.AILSBusiness":
+                case "com.asolute.AILSBusiness":
+                    Detail = new CustomNavigationPage(new BusinessChartTable());
+                    break;
+
+                default:
+                    Detail = new CustomNavigationPage(new NewMainMenu());
+                    break;
             }
 
             masterPage.ListView.ItemSelected += OnItemSelected;
@@ -171,7 +179,7 @@ namespace ASolute_Mobile
                             }
                             catch (Exception exception)
                             {
-                                //await DisplayAlert("Error", exception.Message, "OK");
+                                await DisplayAlert("Error", exception.Message, "OK");
                             }
                         }
                         else

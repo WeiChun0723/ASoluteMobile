@@ -24,13 +24,18 @@ namespace ASolute_Mobile
             var masterPageItems = new List<MasterPageItem>();
             masterPageItems.Clear();
 
-            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking")
+            if (Ultis.Settings.App.Contains("Tracking"))
             {
                 MasterPageItem provider = new MasterPageItem();
                 provider.Id = "AddProvider";
                 provider.Title = "Add Service Providers";
                 provider.IconSource = "language.png";
+
                 masterPageItems.Add(provider);
+            }
+            else if(Ultis.Settings.App.Contains("Business"))
+            {
+
             }
             else
             {

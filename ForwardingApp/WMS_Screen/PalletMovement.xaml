@@ -12,9 +12,7 @@
      <ScrollView>
         
         <StackLayout Padding="15,15,15,15" Spacing="10">
-          
 
-            
             <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
 
             <inputLayout:SfTextInputLayout 
@@ -27,7 +25,7 @@
                 
             <Entry x:Name="palletIdEntry" TextChanged="Handle_TextChanged" > 
             <Entry.Behaviors>
-                    <local:MaxLengthValidation MaxLength="30" />
+                    <local:MaxLengthValidation MaxLength="100" />
                 </Entry.Behaviors>        
             </Entry>
          

@@ -3,18 +3,23 @@
     <ScrollView>
         <StackLayout Padding="15,15,15,15" Spacing="20">
             <Image x:Name="splashImage" Source="appIcon" HeightRequest="100" WidthRequest="100" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
-            <Image x:Name="splashDeviceImage" Source="splashScreenlogo" HeightRequest="300" WidthRequest="150" IsVisible="false" />
-            <Label HorizontalOptions="CenterAndExpand" Text="Please enter enterprise name." FontAttributes="Bold" FontSize="Medium" IsVisible="false" x:Name="title" />
-            <inputLayout:SfTextInputLayout Hint="Enterprise name" ContainerBackgroundColor="CornflowerBlue" FocusedColor="Black" HorizontalOptions="FillAndExpand" TrailingViewPosition="Inside" IsVisible="false" x:Name="enterpriseView">
-                <Entry x:Name="enterpriseEntry" TextColor="White" HorizontalTextAlignment="Center">
-                    <Entry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="50" />
-                    </Entry.Behaviors>
-                </Entry>
-            </inputLayout:SfTextInputLayout>
-            <StackLayout Padding="0,15" />
-            <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
-            <buttons:SfButton x:Name="submit" Text="Submit" Clicked="GetBaseURL" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" IsVisible="false" />
+            <StackLayout x:Name="entryStack" IsVisible="false">
+                <Image x:Name="splashDeviceImage" Source="splashScreenlogo" HeightRequest="300" WidthRequest="150"  />
+                <Label HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Medium"  x:Name="title" />
+                <inputLayout:SfTextInputLayout Hint="Email Address" ContainerBackgroundColor="CornflowerBlue" FocusedColor="Black" HorizontalOptions="FillAndExpand" TrailingViewPosition="Inside" IsVisible="false" x:Name="emailEntryView">
+                    <Entry x:Name="startUpEmail" TextColor="White" HorizontalTextAlignment="Center" />
+                </inputLayout:SfTextInputLayout>
+                <inputLayout:SfTextInputLayout Hint="Enterprise name" ContainerBackgroundColor="CornflowerBlue" FocusedColor="Black" HorizontalOptions="FillAndExpand" TrailingViewPosition="Inside" IsVisible="false" x:Name="enterpriseEntryView">
+                    <Entry x:Name="startUpEnterprise" TextColor="White" HorizontalTextAlignment="Center">
+                        <Entry.Behaviors>
+                            <local:MaxLengthValidation MaxLength="50" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </inputLayout:SfTextInputLayout>
+                <StackLayout Padding="0,15" />
+                <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
+                <buttons:SfButton x:Name="submit" Text="Submit" Clicked="GetBaseURL" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" />
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

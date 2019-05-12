@@ -16,7 +16,7 @@ namespace ASolute_Mobile.CustomerTracking
         public PopUp(string code, string rfc,string rfcHour,string container)
         {
             InitializeComponent();
-
+           
             provider_code = code;
             process_id = rfc;
             rfcHours = rfcHour;

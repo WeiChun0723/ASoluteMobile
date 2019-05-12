@@ -18,6 +18,7 @@ using Xamarin.Forms;
 
 namespace ASolute_Mobile
 {
+    //all of the app share this main menu after they login to the app
     public partial class NewMainMenu : ContentPage
     {
         Label title1, title2;
@@ -26,8 +27,6 @@ namespace ASolute_Mobile
 
         public NewMainMenu()
         {
-
-           
 
             InitializeComponent();
 

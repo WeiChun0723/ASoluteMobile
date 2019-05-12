@@ -23,9 +23,9 @@ namespace ASolute_Mobile.iOS
             Rg.Plugins.Popup.Popup.Init();
             global::Xamarin.Forms.Forms.Init();
 
-
+            Ultis.Settings.App = "com.asolute.AILSFleet";
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
-            LoadApplication(new App());
+           
             Xamarin.FormsMaps.Init();
             Syncfusion.SfChart.XForms.iOS.Renderers.SfChartRenderer.Init();
             Syncfusion.SfDataGrid.XForms.iOS.SfDataGridRenderer.Init();
@@ -42,6 +42,8 @@ namespace ASolute_Mobile.iOS
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
 
             App.DisplayScreenWidth = UIScreen.MainScreen.Bounds.Width;
+
+            LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }

@@ -187,7 +187,7 @@ namespace ASolute_Mobile.Utils
             return String.Format("Account/GetCompanyName?RegNo={0}", RegNo);
         }
 
-        public static String postRegisterURL()
+        public static String postBusinessRegisterURL()
         {
             return String.Format("Account/Register");
         }

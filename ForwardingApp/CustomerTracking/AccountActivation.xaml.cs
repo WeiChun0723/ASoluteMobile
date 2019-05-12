@@ -21,14 +21,14 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void Submit_Clicked(object sender, EventArgs e)
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL(ActivationEntry.Text));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL(ActivationEntry.Text),this);
             clsResponse send_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (send_response.IsGood)
             {
                 try
                 {
-                    OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+                   // OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
 
                     Ultis.Settings.FireID = firebaseID;
                 }
@@ -37,7 +37,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 }
 
-                var login_content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID,  firebaseID ));
+                var login_content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(Ultis.Settings.DeviceUniqueID,  firebaseID ),this);
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(login_content);
 
                 if(login_response.IsGood)
@@ -61,7 +61,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void Resend_Clicked(object sender, EventArgs e)
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL());
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.sendActivationURL(),this);
             clsResponse resend_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(resend_response.IsGood)

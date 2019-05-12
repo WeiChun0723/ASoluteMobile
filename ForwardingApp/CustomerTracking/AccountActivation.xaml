@@ -18,7 +18,7 @@
         
         <Label Text="We have sent the activation code to your email account. Please copy and paste the value here." HorizontalOptions="EndAndExpand"/>
         <StackLayout Padding = "0, 15"></StackLayout>
-        <controls:CustomEntry Placeholder="Enter Activation code" x:Name = "ActivationEntry" Image="user" Style="{StaticResource entryStyle}" Keyboard="Numeric"/>
+        <Entry Placeholder="Enter Activation code" x:Name = "ActivationEntry" Style="{StaticResource entryStyle}" Keyboard="Numeric"/>
         
         <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="SubmitButton" Text = "Submit" Clicked="Submit_Clicked" />
         <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="ResendButton" Text = "Resend Activation Code" Clicked="Resend_Clicked" />

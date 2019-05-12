@@ -22,6 +22,8 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.BusTicketing;
+using ASolute_Mobile.ZebraPrinter;
+using LinkOS.Plugin.Abstractions;
 
 namespace ASolute_Mobile
 {
@@ -34,6 +36,7 @@ namespace ASolute_Mobile
         public static double gpsLocationLong { get; set; }
         public static double DisplayScreenWidth { get; set; }
         public static double DisplayScreenHeight { get; set; }
+        public static IDiscoveredPrinter myPrinter;
 
         public App()
         {
@@ -41,17 +44,18 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking")
+            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking" || Ultis.Settings.App == "com.asolute.AILSTracking")
             {
                 Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-                MainPage = new CustomNavigationPage(new AppNavigation());
+                //MainPage = new CustomNavigationPage(new AppNavigation());
+                MainPage = new CustomNavigationPage(new StartUpScreen());
             }
             else
             {
+
                 if (sessionKey != "")
                 {
                     MainPage = new MainPage();
-
                 }
                 else
                 {
