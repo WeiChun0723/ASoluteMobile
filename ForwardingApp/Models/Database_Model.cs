@@ -32,63 +32,34 @@ namespace ASolute_Mobile.Models
     public class BusTrip : Generic
     {
         public string Id { get; set; }
-
         public string TruckId { get; set; }
-
         public string DriverId { get; set; }
-
         public DateTime StartTime { get; set; }
-
         public int? StartOdometer { get; set; }
-
         public string StartLocationName { get; set; }
-
         public string StartGeoLoc { get; set; }
-
         public DateTime? EndTime { get; set; }
-
         public int? EndOdometer { get; set; }
-
         public string EndLocationName { get; set; }
-
         public string EndGeoLoc { get; set; }
     }
 
     public class SoldTicket : Generic
     {
         public DateTime TrxTime { get; set; }
-
         public string SerialNumber { get; set; }
-
         public string TruckId { get; set; }
-
         public string DriverId { get; set; }
-
         public string TripId { get; set; }
-
         public string RouteId { get; set; }
-
         public string StopId { get; set; }
-
         public string TicketType { get; set; }
-
         public string PaymentType { get; set; }
-
         public double Amount { get; set; }
-
         public string From { get; set; }
-
         public string To { get; set; }
     }
     #endregion 
-
-
-    public class ProviderInfo : Generic
-    {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Url { get; set; }
-    } 
 
     public class SummaryItems : Generic
     {
@@ -103,6 +74,11 @@ namespace ASolute_Mobile.Models
         public string StopId { get; set; }
         public string StopName { get; set; }
         public double Rate { get; set; }
+
+        //ProviderInfo property
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string Url { get; set; }
     }
 
     public class DetailItems : Generic
@@ -130,12 +106,13 @@ namespace ASolute_Mobile.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Booking { get; set; }
-        public string CustomerRef { get; set; }
         public string Category { get; set; }
         public string Summary { get; set; }
         public string Background { get; set; }
         public string Action { get; set; }
+        //Tracking property
+        public string Booking { get; set; }
+        public string CustomerRef { get; set; }
 
         //Yard
         public DateTime? ClosingDate { get; set; }

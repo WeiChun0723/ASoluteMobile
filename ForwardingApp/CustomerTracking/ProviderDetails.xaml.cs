@@ -14,7 +14,6 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProviderDetails : ContentPage
     {
         string providerCode, categorycode;
@@ -32,8 +31,8 @@ namespace ASolute_Mobile.CustomerTracking
 
             Device.BeginInvokeOnMainThread((Action)(async () =>
             {
-                App.Database.deleteMainMenu();
-                App.Database.deleteRecordSummary((string)"Container");
+                App.Database.deleteRecords("Container");
+                App.Database.deleteRecordSummary("Container");
 
                 await GetContainer();
 
@@ -48,9 +47,8 @@ namespace ASolute_Mobile.CustomerTracking
        
         protected async void refreshContainerList(object sender, EventArgs e)
         {
-            App.Database.deleteMainMenu();
+            App.Database.deleteRecords("Container");
 
-       
             await GetContainer();
 
             container_list.IsRefreshing = false;
@@ -71,7 +69,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
                     try
                     {
-                        List<ListItems> test = new List<ListItems>(App.Database.GetMainMenuItems());
+                        List<ListItems> test = new List<ListItems>(App.Database.GetMainMenu("Container"));
                         container_list.ItemsSource = test.Where(x => x.Id.Contains(searchKey.ToUpper()) || x.Name.Contains(searchKey.ToUpper()) || x.Summary.Contains(searchKey.ToUpper()));
 
                     }
@@ -95,10 +93,7 @@ namespace ASolute_Mobile.CustomerTracking
    
         }
 
-        public void switchMap(object sender, EventArgs e)
-        {
-            
-        }
+
 
         public async void selectContainer(object sender, ItemTappedEventArgs e)
         {
@@ -108,7 +103,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async Task GetContainer()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerListURL(providerCode, categorycode));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerListURL(providerCode, categorycode),this);
             clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (container_response.IsGood)
@@ -123,18 +118,10 @@ namespace ASolute_Mobile.CustomerTracking
                     menu.Id = container.Id;
                     menu.Category = "Container";
 
-                    if(!(String.IsNullOrEmpty(container.BackColor)))
-                    {
-                        menu.Background = container.BackColor;
-                    }
-                    else
-                    {
-                        menu.Background = "#ffffff";
-                    }
-
+                    menu.Background = (!(String.IsNullOrEmpty(container.BackColor)))? container.BackColor : "#ffffff";
+                   
                     foreach (clsCaptionValue summaryList in container.Summary)
                     {
-                    
                         if(firstLine)
                         {
                             summary += summaryList.Value + "\r\n" + "\r\n";
@@ -166,17 +153,13 @@ namespace ASolute_Mobile.CustomerTracking
 
                 loadContainerList();
             }
-            else
-            {
-                await DisplayAlert("JsonError", container_response.Message, "OK");
-            }
+           
         }
 
 
         public void loadContainerList()
         {
-            Ultis.Settings.List= "container_List";
-            List<ListItems> Item = new List<ListItems>(App.Database.GetMainMenuItems());
+            List<ListItems> Item = new List<ListItems>(App.Database.GetMainMenu("Container"));
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;
    

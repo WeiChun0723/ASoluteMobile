@@ -17,7 +17,6 @@ namespace ASolute_Mobile.Data
 		{
             database = new SQLiteConnection(dbPath);
             //database.CreateTable<ChatRecord>();
-            database.CreateTable<ProviderInfo>();
             database.CreateTable<UserItem>();
             database.CreateTable<SummaryItems>();
             database.CreateTable<DetailItems>();
@@ -40,7 +39,6 @@ namespace ASolute_Mobile.Data
             database.DropTable<AppImage>();               
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
-            database.DropTable<ProviderInfo>();
             database.DropTable<BusTrip>();
             database.DropTable<SoldTicket>();
         }
@@ -177,11 +175,14 @@ namespace ASolute_Mobile.Data
         #endregion
 
         #region get/store app image
+
+        //get image havent upload 
         public List<AppImage> GetRecordImagesAsync(string id, bool uploaded)
         {
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [Uploaded] = ?", id, uploaded);
         }
 
+        //get image that uploaded
         public List<AppImage> GetUplodedRecordImagesAsync(string id, string type)
         {
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [type] = ?", id, type);
@@ -192,39 +193,41 @@ namespace ASolute_Mobile.Data
             return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [Uploaded] = ?", uploaded);
         }
 
+        public void DeleteImage(string imageType)
+        {
+            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [type] = ?" , imageType);
+        }
+
+        public int SaveRecordImageAsync(AppImage image)
+        {
+            if (image.tableID != 0)
+            {
+
+                return database.Update(image);
+            }
+            else
+            {
+
+                return database.Insert(image);
+            }
+        }
+
+        //Image viewer use
+        public int DeleteJobImage(AppImage item)
+        {
+            return database.Delete(item);
+        }
+
         //delete user previous profile picture
         public void DeleteUserImage(string userId)
         {
             database.Query<AppImage>("DELETE FROM [AppImage] WHERE [id] = ?", userId);
         }
 
-        public void DeleteImage(string imageType)
-        {
-            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [type] = ?" , imageType);
-        }
-
+        //get store user image
         public AppImage GetUserProfilePicture(string id)
         {
             return database.Table<AppImage>().Where(i => i.id == id).FirstOrDefault();
-        }
-
-        public int SaveRecordImageAsync(AppImage item)
-        {
-            if (item.tableID != 0)
-            {
-
-                return database.Update(item);
-            }
-            else
-            {
-
-                return database.Insert(item);
-            }
-        }
-
-        public int DeleteJobImage(AppImage item)
-        {
-            return database.Delete(item);
         }
         #endregion
 
@@ -323,32 +326,6 @@ namespace ASolute_Mobile.Data
 
         #region Customer Tracking table function
 
-        public int SaveProvider(ProviderInfo provider)
-        {
-            provider.owner = Ultis.Settings.SessionUserId;
-            if (provider.tableID != 0)
-            {
-
-                return database.Update(provider);
-            }
-            else
-            {
-
-                return database.Insert(provider);
-            }
-        }
-
-
-        public void DeleteProvider()
-        {
-            database.Query<ProviderInfo>("DELETE FROM ProviderInfo");
-        }
-
-        public List<ProviderInfo> Providers(string Code)
-        {
-            return database.Query<ProviderInfo>("SELECT * FROM [ProviderInfo] WHERE [Code] = ?", Code);
-        }
-
         public int DeleteMenu(ListItems menu)
         {
             deleteProvider(menu.Id);
@@ -358,7 +335,7 @@ namespace ASolute_Mobile.Data
 
         public void deleteProvider(string id)
         {
-            database.Query<ProviderInfo>("DELETE FROM [ProviderInfo] WHERE [Code] = ?", id);
+            database.Query<SummaryItems>("DELETE FROM [SummaryItems] WHERE [Code] = ?", id);
         }
         #endregion
 
@@ -421,12 +398,6 @@ namespace ASolute_Mobile.Data
             return database.Table<JobNoList>().Where(i => i.JobNoValue == id).FirstOrDefault();
         }
 
-        public List<ListItems> GetMainMenuItems()
-        {
-            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
-        }
-
-      
         public List<ListItems> GetStops(string category,string stopId)
         {
             return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ? AND [StopId] = ?", category, stopId);
@@ -447,26 +418,17 @@ namespace ASolute_Mobile.Data
             return database.Query<JobNoList>("SELECT * FROM [JobNoList] ");
         }
 
-
-
-
-
         public ListItems GetJobRecordAsync(string id)
         {
             return database.Table<ListItems>().Where(i => i.Id == id).FirstOrDefault();
         }
 
-    
         public void deleteJobNo()
         {
             database.Query<JobNoList>("DELETE FROM [JobNoList]");
         }
 
-      
-        public void deleteMainMenu()
-        {
-            database.Query<ListItems>("DELETE FROM ListItems");
-        }
+     
 
         public int SaveJobNoAsync(JobNoList item)
         {
@@ -495,7 +457,5 @@ namespace ASolute_Mobile.Data
             }
         }
 
-       
-        
     }
 }

@@ -13,7 +13,7 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+
     public partial class ContainerCategory : ContentPage
     {
         public class TrackingCategory
@@ -48,33 +48,31 @@ namespace ASolute_Mobile.CustomerTracking
         {
             getCategory();
             category_list.IsRefreshing = false;
-
         }
 
         public async void getCategory()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryListURL(providerCode));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getCategoryListURL(providerCode),this);
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (provider_response.IsGood)
             {
                 categories = JObject.Parse(content)["Result"].ToObject<List<clsCaptionValue>>();
 
-                App.Database.deleteMainMenu();
+                App.Database.deleteRecords("Category");
                 App.Database.deleteRecordSummary("Category");
-
 
                 foreach (clsCaptionValue category in categories)
                 {
                     ListItems menu = new ListItems();
                     menu.Id = category.Caption;
                     menu.Name = category.Value;
+                    menu.Category = "Category";
                     App.Database.SaveMenuAsync(menu);
-
 
                     SummaryItems summaryItem = new SummaryItems();
                     summaryItem.Id = category.Caption;
-                    summaryItem.Caption = category.Caption;
+                    summaryItem.Caption = "";
                     summaryItem.Value = category.Value;
                     summaryItem.Display = category.Display;
                     summaryItem.Type = "Category";
@@ -124,8 +122,8 @@ namespace ASolute_Mobile.CustomerTracking
         }
          public void loadCateogoryList()
          {
-             Ultis.Settings.List = "category_List";
-             ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenuItems());
+             Ultis.Settings.List = "Category";
+             ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("Category"));
              category_list.ItemsSource = Item;
              category_list.HasUnevenRows = true;
              category_list.Style = (Style)App.Current.Resources["recordListStyle"];

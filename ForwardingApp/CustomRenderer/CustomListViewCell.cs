@@ -19,7 +19,7 @@ namespace ASolute_Mobile
     public class CustomListViewCell : ViewCell
     {
         public static List<SummaryItems> summaryRecord;
-        public static List<ProviderInfo> providers;
+       // public static List<ProviderInfo> providers;
         string color;
 
         public CustomListViewCell()
@@ -36,23 +36,7 @@ namespace ASolute_Mobile
                 if (this.BindingContext != null)
                 {
 
-                    if (Ultis.Settings.List == "provider_List")
-                    {
-                        ListItems model = (ListItems)this.BindingContext;
-                        providers = App.Database.Providers(model.Id);
-
-                    }
-                    else if (Ultis.Settings.List == "container_List")
-                    {
-                        ListItems model = (ListItems)this.BindingContext;
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "Container");
-                    }
-                    else if (Ultis.Settings.List == "category_List")
-                    {
-                        ListItems model = (ListItems)this.BindingContext;
-                        summaryRecord = App.Database.GetSummarysAsync(model.Id, "Category");
-                    }
-                    else if (Ultis.Settings.List == "Main_Menu")
+                    if (Ultis.Settings.List == "Main_Menu")
                     {
                         ListItems model = (ListItems)this.BindingContext;
                         summaryRecord = App.Database.GetSummarysAsync(model.Id, "MainMenu");
@@ -63,8 +47,6 @@ namespace ASolute_Mobile
                         summaryRecord = App.Database.GetSummarysAsync(model.Id, Ultis.Settings.List);
                     }
 
-
-
                     StackLayout cellTextWrapper = new StackLayout()
                     {
                         //Padding = new Thickness(10, 10, 10, 10),
@@ -72,13 +54,11 @@ namespace ASolute_Mobile
                         VerticalOptions = LayoutOptions.FillAndExpand
                     };
 
-
-                   
                     bool firstSummaryLine = true;
 
-                    if (Ultis.Settings.List == "provider_List")
+                    /*if (Ultis.Settings.List == "provider_List")
                     {
-                        foreach (ProviderInfo items in providers)
+                       /* foreach (ProviderInfo items in providers)
                         {
                             Label label = new Label();
                             label.FontAttributes = FontAttributes.Bold;
@@ -89,45 +69,45 @@ namespace ASolute_Mobile
                     else
                     {
 
-                        foreach (SummaryItems items in summaryRecord)
+                      
+                    }*/
+
+                    foreach (SummaryItems items in summaryRecord)
+                    {
+                        Label label = new Label();
+                        label.FontSize = 15;
+
+                        if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.List.Equals("category_List"))
                         {
-                            Label label = new Label();
-                            label.FontSize = 15;
+                            label.Text = items.Value;
 
-                            if (items.Caption == "" || items.Caption == "Job No." || items.Caption == "Consignee" || Ultis.Settings.List.Equals("category_List"))
-                            {
-                                label.Text = items.Value;
+                        }
+                        else if (items.Caption == "Action" || items.Display == false)
+                        {
+                            label.IsVisible = false;
+                        }
+                        else
+                        {
+                            label.Text = items.Caption + ": " + items.Value;
+                        }
 
-                            }
-                            else if (items.Caption == "Action" || items.Display == false)
-                            {
-                                label.IsVisible = false;
-                            }
-                            else
-                            {
-                                label.Text = items.Caption + ": " + items.Value;
-                            }
+                        if (firstSummaryLine)
+                        {
 
-                            if (firstSummaryLine)
-                            {
+                            firstSummaryLine = false;
+                            label.FontAttributes = FontAttributes.Bold;
+                        }
 
-                                firstSummaryLine = false;
-                                label.FontAttributes = FontAttributes.Bold;
-                            }
+                        cellTextWrapper.Children.Add(label);
 
-                            cellTextWrapper.Children.Add(label);
-
-                            if (!(String.IsNullOrEmpty(items.BackColor)))
-                            {
-                                cellTextWrapper.BackgroundColor = Color.FromHex(items.BackColor);
-                                color = items.BackColor;
-                            }
+                        if (!(String.IsNullOrEmpty(items.BackColor)))
+                        {
+                            cellTextWrapper.BackgroundColor = Color.FromHex(items.BackColor);
+                            color = items.BackColor;
                         }
                     }
 
-                    // absoluteLayout.Children.Add(cellWrapper);
-
-                    if (Ultis.Settings.List.Equals("provider_List"))
+                    if (Ultis.Settings.List.Equals("ProviderList"))
                     {
                         MenuItem menuItem = new MenuItem()
                         {
@@ -188,7 +168,7 @@ namespace ASolute_Mobile
 
         public async void callWebService(string code)
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProviderURL(code));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.deleteSavedProviderURL(code),null);
             clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
         }
 

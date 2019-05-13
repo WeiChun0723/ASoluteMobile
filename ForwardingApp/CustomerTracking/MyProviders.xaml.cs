@@ -53,7 +53,7 @@ namespace ASolute_Mobile.CustomerTracking
                 {
 
                     Ultis.Settings.AppFirstInstall = "Second";
-                    var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL());
+                    var content = await CommonFunction.CallWebService(0, null,Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL(),this);
                     clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     if (autoScan_response.IsGood)
@@ -61,16 +61,11 @@ namespace ASolute_Mobile.CustomerTracking
                         await DisplayAlert("Succeed", autoScan_response.Result, "OK");
                         await getProviderList();
                     }
-                    else
-                    {
-                        await DisplayAlert("Error", autoScan_response.Message, "OK");
-                    }
 
                     await StartListening();
                 }
                 else
                 {
-
                     if (App.Database.GetMainMenu("ProviderList").Count == 0 || Ultis.Settings.AppFirstInstall == "Refresh")
                     {
                         await getProviderList();
@@ -80,7 +75,6 @@ namespace ASolute_Mobile.CustomerTracking
                     {
                         LoadProviderList();
                     }
-
                 }
             }
             catch
@@ -92,22 +86,18 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
-
             await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).Id,((ListItems)e.Item).Name));
-
-
         }
 
         protected async void refreshProviderList(object sender, EventArgs e)
         {
             await getProviderList();
             provide_list.IsRefreshing = false;
-
         }
     
         public async Task getProviderList()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderListURL());
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getProviderListURL(),this);
             clsResponse provider_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(provider_response.IsGood)
@@ -115,36 +105,34 @@ namespace ASolute_Mobile.CustomerTracking
                 var providers = JObject.Parse(content)["Result"].ToObject<List<clsProvider>>();
 
                 App.Database.deleteRecords("ProviderList");
-                App.Database.DeleteProvider();
+                App.Database.deleteRecordSummary("ProviderList");
                 
-                foreach(clsProvider p in providers)
+                foreach(clsProvider provider in providers)
                 {
-
                     ListItems menu = new ListItems();
-                    menu.Id = p.Code;
-                    menu.Name = p.Name;
+                    menu.Id = provider.Code;
+                    menu.Name = provider.Name;
                     menu.Category = "ProviderList";
-                   App.Database.SaveMenuAsync(menu);
+                    App.Database.SaveMenuAsync(menu);
 
+                    SummaryItems summaryItem = new SummaryItems();
+                    summaryItem.Id = provider.Code;
+                    summaryItem.Name = provider.Name;
+                    summaryItem.Type = "ProviderList";
+                    summaryItem.Caption = "";
+                    summaryItem.Value = provider.Name;
+                    summaryItem.Display = true;
 
-                    ProviderInfo available_provider = new ProviderInfo();
-                    available_provider.Code = p.Code;
-                    available_provider.Name = p.Name;
-                    
-
-                    App.Database.SaveProvider(available_provider);
+                    App.Database.SaveSummarysAsync(summaryItem);
                 }
                  LoadProviderList();
             }
-            else
-            {
-                await DisplayAlert("JsonError", provider_response.Message, "OK");
-            }
+           
         }
 
         public void LoadProviderList()
         {
-            Ultis.Settings.List = "provider_List";
+            Ultis.Settings.List = "ProviderList";
             ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("ProviderList"));
             provide_list.ItemsSource = Item;
             provide_list.HasUnevenRows = true;          
