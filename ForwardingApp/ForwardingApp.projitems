@@ -432,7 +432,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
     <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Yard\" />
-    <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
     <Folder Include="$(MSBuildThisFileDirectory)ZebraPrinter\" />
   </ItemGroup>
   <ItemGroup>

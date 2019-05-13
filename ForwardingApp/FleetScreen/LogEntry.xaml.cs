@@ -213,7 +213,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                var content = await CommonFunction.PostRequestAsync(data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL());
+                var content = await CommonFunction.CallWebService(1,data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewLogRecordURL(),this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (response.IsGood)
@@ -254,18 +254,7 @@ namespace ASolute_Mobile
                     UploadImage();
 
                 }
-                else
-                {
-                    //await DisplayAlert("Error", response.Message, "OK");
-                    if (Ultis.Settings.Language.Equals("English"))
-                    {
-                        await DisplayAlert("Error", response.Message, "OK");
-                    }
-                    else
-                    {
-                        await DisplayAlert("Failed", response.Message, "OK");
-                    }
-                }
+              
             }
             catch
             {

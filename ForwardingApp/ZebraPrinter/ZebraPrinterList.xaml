@@ -5,7 +5,7 @@
     
     <StackLayout Padding="10,10,10,10" Spacing="20">
         
-       <!--<buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnTestPrinter" Text="Check status" Clicked="Handle_Clicked" />
+      <!-- <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnTestPrinter" Text="Check status" Clicked="Handle_Clicked" />
        <Label x:Name="printerLbl" FontAttributes="Bold" FontSize="Medium"/>
         <Label x:Name="checkStatus" FontAttributes="Bold" FontSize="Medium"/>-->
         <Label x:Name="statusLbl" FontAttributes="Bold" FontSize="Large"/>

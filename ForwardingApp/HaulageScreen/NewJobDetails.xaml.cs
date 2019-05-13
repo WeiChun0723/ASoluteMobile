@@ -518,7 +518,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                             if (response.IsGood)
                             {
-
                                 Ultis.Settings.RefreshListView = "Yes";
 
                                 if (Ultis.Settings.Language.Equals("English"))

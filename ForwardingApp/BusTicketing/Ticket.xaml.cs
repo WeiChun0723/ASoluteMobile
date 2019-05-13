@@ -86,7 +86,7 @@ namespace ASolute_Mobile.BusTicketing
 
                 try
                 {
-                    TicketTemplate test = new TicketTemplate();
+                    /*TicketTemplate test = new TicketTemplate();
 
                     if(App.myPrinter!= null)
                     {
@@ -95,11 +95,12 @@ namespace ASolute_Mobile.BusTicketing
                     else
                     {
                         await Navigation.PushAsync(new ZebraPrinterList());
-                    }
-                    /*if (connectedPrinter == false)
+                    }*/
+                    if (connectedPrinter == false)
                     {
 
-                        bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+                       // bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+                        bool x = await DependencyService.Get<IBthService>().connectBTDevice("84:25:3F:1F:82:75");
 
                         if (!x)
                         {
@@ -157,7 +158,7 @@ namespace ASolute_Mobile.BusTicketing
 
                     WriteMemoryStream(buffer, WoosimPageMode.print());
 
-                    DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());*/
+                    DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
 
                 }
                 catch (Exception ex)

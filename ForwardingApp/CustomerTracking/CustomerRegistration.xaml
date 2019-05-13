@@ -5,7 +5,9 @@
              x:Class="ASolute_Mobile.CustomerTracking.CustomerRegistration"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              BackgroundColor = "#9A2116"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:local="clr-namespace:ASolute_Mobile.InputValidation">
     
  
      <ScrollView>
@@ -18,13 +20,57 @@
         <Label TextColor="#FFFFFF" FontSize = "20" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" Text="Registration"/>
         <StackLayout Padding = "0, 15"></StackLayout>
 
-       
-        <Entry Placeholder="User Name" PlaceholderColor="Black" x:Name = "userNameEntry"  Style="{StaticResource entryStyle}" TextChanged="userNameTextChange" BackgroundColor="LightYellow"/>
-        <Entry Placeholder="Email Address" PlaceholderColor="Black" x:Name = "emailAddressEntry"  Style="{StaticResource entryStyle}" TextChanged="emailTextChange" Keyboard="Email" BackgroundColor="LightYellow"/>
-        <Entry Placeholder="Mobile No." PlaceholderColor="Black" x:Name = "phoneEntry"  Style="{StaticResource entryStyle}" Keyboard="Numeric" TextChanged="mobileTextChange" BackgroundColor="LightYellow"/>
-        <Entry Placeholder="Business Reg No." PlaceholderColor="Black" x:Name = "businessRegEntry"  Style="{StaticResource entryStyle}" TextChanged="businessTextChange" BackgroundColor="LightYellow"/>
-        <Entry Placeholder="Company Name" PlaceholderColor="Black" x:Name = "companyEntry"  Style="{StaticResource entryStyle}" TextChanged="companyTextChange" IsVisible="false" BackgroundColor="LightYellow"/>
-        
+       <inputLayout:SfTextInputLayout Hint="User Name" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="userNameEntry" >
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="50" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="user" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            
+            <inputLayout:SfTextInputLayout Hint="Email Address" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow" >
+                <Entry x:Name="emailAddressEntry" />
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="user" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            
+             <inputLayout:SfTextInputLayout Hint="Mobile No." Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="phoneEntry" >
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="20" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="call" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            
+            <inputLayout:SfTextInputLayout Hint="Business Reg No." Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="businessRegEntry" >
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="20" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="enterprise" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+            
+            <inputLayout:SfTextInputLayout Hint="Company Name" Style="{StaticResource inputStyle}" x:Name="companyEntryView" IsVisible="false" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="companyEntry" >
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="100" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="enterprise" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>
+ 
         <chkBox:CheckBox DefaultText="I agreed with the term and condition." HorizontalOptions="FillAndExpand" FontSize="10" IsVisible="false" x:Name="term"/>
         
         <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="RegisterButton" Text = "Next" Clicked="Register_Clicked" />

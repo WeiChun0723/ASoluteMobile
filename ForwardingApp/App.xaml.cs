@@ -44,15 +44,15 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            if (Ultis.Settings.App == "asolute.Mobile.AILSTracking" || Ultis.Settings.App == "com.asolute.AILSTracking")
+            if (Ultis.Settings.App.Contains("Tracking") || Ultis.Settings.App.Contains("Business"))
             {
                 Ultis.Settings.SessionBaseURI = "https://api.asolute.com/host/api/";
-                //MainPage = new CustomNavigationPage(new AppNavigation());
                 MainPage = new CustomNavigationPage(new StartUpScreen());
             }
             else
             {
 
+               
                 if (sessionKey != "")
                 {
                     MainPage = new MainPage();

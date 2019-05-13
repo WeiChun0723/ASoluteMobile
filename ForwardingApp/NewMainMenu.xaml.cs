@@ -16,6 +16,7 @@ using Syncfusion.XForms.Buttons;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+
 namespace ASolute_Mobile
 {
     //all of the app share this main menu after they login to the app

@@ -216,7 +216,7 @@ namespace ASolute_Mobile.ZebraPrinter
                 {
 
                    // checkStatus.Text = "Printer Status: Printer Ready";
-                   // checkStatus.TextColor = Color.Green;
+                   //checkStatus.TextColor = Color.Green;
                    
                 }
                 else

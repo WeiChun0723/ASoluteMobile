@@ -43,92 +43,41 @@ namespace ASolute_Mobile.CustomerTracking
 
         }
 
-        public void userNameTextChange(object sender, TextChangedEventArgs e)
-        {
-            string _name = userNameEntry.Text.ToUpper(); 
-            if (_name.Length > 50)
-            {
-                _name = _name.Remove(_name.Length - 1);
-
-            }
-            userNameEntry.Text = _name;
-        }
-
-        public void emailTextChange(object sender, TextChangedEventArgs e)
-        {
-            string _email = emailAddressEntry.Text; 
-            if (_email.Length > 50)
-            {
-                _email = _email.Remove(_email.Length - 1);
-
-            }
-            emailAddressEntry.Text = _email;
-        }
-
-        public void mobileTextChange(object sender, TextChangedEventArgs e)
-        {
-            string _phone = phoneEntry.Text;
-            if (_phone.Length > 20)
-            {
-                _phone = _phone.Remove(_phone.Length - 1);
-
-            }
-            phoneEntry.Text = _phone;
-        }
-
-
-        public void businessTextChange(object sender, TextChangedEventArgs e)
-        {
-            string _business = businessRegEntry.Text.ToUpper();
-            if (_business.Length > 20)
-            {
-                _business = _business.Remove(_business.Length - 1);
-
-            }
-            businessRegEntry.Text = _business;
-        }
-
-        public void companyTextChange(object sender, TextChangedEventArgs e)
-        {
-            string _company = companyEntry.Text.ToUpper();
-            if (_company.Length > 100)
-            {
-                _company = _company.Remove(_company.Length - 1);
-
-            }
-            companyEntry.Text = _company;
-        }
-
         public async void Register_Clicked(object sender, EventArgs e)
         {
             try
             {
                 if (RegisterButton.Text.Equals("Next"))
                 {
-                    if (emailAddressEntry.Text.Contains("@") && emailAddressEntry.Text.Contains("."))
+                
+                    if (emailAddressEntry.Text.Contains("@"))
                     {
-                        var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text),this);
-                        clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        if (company_response.IsGood)
+                        string[] emailFormat = emailAddressEntry.Text.Split('@');
+
+                        if(emailFormat[1].Contains("."))
                         {
-                            companyEntry.IsVisible = true;
-                            term.IsVisible = true;
+                            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getCompanyNameURL(businessRegEntry.Text), this);
+                            clsResponse company_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                            companyEntry.Text = company_response.Result;
-                            RegisterButton.Text = "Confirm";
+                            if (company_response.IsGood)
+                            {
+                                companyEntryView.IsVisible = true;
+                                term.IsVisible = true;
+
+                                companyEntry.Text = company_response.Result;
+                                RegisterButton.Text = "Confirm";
+                            }
                         }
                         else
                         {
-                            await DisplayAlert("Json Error", company_response.Message, "OK");
+                            await DisplayAlert("Error", "Email address must in example@mail.com format.", "OK");
                         }
-
                     }
                     else
                     {
-                        await DisplayAlert("Error", "Email address must in example@mail.com format", "OK");
+                        await DisplayAlert("Error", "Email address must in example@mail.com format.", "OK");
                     }
-
                 }
                 else
                 {

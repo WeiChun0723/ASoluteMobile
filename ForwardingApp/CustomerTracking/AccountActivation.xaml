@@ -4,13 +4,13 @@
              x:Class="ASolute_Mobile.CustomerTracking.AccountActivation"
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              BackgroundColor = "#9A2116"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
     
     <ScrollView>
     <StackLayout Padding = "20, 0, 20, 20" >
-        <StackLayout Padding="0,30">
+        <StackLayout Padding="0,30"/>
 
-        </StackLayout>
         <Image x:Name="logoImageHolder" Source="appIcon.png" VerticalOptions="End" HorizontalOptions="Center" WidthRequest="100" HeightRequest="100"/>
         <StackLayout Padding = "0, 10"></StackLayout>
         <Label TextColor="#FFFFFF" FontSize = "20" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold, Italic" FontFamily="" Text="Account Activation"/>
@@ -18,7 +18,15 @@
         
         <Label Text="We have sent the activation code to your email account. Please copy and paste the value here." HorizontalOptions="EndAndExpand"/>
         <StackLayout Padding = "0, 15"></StackLayout>
-        <Entry Placeholder="Enter Activation code" x:Name = "ActivationEntry" Style="{StaticResource entryStyle}" Keyboard="Numeric"/>
+        
+          <inputLayout:SfTextInputLayout Hint="Enter Activation code" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="ActivationEntry"  Keyboard="Numeric"/>
+                    
+                <inputLayout:SfTextInputLayout.LeadingView>
+                    <Image Source="padlock" />
+                </inputLayout:SfTextInputLayout.LeadingView>
+            </inputLayout:SfTextInputLayout>   
+        
         
         <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="SubmitButton" Text = "Submit" Clicked="Submit_Clicked" />
         <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="ResendButton" Text = "Resend Activation Code" Clicked="Resend_Clicked" />
