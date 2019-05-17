@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using ASolute_Mobile.Models;
+using Honeywell.AIDC.CrossPlatform.Print;
 using LinkOS.Plugin;
 using LinkOS.Plugin.Abstractions;
 
@@ -40,6 +41,7 @@ namespace ASolute_Mobile.ZebraPrinter
 
         private void SendZplReceipt(IConnection printerConnection, SoldTicket ticketContent)
         {
+
             /*Some basics of ZPL. Find more information here : http://www.zebra.com
 
                     ^XA indicates the beginning of a label
@@ -108,7 +110,7 @@ namespace ASolute_Mobile.ZebraPrinter
             printerConnection.Write(GetBytes(footer));
             */
 
-            string ticketType = "";
+           string ticketType = "";
 
             switch(ticketContent.TicketType)
             {

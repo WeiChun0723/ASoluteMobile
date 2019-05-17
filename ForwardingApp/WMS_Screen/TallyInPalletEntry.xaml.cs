@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
@@ -28,6 +29,7 @@ namespace ASolute_Mobile.WMS_Screen
         CustomDatePicker customDatePicker;
         List<bool> checkField = new List<bool>();
         string userInput = "", productID;
+        bool scanAgain = false;
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
@@ -69,25 +71,76 @@ namespace ASolute_Mobile.WMS_Screen
             palletDesc.Children.Add(bottomBlank);
 
             GetNewPalletList();
+
+
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
 
+            palletNo.Focus();
+
+
+            if (Ultis.Settings.EnterpriseName == "PANDA")
+            {
+                palletNo.CanShowVirtualKeyboard = false;
+            }
+        }
+
+        void Handle_Completed(object sender, System.EventArgs e)
+        {
+            var entry = sender as CustomEntry;
+
+            switch(entry.StyleId)
+            {
+                case "palletNo":
+                    quantity.Focus();
+                    break;
+
+                case "quantity":
+                    SearchControl("String01", "Focus", "");
+                    break;
+
+                case "String01":
+                    SearchControl("String02", "Focus", "");
+                    break;
+
+                case "String02":
+                    SearchControl("String03", "Focus", "");
+                    break;
+
+                case "String03":
+                    SearchControl("String04", "Focus", "");
+                    break;
+
+                case "String04":
+                    SearchControl("String05", "Focus", "");
+                    break;
+
+                case "String05":
+                    SearchControl("String06", "Focus", "");
+                    break;
+
+            }
+        }
+      
         void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
         {
             var picker = sender as SfComboBox;
 
-            if(picker.StyleId == "unitBox")
+            if (picker.StyleId == "unitBox")
             {
                 List<string> palletSizes = sizeBox.ComboBoxSource;
 
                 foreach (string size in palletSizes)
                 {
                     string[] defaultSize = size.Split('(');
-                    if(defaultSize[1].Contains(unitBox.Text))
+                    if (defaultSize[1].Contains(unitBox.Text))
                     {
                         sizeBox.Text = size;
                     }
-                   
+
                 }
             }
         }
@@ -96,7 +149,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             try
             {
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPalletURL(id, productPallet.ProductLinkId),this);
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.loadNewPalletURL(id, productPallet.ProductLinkId), this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (newPallet_response.IsGood)
@@ -108,14 +161,11 @@ namespace ASolute_Mobile.WMS_Screen
                     foreach (clsKeyValue size in newPallet.PalletSize)
                     {
                         sizes.Add(size.Value);
-
                         string[] defaultSize = size.Value.Split('(');
-
                         if (defaultSize[1].Contains(newPallet.DefaultProductUom))
                         {
                             sizeBox.Text = size.Value;
                         }
-                      
                     }
 
                     foreach (clsKeyValue unit in newPallet.ProductUom)
@@ -175,12 +225,14 @@ namespace ASolute_Mobile.WMS_Screen
 
                             };
 
+                            customEntry.Completed += Handle_Completed;
+
                             customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 50 });
 
                             entryStack.Children.Add(customEntry);
                         }
 
-                       
+
                         if (attr.Value == "M")
                         {
                             if (customEntry != null)
@@ -280,7 +332,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             var image = sender as Image;
 
-            switch(image.StyleId)
+            switch (image.StyleId)
             {
                 case "barcode_icon":
                     PalletScan();
@@ -321,8 +373,8 @@ namespace ASolute_Mobile.WMS_Screen
                                 Qty = Convert.ToInt32(quantity.Text),
                                 Uom = newPallet.ProductUom[units.FindIndex(x => x.Equals(unitBox.Text))].Key,
                                 StockStatus = statusBox.Text,
-                                String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue","")))) ? SearchControl("String01", "GetValue", "") : String.Empty,
-                                String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue","")))) ? SearchControl("String02", "GetValue", "") : String.Empty,
+                                String01 = (!(String.IsNullOrEmpty(SearchControl("String01", "GetValue", "")))) ? SearchControl("String01", "GetValue", "") : String.Empty,
+                                String02 = (!(String.IsNullOrEmpty(SearchControl("String02", "GetValue", "")))) ? SearchControl("String02", "GetValue", "") : String.Empty,
                                 String03 = (!(String.IsNullOrEmpty(SearchControl("String03", "GetValue", "")))) ? SearchControl("String03", "GetValue", "") : String.Empty,
                                 String04 = (!(String.IsNullOrEmpty(SearchControl("String04", "GetValue", "")))) ? SearchControl("String04", "GetValue", "") : String.Empty,
                                 String05 = (!(String.IsNullOrEmpty(SearchControl("String05", "GetValue", "")))) ? SearchControl("String05", "GetValue", "") : String.Empty,
@@ -341,21 +393,23 @@ namespace ASolute_Mobile.WMS_Screen
                                 quantity.Text = String.Empty;
 
                                 List<string> dynamicFields = new List<string>
-                            {
-                            "String01",
-                            "String02",
-                            "String03",
-                            "String04",
-                            "String05",
-                            "String06",
-                            "ExpiryDate",
-                            "MfgDate"
-                            };
+                                {
+                                    "String01",
+                                    "String02",
+                                    "String03",
+                                    "String04",
+                                    "String05",
+                                    "String06",
+                                    "ExpiryDate",
+                                    "MfgDate"
+                                };
 
                                 foreach (string field in dynamicFields)
                                 {
-                                    SearchControl(field, "ClearValue","");
+                                    SearchControl(field, "ClearValue", "");
                                 }
+
+                                palletNo.Focus();
                             }
                             else
                             {
@@ -440,7 +494,7 @@ namespace ASolute_Mobile.WMS_Screen
             toastConfig.Position = 0;
             toastConfig.SetMessageTextColor(System.Drawing.Color.Black);
 
-            if(scanStatus.Contains("scanned") || scanStatus.Contains("scanning"))
+            if (scanStatus.Contains("scanned") || scanStatus.Contains("scanning"))
             {
                 toastConfig.SetBackgroundColor(System.Drawing.Color.Green);
             }
@@ -455,8 +509,7 @@ namespace ASolute_Mobile.WMS_Screen
         async void EntryScan(Image image)
         {
             try
-            {
-
+            {  
                 var scanPage = new ZXingScannerPage();
                 await Navigation.PushAsync(scanPage);
 
@@ -523,44 +576,71 @@ namespace ASolute_Mobile.WMS_Screen
                             {
                                 CustomEntry entry = (CustomEntry)v;
 
-                                if (action == "GetValue")
+                                switch(action)
+                                {
+                                    case "GetValue":
+                                        return entry.Text;
+
+
+                                    case "SetValue":
+                                        entry.Text = content;
+                                        break;
+
+                                    case "Focus":
+                                        entry.Focus();
+                                        break;
+
+                                    default:
+                                        entry.Text = String.Empty;
+                                        break;
+                                }
+                               /* if (action == "GetValue")
                                 {
                                     return entry.Text;
                                 }
-                                else if(action == "SetValue")
+                                else if (action == "SetValue")
                                 {
                                     entry.Text = content;
                                 }
+                                
                                 else
                                 {
                                     entry.Text = String.Empty;
-                                }
+                                }*/
 
                             }
                             else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
                             {
                                 CustomDatePicker picker = (CustomDatePicker)v;
 
-                                if (action == "GetValue")
-                                {
-                                    if (picker.NullableDate == null)
-                                    {
-                                        return "";
-                                    }
-                                    else
-                                    {
-                                        return picker.Date.ToString("yyyy-MM-dd");
-                                    }
-                                }
-                                else
-                                {
-                                    if (picker.NullableDate != null)
-                                    {
-                                        picker.Date = DateTime.Now;
-                                        picker.NullableDate = null;
-                                    }
-                                }
 
+                                switch(action)
+                                {
+                                    case "GetValue":
+                                        if (picker.NullableDate == null)
+                                        {
+                                            return "";
+                                        }
+                                        else
+                                        {
+                                            return picker.Date.ToString("yyyy-MM-dd");
+                                        }
+                                       
+
+                                    case "Focus":
+                                        picker.Focus();
+                                        break;
+
+                                    default:
+                                        if (picker.NullableDate != null)
+                                        {
+                                            picker.Date = DateTime.Now;
+                                            picker.NullableDate = null;
+                                        }
+                                        break;
+
+                                }
+                             
                             }
                         }
                     }
@@ -574,26 +654,26 @@ namespace ASolute_Mobile.WMS_Screen
         {
             try
             {
-                if (actionID == "BARRY"  )
+                if (actionID == "BARRY")
                 {
-                    userInput = scanEntry.Text;
+
+
+                    userInput = palletNo.Text;
 
                     string productCode = userInput.Substring(0, 13);
                     string productPackageCode = userInput.Substring(16, 8);
                     string productRunningNo = userInput.Substring(25, 1);
-                    string productQTY = userInput.Substring(27, 2);
+                    string productQTY = userInput.Substring(26, 2);
 
                     if (productCode == productPallet.ProductCode)
                     {
-                        palletNo.Text = "";
-                        quantity.Text = "";
 
-                        scanEntry.Text = productPackageCode;
-                        palletNo.Text = userInput;
+                        quantity.Text = "";
                         quantity.Text = productQTY;
 
-                        SearchControl("String01", "SetValue", productPackageCode);
-                        SearchControl("String02", "SetValue", productRunningNo);
+                        SearchControl("String01", "ClearValue", "");
+                        SearchControl("String01", "SetValue", productPackageCode + productRunningNo);
+
 
                         DisplayScanStatus(userInput + " scanned");
 
@@ -613,10 +693,9 @@ namespace ASolute_Mobile.WMS_Screen
 
         void Handle_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
         {
+            //scanEntry.Focus();
 
-            scanEntry.Focus();
-
-            DisplayScanStatus( "Start scanning....");
+            DisplayScanStatus("Start scanning....");
         }
     }
 }

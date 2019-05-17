@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
@@ -163,8 +164,8 @@ namespace ASolute_Mobile.HaulageScreen
             pointInStack.IsVisible = false;
             actionIconStack.IsVisible = true;
             remarkStack.IsVisible = true;
-            TrailerDetailGrid.IsVisible = true;
-            TrailerGrid.IsVisible = true;
+            TrailerDetailStack.IsVisible = true;
+            TrailerStack.IsVisible = true;
 
             //display all the job details
             int count = 0;
@@ -235,7 +236,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                     case "Point1_Chk":
                     case "Point2_Chk":
-                        TrailerDetailGrid.IsVisible = false;
+                        TrailerDetailStack.IsVisible = false;
                         signatureStack.IsVisible = (jobItem.ReqSign) ? true : false;
                         SplitContainerNumber();
                         break;
@@ -246,8 +247,8 @@ namespace ASolute_Mobile.HaulageScreen
                         pointInStack.IsVisible = true;
                         actionIconStack.IsVisible = false;
                         remarkStack.IsVisible = false;
-                        TrailerDetailGrid.IsVisible = false;
-                        TrailerGrid.IsVisible = false;
+                        TrailerDetailStack.IsVisible = false;
+                        TrailerStack.IsVisible = false;
                         break;
                 }
             }
@@ -256,26 +257,29 @@ namespace ASolute_Mobile.HaulageScreen
             //indicate the seal no is mandatory, optional or read only
             if (jobItem.ActionId == "Point1_Chk" || jobItem.ActionId == "Point2_Chk")
             {
-                switch (jobItem.SealMode)
-                {
-                    case "R":
-                        sealNoEntry.IsEnabled = false;
-                        break;
+                Device.BeginInvokeOnMainThread(() => {
+                    switch (jobItem.SealMode)
+                    {
+                        case "R":
+                            sealNoEntry.IsEnabled = false;
+                            break;
 
-                    case "O":
-                        sealNoEntry.IsEnabled = true;
-                        break;
+                        case "O":
+                            sealNoEntry.IsEnabled = true;
+                            break;
 
-                    case "M":
-                        sealNoEntry.IsEnabled = true;
-                        sealNoEntry.LineColor = Color.LightYellow;
-                        break;
+                        case "M":
+                            sealNoEntry.IsEnabled = true;
+                            //sealNoEntry.LineColor = Color.LightYellow;
+                            sealNoView.ContainerBackgroundColor = Color.LightYellow;
+                            break;
 
-                    case "H":
-                        sealNo.IsVisible = false;
-                        sealNoEntry.IsVisible = false;
-                        break;
-                }
+                        case "H":
+                            sealNoView.IsVisible = false;
+                            sealNoEntry.IsVisible = false;
+                            break;
+                    }
+                });
             }
         }
 
@@ -288,12 +292,15 @@ namespace ASolute_Mobile.HaulageScreen
                     string input = jobItem.ContainerNo;
                     contPrefix.Text = input.Substring(0, 4);
                     contNum.Text = input.Substring(4, 7);
-                    contPrefix.IsEnabled = false;
-                    contNum.IsEnabled = false;
+
                 }
-                catch (Exception exception)
+                catch
                 {
-                    DisplayAlert("Sub string Error", exception.Message, "OK");
+                    var resultString = Regex.Match(jobItem.ContainerNo, @"\d+").Value;
+
+                    contNum.Text = resultString;
+
+                    //DisplayAlert("Sub string Error", exception.Message, "OK");
                 }
             }
         }
@@ -338,7 +345,8 @@ namespace ASolute_Mobile.HaulageScreen
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
-            var field = sender as CustomEntry;
+            //var field = sender as CustomEntry;
+            var field = sender as Entry;
 
             switch (field.StyleId)
             {
@@ -369,7 +377,7 @@ namespace ASolute_Mobile.HaulageScreen
                     {
                         chkNo.Checked = false;
                     }
-                    if (TrailerDetailGrid.IsVisible)
+                    if (TrailerDetailStack.IsVisible)
                     {
                         mgwEntry.Focus();
                     }
@@ -489,11 +497,11 @@ namespace ASolute_Mobile.HaulageScreen
             loading.IsVisible = true;
             try
             {
-                if (contPrefix.Text.Length >= 4 && contNum.Text.Length >= 7)
-                {
-                    if (!(sealNoEntry.LineColor == Color.LightYellow) || (sealNoEntry.LineColor == Color.LightYellow && !(String.IsNullOrEmpty(sealNoEntry.Text))))
+                //if (contPrefix.Text.Length >= 4 && contNum.Text.Length >= 7)
+
+                    if (!(sealNoView.ContainerBackgroundColor == Color.LightYellow) || (sealNoView.ContainerBackgroundColor == Color.LightYellow && !(String.IsNullOrEmpty(sealNoEntry.Text))))
                     {
-                        if (!(TrailerDetailGrid.IsVisible) || (TrailerDetailGrid.IsVisible && (chkYes.Checked || chkNo.Checked)))
+                        if (!(TrailerDetailStack.IsVisible) || (TrailerDetailStack.IsVisible && (chkYes.Checked || chkNo.Checked)))
                         {
                             if (jobItem.ActionId == "EmptyPickup")
                             {
@@ -546,11 +554,7 @@ namespace ASolute_Mobile.HaulageScreen
                     {
                         await DisplayAlert("Error", "Please enter seal number.", "OK");
                     }
-                }
-                else
-                {
-                    await DisplayAlert("Error", "Please make sure container number format correct.", "OK");
-                }
+               
             }
             catch (Exception ex)
             {
@@ -581,7 +585,6 @@ namespace ASolute_Mobile.HaulageScreen
             int rowNo = noOfImages / noOfCols;
             int colNo = noOfImages - (rowNo * noOfCols);
             imageGrid.Children.Add(image, colNo, rowNo);
-
         }
 
         public async Task DisplayImage()

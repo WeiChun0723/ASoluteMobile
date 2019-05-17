@@ -24,7 +24,6 @@ namespace ASolute_Mobile.TransportScreen
 
             Title = "Sub Job List";
 
-
         }
 
         protected override void OnAppearing()

@@ -16,7 +16,7 @@ using Haulage.Droid.MobilePrinter;
 namespace ASolute_Mobile.Droid
 {
 
-    [Activity(Label = "AILS Tracking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static Activity activity;
@@ -65,7 +65,6 @@ namespace ASolute_Mobile.Droid
                 App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
 
                 LoadApplication(new App());
-
             }
             catch
             {

@@ -479,6 +479,7 @@
     <BundleResource Include="Resources\padlock.png" />
     <BundleResource Include="Resources\user_icon.png" />
     <BundleResource Include="Resources\warehouseheader.png" />
+    <BundleResource Include="Resources\truckingheader.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\refuel.png" />

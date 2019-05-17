@@ -31,7 +31,7 @@ namespace ASolute_Mobile
 
             InitializeComponent();
 
-            switch(Ultis.Settings.App)
+            switch (Ultis.Settings.App)
             {
                 case "asolute.Mobile.AILSBUS":
                     headerImage.Source = "busticketingheader.png";
@@ -48,6 +48,10 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.AILSYard":
                     headerImage.Source = "yardheader.png";
+                    break;
+
+                case "asolute.Mobile.AILSTrucking":
+                    headerImage.Source = "truckingheader.png";
                     break;
             }
 
@@ -68,7 +72,7 @@ namespace ASolute_Mobile
             main.Children.Add(title2);
             NavigationPage.SetTitleView(this, main);
 
-            if(!(String.IsNullOrEmpty(Ultis.Settings.StartEndStatus)))
+            if (!(String.IsNullOrEmpty(Ultis.Settings.StartEndStatus)))
             {
                 StartEndButton.Text = Ultis.Settings.StartEndStatus;
             }
@@ -80,6 +84,7 @@ namespace ASolute_Mobile
             //get the latest store local profile image
             var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
             profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+
             LoadMainMenu();
         }
 
@@ -129,7 +134,7 @@ namespace ASolute_Mobile
                                 mainGrid.Children.Add(expiryStack, 0, 2);
                                 expiryLabel.Text = mainMenu.Caption;
                                 expiryGrid.Children.Clear();
-                                
+
                                 int rowIndex = 0, columnIndex = 0;
                                 foreach (clsCaptionValue expiryInfo in mainMenu.Summary)
                                 {
@@ -238,7 +243,7 @@ namespace ASolute_Mobile
             }
             catch (Exception ex)
             {
-                 await DisplayAlert("Exception", ex.Message, "OK");
+                await DisplayAlert("Exception", ex.Message, "OK");
             }
         }
 
@@ -272,6 +277,7 @@ namespace ASolute_Mobile
                 listView.ItemsSource = Item;
                 listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 80 : Item.Count * 100;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+
                 System.TimeSpan interval = new System.TimeSpan();
                 if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
                 {
@@ -279,8 +285,9 @@ namespace ASolute_Mobile
                     interval = DateTime.Now.Subtract(enteredDate);
                 }
 
-                if(NetworkCheck.IsInternet())
+                if (NetworkCheck.IsInternet())
                 {
+
                     if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
                     {
                         GetMainMenu();
@@ -288,9 +295,8 @@ namespace ASolute_Mobile
                         Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                     }
                 }
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
@@ -326,9 +332,14 @@ namespace ASolute_Mobile
                     break;
 
                 case "JobList":
-                    //await Navigation.PushAsync(new TransportScreen.JobList(((AppMenu)e.Item).action, ((AppMenu)e.Item).name));
-                    //await Navigation.PushAsync(new HaulageScreen.JobList(((ListItems)e.Item).Name));
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
+                    if(Ultis.Settings.App == "asolute.Mobile.AILSTrucking")
+                    {
+                        await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getHaulageJobListURL()));
+                    }
                     break;
 
                 case "MasterJobList":
@@ -431,10 +442,10 @@ namespace ASolute_Mobile
         {
             GetMainMenu();
         }
-       
+
         void Handle_Pulling(object sender, Syncfusion.SfPullToRefresh.XForms.PullingEventArgs e)
         {
-            
+
         }
 
         #region AILS BUS function

@@ -24,6 +24,7 @@ using ASolute_Mobile.Planner;
 using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.ZebraPrinter;
 using LinkOS.Plugin.Abstractions;
+using ASolute_Mobile.testing;
 
 namespace ASolute_Mobile
 {
@@ -52,8 +53,8 @@ namespace ASolute_Mobile
             else
             {
 
-               
-                if (sessionKey != "")
+                MainPage = new YardMap();
+               /* if (sessionKey != "")
                 {
                     MainPage = new MainPage();
                 }
@@ -69,7 +70,7 @@ namespace ASolute_Mobile
                         MainPage = new CustomNavigationPage(new LoginPage());
                     }
 
-                }
+                }*/
             }
 
             /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")

@@ -27,15 +27,20 @@ namespace ASolute_Mobile.TransportScreen
 
             webServiceAction = action;
 
-           
+            GetJobList();
+
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            GetJobList(); 
 
+            if(Ultis.Settings.RefreshListView == "Yes")
+            {
+                GetJobList();
+                Ultis.Settings.RefreshListView = "No";
+            }
         }
 
         public async void selectJob(object sender, ItemTappedEventArgs e)
@@ -50,6 +55,32 @@ namespace ASolute_Mobile.TransportScreen
             loading.IsEnabled = true;
             GetJobList();
             jobList.IsRefreshing = false;
+        }
+
+        async void Handle_Tapped(object sender, System.EventArgs e)
+        {
+            try
+            {
+                var scanPage = new ZXingScannerPage();
+                scanPage.AutoFocus();
+                await Navigation.PushAsync(scanPage);
+
+                scanPage.OnScanResult += (result) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+
+                        await Navigation.PopAsync();
+
+                        searchBar.Text = result.Text;
+
+                    });
+                };
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
         }
 
         private async void SearchJob(object sender, TextChangedEventArgs e)
@@ -73,13 +104,13 @@ namespace ASolute_Mobile.TransportScreen
                     }
                     catch
                     {
-                        await DisplayAlert("Error", "Please try again", "OK");
+                       // await DisplayAlert("Error", "Please try again", "OK");
                     }
                 }
             }
             catch
             {
-                await DisplayAlert("Error", "Please try again", "OK");
+               // await DisplayAlert("Error", "Please try again", "OK");
             }
 
         }

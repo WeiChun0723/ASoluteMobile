@@ -21,12 +21,12 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <Entry IsVisible="false" x:Name="scanEntry" TextChanged="Handle_TextChanged"/>
+                <Entry IsVisible="false" x:Name="scanEntry" />
                 <StackLayout Padding="0,10,0,0" Grid.Row="0" Grid.Column="0">
                     <Label Text="Pallet Ref No." FontAttributes="Bold" />
                 </StackLayout>
                 <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="palletNo" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="WhiteSmoke" Focused="Handle_Focused"/>
+                    <controls:CustomEntry  x:Name="palletNo" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="WhiteSmoke" Focused="Handle_Focused" TextChanged="Handle_TextChanged" Completed="Handle_Completed"/>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="barcode_icon">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Tapped="Handle_Tapped" />
@@ -38,7 +38,7 @@
                     <Label Text="Quantity" FontAttributes="Bold" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <controls:CustomEntry x:Name="quantity" HeightRequest="30" HorizontalOptions="FillAndExpand" LineColor="LightYellow" Keyboard="Numeric" />
+                    <controls:CustomEntry x:Name="quantity" HeightRequest="30" HorizontalOptions="FillAndExpand" LineColor="LightYellow" Keyboard="Numeric"  Completed="Handle_Completed"/>
                     <combobox:SfComboBox HeightRequest="40" x:Name="unitBox" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow"  SelectionChanged="Handle_SelectionChanged"/>
                 </StackLayout>
                 <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">

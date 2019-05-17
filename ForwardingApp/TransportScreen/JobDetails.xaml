@@ -12,7 +12,7 @@
 
             <StackLayout Orientation="Horizontal"  Padding="15,0,0,0" >
                
-                <Image Source="map.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="map_icon" IsVisible="False">
+                <Image Source="navigation.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="map_icon" IsVisible="False">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="navigateToDest"/>
                     </Image.GestureRecognizers>

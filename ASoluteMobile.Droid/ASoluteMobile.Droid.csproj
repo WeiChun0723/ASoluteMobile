@@ -479,6 +479,18 @@
     <Reference Include="ASolute.Mobile.Models">
       <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
+    <Reference Include="Honeywell.AIDC.CrossPlatform.Print">
+      <HintPath>..\packages\Honeywell.AIDC.CrossPlatform.Print.2.10.1.448\lib\MonoAndroid41\Honeywell.AIDC.CrossPlatform.Print.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfMaps.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfMaps.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfMaps.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfMaps.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfMaps.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfMaps.XForms.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseApplication.cs" />
@@ -503,6 +515,7 @@
     <Compile Include="Services\BluetoothService_test.cs" />
     <Compile Include="CustomRenderer\PinCustomRenderer.cs" />
     <Compile Include="MobilePrinter\PrinterDiscoveryImplementation.cs" />
+    <Compile Include="CustomRenderer\HideKeyBoardEntryRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -545,6 +558,7 @@
     <AndroidResource Include="Resources\drawable\warehouseheader.png" />
     <AndroidResource Include="Resources\drawable\busticketingheader.png" />
     <AndroidResource Include="Resources\drawable\yardheader.png" />
+    <AndroidResource Include="Resources\drawable\truckingheader.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />
@@ -641,6 +655,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MobilePrinter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\printer_profiles.JSON" />
   </ItemGroup>
   <Import Project="..\ForwardingApp\ForwardingApp.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

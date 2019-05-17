@@ -86,7 +86,7 @@ namespace ASolute_Mobile.BusTicketing
 
                 try
                 {
-                    /*TicketTemplate test = new TicketTemplate();
+                    /* TicketTemplate test = new TicketTemplate();
 
                     if(App.myPrinter!= null)
                     {
@@ -97,69 +97,68 @@ namespace ASolute_Mobile.BusTicketing
                         await Navigation.PushAsync(new ZebraPrinterList());
                     }*/
                     if (connectedPrinter == false)
-                    {
+                     {
 
-                       // bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
-                        bool x = await DependencyService.Get<IBthService>().connectBTDevice("84:25:3F:1F:82:75");
+                         bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+                         //bool x = await DependencyService.Get<IBthService>().connectBTDevice("84:25:3F:1F:82:75");
 
-                        if (!x)
-                        {
-                            Device.BeginInvokeOnMainThread(async () =>
-                            {
-                                await DisplayAlert("Error", "Unable connect", "OK");
-                            });
-                        }
-                        else
-                        {
-                            connectedPrinter = true;
-                        }
-                    }
+                         if (!x)
+                         {
+                             Device.BeginInvokeOnMainThread(async () =>
+                             {
+                                 await DisplayAlert("Error", "Unable connect", "OK");
+                             });
+                         }
+                         else
+                         {
+                             connectedPrinter = true;
+                         }
+                     }
 
-                    System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
+                     System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("PERAK TRANSIT BERHAD\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("PERAK TRANSIT BERHAD\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(DateTime.UtcNow.ToString("dd/MM/yyyy h:mm:ss tt") + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(DateTime.UtcNow.ToString("dd/MM/yyyy h:mm:ss tt") + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(lblPrice.Text + "   " + ticketType + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(lblPrice.Text + "   " + ticketType + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(fromEntry.Text + " ---> " + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(fromEntry.Text + " ---> " + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(toEntry.Text + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(toEntry.Text + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("T30B-" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH02, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("T30B-" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("NO BAS : " + Ultis.Settings.SessionUserItem.TruckId + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("NO BAS : " + Ultis.Settings.SessionUserItem.TruckId + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("NO Pemandu : " + Ultis.Settings.SessionUserItem.DriverId + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("NO Pemandu : " + Ultis.Settings.SessionUserItem.DriverId + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Pemandu : " + Ultis.Settings.SessionUserItem.UserName + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Pemandu : " + Ultis.Settings.SessionUserItem.UserName + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("KOD LALUAN : T30B" + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("KOD LALUAN : T30B" + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Pembayaran : Cash" + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Pembayaran : Cash" + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Perak Transit Info : +6012-4500806" + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("Perak Transit Info : +6012-4500806" + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
-                    WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("SIMPAN TICKET UNTUK PEMERIKSAAN." + "\r\n\r\n"));
+                     WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, true, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT01, false));
+                     WriteMemoryStream(buffer, Encoding.ASCII.GetBytes("SIMPAN TICKET UNTUK PEMERIKSAAN." + "\r\n\r\n"));
 
-                    WriteMemoryStream(buffer, WoosimPageMode.print());
+                     WriteMemoryStream(buffer, WoosimPageMode.print());
 
-                    DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
-
+                     DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
                 }
                 catch (Exception ex)
                 {

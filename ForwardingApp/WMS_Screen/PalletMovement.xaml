@@ -7,14 +7,18 @@
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer"
              xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
-             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             xmlns:chkBox="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms">
     
      <ScrollView>
         
         <StackLayout Padding="15,15,15,15" Spacing="10">
 
             <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..."  TextColor="Red"  IsVisible="false"/> 
-
+            <StackLayout Spacing="5" Orientation="Horizontal" x:Name="inputType">
+                    <chkBox:CheckBox x:Name="chkScan" DefaultText="Scan" HorizontalOptions="StartAndExpand" Scale="1.5" CheckedChanged="Handle_CheckedChanged" />
+                    <chkBox:CheckBox x:Name="chkManual" DefaultText="Manual key in" HorizontalOptions="StartAndExpand" Scale="1.5" CheckedChanged="Handle_CheckedChanged" />
+            </StackLayout>
             <inputLayout:SfTextInputLayout 
                 Hint="Pallet ID" 
                 ContainerBackgroundColor="LightYellow"
@@ -23,7 +27,7 @@
                 LeadingViewPosition="Inside"
                 MinimumHeightRequest="50">   
                 
-            <Entry x:Name="palletIdEntry" TextChanged="Handle_TextChanged" > 
+            <Entry x:Name="palletIdEntry" TextChanged="Handle_TextChanged" Completed="Handle_Completed" > 
             <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="100" />
                 </Entry.Behaviors>        
@@ -65,7 +69,7 @@
                 FocusedColor="Black" HorizontalOptions="FillAndExpand"
                 TrailingViewPosition="Inside" LeadingViewPosition="Inside" x:Name="confirmView" IsVisible="false" >   
                 
-            <Entry x:Name="confirmEntry" TextChanged="Handle_TextChanged">
+            <Entry x:Name="confirmEntry" TextChanged="Handle_TextChanged" Completed="Handle_Completed">
                      <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="30"/>
                 </Entry.Behaviors>      

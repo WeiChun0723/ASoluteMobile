@@ -158,6 +158,11 @@ namespace ASolute_Mobile.Utils
                 case "asolute.Mobile.AILSBUS":
                     name = "Bus";
                     break;
+
+                case "asolute.Mobile.AILSTrucking":
+                    name = "Truck";
+                    break;
+
             }
 
             return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, name, CrossDeviceInfo.Current.AppVersion);

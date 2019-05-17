@@ -187,15 +187,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ZebraPrinter\ZebraPrinterList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\ClickChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)CustomerTracking\BusinessChartTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\ZebraPrinterList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\YardMap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -349,9 +353,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\TallyInPalletEntry.xaml.cs">
       <DependentUpon>TallyInPalletEntry.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\Cmd.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\CustomQueue.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WoosimPrinterService\IBthService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\PalletMovement.xaml.cs">
       <DependentUpon>PalletMovement.xaml</DependentUpon>
     </Compile>
@@ -404,18 +405,26 @@
       <DependentUpon>Registration.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\IPrinterDiscovery.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\ZebraPrinterList.xaml.cs">
-      <DependentUpon>ZebraPrinterList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\ConnectionType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ZebraPrinter\TicketTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)testing\ClickChart.xaml.cs">
       <DependentUpon>ClickChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)testing\Person.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\BusinessChartTable.xaml.cs">
       <DependentUpon>BusinessChartTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\WoosimPrinterService\CustomQueue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\WoosimPrinterService\IBthService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\WoosimPrinterService\library\Cmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\ConnectionType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\IPrinterDiscovery.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\TicketTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\ZebraPrinterList.xaml.cs">
+      <DependentUpon>..\..\ZebraPrinter\ZebraPrinterList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\GenericEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\HideKeyBoardEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)testing\YardMap.xaml.cs">
+      <DependentUpon>YardMap.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -428,11 +437,12 @@
     <Folder Include="$(MSBuildThisFileDirectory)testing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Planner\" />
     <Folder Include="$(MSBuildThisFileDirectory)WMS_Screen\" />
-    <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\" />
-    <Folder Include="$(MSBuildThisFileDirectory)WoosimPrinterService\library\" />
     <Folder Include="$(MSBuildThisFileDirectory)BusTicketing\" />
     <Folder Include="$(MSBuildThisFileDirectory)Yard\" />
-    <Folder Include="$(MSBuildThisFileDirectory)ZebraPrinter\" />
+    <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\" />
+    <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\WoosimPrinterService\" />
+    <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\" />
+    <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\HoneywellPrinter\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

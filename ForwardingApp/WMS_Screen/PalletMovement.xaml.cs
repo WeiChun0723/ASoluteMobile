@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
+using XLabs.Forms.Controls;
 using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.WMS_Screen
@@ -27,12 +28,14 @@ namespace ASolute_Mobile.WMS_Screen
 
             Title = record.Name;
 
-            palletIdEntry.Completed += PdEntry_Completed;
+            chkScan.Checked = true;
         }
 
-        void PdEntry_Completed(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-            GetPalletTrx(palletIdEntry.Text);
+            base.OnAppearing();
+
+            palletIdEntry.Focus();
         }
 
         public void Handle_Tapped(object sender, EventArgs e)
@@ -53,14 +56,32 @@ namespace ASolute_Mobile.WMS_Screen
 
                 case "palletEntryCancel":
                     palletIdEntry.Text = "";
+                    palletIdEntry.Focus();
                     break;
 
                 case "confirmEntryCancel":
                     confirmEntry.Text = "";
+                    confirmEntry.Focus();
                     break;
             }
         }
 
+        void Handle_Completed(object sender, System.EventArgs e)
+        {
+            var entry = sender as Entry;
+
+            switch(entry.StyleId)
+            {
+                case "palletIdEntry":
+                    GetPalletTrx(palletIdEntry.Text);
+                    break;
+
+                case "confirmEntry":
+                    checkDigitEntry.Focus();
+                    break;
+            }
+
+        }
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
@@ -77,6 +98,17 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         palletEntryCancel.IsVisible = false;
                     }
+
+                    if(chkScan.Checked)
+                    {
+                        if(!(String.IsNullOrEmpty(palletIdEntry.Text)))
+                        {
+
+                            GetPalletTrx(palletIdEntry.Text);
+                        }
+
+                    }
+
                     break;
 
                 case "confirmEntry":
@@ -87,6 +119,32 @@ namespace ASolute_Mobile.WMS_Screen
                     else
                     {
                         confirmEntryCancel.IsVisible = false;
+                    }
+
+                    break;
+            }
+        }
+
+        void Handle_CheckedChanged(object sender, XLabs.EventArgs<bool> e)
+        {
+            var chkBox = sender as CheckBox;
+
+            switch (chkBox.StyleId)
+            {
+                case "chkScan":
+                    if (chkManual.Checked && chkScan.Checked)
+                    {
+                        chkManual.Checked = false;
+                        palletIdEntry.Focus();
+                    }
+
+                    break;
+
+                case "chkManual":
+                    if (chkScan.Checked && chkManual.Checked)
+                    {
+                        chkScan.Checked = false;
+                        palletIdEntry.Focus();
                     }
                     break;
             }
@@ -116,8 +174,6 @@ namespace ASolute_Mobile.WMS_Screen
                 case "btnPickUp":
                     PalletUpdate();
                     break;
-
-                
             }
         }
 
@@ -221,6 +277,11 @@ namespace ASolute_Mobile.WMS_Screen
             loading.IsVisible = true;
             try
             {
+                if(palletIdEntry.IsFocused)
+                {
+                    palletIdEntry.Unfocus();
+                }
+
                 string encodePalletId = System.Net.WebUtility.UrlEncode(palletID);
 
                 var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(encodePalletId),this);
@@ -253,6 +314,8 @@ namespace ASolute_Mobile.WMS_Screen
                                 confirmView.IsVisible = true;
                                 checkDigitView.IsVisible = true;
                                 suggestedEntry.Text = pallet.NewLocation;
+
+                                confirmEntry.Focus();
                             }
                             break;
 

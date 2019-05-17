@@ -207,6 +207,8 @@ namespace ASolute_Mobile.ZebraPrinter
                     connection.Close();
 
             }
+
+
         }
 
         private void ShowStatus(IPrinterStatus status)

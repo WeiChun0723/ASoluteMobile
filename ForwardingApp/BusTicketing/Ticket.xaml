@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.BusTicketing.Ticket"
-             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
-             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
-             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
-    
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.BusTicketing.Ticket" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:local="clr-namespace:ASolute_Mobile.InputValidation" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
     <ScrollView>
-    <StackLayout Padding="10,10,10,10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <syncIndicator:SfBusyIndicator x:Name="print" AnimationType="Print" Title="Printing..." TextColor="Red" IsVisible="false" />
-        
-         <inputLayout:SfTextInputLayout 
-                Hint="From" 
-                HorizontalOptions="FillAndExpand"
-                EnableHintAnimation="true">   
-                
-            <Editor x:Name="fromEntry" FontSize="Large"/> 
-            
-                
+        <StackLayout Padding="10,10,10,10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <syncIndicator:SfBusyIndicator x:Name="print" AnimationType="Print" Title="Printing..." TextColor="Red" IsVisible="false" />
+            <inputLayout:SfTextInputLayout Hint="From" HorizontalOptions="FillAndExpand" EnableHintAnimation="true">
+                <Editor x:Name="fromEntry" FontSize="Large" />
             </inputLayout:SfTextInputLayout>
-        
-         <inputLayout:SfTextInputLayout 
-                Hint="To" 
-                HorizontalOptions="FillAndExpand"
-                EnableHintAnimation="true">   
-                
-            <Editor x:Name="toEntry" FontSize="Large"/> 
-
+            <inputLayout:SfTextInputLayout Hint="To" HorizontalOptions="FillAndExpand" EnableHintAnimation="true">
+                <Editor x:Name="toEntry" FontSize="Large" />
             </inputLayout:SfTextInputLayout>
-        
-        <Label x:Name="lblPrice" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" FontSize="Large"/>
-        
-        <buttons:SfButton Padding="0,10"  HorizontalOptions="CenterAndExpand"  BackgroundColor="#ED1C24" CornerRadius="20" 
-                          HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnPublic" Text="Public" Clicked="PrintBusTicket"/>
-        
-        <buttons:SfButton Padding="0,10"  HorizontalOptions="CenterAndExpand"  BackgroundColor="#ED1C24" CornerRadius="20" 
-                          HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnStudent" Text="Student" Clicked="PrintBusTicket"/>
-    </StackLayout>
-   </ScrollView>
+            <Label x:Name="lblPrice" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" FontSize="Large" />
+            <buttons:SfButton Padding="0,10" HorizontalOptions="CenterAndExpand" BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnPublic" Text="Public"
+                Clicked="PrintBusTicket" />
+            <buttons:SfButton Padding="0,10" HorizontalOptions="CenterAndExpand" BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="200" WidthRequest="300" FontAttributes="Bold" FontSize="50" x:Name="btnStudent" Text="Student"
+                Clicked="PrintBusTicket" />
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

@@ -74,25 +74,29 @@ namespace ASolute_Mobile.Utils
 
                 Debug.WriteLine(content);
 
-                clsResponse reply = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                if(page != null)
+                if(content != null)
                 {
-                    if (reply.Message == "Invalid Session !")
+                    clsResponse reply = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (page != null)
                     {
-                        BackgroundTask.Logout(page);
-                        await page.DisplayAlert("Error", reply.Message, "OK");
-                    }
-                    else
-                    {
-                        if (!(reply.IsGood))
+                        if (reply.Message == "Invalid Session !")
                         {
+                            BackgroundTask.Logout(page);
                             await page.DisplayAlert("Error", reply.Message, "OK");
                         }
+                        else
+                        {
+                            if (!(reply.IsGood))
+                            {
+                                await page.DisplayAlert("Error", reply.Message, "OK");
+                            }
+                        }
                     }
+
+                    return content;
                 }
 
-                return content;
             }
             catch(HttpRequestException requestEx)
             {

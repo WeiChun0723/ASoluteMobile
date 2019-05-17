@@ -241,6 +241,8 @@ namespace ASolute_Mobile.TransportScreen
 
                 if(update_response.IsGood)
                 {
+                    Ultis.Settings.RefreshListView = "Yes";
+
                     Ultis.Settings.CargoReturn = jobID + "," + eventRecordID + "," + reqSign;
                     await DisplayAlert("Success", "Job updated.", "OK");
                     await Navigation.PopAsync();

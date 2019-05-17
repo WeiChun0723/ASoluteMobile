@@ -65,7 +65,10 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.AILSBUS":
                     name = "AILS Bus Ver.";
-                    //Task.Run(async () => { await BackgroundTask.DownloadBusStopList(); });
+                    break;
+
+                case "asolute.Mobile.AILSTrucking":
+                    name = "AILS Trucking Ver.";
                     break;
             }
 
@@ -274,6 +277,9 @@ namespace ASolute_Mobile
                             }
                         }
 
+
+                       // Task.Run(async () => { await BackgroundTask.UploadPendingRecord(); }).Wait();
+
                         Application.Current.MainPage = new MainPage();
                     }
                    
@@ -294,7 +300,6 @@ namespace ASolute_Mobile
             else
             {
                 await DisplayAlert("Login Fail", "Please make sure all fields are complete", "Ok");
-
             }
             this.activityIndicator.IsRunning = false;
         }

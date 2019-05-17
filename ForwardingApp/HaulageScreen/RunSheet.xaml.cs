@@ -385,51 +385,54 @@ namespace ASolute_Mobile.HaulageScreen
                     App.Database.deleteRecords(runSheetItem.Id);
                     App.Database.deleteRecordSummary(runSheetItem.Id);
                     //App.Database.deleteHaulage("HaulageHistory");
-
-                    foreach (clsHaulageModel data in history)
+                    if(history != null)
                     {
-                        ListItems record = new ListItems
+                        foreach (clsHaulageModel data in history)
                         {
-                            Id = data.Id,
-                            Background = data.BackColor,
-                            Category = runSheetItem.Id,
-                            Name = runSheetItem.Name,
-                            TruckId = data.TruckId,
-                            ReqSign = data.ReqSign,
-                            Latitude = data.Latitude,
-                            Longitude = data.Longitude,
-                            TelNo = data.TelNo,
-                            EventRecordId = data.EventRecordId,
-                            TrailerId = data.TrailerId,
-                            ContainerNo = data.ContainerNo,
-                            MaxGrossWeight = data.MaxGrossWeight,
-                            TareWeight = data.TareWeight,
-                            CollectSeal = data.CollectSeal,
-                            SealNo = data.SealNo,
-                            ActionId = data.ActionId.ToString(),
-                            ActionMessage = data.ActionMessage,
-                            Title = data.Title,
-                            SealMode = data.SealMode,
-                        };
+                            ListItems record = new ListItems
+                            {
+                                Id = data.Id,
+                                Background = data.BackColor,
+                                Category = runSheetItem.Id,
+                                Name = runSheetItem.Name,
+                                TruckId = data.TruckId,
+                                ReqSign = data.ReqSign,
+                                Latitude = data.Latitude,
+                                Longitude = data.Longitude,
+                                TelNo = data.TelNo,
+                                EventRecordId = data.EventRecordId,
+                                TrailerId = data.TrailerId,
+                                ContainerNo = data.ContainerNo,
+                                MaxGrossWeight = data.MaxGrossWeight,
+                                TareWeight = data.TareWeight,
+                                CollectSeal = data.CollectSeal,
+                                SealNo = data.SealNo,
+                                ActionId = data.ActionId.ToString(),
+                                ActionMessage = data.ActionMessage,
+                                Title = data.Title,
+                                SealMode = data.SealMode
+                            };
 
-                        App.Database.SaveMenuAsync(record);
+                            App.Database.SaveMenuAsync(record);
 
-                        foreach (clsCaptionValue summaryList in data.Summary)
-                        {
-                            SummaryItems summaryItem = new SummaryItems();
+                            foreach (clsCaptionValue summaryList in data.Summary)
+                            {
+                                SummaryItems summaryItem = new SummaryItems();
 
-                            summaryItem.Id = data.Id;
-                            summaryItem.Caption = summaryList.Caption;
-                            summaryItem.Value = summaryList.Value;
-                            summaryItem.Display = summaryList.Display;
-                            summaryItem.Type = runSheetItem.Id;
-                            summaryItem.BackColor = data.BackColor;
-                            App.Database.SaveSummarysAsync(summaryItem);
+                                summaryItem.Id = data.Id;
+                                summaryItem.Caption = summaryList.Caption;
+                                summaryItem.Value = summaryList.Value;
+                                summaryItem.Display = summaryList.Display;
+                                summaryItem.Type = runSheetItem.Id;
+                                summaryItem.BackColor = data.BackColor;
+                                App.Database.SaveSummarysAsync(summaryItem);
+                            }
+
                         }
 
+                        option = "none";
                     }
 
-                    option = "none";
                     refreshRunSheetHistory();
 
                 }

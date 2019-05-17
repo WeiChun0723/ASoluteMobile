@@ -13,19 +13,21 @@ using PCLStorage;
 using Syncfusion.SfDataGrid.XForms;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
+using System.Collections.ObjectModel;
+using XLabs.Forms.Controls;
 
 namespace ASolute_Mobile.WMS_Screen
 {
     public partial class WMS_DetailsPage : ContentPage
     {
-        string uri,pickingID;
+        string uri, pickingID;
         clsWhsHeader recordDetails;
         double imageWidth;
         List<AppImage> images = new List<AppImage>();
-        List<clsWhsItem> tallyOutItems = new List<clsWhsItem>();
+        ObservableCollection<clsWhsItem> tallyOutItems = new ObservableCollection<clsWhsItem>();
         ListItems record = new ListItems();
 
-        public WMS_DetailsPage(string recordUri,ListItems tappedRecord)
+        public WMS_DetailsPage(string recordUri, ListItems tappedRecord)
         {
             InitializeComponent();
 
@@ -50,22 +52,25 @@ namespace ASolute_Mobile.WMS_Screen
                     imageGrid.IsVisible = true;
                     barcode_icon.IsVisible = true;
                     tallyOutEntry.IsVisible = true;
+                    dataGrid.IsVisible = true;
+                    inputType.IsVisible = true;
+                    chkScan.Checked = true;
                     break;
             }
         }
 
-      
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
             GetRecordDetails();
 
-            if (tallyOutItems.Count != 0 && record.Category == "TallyOut")
+            if (tallyOutEntry.IsVisible == true)
             {
-                dataGrid.IsVisible = true;
-                dataGrid.ItemsSource = tallyOutItems;
+                palletIdEntry.Focus();
             }
+
         }
 
         public async void GetRecordDetails()
@@ -152,7 +157,7 @@ namespace ASolute_Mobile.WMS_Screen
                     await DisplayAlert("Error", response.Message, "OK");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
@@ -162,22 +167,22 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void Handle_GridTapped(object sender, GridTappedEventArgs e)
         {
-            if(record.Category == "TallyIn" || record.Category == "FullPick" || record.Category == "LoosePick" || record.Category == "Picking")
+            if (record.Category == "TallyIn" || record.Category == "FullPick" || record.Category == "LoosePick" || record.Category == "Picking")
             {
                 clsWhsItem product = new clsWhsItem();
                 product = ((clsWhsItem)e.RowData);
 
                 if (product != null)
                 {
-                    if(record.Category == "TallyIn")
+                    if (record.Category == "TallyIn")
                     {
-                        await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id,recordDetails.Action));
+                        await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id, recordDetails.Action));
                     }
                     else
                     {
-                        await Navigation.PushAsync(new PickingEntry(product, pickingID,record.Name, recordDetails.Items));
+                        await Navigation.PushAsync(new PickingEntry(product, pickingID, record.Name, recordDetails.Items));
                     }
-                   
+
                 }
             }
         }
@@ -209,36 +214,43 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void TallyOut(string result)
         {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                clsPalletTrx tallyOutPallet = new clsPalletTrx
-                {
-                    LinkId = record.Id,
-                    Id = result
-                };
+           
+             Device.BeginInvokeOnMainThread(async () =>
+             {
+                 clsPalletTrx tallyOutPallet = new clsPalletTrx
+                 {
+                     LinkId = record.Id,
+                     Id = result
 
-                var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL());
-                clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                 };
 
-                if (upload_response.IsGood)
-                {
-                    DisplayToast("Success");
-                    clsWhsItem item = new clsWhsItem
-                    {
-                        PalletId = result,
-                        Description = Ultis.Settings.SessionUserId
-                    };
+                 var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL());
+                 clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                    tallyOutItems.Add(item);
+                 if (upload_response.IsGood)
+                 {
+                     DisplayToast("Success");
 
-                    palletIdEntry.Text = "";
-                }
-                else
-                {
-                    DisplayToast(palletIdEntry.Text + " " +  upload_response.Message);
+                     clsWhsItem item = new clsWhsItem
+                     {
+                         PalletId = result,
+                         Description = Ultis.Settings.SessionUserId
+                     };
 
-                }
-            });
+                     tallyOutItems.Add(item);
+
+                     dataGrid.ItemsSource = null;
+
+                     dataGrid.ItemsSource = tallyOutItems;
+                     
+                     palletIdEntry.Text = String.Empty;
+                 }
+                 else
+                 {
+                     DisplayToast(palletIdEntry.Text + " " + upload_response.Message);
+
+                 }
+             });
 
         }
 
@@ -263,7 +275,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             var image = sender as Image;
 
-            switch(image.StyleId)
+            switch (image.StyleId)
             {
                 case "camera_icon":
                     await CommonFunction.StoreImages(recordDetails.EventRecordId.ToString(), this, "NormalImage");
@@ -343,12 +355,51 @@ namespace ASolute_Mobile.WMS_Screen
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
+            if (chkScan.Checked)
+            {
+                if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
+                {
+                    TallyOut(palletIdEntry.Text);
+                }
 
-            if(!(String.IsNullOrEmpty(palletIdEntry.Text)))
+            }
+
+        }
+
+        void Handle_Completed(object sender, System.EventArgs e)
+        {
+            if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
             {
                 TallyOut(palletIdEntry.Text);
             }
+        }
 
+        void Handle_CheckedChanged(object sender, XLabs.EventArgs<bool> e)
+        {
+            var chkBox = sender as CheckBox;
+
+            switch (chkBox.StyleId)
+            {
+                case "chkScan":
+                    if (chkManual.Checked && chkScan.Checked)
+                    {
+
+                        palletIdEntry.Focus();
+                        chkManual.Checked = false;
+                        
+                    }
+
+                    break;
+
+                case "chkManual":
+                    if (chkScan.Checked && chkManual.Checked)
+                    {
+
+                        palletIdEntry.Focus();
+                        chkScan.Checked = false;
+                    }
+                    break;
+            }
         }
     }
 }

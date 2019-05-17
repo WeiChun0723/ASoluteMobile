@@ -21,7 +21,7 @@
                 TrailingViewPosition="Inside" x:Name="confirmView"
                 >   
                 
-            <Entry x:Name="confirmEntry">
+            <Entry x:Name="confirmEntry" Completed="Handle_Completed">
                      <Entry.Behaviors>
                     <local:MaxLengthValidation MaxLength="30"/>
                 </Entry.Behaviors>      
@@ -41,7 +41,7 @@
                 Hint="Check Digit" 
                 ContainerBackgroundColor="LightYellow"
                 FocusedColor="Black" x:Name="checkDigitView" >       
-            <Entry x:Name="checkDigitEntry" Keyboard="Numeric"/>
+            <Entry x:Name="checkDigitEntry" Keyboard="Numeric" Completed="Handle_Completed"/>
             </inputLayout:SfTextInputLayout>
             
             

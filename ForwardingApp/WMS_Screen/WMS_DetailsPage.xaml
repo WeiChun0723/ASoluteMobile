@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.WMS_Screen.WMS_DetailsPage" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.WMS_Screen.WMS_DetailsPage" 
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
+             xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+             xmlns:local = "clr-namespace:ASolute_Mobile.InputValidation"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" 
+             xmlns:chkBox="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             xmlns:refresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms" 
+             xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" 
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <ScrollView>
         <StackLayout Padding="15,15,15,0" Spacing="10">
             <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
             <StackLayout x:Name="desc" BackgroundColor="#E5E5E5" />
+            <StackLayout Spacing="5" Orientation="Horizontal" x:Name="inputType" IsVisible="false">
+                    <chkBox:CheckBox x:Name="chkScan" DefaultText="Scan" HorizontalOptions="StartAndExpand" Scale="1.5" CheckedChanged="Handle_CheckedChanged" />
+                    <chkBox:CheckBox x:Name="chkManual" DefaultText="Manual key in" HorizontalOptions="StartAndExpand" Scale="1.5" CheckedChanged="Handle_CheckedChanged" />
+            </StackLayout>
             <inputLayout:SfTextInputLayout Hint="Pallet ID" IsVisible="false" x:Name="tallyOutEntry" ContainerBackgroundColor="LightYellow" FocusedColor="Black" HorizontalOptions="FillAndExpand" TrailingViewPosition="Inside" LeadingViewPosition="Inside" MinimumHeightRequest="50">
-                <Entry x:Name="palletIdEntry" TextChanged="Handle_TextChanged" />
+            
+                <Entry x:Name="palletIdEntry" TextChanged="Handle_TextChanged" Completed="Handle_Completed"/>
+
                 <inputLayout:SfTextInputLayout.TrailingView>
                     <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center"  x:Name="cancel_icon" >
                         <Image.GestureRecognizers>

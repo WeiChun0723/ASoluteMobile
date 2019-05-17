@@ -28,6 +28,31 @@ namespace ASolute_Mobile.WMS_Screen
             index = items.FindIndex(a => a.PalletId == pickingSummary.PalletId);
 
             LoadPickingSummary(pickingSummary.Summary);
+
+
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            confirmEntry.Focus();
+        }
+
+        void Handle_Completed(object sender, System.EventArgs e)
+        {
+            var entry = sender as Entry;
+
+            switch(entry.StyleId)
+            {
+                case "confirmEntry":
+                    checkDigitEntry.Focus();
+                    break;
+
+                case "checkDigitEntry":
+                    palletIDEntry.Focus();
+                    break;
+            }
         }
 
         void LoadPickingSummary(List<clsCaptionValue> values)
