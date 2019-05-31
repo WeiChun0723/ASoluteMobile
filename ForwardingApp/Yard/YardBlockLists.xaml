@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.Yard.YardBlockLists">
+    
+   <ScrollView>
+    
+        
+      
+        <!--<ListView x:Name="listView" ItemTapped="Handle_ItemTapped"   Style="{StaticResource recordListStyle}" HasUnevenRows="true" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame HasShadow="true" Margin="5" BackgroundColor="White">
+                            <StackLayout BackgroundColor="White">
+                                <Label Text="{Binding Id}" FontAttributes="Bold" HorizontalOptions="FillAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
+       <Grid RowSpacing="0" ColumnSpacing="0" x:Name="grid">
+             <Grid.ColumnDefinitions>
+             <ColumnDefinition Width="60" />
+             <ColumnDefinition Width="*" />
+         </Grid.ColumnDefinitions>
+            
+        </Grid>
+    
+   </ScrollView>
+</ContentPage>

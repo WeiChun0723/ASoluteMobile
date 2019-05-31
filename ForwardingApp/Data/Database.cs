@@ -185,7 +185,7 @@ namespace ASolute_Mobile.Data
         //get image that uploaded
         public List<AppImage> GetUplodedRecordImagesAsync(string id, string type)
         {
-            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [type] = ?", id, type);
+            return database.Query<AppImage>("SELECT * FROM [AppImage] WHERE [id] = ? AND [type] = ? ", id, type);
         }
 
         public List<AppImage> GetPendingRecordImages(bool uploaded)

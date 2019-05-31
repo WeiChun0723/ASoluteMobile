@@ -199,7 +199,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\YardMap.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Yard\YardBlockLists.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Yard\YardBlockZones.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Yard\YardBlockDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\NewMasterJob.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)TransportScreen\NewMasterJobPopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -423,8 +439,20 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\GenericEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\HideKeyBoardEntry.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)testing\YardMap.xaml.cs">
-      <DependentUpon>YardMap.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Yard\YardBlockLists.xaml.cs">
+      <DependentUpon>YardBlockLists.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Yard\YardBlockZones.xaml.cs">
+      <DependentUpon>YardBlockZones.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Yard\YardBlockDetails.xaml.cs">
+      <DependentUpon>YardBlockDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\NewMasterJob.xaml.cs">
+      <DependentUpon>NewMasterJob.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\NewMasterJobPopUp.xaml.cs">
+      <DependentUpon>NewMasterJobPopUp.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

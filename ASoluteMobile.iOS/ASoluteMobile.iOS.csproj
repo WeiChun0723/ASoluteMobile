@@ -399,9 +399,6 @@
     <Reference Include="ImageCircle.Forms.Plugin">
       <HintPath>..\packages\Xam.Plugins.Forms.ImageCircle.3.0.0.5\lib\xamarinios10\ImageCircle.Forms.Plugin.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Essentials">
       <HintPath>..\packages\Xamarin.Essentials.1.0.0\lib\xamarinios10\Xamarin.Essentials.dll</HintPath>
     </Reference>
@@ -413,6 +410,15 @@
     </Reference>
     <Reference Include="zsdk_iosx">
       <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\Xamarin.iOS10\zsdk_iosx.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfProgressBar.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfProgressBar.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.SfProgressBar.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfProgressBar.XForms.iOS">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfProgressBar.16.4.0.40-beta\lib\Xamarin.iOS10\Syncfusion.SfProgressBar.XForms.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

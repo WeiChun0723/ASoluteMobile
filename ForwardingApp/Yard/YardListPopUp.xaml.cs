@@ -13,7 +13,7 @@ namespace ASolute_Mobile.Yard
 {
     public partial class YardListPopUp : PopupPage
     {
-
+        ListItems selectedContainer = new ListItems();
         List<clsYardBlock> yardBlocks;
         List<string> blocks = new List<string>();
         List<string> bays = new List<string>();
@@ -24,6 +24,7 @@ namespace ASolute_Mobile.Yard
         {
             InitializeComponent();
             recordId = item.Id;
+            selectedContainer = item;
             GetYardValue();
         }
 
@@ -42,6 +43,13 @@ namespace ASolute_Mobile.Yard
                         blocks.Add(yardBlock.Id);
                     }
                     blockComboBox.ComboBoxSource = blocks;
+
+                    if(!(String.IsNullOrEmpty(selectedContainer.Action)))
+                    {
+                        blockComboBox.Text = selectedContainer.Action;
+                       
+                        LoadComboBoxValue();
+                    }
                 }
             }
             catch (Exception ex)
@@ -53,14 +61,19 @@ namespace ASolute_Mobile.Yard
         //refresh bay and level drop down list value when choose other block
         void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
         {
+            LoadComboBoxValue();
+        }
+
+        void LoadComboBoxValue()
+        {
             bays.Clear();
             levels.Clear();
             bayComboBox.IsEnabled = true;
             levelComboBox.IsEnabled = true;
 
-            var selectedBay = yardBlocks.Find(item => item.Id == blockComboBox.SelectedValue.ToString());
+            var selectedBay = yardBlocks.Find(item => item.Id == blockComboBox.Text);
 
-            if(selectedBay.TotalBay == 0 && selectedBay.TotalLevel == 0)
+            if (selectedBay.TotalBay == 0 && selectedBay.TotalLevel == 0)
             {
                 bayComboBox.IsEnabled = false;
                 levelComboBox.IsEnabled = false;
@@ -90,7 +103,7 @@ namespace ASolute_Mobile.Yard
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
-            if(blockComboBox.SelectedIndex != -1)
+            if(!(String.IsNullOrEmpty(blockComboBox.Text)))
             {
                 string locationId = (bayComboBox.IsEnabled == false && levelComboBox.IsEnabled == false) ? blockComboBox.Text : blockComboBox.Text + "-" + bayComboBox.Text + "-" + levelComboBox.Text;
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.confirmBlock(recordId, locationId), this);

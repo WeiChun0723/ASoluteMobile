@@ -33,58 +33,71 @@ namespace ASolute_Mobile.WMS_Screen
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
-            InitializeComponent();
-
-            id = tallyInID;
-
-            actionID = action;
-
-            productPallet = product;
-
-            Title = "Tally In # " + productPallet.ProductCode;
-
-            palletDesc.Children.Clear();
-
-            Label topBlank = new Label();
-            palletDesc.Children.Add(topBlank);
-
-            string[] descs = (productPallet.Description.Replace("\r\n", "t")).Split('t');
-
-            foreach (string desc in descs)
+            try
             {
-                Label caption = new Label();
+                InitializeComponent();
 
-                if (desc == "")
+                id = tallyInID;
+
+                actionID = action;
+
+                productPallet = product;
+
+                Title = "Tally In # " + productPallet.ProductCode;
+
+                palletDesc.Children.Clear();
+
+                Label topBlank = new Label();
+                palletDesc.Children.Add(topBlank);
+
+                string[] descs = (productPallet.Description.Replace("\r\n", "t")).Split('t');
+
+                foreach (string desc in descs)
                 {
-                    caption.Text = "    " + desc;
-                    caption.FontAttributes = FontAttributes.Bold;
-                }
-                else
-                {
-                    caption.Text = "    " + desc;
+                    Label caption = new Label();
+
+                    if (desc == "")
+                    {
+                        caption.Text = "    " + desc;
+                        caption.FontAttributes = FontAttributes.Bold;
+                    }
+                    else
+                    {
+                        caption.Text = "    " + desc;
+                    }
+
+                    palletDesc.Children.Add(caption);
                 }
 
-                palletDesc.Children.Add(caption);
+                Label bottomBlank = new Label();
+                palletDesc.Children.Add(bottomBlank);
+
+                GetNewPalletList();
             }
-
-            Label bottomBlank = new Label();
-            palletDesc.Children.Add(bottomBlank);
-
-            GetNewPalletList();
+            catch(Exception ex)
+            {
+                string test = ex.Message;
+            }
 
 
         }
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
-
-            palletNo.Focus();
-
-
-            if (Ultis.Settings.EnterpriseName == "PANDA")
+            try
             {
-                palletNo.CanShowVirtualKeyboard = false;
+                base.OnAppearing();
+
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    this.palletNo.Focus();
+                });
+
+            }
+            catch
+            {
+
             }
         }
 
@@ -434,43 +447,48 @@ namespace ASolute_Mobile.WMS_Screen
             try
             {
                 var scanPage = new ZXingScannerPage();
-                scanPage.AutoFocus();
                 await Navigation.PushAsync(scanPage);
 
                 scanPage.OnScanResult += (result) =>
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        scanPage.PauseAnalysis();
                         try
                         {
                             if (!(actionID == "BARRY"))
                             {
-                                await Navigation.PopAsync();
                                 palletNo.Text = result.Text;
+                                await Navigation.PopAsync();
                             }
                             else
                             {
-                                string productCode = result.Text.Substring(0, 13);
-                                string productRef = result.Text.Substring(16, 10);
-                                string productQTY = result.Text.Substring(26, 2);
 
-                                if (productCode == productPallet.ProductCode)
+                                if (result.Text.Length < 28)
                                 {
-                                    palletNo.Text = productRef;
-                                    quantity.Text = productQTY;
-                                    DisplayScanStatus(result.Text + " scanned");
-                                    await Navigation.PopAsync();
+                                    await DisplayAlert("Error", "Please make sure pallet reference have 28 characters.", "OK");
+                                    palletNo.Text = String.Empty;
                                 }
                                 else
                                 {
-                                    DisplayScanStatus("Product not matched.");
+                                    string productCode = result.Text.Substring(0, 16);
+                                    string productPackageCode = result.Text.Substring(16, 8);
+                                    string productRunningNo = result.Text.Substring(25, 1);
+                                    string productQTY = result.Text.Substring(26, 2);
+
+                                    palletNo.Text = "";
+                                    palletNo.Text = result.Text;
+
+                                    quantity.Text = "";
+                                    quantity.Text = productQTY;
+
+                                    SearchControl("String01", "ClearValue", "");
+                                    SearchControl("String01", "SetValue", productPackageCode + productRunningNo);
+
+                                    DisplayScanStatus(result.Text + " scanned");
+
+                                    await Navigation.PopAsync();
                                 }
 
-                                if (scanPage != null)
-                                {
-                                    scanPage.ResumeAnalysis();
-                                }
                             }
                         }
                         catch
@@ -489,20 +507,28 @@ namespace ASolute_Mobile.WMS_Screen
 
         void DisplayScanStatus(string scanStatus)
         {
-            var toastConfig = new ToastConfig(scanStatus);
-            toastConfig.SetDuration(4000);
-            toastConfig.Position = 0;
-            toastConfig.SetMessageTextColor(System.Drawing.Color.Black);
+            try
+            {
+                var toastConfig = new ToastConfig(scanStatus);
+                toastConfig.SetDuration(4000);
+                toastConfig.Position = 0;
+                toastConfig.SetMessageTextColor(System.Drawing.Color.Black);
 
-            if (scanStatus.Contains("scanned") || scanStatus.Contains("scanning"))
-            {
-                toastConfig.SetBackgroundColor(System.Drawing.Color.Green);
+                if (scanStatus.Contains("scanned") || scanStatus.Contains("scanning"))
+                {
+                    toastConfig.SetBackgroundColor(System.Drawing.Color.Green);
+                }
+                else
+                {
+                    toastConfig.SetBackgroundColor(System.Drawing.Color.Red);
+                }
+                UserDialogs.Instance.Toast(toastConfig);
             }
-            else
+            catch
             {
-                toastConfig.SetBackgroundColor(System.Drawing.Color.Red);
+
             }
-            UserDialogs.Instance.Toast(toastConfig);
+
         }
 
 
@@ -594,20 +620,7 @@ namespace ASolute_Mobile.WMS_Screen
                                         entry.Text = String.Empty;
                                         break;
                                 }
-                               /* if (action == "GetValue")
-                                {
-                                    return entry.Text;
-                                }
-                                else if (action == "SetValue")
-                                {
-                                    entry.Text = content;
-                                }
-                                
-                                else
-                                {
-                                    entry.Text = String.Empty;
-                                }*/
-
+                               
                             }
                             else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
                             {
@@ -650,52 +663,56 @@ namespace ASolute_Mobile.WMS_Screen
             return null;
         }
 
-        void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        async void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
             try
             {
-                if (actionID == "BARRY")
+                if (!(String.IsNullOrEmpty(palletNo.Text)))
                 {
-
-
                     userInput = palletNo.Text;
 
-                    string productCode = userInput.Substring(0, 13);
-                    string productPackageCode = userInput.Substring(16, 8);
-                    string productRunningNo = userInput.Substring(25, 1);
-                    string productQTY = userInput.Substring(26, 2);
+                        try
+                        {
+                            if (actionID == "BARRY")
+                            {
+                                if (userInput.Length < 28)
+                                {
+                                    await DisplayAlert("Error", "Please make sure pallet reference have 28 characters.", "OK");
 
-                    if (productCode == productPallet.ProductCode)
-                    {
+                                    palletNo.Text = String.Empty;
+                                }
+                                else
+                                {
+                                    string productCode = userInput.Substring(0, 16);
+                                    string productPackageCode = userInput.Substring(16, 8);
+                                    string productRunningNo = userInput.Substring(25, 1);
+                                    string productQTY = userInput.Substring(26, 2);
 
-                        quantity.Text = "";
-                        quantity.Text = productQTY;
+                                    quantity.Text = "";
+                                    quantity.Text = productQTY;
 
-                        SearchControl("String01", "ClearValue", "");
-                        SearchControl("String01", "SetValue", productPackageCode + productRunningNo);
+                                    SearchControl("String01", "ClearValue", "");
+                                    SearchControl("String01", "SetValue", productPackageCode + productRunningNo);
 
+                                    DisplayScanStatus(userInput + " scanned");
+                                }
 
-                        DisplayScanStatus(userInput + " scanned");
+                            }
+                        }
+                        catch
+                        {
 
+                        }
                     }
-                    else
-                    {
-                        DisplayScanStatus("Product not matched.");
-                        palletNo.Text = "";
-                    }
-                }
+
+
             }
             catch
             {
 
             }
+
         }
 
-        void Handle_Focused(object sender, Xamarin.Forms.FocusEventArgs e)
-        {
-            //scanEntry.Focus();
-
-            DisplayScanStatus("Start scanning....");
-        }
     }
 }

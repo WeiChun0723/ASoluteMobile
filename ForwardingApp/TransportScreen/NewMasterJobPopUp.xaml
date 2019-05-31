@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.TransportScreen.NewMasterJobPopUp" xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup" xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation PositionIn="Center" PositionOut="Center" ScaleIn="1.2" ScaleOut="0.8" DurationIn="400" DurationOut="300" EasingIn="SinOut" EasingOut="SinIn" HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Padding="10, 10, 10, 10">
+        <Frame CornerRadius="10" BackgroundColor="#87ceeb">
+            <StackLayout Spacing="20">
+                <Label Text="Add Do" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="Red" FontSize="Large"/>
+                <combobox:SfComboBox x:Name="dropOffComboBox" Style="{StaticResource comboBoxStyle}" Text="DropOff"  HeightRequest="50" TextSize="20" />
+                <inputLayout:SfTextInputLayout Hint="DO No." Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                    <Entry x:Name="doNo" />
+                    <inputLayout:SfTextInputLayout.TrailingView>
+                        <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </inputLayout:SfTextInputLayout.TrailingView>
+                </inputLayout:SfTextInputLayout>
+                <combobox:SfComboBox x:Name="cargoTypeComboBox" Style="{StaticResource comboBoxStyle}" Text="Cargo Type" HeightRequest="50" TextSize="20" />
+                <inputLayout:SfTextInputLayout Hint="Quantity" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                    <Entry x:Name="quantity" />
+                    
+                </inputLayout:SfTextInputLayout>
+                <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Confirm" x:Name="btnConfirm" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</pages:PopupPage>

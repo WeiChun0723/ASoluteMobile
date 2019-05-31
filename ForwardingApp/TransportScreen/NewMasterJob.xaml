@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.TransportScreen.NewMasterJob"
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+    <StackLayout Padding="15,15,15,15" Spacing="15">
+        <combobox:SfComboBox x:Name="customerComboBox"  Style="{StaticResource comboBoxStyle}" Text="Customer"   HeightRequest="60"  TextSize="20"  />
+        <combobox:SfComboBox x:Name="pickUpComboBox"  Style="{StaticResource comboBoxStyle}" Text="Pickup"   HeightRequest="60"  TextSize="20"  />
+        
+        <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Add DO"  x:Name="btnAddDo" Clicked="Handle_Clicked" HorizontalOptions="CenterAndExpand" HeightRequest="100"/>
+        
+        <ListView x:Name="listView" Style="{StaticResource recordListStyle}" HasUnevenRows="true" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame HasShadow="true" Margin="5" >
+                            <StackLayout >
+                                <Label Text="{Binding Summary}" FontAttributes="Bold" HorizontalOptions="FillAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ASolute_Mobile.LogEntry"  
-             xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms">
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.LogEntry" 
+             xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation">
     <ScrollView>
-    <StackLayout Padding="15,15,15,15">
-        <Grid  x:Name="startLogEntry" RowSpacing="5" ColumnSpacing="0" >
+        <StackLayout Padding="15,15,15,15">
+            <!-- <Grid  x:Name="startLogEntry" RowSpacing="5" ColumnSpacing="0" >
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -25,7 +26,7 @@
             <Label Text="Odometer" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"  WidthRequest="150"  x:Name="lblStartOdometer"/>
             <Entry x:Name="startOdometer" BackgroundColor="LightYellow" Placeholder="Maximum 6 digit" Grid.Row="2" Grid.Column="1" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center" TextChanged="startMeter"/>
             <Label Text="From" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"  VerticalOptions="Center"  x:Name="lblStartFrom"/>
-            <!--<Entry x:Name="startLocation"  BackgroundColor="LightYellow" Grid.Row="3" Grid.Column="1" HorizontalOptions="Fill" WidthRequest="150" HorizontalTextAlignment="Center"/>-->
+            
             <autocomplete:SfAutoComplete x:Name="startLocation" HeightRequest="40" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
                                      AutoCompleteMode="Suggest" Grid.Row="3" Grid.Column="1" WidthRequest="150" BackgroundColor="LightYellow" ValueChanged="StartLocationChanged"/>
         </Grid>
@@ -52,27 +53,68 @@
             <Label Text="Purpose" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"  VerticalOptions="Center" x:Name="lblEndLocation"/>
             <autocomplete:SfAutoComplete x:Name="endLocation" HeightRequest="40" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
                                       AutoCompleteMode="Suggest"   Grid.Row="3" Grid.Column="1"  WidthRequest="150" BackgroundColor="LightYellow" ValueChanged="EndLocationChanged"/> 
-        </Grid>
-
-
-            <StackLayout Orientation="Horizontal" Spacing="6" HorizontalOptions="Center">
-              <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center"   x:Name="camera_icon" IsEnabled="false" >
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Handle_Tapped"/>
-                    </Image.GestureRecognizers>
-                </Image>
-
-                <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center"  x:Name="confirm_icon">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Handle_Tapped"/>
-                    </Image.GestureRecognizers>
-                </Image>
-             </StackLayout>
+        </Grid>-->
+            <StackLayout  x:Name="startLogEntry" Spacing="20">
+                <Label Text="Start"  FontAttributes="Bold" TextColor="Red"  VerticalOptions="Center" x:Name="lblStart" />
+                <Label Text="Date &amp; Time" FontAttributes="Bold"  VerticalOptions="Center" x:Name="lblStartDateTime" />
+                <StackLayout Orientation="Horizontal" >
+                    <DatePicker x:Name="startDate" HorizontalOptions="FillAndExpand" Format="dd MMMM" BackgroundColor="LightYellow" />
+                    <TimePicker x:Name="startTime" HorizontalOptions="FillAndExpand" Format="HH:mm" BackgroundColor="LightYellow" />
+                </StackLayout>
+                
+                <inputLayout:SfTextInputLayout  Hint="Odometer" Style="{StaticResource inputStyle}"  x:Name="lblStartOdometer" ContainerBackgroundColor="LightYellow" >
+                <Entry  x:Name="startOdometer" Placeholder="Maximum 6 digit" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center"> 
+                 <Entry.Behaviors>
+                    <validation:MaxLengthValidation MaxLength="6"/>
+                </Entry.Behaviors>  
+                </Entry>
+            </inputLayout:SfTextInputLayout>
+             
+                <inputLayout:SfTextInputLayout  Hint="From"  Style="{StaticResource inputStyle}"  x:Name="lblStartFrom" ContainerBackgroundColor="LightYellow"  >
+                 <autocomplete:SfAutoComplete  x:Name="startLocation" HeightRequest="60" SuggestionMode="ContainsWithCaseSensitive"  HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
+                                     AutoCompleteMode="Suggest" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ValueChanged="StartLocationChanged" />
+            </inputLayout:SfTextInputLayout>
+            </StackLayout>
             
-      
-         
-            <Label x:Name="successUploaded" IsVisible="False"/>
-             <Grid x:Name="imageGrid" RowSpacing="0" ColumnSpacing="0">
+            <StackLayout x:Name="endLogEntry" Padding="0,10,0,0" IsVisible="False">
+               <Label Text="End" Margin="0,0,0,10" FontAttributes="Bold" TextColor="Red"  VerticalOptions="Center"  x:Name="lblEnd"/>
+            <Label Text="Date &amp; Time" FontAttributes="Bold" VerticalOptions="Center" x:Name="lblEndDateTime"/>
+            <StackLayout Orientation="Horizontal" >
+                <DatePicker x:Name="endDate" HorizontalOptions="FillAndExpand" Format="dd MMMM" BackgroundColor="LightYellow"/>
+                <TimePicker x:Name="endTime" HorizontalOptions="FillAndExpand" Format="HH:mm" BackgroundColor="LightYellow"/>
+            </StackLayout>
+                
+                <inputLayout:SfTextInputLayout Padding="0,10" Hint="Odometer" Style="{StaticResource inputStyle}"  x:Name="lblEndOdometer" ContainerBackgroundColor="LightYellow" >
+                <Entry  x:Name="endOdometer" Placeholder="Maximum 6 digit" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="Center"> 
+                 <Entry.Behaviors>
+                    <validation:MaxLengthValidation MaxLength="6"/>
+                </Entry.Behaviors>  
+                </Entry>
+            </inputLayout:SfTextInputLayout>
+             
+                <inputLayout:SfTextInputLayout  Hint="Purpose"  Style="{StaticResource inputStyle}"  x:Name="lblEndLocation" ContainerBackgroundColor="LightYellow" >
+                 <autocomplete:SfAutoComplete x:Name="endLocation" HeightRequest="60" SuggestionMode="ContainsWithCaseSensitive" HighlightedTextColor="Red" NoResultsFoundText="No result found" HighlightedTextFontAttributes="Bold" TextHighlightMode="FirstOccurrence"
+                                     AutoCompleteMode="Suggest" HorizontalOptions="FillAndExpand"  ValueChanged="EndLocationChanged"/>
+            </inputLayout:SfTextInputLayout>
+                
+                
+            </StackLayout>
+            
+            
+            <StackLayout Orientation="Horizontal" Spacing="6" HorizontalOptions="Center">
+                <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center" x:Name="camera_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Handle_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" x:Name="confirm_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Handle_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            <Label x:Name="successUploaded" IsVisible="False" />
+            <Grid x:Name="imageGrid" RowSpacing="0" ColumnSpacing="0">
                 <Grid.RowDefinitions>
                     <RowDefinition x:Name="imageGridRow" />
                 </Grid.RowDefinitions>

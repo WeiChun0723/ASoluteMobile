@@ -104,7 +104,7 @@ namespace ASolute_Mobile.Utils
             }
             catch(Exception ex)
             {
-                await page.DisplayAlert("Error", ex.Message, "OK");
+               // await page.DisplayAlert("Error", ex.Message, "OK");
             }
             return null;
         }

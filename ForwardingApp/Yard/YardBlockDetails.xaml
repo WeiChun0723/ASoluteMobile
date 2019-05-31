@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.Yard.YardBlockDetails" xmlns:datagrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+    <StackLayout Padding="15,15,15,15">
+        <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
+        <datagrid:SfDataGrid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" x:Name="dataGrid" AutoGenerateColumns="true" SelectionMode="Single" BackgroundColor="Transparent" HeightRequest="500">
+            <datagrid:SfDataGrid.Columns>
+                <datagrid:GridTextColumn MappingName="ContainerNo" Width="100" />
+                <datagrid:GridTextColumn MappingName="Location" Width="80" />
+                <datagrid:GridTextColumn MappingName="Customer" Width="100" />
+                <datagrid:GridTextColumn MappingName="ClosingDate" Width="100" />
+            </datagrid:SfDataGrid.Columns>
+        </datagrid:SfDataGrid>
+    </StackLayout>
+</ContentPage>

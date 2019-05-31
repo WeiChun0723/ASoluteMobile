@@ -32,6 +32,11 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Yard/Inventory?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
+
+        public static String getYardMapPosition()
+        {
+            return String.Format("Yard/Map?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
         #endregion
 
         #region bus ticketing url

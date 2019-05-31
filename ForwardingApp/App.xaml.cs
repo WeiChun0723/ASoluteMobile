@@ -24,7 +24,7 @@ using ASolute_Mobile.Planner;
 using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.ZebraPrinter;
 using LinkOS.Plugin.Abstractions;
-using ASolute_Mobile.testing;
+
 
 namespace ASolute_Mobile
 {
@@ -52,25 +52,25 @@ namespace ASolute_Mobile
             }
             else
             {
+                 // MainPage = new YardMap();
 
-                MainPage = new YardMap();
-               /* if (sessionKey != "")
-                {
-                    MainPage = new MainPage();
-                }
-                else
-                {
-                    if (Ultis.Settings.AppFirstInstall == "First")
-                    {
+                  if (sessionKey != "")
+                  {
+                      MainPage = new MainPage();
+                  }
+                  else
+                  {
+                      if (Ultis.Settings.AppFirstInstall == "First")
+                      {
 
-                        MainPage = new CustomNavigationPage(new StartUpScreen());
-                    }
-                    else
-                    {
-                        MainPage = new CustomNavigationPage(new LoginPage());
-                    }
+                          MainPage = new CustomNavigationPage(new StartUpScreen());
+                      }
+                      else
+                      {
+                          MainPage = new CustomNavigationPage(new LoginPage());
+                      }
 
-                }*/
+                  }
             }
 
             /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
@@ -80,7 +80,7 @@ namespace ASolute_Mobile
 
         }
 
-        void HandleNotificationReceived(OSNotification notification)
+            void HandleNotificationReceived(OSNotification notification)
         {
 
             /*if(!String.IsNullOrEmpty(notification.payload.body))

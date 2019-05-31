@@ -201,6 +201,7 @@ namespace ASolute_Mobile
                                     if (response.IsGood)
                                     {
                                         imageEventID = response.Result["LinkId"];
+                                        UploadImage();
                                         if (Ultis.Settings.Language.Equals("English"))
                                         {
                                             await DisplayAlert("Success", "Record added", "OK");
@@ -213,7 +214,7 @@ namespace ASolute_Mobile
                                         Ultis.Settings.RefreshListView = "Yes";
                                         confirm_icon.IsEnabled = false;
                                         confirm_icon.Source = "confirmDisable.png";
-                                        UploadImage();
+                                       
 
                                         await Navigation.PopAsync();
                                     }

@@ -8,7 +8,9 @@ using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.CommonScreen;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
+using ASolute_Mobile.TransportScreen;
 using ASolute_Mobile.Utils;
+using ASolute_Mobile.Yard;
 using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -28,7 +30,7 @@ namespace ASolute_Mobile
 
         public NewMainMenu()
         {
-
+ 
             InitializeComponent();
 
             switch (Ultis.Settings.App)
@@ -42,16 +44,16 @@ namespace ASolute_Mobile
                     headerImage.Source = "warehouseheader.png";
                     break;
 
-                case "asolute.Mobile.AILSHaulage":
-                    headerImage.Source = "headerBackground.png";
-                    break;
-
                 case "asolute.Mobile.AILSYard":
                     headerImage.Source = "yardheader.png";
                     break;
 
                 case "asolute.Mobile.AILSTrucking":
                     headerImage.Source = "truckingheader.png";
+                    break;
+
+                default:
+                    headerImage.Source = "headerBackground.png";
                     break;
             }
 
@@ -81,11 +83,21 @@ namespace ASolute_Mobile
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //get the latest store local profile image
-            var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
-            profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
 
-            LoadMainMenu();
+            try
+            {
+              
+                //get the latest store local profile image
+                var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
+                profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+
+                LoadMainMenu();
+            }
+            catch
+            {
+
+            }
+           
         }
 
         async void Handle_Tapped(object sender, System.EventArgs e)
@@ -275,7 +287,7 @@ namespace ASolute_Mobile
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
-                listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 80 : Item.Count * 100;
+                listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 80 : Item.Count * 130;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
                 System.TimeSpan interval = new System.TimeSpan();
@@ -295,6 +307,9 @@ namespace ASolute_Mobile
                         Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                     }
                 }
+
+
+             
             }
             catch (Exception ex)
             {
@@ -343,7 +358,8 @@ namespace ASolute_Mobile
                     break;
 
                 case "MasterJobList":
-                    await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
+                    //await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
+                    await Navigation.PushAsync(new NewMasterJob(((ListItems)e.Item)));
                     break;
 
                 case "CargoReturn":
@@ -427,6 +443,10 @@ namespace ASolute_Mobile
 
                 case "TicketHistory":
                     await Navigation.PushAsync(new HaulageScreen.RunSheet(((ListItems)e.Item)));
+                    break;
+
+                case "YardUsage":
+                    await Navigation.PushAsync(new YardBlockZones());
                     break;
             }
 

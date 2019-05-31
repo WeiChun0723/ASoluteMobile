@@ -110,6 +110,7 @@ namespace ASolute_Mobile.Models
         public string Summary { get; set; }
         public string Background { get; set; }
         public string Action { get; set; }
+
         //Tracking property
         public string Booking { get; set; }
         public string CustomerRef { get; set; }
@@ -143,6 +144,7 @@ namespace ASolute_Mobile.Models
         public string ReasonCode { get; set; }
         public string SealMode { get; set; }
     }
+    
 
     public class JobNoList : Generic
     {

@@ -83,7 +83,7 @@ namespace ASolute_Mobile.TransportScreen
             }
         }
 
-        private async void SearchJob(object sender, TextChangedEventArgs e)
+        private void SearchJob(object sender, TextChangedEventArgs e)
         {
             try
             {

@@ -17,6 +17,7 @@ using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
 using static ASolute_Mobile.BusTicketing.StopsList;
 using System.Collections.ObjectModel;
+using Xamarin.Essentials;
 
 namespace ASolute_Mobile
 {
@@ -25,25 +26,21 @@ namespace ASolute_Mobile
         static byte[] scaledImageByte;
         static string imageEventID;
         static List<AppImage> recordImages = new List<AppImage>();
-        static Plugin.Geolocator.Abstractions.Position position = null;
+        //static Plugin.Geolocator.Abstractions.Position position = null;
         static string address = "";
         static string location = "0,0";
 
         public static async Task GetGPS()
         {
-            var locator = CrossGeolocator.Current;
-            position = await locator.GetPositionAsync();
-
-            if (position.Equals(null))
-            {
-                position = await locator.GetLastKnownLocationAsync();
-            }
-
+            //var locator = CrossGeolocator.Current;
+            //position = await locator.GetPositionAsync();
+            /*var position = await Geolocation.GetLastKnownLocationAsync();
+           
             if (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0))
             {
                 if (position != null)
                 {
-                    location = String.Format("{0:0.000000}", position.Latitude) + "," + String.Format("{0:0.000000}", position.Longitude);
+                    location = String.Format("{0:0.000000}", position.Latitude.ToString()) + "," + String.Format("{0:0.000000}", position.Longitude.ToString());
                 }
                 else
                 {
@@ -54,9 +51,11 @@ namespace ASolute_Mobile
             else
             {
                 location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
-            }
+            }*/
 
-            if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet() )
+            location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? "0,0"  : String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
+
+            if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet() )
             {
                 try
                 {

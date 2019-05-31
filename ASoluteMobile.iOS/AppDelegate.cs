@@ -38,6 +38,8 @@ namespace ASolute_Mobile.iOS
             Syncfusion.SfPullToRefresh.XForms.iOS.SfPullToRefreshRenderer.Init();
             Syncfusion.ListView.XForms.iOS.SfListViewRenderer.Init();
             Syncfusion.XForms.iOS.Border.SfBorderRenderer.Init();
+            Syncfusion.XForms.iOS.ProgressBar.SfLinearProgressBarRenderer.Init();
+            Syncfusion.XForms.iOS.ProgressBar.SfCircularProgressBarRenderer.Init();
             ImageCircleRenderer.Init();
             UIApplication.SharedApplication.SetMinimumBackgroundFetchInterval(UIApplication.BackgroundFetchIntervalMinimum);
 

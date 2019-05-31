@@ -88,29 +88,7 @@ namespace ASolute_Mobile
             endLocation.Text = e.Value.ToUpper();
         }
 
-        public void startMeter(object sender, EventArgs e)
-        {
-            string _startOdometer = startOdometer.Text;
-
-            if (_startOdometer.Length > 6)       //If it is more than your character restriction
-            {
-                _startOdometer = _startOdometer.Remove(_startOdometer.Length - 1);  // Remove Last character
-                startOdometer.Text = _startOdometer;        //Set the Old value
-            }
-        }
-
-        public void endMeter(object sender, EventArgs e)
-        {
-            string _endOdometer = endOdometer.Text;
-
-            if (_endOdometer.Length > 6)       //If it is more than your character restriction
-            {
-                _endOdometer = _endOdometer.Remove(_endOdometer.Length - 1);  // Remove Last character
-                endOdometer.Text = _endOdometer;        //Set the Old value
-            }
-
-        }
-
+       
         async void Handle_Tapped(object sender, System.EventArgs e)
         {
             var image = sender as Image;
@@ -118,7 +96,7 @@ namespace ASolute_Mobile
             switch (image.StyleId)
             {
                 case "camera_icon":
-                    await CommonFunction.StoreImages(imageLinkID, this, "NormalImage");
+                    await CommonFunction.StoreImages(offlineLogID, this, "NormalImage");
                     DisplayImage();
 
                     if (!(String.IsNullOrEmpty(imageLinkID)))
@@ -318,7 +296,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                recordImages = App.Database.GetPendingRecordImages(false);
+                recordImages = App.Database.GetRecordImagesAsync(offlineLogID, false);
                 foreach (AppImage recordImage in recordImages)
                 {
                     clsFileObject image = new clsFileObject();
@@ -419,25 +397,25 @@ namespace ASolute_Mobile
                         lblStartDateTime.Text = language.Value;
                         lblEndDateTime.Text = language.Value;
                     }
-                    else if (lblStartOdometer.Text == lblCaption)
+                    else if (lblStartOdometer.Hint == lblCaption)
                     {
-                        lblStartOdometer.Text = language.Value;
+                        lblStartOdometer.Hint = language.Value;
                     }
-                    else if (lblStartFrom.Text == lblCaption)
+                    else if (lblStartFrom.Hint == lblCaption)
                     {
-                        lblStartFrom.Text = language.Value;
+                        lblStartFrom.Hint = language.Value;
                     }
                     else if (lblEnd.Text == lblCaption)
                     {
                         lblEnd.Text = language.Value;
                     }
-                    else if (lblEndOdometer.Text == lblCaption)
+                    else if (lblEndOdometer.Hint == lblCaption)
                     {
-                        lblEndOdometer.Text = language.Value;
+                        lblEndOdometer.Hint = language.Value;
                     }
-                    else if (lblEndLocation.Text == lblCaption)
+                    else if (lblEndLocation.Hint == lblCaption)
                     {
-                        lblEndLocation.Text = language.Value;
+                        lblEndLocation.Hint = language.Value;
                     }
                 }
 

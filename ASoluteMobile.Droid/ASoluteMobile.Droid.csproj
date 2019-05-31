@@ -24,6 +24,7 @@
     <AndroidKeyStore>false</AndroidKeyStore>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+    <EnableProguard>true</EnableProguard>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,10 +34,7 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <EnableProguard>true</EnableProguard>
-    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <PlatformTarget>x86</PlatformTarget>
-    <AndroidSupportedAbis />
 <AndroidTlsProvider>btls</AndroidTlsProvider>
 <AndroidKeyStore>True</AndroidKeyStore>
 <AndroidSigningKeyStore>/Users/asolute/Library/Developer/Xamarin/Keystore/asolute/asolute.keystore</AndroidSigningKeyStore>
@@ -44,6 +42,9 @@
 <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>
 <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
 <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+<AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
+<AndroidSupportedAbis>arm64-v8a;armeabi;armeabi-v7a;x86;x86_64</AndroidSupportedAbis>
+<EnableProguard>true</EnableProguard>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -61,6 +62,7 @@
     <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64;armeabi</AndroidSupportedAbis>
+    <EnableProguard>false</EnableProguard>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AndHUD, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -476,20 +478,17 @@
     <Reference Include="ZSDK_ANDROIDX">
       <HintPath>..\packages\LinkOS_Xamarin_SDK.1.2.0\lib\MonoAndroid\ZSDK_ANDROIDX.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Honeywell.AIDC.CrossPlatform.Print">
       <HintPath>..\packages\Honeywell.AIDC.CrossPlatform.Print.2.10.1.448\lib\MonoAndroid41\Honeywell.AIDC.CrossPlatform.Print.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SfMaps.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfMaps.Android.dll</HintPath>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SfMaps.XForms.Android">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfMaps.XForms.Android.dll</HintPath>
+    <Reference Include="Syncfusion.SfProgressBar.XForms.Android">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfProgressBar.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfProgressBar.XForms.Android.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.SfMaps.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfMaps.XForms.dll</HintPath>
+    <Reference Include="Syncfusion.SfProgressBar.XForms">
+      <HintPath>..\packages\Syncfusion.Xamarin.SfProgressBar.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfProgressBar.XForms.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -658,6 +657,13 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\printer_profiles.JSON" />
+    <AndroidAsset Include="Assets\Custom.dbf" />
+    <AndroidAsset Include="Assets\Custom.shp" />
+    <AndroidAsset Include="Assets\Custom.shx" />
+    <AndroidAsset Include="Assets\usa_state.dbf" />
+    <AndroidAsset Include="Assets\usa_state.shp" />
+    <AndroidAsset Include="Assets\world1.dbf" />
+    <AndroidAsset Include="Assets\world1.shp" />
   </ItemGroup>
   <Import Project="..\ForwardingApp\ForwardingApp.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

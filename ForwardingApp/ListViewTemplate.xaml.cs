@@ -286,7 +286,8 @@ namespace ASolute_Mobile
                             Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id,
                             Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
                             Category = menuItems.Id,
-                            Name = menuItems.Name
+                            Name = menuItems.Name,
+                            Action = data.Action
                         };
 
                         if (menuItems.Id == "JobList")
@@ -334,11 +335,13 @@ namespace ASolute_Mobile
                             }
                             else if (summaryItem.Caption == "Closing Date")
                             {
-                                closingTime = summaryItem.Value;
+                                closingTime = summaryItem.Value.Replace('-','/');
                             }
                         }
+
+
                         record.Summary = summary;
-                        record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : Convert.ToDateTime(closingTime);
+                        record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : DateTime.Parse(closingTime);
 
                         if (records.Count < 100)
                         {
@@ -428,7 +431,7 @@ namespace ASolute_Mobile
                     dateComboBox.ComboBoxSource = dateOption;
                 }
 
-                string test = "";
+             
 
             }
             catch (Exception ex)
@@ -444,16 +447,18 @@ namespace ASolute_Mobile
             {
                 var filterOption = sender as Syncfusion.XForms.ComboBox.SfComboBox;
 
+                var listViewSource = (overloadRecord.Count == 0) ? Item : overloadRecord;
+
                 switch (filterOption.StyleId)
                 {
                     case "blockComboBox":
                         if (blockComboBox.Text == "All")
                         {
-                            listView.ItemsSource = overloadRecord;
+                            listView.ItemsSource = listViewSource;
                         }
                         else
                         {
-                            listView.ItemsSource = overloadRecord.Where(x => x.Summary.Contains(blockComboBox.Text + "-"));
+                            listView.ItemsSource = listViewSource.Where(x => x.Summary.Contains(blockComboBox.Text + "-"));
                         }
                         break;
 
@@ -467,15 +472,15 @@ namespace ASolute_Mobile
                             switch(dateComboBox.Text)
                             {
                                 case "Closing Today":
-                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate <= DateTime.Now.AddDays(-1) || x.ClosingDate.Value.Day == DateTime.Now.Day);
+                                    listView.ItemsSource = listViewSource.Where(x => x.ClosingDate <= DateTime.Now.AddDays(-1) || x.ClosingDate.Value.Day == DateTime.Now.Day);
                                     break;
 
                                 case "Closing Tomorrow":
-                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate.Value.Day == DateTime.Now.AddDays(1).Day);
+                                    listView.ItemsSource = listViewSource.Where(x => x.ClosingDate.Value.Day == DateTime.Now.AddDays(1).Day);
                                     break;
 
                                 case "Closing After Tomorrow":
-                                    listView.ItemsSource = overloadRecord.Where(x => x.ClosingDate >= DateTime.Now.AddDays(2));
+                                    listView.ItemsSource = listViewSource.Where(x => x.ClosingDate >= DateTime.Now.AddDays(2));
                                     break;
                             }
                         }

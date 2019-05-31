@@ -87,16 +87,6 @@ namespace ASolute_Mobile.Droid.Services
             return StartCommandResult.NotSticky;
         }
 
-        private string createNotificationChannel(string channel_id, string channel_name)
-        {
-            var chan = new NotificationChannel(channel_id, channel_name, NotificationImportance.None);
-            chan.LockscreenVisibility = NotificationVisibility.Private;
-            var service = GetSystemService(Context.NotificationService) as NotificationManager;
-            service.CreateNotificationChannel(chan);
-
-            return channel_id;
-        }
-
 
         // This gets called once, the first time any client bind to the Service
         // and returns an instance of the LocationServiceBinder. All future clients will
