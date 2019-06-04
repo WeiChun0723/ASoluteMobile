@@ -61,7 +61,7 @@
     <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64;armeabi</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;armeabi;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
     <EnableProguard>false</EnableProguard>
   </PropertyGroup>
   <ItemGroup>
@@ -481,14 +481,14 @@
     <Reference Include="Honeywell.AIDC.CrossPlatform.Print">
       <HintPath>..\packages\Honeywell.AIDC.CrossPlatform.Print.2.10.1.448\lib\MonoAndroid41\Honeywell.AIDC.CrossPlatform.Print.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.SfProgressBar.XForms.Android">
       <HintPath>..\packages\Syncfusion.Xamarin.SfProgressBar.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfProgressBar.XForms.Android.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfProgressBar.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfProgressBar.16.4.0.40-beta\lib\MonoAndroid10\Syncfusion.SfProgressBar.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -558,6 +558,7 @@
     <AndroidResource Include="Resources\drawable\busticketingheader.png" />
     <AndroidResource Include="Resources\drawable\yardheader.png" />
     <AndroidResource Include="Resources\drawable\truckingheader.png" />
+    <AndroidResource Include="Resources\drawable\plus.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refuel.png" />

@@ -262,6 +262,8 @@ namespace ASolute_Mobile.Utils
             return String.Format("Providers/HaulageVolume?SessionId={0}&ViewDate={1}", Ultis.Settings.SessionSettingKey, dateTime);
         }
 
+
+
         #endregion
 
         #region trucking url
@@ -318,6 +320,24 @@ namespace ASolute_Mobile.Utils
         public static String postNewCargoRecordURL(string recordID)
         {
             return String.Format("Cargo/Save?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), recordID);
+        }
+
+        public static String getCustomerList()
+        {
+            return String.Format("Trucking/CustomerList?SessionId={0}", Ultis.Settings.SessionSettingKey);
+
+        }
+
+        public static String getCustomerDetail(string customerCode)
+        {
+            return String.Format("Trucking/OtherListByCustomer?SessionId={0}&CustomerCode={1}", Ultis.Settings.SessionSettingKey,customerCode);
+
+        }
+
+        public static String postCustomerDetail()
+        {
+            return String.Format("Trucking/SaveNewJob?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+
         }
         #endregion
 

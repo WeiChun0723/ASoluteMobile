@@ -1,6 +1,7 @@
 ﻿using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
+using ASolute_Mobile.TransportScreen;
 using ASolute_Mobile.Ultis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -90,13 +91,12 @@ namespace ASolute_Mobile.Utils
                             if (!(reply.IsGood))
                             {
                                 await page.DisplayAlert("Error", reply.Message, "OK");
+                                return null;
                             }
                         }
                     }
-
                     return content;
                 }
-
             }
             catch(HttpRequestException requestEx)
             {
@@ -236,7 +236,6 @@ namespace ASolute_Mobile.Utils
             }
         }
 
-
         //create notification icon in the bavigation bar
         public static void CreateToolBarItem(ContentPage contentPage)
         {
@@ -247,17 +246,18 @@ namespace ASolute_Mobile.Utils
             {
                 var item = new ToolbarItem
                 {
-                    Icon = "new_job.png",
+                    Icon = "plus.png",
                     Priority = 0,
                     Order = ToolbarItemOrder.Primary,
 
                 };
 
-                item.Clicked +=  (sender, e) =>
+                item.Clicked += async (sender, e) =>
                 {
-                    Ultis.Settings.NewJob = "No";
-                    pages.ToolbarItems.Clear();
-                   
+                    //Ultis.Settings.NewJob = "No";
+                    //pages.ToolbarItems.Clear();
+                    await contentPage.Navigation.PushAsync(new NewMasterJob());
+
                 };
 
                 contentPage.ToolbarItems.Add(item);

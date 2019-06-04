@@ -50,6 +50,7 @@ namespace ASolute_Mobile.Droid.Services
             var wf = (WifiManager)GetSystemService(Context.WifiService);
              _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
             _wifiLock.Acquire();
+
         }
 
         // This gets called when StartService is called in our App class
@@ -84,7 +85,7 @@ namespace ASolute_Mobile.Droid.Services
 
             StartForeground((int)NotificationFlags.ForegroundService, notification);*/
 
-            return StartCommandResult.NotSticky;
+            return StartCommandResult.Sticky;
         }
 
 
@@ -130,7 +131,6 @@ namespace ASolute_Mobile.Droid.Services
 
                  await Task.Delay(600000);
              });
-
              return true;
             });
 

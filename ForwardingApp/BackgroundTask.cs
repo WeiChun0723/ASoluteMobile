@@ -46,7 +46,6 @@ namespace ASolute_Mobile
                 {
                     location = "0,0";
                 }
-
             }
             else
             {
@@ -74,7 +73,6 @@ namespace ASolute_Mobile
                 {
 
                 }
-
             }
         }
 
@@ -265,14 +263,12 @@ namespace ASolute_Mobile
                                                 App.Database.SaveTicketTransaction(completeTicket);
                                             }
                                         }*/
-
                                         App.Database.DeleteTicket();
 
                                         var test = App.Database.gettesting();
                                     }
                                 }
                             }
-
                         }
 
                     }

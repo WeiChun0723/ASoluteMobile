@@ -308,8 +308,6 @@ namespace ASolute_Mobile
                     }
                 }
 
-
-             
             }
             catch (Exception ex)
             {
@@ -358,8 +356,7 @@ namespace ASolute_Mobile
                     break;
 
                 case "MasterJobList":
-                    //await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
-                    await Navigation.PushAsync(new NewMasterJob(((ListItems)e.Item)));
+                    await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
                     break;
 
                 case "CargoReturn":

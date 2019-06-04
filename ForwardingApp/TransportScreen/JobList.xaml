@@ -5,6 +5,8 @@
    
     <StackLayout Padding="15,15,15,15">
         <StackLayout Orientation="Horizontal">
+            
+            
         <SearchBar TextChanged="SearchJob" HeightRequest="50" x:Name="searchBar" Placeholder="Search here...." WidthRequest="270"/>
             <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="barcode_icon">
                         <Image.GestureRecognizers>

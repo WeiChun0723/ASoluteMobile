@@ -29,18 +29,25 @@ namespace ASolute_Mobile.TransportScreen
 
             GetJobList();
 
+            if (action.Contains("MasterJobList"))
+            {
+                CommonFunction.CreateToolBarItem(this);
+            }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-
             if(Ultis.Settings.RefreshListView == "Yes")
             {
                 GetJobList();
                 Ultis.Settings.RefreshListView = "No";
             }
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshNewMasterJobList", (sender) => {
+                GetJobList();
+            });
         }
 
         public async void selectJob(object sender, ItemTappedEventArgs e)
@@ -259,6 +266,7 @@ namespace ASolute_Mobile.TransportScreen
                 jobList.IsVisible = true;
                 noData.IsVisible = true;
                 searchBar.IsVisible = false;
+                barcode_icon.IsVisible = false;
             }
             else
             {
