@@ -23,7 +23,7 @@ namespace ASolute_Mobile.Yard
             {
                 if(!(block.Id.Contains("(")))
                 {
-                    block.Id = block.Id + " ( " + block.Utilization + "%" + " ) ";
+                    block.Id = block.Id + " " + block.Utilization + "%" + " ";
                 }
                
                 grid.RowDefinitions.Add(new RowDefinition { Height = 100 });

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.LGC.OutFromChina"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+    <StackLayout Padding="15,10,15,10">
+        <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" /> 
+        <inputLayout:SfTextInputLayout Hint="Shipment Ref#" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="shipmentRef">
+                    <Entry.Behaviors>
+                        <validation:MaxLengthValidation MaxLength="25" />
+                    </Entry.Behaviors>
+                </Entry>
+               
+            </inputLayout:SfTextInputLayout>
+        
+        
+        <inputLayout:SfTextInputLayout Hint="Carton Box #" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                    <Entry x:Name="cartonBox" >
+                <Entry.Behaviors>
+                        <validation:MaxLengthValidation MaxLength="15" />
+                    </Entry.Behaviors>
+                </Entry>
+                    <inputLayout:SfTextInputLayout.TrailingView>
+                        <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="cartonBox_icon">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </inputLayout:SfTextInputLayout.TrailingView>
+                </inputLayout:SfTextInputLayout>
+        
+        <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnSubmit" Text="Submit" Clicked="Handle_Clicked" />
+        
+        <ListView x:Name="shipmentList" SeparatorColor="White" >
+               <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell>
+                            
+                     <Frame HasShadow="true" Margin="5" >
+                       <StackLayout >
+                                <Label Text="{Binding ShipmentNo}" FontAttributes="Bold" />
+                                <Label Text="{Binding CartonBox}" FontAttributes="Bold" />
+                        </StackLayout>
+                    </Frame>
+                         
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+         </ListView>
+    </StackLayout>
+</ContentPage>

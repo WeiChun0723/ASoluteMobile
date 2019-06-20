@@ -6,6 +6,7 @@ using System.Linq;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.CommonScreen;
+using ASolute_Mobile.LGC;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
 using ASolute_Mobile.TransportScreen;
@@ -86,7 +87,6 @@ namespace ASolute_Mobile
 
             try
             {
-              
                 //get the latest store local profile image
                 var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
                 profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
@@ -112,7 +112,7 @@ namespace ASolute_Mobile
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (response != null)
+                if (response.IsGood == true)
                 {
                     var menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
                     Ultis.Settings.SubTitle = menu.SubTitle;
@@ -287,7 +287,7 @@ namespace ASolute_Mobile
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
-                listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 80 : Item.Count * 130;
+                //listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 120 : Item.Count * 130;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
                 System.TimeSpan interval = new System.TimeSpan();
@@ -299,7 +299,6 @@ namespace ASolute_Mobile
 
                 if (NetworkCheck.IsInternet())
                 {
-
                     if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
                     {
                         GetMainMenu();
@@ -307,11 +306,10 @@ namespace ASolute_Mobile
                         Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                     }
                 }
-
             }
-            catch (Exception ex)
+            catch 
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+
             }
         }
 
@@ -444,6 +442,22 @@ namespace ASolute_Mobile
 
                 case "YardUsage":
                     await Navigation.PushAsync(new YardBlockZones());
+                    break;
+
+                case "Outbound":
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getPendingOutbound()));
+                    break;
+
+                case "CartonBox":
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getCartonBoxListURL()));
+                    break;
+
+                case "ParcelIn":
+                    await Navigation.PushAsync(new ChinaReceiving());
+                    break;
+
+                case "ShipmentOut":
+                    await Navigation.PushAsync(new OutFromChina());
                     break;
             }
 

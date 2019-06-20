@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ASolute_Mobile.LGC.ChinaReceiving" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+    <ScrollView>
+        <StackLayout Padding="15,15,15,15" Spacing="20">
+            <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
+            <inputLayout:SfTextInputLayout Hint="Seller Consigment Note #" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <Entry x:Name="consigNote">
+                    <Entry.Behaviors>
+                        <validation:MaxLengthValidation MaxLength="25" />
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.TrailingView>
+                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="consigNote_icon">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout>
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnNext" Text="Next" Clicked="Handle_Clicked" />
+            <StackLayout x:Name="recevingStack" IsVisible="false">
+                <StackLayout Orientation="Horizontal">
+                    <inputLayout:SfTextInputLayout Hint="Length" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                        <Entry x:Name="length" Keyboard="Numeric" TextChanged="Handle_TextChanged">
+                            <Entry.Behaviors>
+                                <validation:MaxLengthValidation MaxLength="3" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </inputLayout:SfTextInputLayout>
+                    <inputLayout:SfTextInputLayout Hint="Width" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                        <Entry x:Name="width" Keyboard="Numeric" TextChanged="Handle_TextChanged">
+                            <Entry.Behaviors>
+                                <validation:MaxLengthValidation MaxLength="3" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </inputLayout:SfTextInputLayout>
+                    <inputLayout:SfTextInputLayout Hint="Height" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                        <Entry x:Name="height" Keyboard="Numeric" TextChanged="Handle_TextChanged">
+                            <Entry.Behaviors>
+                                <validation:MaxLengthValidation MaxLength="3" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </inputLayout:SfTextInputLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="20">
+                    <inputLayout:SfTextInputLayout Hint="M3" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightGray">
+                        <Entry x:Name="M3" IsEnabled="false" />
+                    </inputLayout:SfTextInputLayout>
+                    <inputLayout:SfTextInputLayout Hint="KG" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                        <Entry x:Name="unit" Keyboard="Numeric" TextChanged="Handle_TextChanged" />
+                    </inputLayout:SfTextInputLayout>
+                </StackLayout>
+                <inputLayout:SfTextInputLayout Hint="Carton Box #" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                    <Entry x:Name="cartonBox">
+                        <Entry.Behaviors>
+                            <validation:MaxLengthValidation MaxLength="25" />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <inputLayout:SfTextInputLayout.TrailingView>
+                        <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="cartonBox_icon">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </inputLayout:SfTextInputLayout.TrailingView>
+                </inputLayout:SfTextInputLayout>
+                <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnSubmit" Text="Submit" Clicked="Handle_Clicked" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

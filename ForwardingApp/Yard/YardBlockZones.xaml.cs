@@ -55,8 +55,9 @@ namespace ASolute_Mobile.Yard
 
                     foreach (clsYardMapBlock yardBlock in yardBlocks)
                     {
-
                         var blockZone = "Zone " + yardBlock.Id.Substring(0, 1);
+
+                        //var blockZone = "Zone " + yardBlock.ZoneCode;
 
                         if (!(zones.Exists(x => x.Zone == blockZone)))
                         {
@@ -97,6 +98,5 @@ namespace ASolute_Mobile.Yard
     class YardZone
     {
         public string Zone { get; set; }
-
     }
 }

@@ -13,19 +13,33 @@ namespace ASolute_Mobile.Yard
 {
     public partial class YardListPopUp : PopupPage
     {
-        ListItems selectedContainer = new ListItems();
+        ListItems selectedItem = new ListItems();
         List<clsYardBlock> yardBlocks;
         List<string> blocks = new List<string>();
         List<string> bays = new List<string>();
         List<string> levels = new List<string>();
-        string recordId;
 
         public YardListPopUp(ListItems item)
         {
             InitializeComponent();
-            recordId = item.Id;
-            selectedContainer = item;
-            GetYardValue();
+
+            selectedItem = item;
+
+            switch(item.Category)
+            {
+                case "PendingStorage":
+                    blockComboBox.IsVisible = true;
+                    bayComboBox.IsVisible = true;
+                    levelComboBox.IsVisible = true;
+                    GetYardValue();
+                    break;
+
+                case "Outbound":
+                    outboundSummary.IsVisible = true;
+                    outboundSummary.Text = item.Summary;
+                    break;
+            }
+           
         }
 
         async void GetYardValue()
@@ -44,9 +58,9 @@ namespace ASolute_Mobile.Yard
                     }
                     blockComboBox.ComboBoxSource = blocks;
 
-                    if(!(String.IsNullOrEmpty(selectedContainer.Action)))
+                    if(!(String.IsNullOrEmpty(selectedItem.Action)))
                     {
-                        blockComboBox.Text = selectedContainer.Action;
+                        blockComboBox.Text = selectedItem.Action;
                        
                         LoadComboBoxValue();
                     }
@@ -103,23 +117,51 @@ namespace ASolute_Mobile.Yard
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
-            if(!(String.IsNullOrEmpty(blockComboBox.Text)))
+            try
             {
-                string locationId = (bayComboBox.IsEnabled == false && levelComboBox.IsEnabled == false) ? blockComboBox.Text : blockComboBox.Text + "-" + bayComboBox.Text + "-" + levelComboBox.Text;
-                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.confirmBlock(recordId, locationId), this);
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                if (response.IsGood)
+                switch (selectedItem.Category)
                 {
-                    await DisplayAlert("Success", "Location confirmed.", "OK");
-                    await PopupNavigation.Instance.PopAsync(true);
-                    MessagingCenter.Send<App>((App)Application.Current, "RefreshYard");
+                    case "PendingStorage":
+                        if (!(String.IsNullOrEmpty(blockComboBox.Text)))
+                        {
+                            string locationId = (bayComboBox.IsEnabled == false && levelComboBox.IsEnabled == false) ? blockComboBox.Text : blockComboBox.Text + "-" + bayComboBox.Text + "-" + levelComboBox.Text;
+                            var inboundContent = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.confirmBlock(selectedItem.Id, locationId), this);
+                            clsResponse inboundResponse = JsonConvert.DeserializeObject<clsResponse>(inboundContent);
+
+                            if (inboundResponse != null)
+                            {
+                                await DisplayAlert("Success", "Location confirmed.", "OK");
+                                await PopupNavigation.Instance.PopAsync(true);
+                                MessagingCenter.Send<App>((App)Application.Current, "RefreshYard");
+                            }
+                        }
+                        else
+                        {
+                            await DisplayAlert("Missing field", "Please provide valid location.", "OK");
+                        }
+                        break;
+
+                    case "Outbound":
+                        var outboundContent = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.confirmOutbound(selectedItem.Id), this);
+                        clsResponse outboundResponse = JsonConvert.DeserializeObject<clsResponse>(outboundContent);
+
+                        if (outboundResponse != null)
+                        {
+                            await DisplayAlert("Success", "Outbound confirmed.", "OK");
+                            await PopupNavigation.Instance.PopAsync(true);
+                            MessagingCenter.Send<App>((App)Application.Current, "RefreshYard");
+                        }
+                        break;
+
                 }
             }
-            else
+            catch
             {
-                await DisplayAlert("Missing field", "Please provide valid location.", "OK");
+
             }
+           
+
+
         }
     }
 }

@@ -37,6 +37,16 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Yard/Map?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
+
+        public static String getPendingOutbound()
+        {
+            return String.Format("Yard/PendingOutbound?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String confirmOutbound(string id)
+        {
+            return String.Format("Yard/ConfirmOutbound?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id);
+        }
         #endregion
 
         #region bus ticketing url
@@ -145,6 +155,7 @@ namespace ASolute_Mobile.Utils
             switch (Ultis.Settings.App)
             {
                 case "asolute.Mobile.AILSHaulage":
+                case "asolute.Mobile.AILSHaulageTest":
                     name = "Haulage";
                     break;
 
@@ -457,7 +468,56 @@ namespace ASolute_Mobile.Utils
         }
         #endregion
 
+        #region LGC
+
+        public static String getCartonBoxListURL()
+        {
+            return String.Format("CartonBox/List?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String getNewCartonBoxURL()
+        {
+            return String.Format("CartonBox/Add?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String validateConsingmentNoteURL(string consigNote)
+        {
+            return String.Format("Parcel/ValidateConsignmentNo?SessionId={0}&ConsignmentNo={1}", Ultis.Settings.SessionSettingKey, consigNote);
+        }
+
+        public static String postReceiveAndUpdate()
+        {
+            return String.Format("Parcel/Receive?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
+
+        public static String updateShipment(string shipmentNo, string cartonNo)
+        {
+            return String.Format("CartonBox/UpdateShipment?SessionId={0}&ShipmentNo={1}&CartonNo={2}", Ultis.Settings.SessionSettingKey,shipmentNo,cartonNo);
+        }
+
+        public static String getParcelList(string cartonNo)
+        {
+            return String.Format("Parcel/List?SessionId={0}&CartonNo={1}", Ultis.Settings.SessionSettingKey,  cartonNo);
+        }
+
+        public static String printCartonLabelURL(string cartonNo)
+        {
+            return String.Format("CartonBox/Print?SessionId={0}&CartonNo={1}", Ultis.Settings.SessionSettingKey, cartonNo);
+        }
+
+        public static String cancelCartonURL(string cartonNo)
+        {
+            return String.Format("CartonBox/Cancel?SessionId={0}&CartonNo={1}", Ultis.Settings.SessionSettingKey, cartonNo);
+        }
+
+        public static String printParcelLabelURL(string orderNo)
+        {
+            return String.Format("Parcel/Print?SessionId={0}&OrderNo={1}", Ultis.Settings.SessionSettingKey, orderNo);
+        }
+        #endregion
+
         #region warehouse url
+
         public static String getTallyInListURL()
         {
             return String.Format("Wms/TallyIn/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());

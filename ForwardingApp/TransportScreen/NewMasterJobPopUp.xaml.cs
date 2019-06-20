@@ -15,9 +15,7 @@ namespace ASolute_Mobile.TransportScreen
         List<string> dropOffList = new List<string>();
         List<string> cargoTypeList = new List<string>();
         clsKeyValue cust, pick;
-
         Lists comboBoxData;
-
 
         public NewMasterJobPopUp(clsKeyValue customerCode,clsKeyValue pickupCode, Lists comboBoxList)
         {
@@ -40,7 +38,6 @@ namespace ASolute_Mobile.TransportScreen
             cargoTypeComboBox.ComboBoxSource = cargoTypeList;
 
             loadUserPreviousInput();
-
         }
 
         void loadUserPreviousInput()
@@ -68,6 +65,7 @@ namespace ASolute_Mobile.TransportScreen
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
+            loading.IsVisible = true;
             try
             {
                 if(!(String.IsNullOrEmpty(dropOffComboBox.Text)) && !(String.IsNullOrEmpty(doNo.Text)) && !(String.IsNullOrEmpty(cargoTypeComboBox.Text)) && !(String.IsNullOrEmpty(quantity.Text)))
@@ -86,10 +84,15 @@ namespace ASolute_Mobile.TransportScreen
                         Quantity = Convert.ToInt32(quantity.Text)
                     };
 
+                    NewMasterJob.dropOff = "";
+                    NewMasterJob.type = "";
+                    NewMasterJob.scannedResult = "";
+                    NewMasterJob.quantity = "";
+
                     var content = await CommonFunction.CallWebService(1, jobModel, Ultis.Settings.SessionBaseURI, ControllerUtil.postCustomerDetail(), this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                    if(response!=null)
+                    if (response!=null)
                     {
                         await DisplayAlert("Success", "Job added.", "OK");
 
@@ -104,14 +107,15 @@ namespace ASolute_Mobile.TransportScreen
 
                         NewMasterJob.masterJobNo = response.Result["MasterJobNo"];
 
+                        MessagingCenter.Send<App>((App)Application.Current, "SetPageTitle");
+
                         MessagingCenter.Send<App>((App)Application.Current, "RefreshNewMasterJobList");
+
+                        dropOffComboBox.Text = null;
+                        doNo.Text = "";
+                        cargoTypeComboBox.Text = null;
+                        quantity.Text = "";
                     }
-
-                    NewMasterJob.dropOff = "";
-                    NewMasterJob.type = "";
-                    NewMasterJob.scannedResult = "";
-                    NewMasterJob.quantity = "";
-
                 }
                 else
                 {
@@ -122,6 +126,8 @@ namespace ASolute_Mobile.TransportScreen
             {
 
             }
+
+            loading.IsVisible = false;
         }
 
         void Handle_Tapped(object sender, System.EventArgs e)
@@ -131,10 +137,7 @@ namespace ASolute_Mobile.TransportScreen
             NewMasterJob.quantity = quantity.Text;
 
             PopupNavigation.Instance.PopAsync();
-
             MessagingCenter.Send<App>((App)Application.Current, "LaunchBarCodeScanner");
-
-           
         }
     }
 }

@@ -115,7 +115,7 @@ namespace ASolute_Mobile
                         var content = await CommonFunction.CallWebService(1, futileJob, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
                         clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        if (response.IsGood == true)
+                        if (response.IsGood)
                         {
                             confirm_icon.IsEnabled = false;
                             confirm_icon.Source = "confirmDisable.png";

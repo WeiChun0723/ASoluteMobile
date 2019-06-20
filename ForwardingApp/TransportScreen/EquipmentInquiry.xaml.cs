@@ -16,7 +16,6 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class EquipmentInquiry : ContentPage
 	{
         clsResponse newEqResponse = new clsResponse();
@@ -38,7 +37,7 @@ namespace ASolute_Mobile
 
         public async void checkEquipment(object sender, EventArgs e)
         {
-           /* string equipmentId = equipmentID.Text;
+            string equipmentId = equipmentID.Text;
 
             if (NetworkCheck.IsInternet())
             {
@@ -68,16 +67,18 @@ namespace ASolute_Mobile
                     }
                     count++;
                     
-                    List <ListObject> numberRow = new List<ListObject>();
+                    List <EqDetails> numberRow = new List<EqDetails>();
                     for(int j = 0; j < count; j++)
                     {
-                        ListObject listRow = new ListObject();
-                        listRow.type = "true";
+                        EqDetails listRow = new EqDetails();
+                        listRow.count = "true";
 
                         numberRow.Add(listRow);
                     }
 
-                    ObservableCollection<ListObject> row = new ObservableCollection<ListObject>(numberRow);
+                    ObservableCollection<EqDetails> row = new ObservableCollection<EqDetails>(numberRow);
+
+
                    
                     var Template = new DataTemplate(() =>
                     {
@@ -125,8 +126,13 @@ namespace ASolute_Mobile
             else
             {
                 await DisplayAlert("Reminder", "Currently offline cant search", "OK");
-            }*/
+            }
         }
 
+    }
+
+    class EqDetails
+    {
+        public string count { get; set; }
     }
 }

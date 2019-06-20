@@ -19,7 +19,6 @@ namespace ASolute_Mobile
             }
             nameEntry.Text = Ultis.Settings.EnterpriseName;
 
-
             if(!(Device.RuntimePlatform == Device.iOS))
             {
                 NavigationPage.SetHasNavigationBar(this, false);
@@ -28,16 +27,15 @@ namespace ASolute_Mobile
             {
                 NavigationPage.SetHasNavigationBar(this, true);
             }
-
         }
-
 
         async void Url_Clicked(object sender, EventArgs e)
         {
-            submitButton.IsEnabled = false;    
+            submitButton.IsEnabled = false;
             this.activityIndicator.IsRunning = true;
-
-                var content = await CommonFunction.CallWebService(0,null,"https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text),this);
+            try
+            {
+                var content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/", ControllerUtil.getBaseURL(nameEntry.Text), this);
                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (json_response.IsGood)
@@ -54,11 +52,17 @@ namespace ASolute_Mobile
                     {
                         await DisplayAlert("Error", "Enterprise name unknown", "OK");
                     }
-                   
+
                 }
-              
-                this.activityIndicator.IsRunning = false;
-                submitButton.IsEnabled = true;
+
+
+            }
+            catch
+            {
+
+            }
+            this.activityIndicator.IsRunning = false;
+            submitButton.IsEnabled = true;
         }
     }
 }

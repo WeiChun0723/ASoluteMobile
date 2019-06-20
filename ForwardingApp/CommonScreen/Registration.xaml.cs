@@ -124,24 +124,21 @@ namespace ASolute_Mobile.HaulageScreen
                 var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getRegistrationURL(enterpriseEntry.Text, encryptedUserId, encryptedPassword, icEntry.Text),this);
                 clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (register_response.IsGood)
+                if (register_response.IsGood == true)
                 {
                     await DisplayAlert("Success", "Registration successfully wait a moment the app will auto login.", "OK");
                     Ultis.Settings.EnterpriseName = enterpriseEntry.Text;
                     Ultis.Settings.RefreshListView = "Yes";
                     DownloadLogo();
                 }
-                else
-                {
-                    await DisplayAlert("Failed", register_response.Message, "OK");
-                    activityIndicator.IsRunning = false;
-                }
+                
             }
             catch
             {
-                await DisplayAlert("Error", "The baseURL for enterprise " + enterpriseEntry.Text.ToUpper() + " ("
-                                   + Ultis.Settings.SessionBaseURI + ") " + "cannot be use.", "OK");
+                
             }
+
+            activityIndicator.IsRunning = false;
         }
 
         public async void DownloadLogo()
@@ -284,7 +281,7 @@ namespace ASolute_Mobile.HaulageScreen
             }
             catch
             {
-                await DisplayAlert("Error", "Please try again", "OK");
+                //await DisplayAlert("Error", "Please try again", "OK");
             }
 
             activityIndicator.IsRunning = false;

@@ -73,7 +73,7 @@ namespace ASolute_Mobile
                         var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getChangePasswordURL(encryptedNewPassword),this);
                         clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        if (json_response.IsGood == true)
+                        if (json_response.IsGood)
                         {
                             string response = (Ultis.Settings.Language.Equals("English")) ? "Change Password is Successful! Please login again." : "Berjaya ! Sila login semula.";
 

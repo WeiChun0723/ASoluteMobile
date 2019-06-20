@@ -219,6 +219,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Yard\yardmaptest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)LGC\ChinaReceiving.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)LGC\OutFromChina.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)LGC\LGCParcelPopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -454,6 +470,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\NewMasterJobPopUp.xaml.cs">
       <DependentUpon>NewMasterJobPopUp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Yard\yardmaptest.xaml.cs">
+      <DependentUpon>yardmaptest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)LGC\ChinaReceiving.xaml.cs">
+      <DependentUpon>ChinaReceiving.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)LGC\OutFromChina.xaml.cs">
+      <DependentUpon>OutFromChina.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)LGC\LGCParcelPopUp.xaml.cs">
+      <DependentUpon>LGCParcelPopUp.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -471,6 +499,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\WoosimPrinterService\" />
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\" />
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\HoneywellPrinter\" />
+    <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

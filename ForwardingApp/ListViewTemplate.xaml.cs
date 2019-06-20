@@ -5,6 +5,7 @@ using System.Linq;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.HaulageScreen;
+using ASolute_Mobile.LGC;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using ASolute_Mobile.WMS_Screen;
@@ -12,6 +13,7 @@ using ASolute_Mobile.Yard;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rg.Plugins.Popup.Services;
+using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
 
@@ -34,7 +36,7 @@ namespace ASolute_Mobile
             "Closing Tomorrow",
             "Closing After Tomorrow"
         };
-      
+
         //record more than 100 store in this and popuplate to list view
         ObservableCollection<ListItems> overloadRecord = new ObservableCollection<ListItems>();
 
@@ -66,6 +68,26 @@ namespace ASolute_Mobile
                     blockComboBox.IsVisible = true;
                     dateComboBox.IsVisible = true;
                     break;
+
+                //LGC warehouse
+                case "CartonBox":
+                    CommonFunction.CreateToolBarItem(this);
+
+                    MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshCartonList", (sender) =>
+                    {
+                        GetListData();
+                    });
+
+                    MessagingCenter.Subscribe<App>((App)Application.Current, "PrintCartonLabel", (sender) =>
+                    {
+                        DisplayAlert("Sucess", "Printing label.", "OK");
+                    });
+                    break;
+            }
+
+            if (callUri.Contains("Parcel/List"))
+            {
+                LGCCartonStack.IsVisible = true;
             }
 
             //define title for and subtitle for the screen
@@ -90,7 +112,8 @@ namespace ASolute_Mobile
             uri = callUri;
 
             //if AILS YARD updated the container position refresh the list
-            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshYard", (sender) => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshYard", (sender) =>
+            {
                 GetListData();
             });
         }
@@ -168,7 +191,6 @@ namespace ASolute_Mobile
                                     Ultis.Settings.RefreshListView = "Yes";
                                     GetListData();
                                     displayToast("Job added to job list.");
-
                                 }
                                 scanPage.ResumeAnalysis();
                             }
@@ -212,64 +234,76 @@ namespace ASolute_Mobile
 
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-            string type = menuItems.Id;
-
-            switch (type)
+            if(uri.Contains("Parcel/List"))
             {
-                case "TallyIn":
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
-                    break;
-                case "Packing":
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
-                    break;
-                case "Picking":
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id,"Picking"), ((ListItems)e.Item)));
-                    break;
-                case "LoosePick":
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item)));
-                    break;
-                case "FullPick":
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item)));
-                    break;
-                case "TallyOut":
-                    await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
-                    break;
-                case "JobList":
-                    Ultis.Settings.Title = ((ListItems)e.Item).Title;
-                    Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
-                    await Navigation.PushAsync(new NewJobDetails());
-                    break;
-                case "PickingVerify":
-                    await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
-                    break;
-                case "PendingStorage":
-                    await PopupNavigation.Instance.PushAsync(new YardListPopUp(((ListItems)e.Item)));
-                    break;
-                case "LogBook":
-                    string logId = ((ListItems)e.Item).Id;
-                    if (logId != "")
-                    {
-                        await Navigation.PushAsync(new LogEntry(logId, menuItems.Name));
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    break;
+               await PopupNavigation.Instance.PushAsync(new LGCParcelPopUp(((ListItems)e.Item)));
             }
+            else
+            {
+                string type = menuItems.Id;
+                switch (type)
+                {
+                    case "TallyIn":
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyInDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
+                        break;
+                    case "Packing":
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPackingDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
+                        break;
+                    case "Picking":
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "Picking"), ((ListItems)e.Item)));
+                        break;
+                    case "LoosePick":
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "LoosePick"), ((ListItems)e.Item)));
+                        break;
+                    case "FullPick":
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadPickingDetailURL(((ListItems)e.Item).Id, "FullPick"), ((ListItems)e.Item)));
+                        break;
+                    case "TallyOut":
+                        await Navigation.PushAsync(new WMS_DetailsPage(ControllerUtil.loadTallyOutDetailURL(((ListItems)e.Item).Id), ((ListItems)e.Item)));
+                        break;
+                    case "JobList":
+                        Ultis.Settings.Title = ((ListItems)e.Item).Title;
+                        Ultis.Settings.SessionCurrentJobId = ((ListItems)e.Item).Id;
+                        await Navigation.PushAsync(new NewJobDetails());
+                        break;
+                    case "PickingVerify":
+                        await Navigation.PushAsync(new WMS_Screen.PalletMovement(((ListItems)e.Item)));
+                        break;
+                    case "PendingStorage":
+                        await PopupNavigation.Instance.PushAsync(new YardListPopUp(((ListItems)e.Item)));
+                        break;
+                    case "LogBook":
+                        string logId = ((ListItems)e.Item).Id;
+                        if (logId != "")
+                        {
+                            await Navigation.PushAsync(new LogEntry(logId, menuItems.Name));
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    case "Outbound":
+                        await PopupNavigation.Instance.PushAsync(new YardListPopUp(((ListItems)e.Item)));
+                        break;
+                    case "CartonBox":
+                        await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getParcelList(((ListItems)e.Item).Id)));
+                        break;
+                }
+            }
+
         }
 
         async void GetListData()
         {
+            loading.IsVisible = true;
             try
             {
-                loading.IsVisible = true;
-
                 overloadRecord.Clear();
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (response.IsGood)
+                if (response.IsGood == true)
                 {
                     App.Database.deleteRecords(menuItems.Id);
                     App.Database.deleteRecordSummary(menuItems.Id);
@@ -317,7 +351,11 @@ namespace ASolute_Mobile
                         {
                             count++;
 
-                            if (!(String.IsNullOrEmpty(summaryItem.Caption)))
+                            if (summaryItem.Caption == "Closing Date")
+                            {
+                                closingTime = summaryItem.Value.Replace('-', '/');
+                            }
+                            else if (!(String.IsNullOrEmpty(summaryItem.Caption)))
                             {
                                 if (count == data.Summary.Count)
                                 {
@@ -328,17 +366,11 @@ namespace ASolute_Mobile
                                     summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
                                 }
                             }
-
-                            if (summaryItem.Caption == "")
+                            else if (summaryItem.Caption == "")
                             {
-                                summary += summaryItem.Value;
-                            }
-                            else if (summaryItem.Caption == "Closing Date")
-                            {
-                                closingTime = summaryItem.Value.Replace('-','/');
+                                summary += summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
                             }
                         }
-
 
                         record.Summary = summary;
                         record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : DateTime.Parse(closingTime);
@@ -388,13 +420,14 @@ namespace ASolute_Mobile
                     }
 
                     listView.IsRefreshing = false;
-                    loading.IsVisible = false;
                 }
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
+
+            loading.IsVisible = false;
         }
 
         void LoadListData()
@@ -430,9 +463,6 @@ namespace ASolute_Mobile
                     blockComboBox.ComboBoxSource = blocksID;
                     dateComboBox.ComboBoxSource = dateOption;
                 }
-
-             
-
             }
             catch (Exception ex)
             {
@@ -465,11 +495,11 @@ namespace ASolute_Mobile
                     case "dateComboBox":
                         if (dateComboBox.Text == "All")
                         {
-                            listView.ItemsSource = overloadRecord;
+                            listView.ItemsSource = listViewSource;
                         }
                         else
                         {
-                            switch(dateComboBox.Text)
+                            switch (dateComboBox.Text)
                             {
                                 case "Closing Today":
                                     listView.ItemsSource = listViewSource.Where(x => x.ClosingDate <= DateTime.Now.AddDays(-1) || x.ClosingDate.Value.Day == DateTime.Now.Day);
@@ -490,6 +520,35 @@ namespace ASolute_Mobile
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
+
+        //LGC button clicked
+        async void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            var button = sender as SfButton;
+
+            switch (button.StyleId)
+            {
+                case "btnPrint":
+                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.printCartonLabelURL(menuItems.Id), this);
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (response.IsGood == true)
+                    {
+                        await DisplayAlert("Success", "Printing carton label.", "OK");
+                    }
+                    break;
+
+                case "btnCancel":
+                    var cancel_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.cancelCartonURL(menuItems.Id), this);
+                    clsResponse cancel_response = JsonConvert.DeserializeObject<clsResponse>(cancel_content);
+
+                    if(cancel_response.IsGood == true)
+                    {
+                        await DisplayAlert("Success", "Carton cancelled.", "OK");
+                    }
+                    break;
             }
         }
     }

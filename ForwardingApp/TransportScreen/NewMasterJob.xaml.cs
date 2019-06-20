@@ -29,6 +29,10 @@ namespace ASolute_Mobile.TransportScreen
 
             GetCustomerList();
 
+            MessagingCenter.Subscribe<App>((App)Application.Current, "SetPageTitle", (sender) => {
+                Title = masterJobNo;
+            });
+
             MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshNewMasterJobList", (sender) => {
                 listView.ItemsSource = null;
                 listView.ItemsSource = masterJobList;

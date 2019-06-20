@@ -47,6 +47,7 @@ namespace ASolute_Mobile
             switch (Ultis.Settings.App)
             {
                 case "asolute.Mobile.AILSHaulage":
+                case "asolute.Mobile.AILSHaulageTest":
                     name = "AILS Haulage Ver.";
                     break;
 
@@ -168,7 +169,7 @@ namespace ASolute_Mobile
                                     : await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
                     clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                    if (login_response.IsGood == true)
+                    if (login_response.IsGood )
                     {
                         //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
                         Ultis.Settings.RefreshListView = "Yes";
@@ -290,9 +291,9 @@ namespace ASolute_Mobile
                     Application.Current.MainPage = new LoginPage();
 
                 }
-                catch (Exception exception)
+                catch
                 {
-                    await DisplayAlert("Error", exception.Message, "Ok");
+                   
                 }
 
                 this.activityIndicator.IsRunning = false;

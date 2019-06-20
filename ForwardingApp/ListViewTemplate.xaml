@@ -1,10 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.ListViewTemplate" 
-             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms">
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" 
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <StackLayout Padding="5,10,5,10">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
+        <StackLayout Orientation="Horizontal" x:Name="LGCCartonStack" IsVisible="false">
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnPrint" Text="Print Carton Label" Clicked="Handle_Clicked" />
+            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnCancel" Text="Cancel" Clicked="Handle_Clicked" />
+        </StackLayout>
+        
         <combobox:SfComboBox x:Name="blockComboBox" Watermark="Filter by Block..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
         <combobox:SfComboBox x:Name="dateComboBox" Watermark="Filter by Closing Date..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
         <DatePicker x:Name="logBookDate" IsVisible="false"  HorizontalOptions="FillAndExpand" DateSelected="Handle_DateSelected" BackgroundColor="LightYellow"/>

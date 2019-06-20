@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.WMS_Screen.TallyInPalletEntry" 
@@ -38,8 +38,8 @@
                     <Label Text="Quantity" FontAttributes="Bold" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <controls:CustomEntry x:Name="quantity" HeightRequest="30" HorizontalOptions="FillAndExpand" LineColor="LightYellow" Keyboard="Numeric"  Completed="Handle_Completed"/>
-                    <combobox:SfComboBox HeightRequest="40" x:Name="unitBox" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow"  SelectionChanged="Handle_SelectionChanged"/>
+                    <controls:CustomEntry x:Name="quantity" HeightRequest="30" HorizontalOptions="FillAndExpand" WidthRequest="100" LineColor="LightYellow" Keyboard="Numeric"  Completed="Handle_Completed"/>
+                    <combobox:SfComboBox HeightRequest="40" x:Name="unitBox" HorizontalOptions="FillAndExpand" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="Handle_SelectionChanged" />
                 </StackLayout>
                 <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">
                     <Label Text="Status" FontAttributes="Bold" WidthRequest="150" />

@@ -4,10 +4,10 @@
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <StackLayout Padding="15,15,15,15" Spacing="15">
-        <combobox:SfComboBox x:Name="customerComboBox"  Style="{StaticResource comboBoxStyle}" Text="Customer" SelectionChanged="Handle_SelectionChanged"  HeightRequest="60"  TextSize="20"  />
-        <combobox:SfComboBox x:Name="pickUpComboBox"  Style="{StaticResource comboBoxStyle}" Text="Pickup"   HeightRequest="60"  TextSize="20"  />
+        <combobox:SfComboBox x:Name="customerComboBox"  Style="{StaticResource comboBoxStyle}" Watermark="Customer" SelectionChanged="Handle_SelectionChanged"  HeightRequest="60"  TextSize="20"  />
+        <combobox:SfComboBox x:Name="pickUpComboBox"  Style="{StaticResource comboBoxStyle}" Watermark="Pickup"   HeightRequest="60"  TextSize="20"  />
         
-        <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Add DO"  x:Name="btnAddDo" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" HeightRequest="100"/>
+        <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Add DO" FontSize="30" x:Name="btnAddDo" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" HeightRequest="100"/>
         
         <ListView x:Name="listView" Style="{StaticResource recordListStyle}" HasUnevenRows="true" >
             <ListView.ItemTemplate>

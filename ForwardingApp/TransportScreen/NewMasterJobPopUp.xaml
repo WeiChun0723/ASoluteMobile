@@ -6,16 +6,17 @@
                  xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" 
                  xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" 
                  xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
-                 xmlns:local="clr-namespace:ASolute_Mobile.InputValidation">
+                 xmlns:local="clr-namespace:ASolute_Mobile.InputValidation"
+                 xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation PositionIn="Center" PositionOut="Center" ScaleIn="1.2" ScaleOut="0.8" DurationIn="400" DurationOut="300" EasingIn="SinOut" EasingOut="SinIn" HasBackgroundAnimation="True" />
     </pages:PopupPage.Animation>
     <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Padding="10, 10, 10, 10">
         <Frame CornerRadius="10" BackgroundColor="#87ceeb">
             <StackLayout Spacing="20">
-                <Label Text="Add Do" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="Red" FontSize="Large"/>
+                <Label Text="Add DO" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="Red" FontSize="Large"/>
                 <combobox:SfComboBox x:Name="dropOffComboBox" Style="{StaticResource comboBoxStyle}" Watermark="DropOff"  HeightRequest="50" TextSize="20" />
-                <inputLayout:SfTextInputLayout Hint="DO No." Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+                <inputLayout:SfTextInputLayout Hint="DO No."  Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
                     <Entry x:Name="doNo" >
                         <Entry.Behaviors>
                         <local:MaxLengthValidation MaxLength="200" />
@@ -34,6 +35,7 @@
                     <Entry x:Name="quantity" Keyboard="Numeric"/>
                     
                 </inputLayout:SfTextInputLayout>
+                <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." IsVisible="false" TextColor="Red" />
                 <buttons:SfButton Style="{StaticResource buttonStyle}" Text="Confirm" x:Name="btnConfirm" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" />
             </StackLayout>
         </Frame>

@@ -30,6 +30,7 @@ namespace ASolute_Mobile.WMS_Screen
         List<bool> checkField = new List<bool>();
         string userInput = "", productID;
         bool scanAgain = false;
+        string productCode;
 
         public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
@@ -376,11 +377,10 @@ namespace ASolute_Mobile.WMS_Screen
                         if (!(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
                             && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)) && !(checkField.Contains(false)))
                         {
-
                             clsPallet pallet = new clsPallet
                             {
                                 Id = id,
-                                ProductCode = productPallet.ProductCode,
+                                ProductCode = (actionID == "BARRY") ? palletNo.Text.Substring(0, 16) : productPallet.ProductCode,
                                 PalletId = (!(String.IsNullOrEmpty(palletNo.Text))) ? palletNo.Text : String.Empty,
                                 PalletSize = newPallet.PalletSize[sizes.FindIndex(x => x.Equals(sizeBox.Text))].Key,
                                 Qty = Convert.ToInt32(quantity.Text),
@@ -470,7 +470,7 @@ namespace ASolute_Mobile.WMS_Screen
                                 }
                                 else
                                 {
-                                    string productCode = result.Text.Substring(0, 16);
+                                    productCode = result.Text.Substring(0, 16);
                                     string productPackageCode = result.Text.Substring(16, 8);
                                     string productRunningNo = result.Text.Substring(25, 1);
                                     string productQTY = result.Text.Substring(26, 2);
@@ -683,7 +683,7 @@ namespace ASolute_Mobile.WMS_Screen
                                 }
                                 else
                                 {
-                                    string productCode = userInput.Substring(0, 16);
+                                    productCode = userInput.Substring(0, 16);
                                     string productPackageCode = userInput.Substring(16, 8);
                                     string productRunningNo = userInput.Substring(25, 1);
                                     string productQTY = userInput.Substring(26, 2);
@@ -704,7 +704,6 @@ namespace ASolute_Mobile.WMS_Screen
 
                         }
                     }
-
 
             }
             catch

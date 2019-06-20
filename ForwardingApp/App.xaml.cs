@@ -24,7 +24,7 @@ using ASolute_Mobile.Planner;
 using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.ZebraPrinter;
 using LinkOS.Plugin.Abstractions;
-
+using ASolute_Mobile.Yard;
 
 namespace ASolute_Mobile
 {
@@ -41,7 +41,7 @@ namespace ASolute_Mobile
 
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTAwNjNAMzEzNjJlMzQyZTMwb1R4bXdyL0JFUUdSVmxqUnEyU0Nod2pOb0x6UHRCQjR6dzdMZVd2TTcwdz0=");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTA3Mzg5QDMxMzcyZTMxMmUzMEFvL1Y2Sk9XWU9SUU5ENzYxSEZNYUZvWG5OSFM4Uk1hcnFOYng1YmphSE09");
 
             InitializeComponent();
 
@@ -52,9 +52,9 @@ namespace ASolute_Mobile
             }
             else
             {
-                 // MainPage = new YardMap();
+                 // MainPage = new yardmaptest();
 
-                  if (sessionKey != "")
+                 if (sessionKey != "")
                   {
                       MainPage = new MainPage();
                   }

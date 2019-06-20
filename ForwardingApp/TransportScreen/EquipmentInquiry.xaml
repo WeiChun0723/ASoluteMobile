@@ -30,7 +30,7 @@
            
         </Grid>
 
-        <ListView x:Name="euipmentList" ItemsSource="Binding " ></ListView>
+        <ListView x:Name="euipmentList"></ListView>
         </StackLayout>
    
 </ContentPage>

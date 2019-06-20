@@ -209,7 +209,6 @@ namespace ASolute_Mobile.TransportScreen
                         ReqSign = truck.ReqSign
                     };
 
-
                     if (!(String.IsNullOrEmpty(truck.BackColor)))
                     {
                         record.BackColor = truck.BackColor;

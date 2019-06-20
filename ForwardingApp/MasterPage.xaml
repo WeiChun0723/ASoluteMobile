@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.MasterPage" 
@@ -56,7 +56,7 @@
                            
                             <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,10,0,10" Spacing="20">
                                 <Image Source="{Binding IconSource}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" />
-                                <Label Text="{Binding Title}" FontSize="Small" VerticalOptions="Center" TextColor="White" FontAttributes="Bold" />
+                                <Label Text="{Binding Title}" FontSize="Small" VerticalOptions="Center" TextColor="Black" FontAttributes="Bold" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

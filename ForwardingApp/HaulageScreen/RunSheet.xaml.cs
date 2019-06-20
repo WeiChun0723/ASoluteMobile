@@ -149,7 +149,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                 downloadRunSheet(selectDate);
             }
-
         }
 
         public void PageContent()
@@ -167,7 +166,6 @@ namespace ASolute_Mobile.HaulageScreen
                 Source = "nodatafound.png",
                 IsVisible = false
             };
-
 
             activityIndicator = new ActivityIndicator
             {
@@ -270,56 +268,57 @@ namespace ASolute_Mobile.HaulageScreen
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
             string recordId = ((ListItems)e.Item).Id;
-
-            try
+            if(Ultis.Settings.App == "asolute.Mobile.AILSBUS")
             {
-                if (history.Count != 0)
+                try
                 {
-                    var recordContent = history.FirstOrDefault(item => item.Id == recordId);
-
-                    if (recordContent != null)
+                    if (history.Count != 0)
                     {
-                        if (connectedPrinter == false)
-                        {
-                            bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+                        var recordContent = history.FirstOrDefault(item => item.Id == recordId);
 
-                            if (!x)
+                        if (recordContent != null)
+                        {
+                            if (connectedPrinter == false)
                             {
-                                Device.BeginInvokeOnMainThread(() =>
+                                bool x = await DependencyService.Get<IBthService>().connectBTDevice("00:15:0E:E6:25:23");
+
+                                if (!x)
                                 {
-                                    DisplayAlert("Error", "Unable connect", "OK");
-                                });
+                                    Device.BeginInvokeOnMainThread(() =>
+                                    {
+                                        DisplayAlert("Error", "Unable connect", "OK");
+                                    });
+                                }
+                                else
+                                {
+                                    connectedPrinter = true;
+                                }
                             }
-                            else
+
+                            System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
+                            WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, false, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
+                            foreach (clsCaptionValue summaryList in recordContent.Summary)
                             {
-                                connectedPrinter = true;
+                                string detail = "";
+
+                                detail = (summaryList.Caption == "") ? summaryList.Value : summaryList.Caption + " : " + summaryList.Value;
+
+                                WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(detail + "\r\n\r\n"));
                             }
+
+                            WriteMemoryStream(buffer, WoosimPageMode.print());
+
+                            DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
                         }
 
-                        System.IO.MemoryStream buffer = new System.IO.MemoryStream(512);
-                        WriteMemoryStream(buffer, WoosimCmd.setTextStyle(0, false, (int)WoosimCmd.TEXTWIDTH.TEXTWIDTH01, (int)WoosimCmd.TEXTHEIGHT.TEXTHEIGHT02, false));
-                        foreach (clsCaptionValue summaryList in recordContent.Summary)
-                        {
-                            string detail = "";
-
-                            detail = (summaryList.Caption == "") ? summaryList.Value : summaryList.Caption + " : " + summaryList.Value;
-
-                            WriteMemoryStream(buffer, Encoding.ASCII.GetBytes(detail + "\r\n\r\n"));
-                        }
-
-                        WriteMemoryStream(buffer, WoosimPageMode.print());
-
-                        DependencyService.Get<IBthService>().WriteComm(buffer.ToArray());
                     }
-
                 }
-            }
-            catch (Exception error)
-            {
-                await DisplayAlert("Error", error.Message, "OK");
-            }
+                catch (Exception error)
+                {
+                    await DisplayAlert("Error", error.Message, "OK");
+                }
 
-
+            }
         }
 
         async private void WriteMemoryStream(System.IO.MemoryStream stream, byte[] data)
@@ -338,18 +337,15 @@ namespace ASolute_Mobile.HaulageScreen
 
         public void NextDate(object sender, EventArgs e)
         {
-
             previous_icon.IsEnabled = false;
             next_icon.IsEnabled = false;
             option = "next";
             downloadRunSheet(datePicker.Date.AddDays(1).ToString("yyyy MM dd"));
         }
 
-
         protected void runSheetRefresh(object sender, EventArgs e)
         {
             downloadRunSheet(datePicker.Date.ToString("yyyy MM dd"));
-
             runSheetHistory.IsRefreshing = false;
         }
 

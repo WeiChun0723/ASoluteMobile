@@ -142,7 +142,7 @@ namespace ASolute_Mobile.TransportScreen
                 {
                     clsTruckingModel futile = new clsTruckingModel();
 
-                    futile.Id = "";
+                    futile.Id = jobID;
                     futile.Remarks = remarkTextEditor.Text;
                     futile.ReasonCode = keyValue[ReasonPicker.SelectedIndex].Key;
 

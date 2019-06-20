@@ -198,7 +198,7 @@ namespace ASolute_Mobile
                                     var content = await CommonFunction.PostRequestAsync(refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                                    if (response.IsGood)
+                                    if (response.IsGood == true)
                                     {
                                         imageEventID = response.Result["LinkId"];
                                         UploadImage();
@@ -394,7 +394,7 @@ namespace ASolute_Mobile
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewFuelCostURL(), this);
                 clsResponse json_reponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (json_reponse.IsGood == true)
+                if (json_reponse.IsGood)
                 {
                     fuelCostNew = JObject.Parse(content)["Result"].ToObject<clsFuelCostNew>();
 

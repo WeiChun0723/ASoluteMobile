@@ -23,7 +23,7 @@ namespace ASolute_Mobile.iOS
             Rg.Plugins.Popup.Popup.Init();
             global::Xamarin.Forms.Forms.Init();
 
-            Ultis.Settings.App = "com.asolute.AILSFleet";
+            Ultis.Settings.App = "asolute.Mobile.AILSWMS";
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
            
             Xamarin.FormsMaps.Init();

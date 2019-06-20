@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using ASolute_Mobile.Models;
-using Honeywell.AIDC.CrossPlatform.Print;
+//using Honeywell.AIDC.CrossPlatform.Print;
 using LinkOS.Plugin;
 using LinkOS.Plugin.Abstractions;
 

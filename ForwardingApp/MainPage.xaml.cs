@@ -73,12 +73,10 @@ namespace ASolute_Mobile
                                     Ultis.Settings.AppFirstInstall = "Refresh";
                                     Application.Current.MainPage = new MainPage();
                                 }
-
-
                             }
                             catch
                             {
-                                await DisplayAlert("Error", "Problem occur", "OK");
+                              
                             }
                         }
 
@@ -93,16 +91,15 @@ namespace ASolute_Mobile
                             {
                                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPanicURL(), this);
                                 clsResponse panic_response = JsonConvert.DeserializeObject<clsResponse>(content);
-                                if (panic_response.IsGood == true)
+                                if (panic_response.IsGood)
                                 {
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Message sent successfully." : "Permintaan anda telah dihantar.";
                                     await DisplayAlert("", reply, "Okay");
                                 }
-
                             }
-                            catch (Exception exception)
+                            catch
                             {
-                                await DisplayAlert("Error", exception.Message, "OK");
+
                             }
 
                         }
@@ -113,9 +110,9 @@ namespace ASolute_Mobile
                         {
                             Device.OpenUri(new Uri(String.Format("tel:{0}", Ultis.Settings.SessionUserItem.OperationPhone)));
                         }
-                        catch (Exception exception)
+                        catch 
                         {
-                            await DisplayAlert("Error", exception.Message, "OK");
+                           
                         }
                     }
                     else if (item.Id.Equals("CallMe"))
@@ -134,11 +131,10 @@ namespace ASolute_Mobile
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Your request has been attended" : "Permintaan anda telah dihantar.";
                                     await DisplayAlert("", reply, "Okay");
                                 }
-
                             }
-                            catch (Exception exception)
+                            catch 
                             {
-                                await DisplayAlert("Error", exception.Message, "OK");
+                               
                             }
 
                         }
@@ -163,23 +159,21 @@ namespace ASolute_Mobile
 
                             try
                             {
-
                                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
                                 clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                                if (json_response.IsGood == true)
+                                if (json_response.IsGood)
                                 {
                                     Ultis.Settings.RefreshListView = "Yes";
                                     string reply = (Ultis.Settings.Language.Equals("English")) ? "Language had been changed." : "Bahasa telah diubah.";
                                     await DisplayAlert("", reply, "Okay");
+
                                     refreshMainPage();
                                 }
-
-
                             }
-                            catch (Exception exception)
+                            catch 
                             {
-                                await DisplayAlert("Error", exception.Message, "OK");
+
                             }
                         }
                         else
@@ -198,16 +192,16 @@ namespace ASolute_Mobile
                                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLogOutURL(), this);
                                 clsResponse logoutResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                                if (logoutResponse.IsGood == true)
+                                if (logoutResponse.IsGood)
                                 {
 
                                     //App.DropDatabase(); the app will crash
                                     BackgroundTask.Logout(this);
                                 }
                             }
-                            catch (Exception exception)
+                            catch 
                             {
-                                await DisplayAlert("Error", exception.Message, "OK");
+
                             }
                         }
                     }

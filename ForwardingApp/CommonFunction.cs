@@ -91,7 +91,7 @@ namespace ASolute_Mobile.Utils
                             if (!(reply.IsGood))
                             {
                                 await page.DisplayAlert("Error", reply.Message, "OK");
-                                return null;
+
                             }
                         }
                     }
@@ -256,7 +256,35 @@ namespace ASolute_Mobile.Utils
                 {
                     //Ultis.Settings.NewJob = "No";
                     //pages.ToolbarItems.Clear();
-                    await contentPage.Navigation.PushAsync(new NewMasterJob());
+
+                    if(Ultis.Settings.App.Contains("Trucking"))
+                    {
+                        await contentPage.Navigation.PushAsync(new NewMasterJob());
+                    }
+                    else
+                    {
+                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewCartonBoxURL(), null);
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if(response.IsGood)
+                        {
+                            MessagingCenter.Send<App>((App)Application.Current, "RefreshCartonList");
+
+                            var answer = await contentPage.DisplayAlert("", "Added new carton box. Print carton label now?", "Yes", "No");
+                            if (answer.Equals(true))
+                            {
+                                try
+                                {
+                                    MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
+
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
+                    }
 
                 };
 
