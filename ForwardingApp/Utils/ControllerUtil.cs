@@ -514,6 +514,11 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Parcel/Print?SessionId={0}&OrderNo={1}", Ultis.Settings.SessionSettingKey, orderNo);
         }
+
+        public static String getParcelRulesURL()
+        {
+            return String.Format("Parcel/Rules?SessionId={0}", Ultis.Settings.SessionSettingKey);
+        }
         #endregion
 
         #region warehouse url

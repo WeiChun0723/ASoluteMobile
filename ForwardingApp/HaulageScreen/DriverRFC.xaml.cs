@@ -35,32 +35,7 @@ namespace ASolute_Mobile.HaulageScreen
             NavigationPage.SetTitleView(this, main);
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (Ultis.Settings.NewJob.Equals("Yes"))
-            {
-                CommonFunction.CreateToolBarItem(this);
-            }
-            else
-            {
-                this.ToolbarItems.Clear();
-            }
-
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
-
-                try
-                {
-                    CommonFunction.NewJobNotification(this);
-                }
-                catch (Exception e)
-                {
-                    DisplayAlert("Notification error", e.Message, "OK");
-                }
-            });
-        }
-
+        
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -110,7 +85,7 @@ namespace ASolute_Mobile.HaulageScreen
         {
             if(!(String.IsNullOrEmpty(contPrefix.Text)) && !(String.IsNullOrEmpty(contNum.Text)))
             {
-                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.postDriverRFCURL(contPrefix.Text + contNum.Text));
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.postDriverRFCURL(contPrefix.Text + contNum.Text),this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(response.IsGood)

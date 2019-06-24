@@ -31,7 +31,6 @@ namespace ASolute_Mobile
 
         public NewMainMenu()
         {
- 
             InitializeComponent();
 
             switch (Ultis.Settings.App)

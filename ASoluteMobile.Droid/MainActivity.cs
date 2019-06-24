@@ -16,7 +16,7 @@ using Haulage.Droid.MobilePrinter;
 namespace ASolute_Mobile.Droid
 {
 
-    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "ASolute Fleet", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static Activity activity;
@@ -40,6 +40,8 @@ namespace ASolute_Mobile.Droid
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
                 ZXing.Mobile.MobileBarcodeScanner.Initialize(Application);
                 Ultis.Settings.App = PackageName;
+
+                
 
                 if ( Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {

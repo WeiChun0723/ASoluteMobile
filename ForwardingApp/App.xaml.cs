@@ -100,7 +100,7 @@ namespace ASolute_Mobile
                   MessagingCenter.Send<App>((App)Application.Current, "Testing");
               }*/
 
-            Ultis.Settings.NewJob = "Yes";
+            
             Ultis.Settings.RefreshListView = "Yes";
             MessagingCenter.Send<App>((App)Application.Current, "Testing");
         }

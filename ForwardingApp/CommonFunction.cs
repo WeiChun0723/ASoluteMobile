@@ -23,7 +23,7 @@ namespace ASolute_Mobile.Utils
         static ContentPage pages;
         static string returnResult;
 
-        //call when calling the web service to get response
+       /* //call when calling the web service to get response
         public static async Task<string> GetRequestAsync(string baseAdd,string callUri)
         {
             var client = new HttpClient();
@@ -48,7 +48,7 @@ namespace ASolute_Mobile.Utils
             Debug.WriteLine(reply);
 
             return reply;
-        }
+        }*/
 
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri, Page page)
@@ -254,8 +254,7 @@ namespace ASolute_Mobile.Utils
 
                 item.Clicked += async (sender, e) =>
                 {
-                    //Ultis.Settings.NewJob = "No";
-                    //pages.ToolbarItems.Clear();
+                   
 
                     if(Ultis.Settings.App.Contains("Trucking"))
                     {
@@ -276,7 +275,6 @@ namespace ASolute_Mobile.Utils
                                 try
                                 {
                                     MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
-
                                 }
                                 catch
                                 {

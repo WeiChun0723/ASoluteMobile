@@ -52,7 +52,7 @@ namespace ASolute_Mobile.Planner
         {
 
 
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getEqCategoryURL());
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getEqCategoryURL(),this);
             clsResponse equipment_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(equipment_response.IsGood)

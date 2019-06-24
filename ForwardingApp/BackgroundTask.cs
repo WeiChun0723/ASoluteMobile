@@ -28,7 +28,7 @@ namespace ASolute_Mobile
         static List<AppImage> recordImages = new List<AppImage>();
         //static Plugin.Geolocator.Abstractions.Position position = null;
         static string address = "";
-        static string location = "0,0";
+        static string location = "";
 
         public static async Task GetGPS()
         {
@@ -52,9 +52,9 @@ namespace ASolute_Mobile
                 location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
             }*/
 
-            location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? "0,0"  : String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
+            location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? ""  : String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
 
-            if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet() )
+            if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet())
             {
                 try
                 {

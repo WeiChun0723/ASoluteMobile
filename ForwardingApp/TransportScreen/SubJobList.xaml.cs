@@ -48,7 +48,7 @@ namespace ASolute_Mobile.TransportScreen
         {
             records.Clear();
          
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getSubJobURL(jobID));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getSubJobURL(jobID),this);
             clsResponse pending_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (pending_response.IsGood)

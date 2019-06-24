@@ -133,7 +133,7 @@ namespace ASolute_Mobile.TransportScreen
                     Device.BeginInvokeOnMainThread(async () =>
                     {
                     
-                        var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.addJobURL(result.Text));
+                        var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.addJobURL(result.Text),this);
                         clsResponse jsonResponse = JsonConvert.DeserializeObject<clsResponse>(content);
 
                         if (jsonResponse.IsGood)
@@ -181,7 +181,7 @@ namespace ASolute_Mobile.TransportScreen
         protected async void GetJobList()
         {
 
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL(webServiceAction));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getTruckListURL(webServiceAction),this);
             clsResponse job_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(job_response.IsGood)

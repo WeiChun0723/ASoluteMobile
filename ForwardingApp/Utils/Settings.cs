@@ -24,7 +24,6 @@ namespace ASolute_Mobile.Ultis
         private const string Enterprise = "enterpriseName";
         private const string SessionKey = "session_key";
         private const string UserId = "session_userId";
-        private const string Password = "session_password";
         private const string CurrentJobId = "job_id";
         private const string CurrentURI = "current_uri";        
         private const string SecretKey = "secret_key";
@@ -40,8 +39,6 @@ namespace ASolute_Mobile.Ultis
         private const string DeviceID = "testing";
         private const string FirebaseID = "firebase";
         private const string UserEmail = "";
-        private const string Cargo_Return = "return";
-        private const string New_Job = "new_job";
         private const string SubTitles = "sub_Titles";
         private const string Titles = "title";
         private const string UpdateTimes = "update_time";
@@ -113,30 +110,6 @@ namespace ASolute_Mobile.Ultis
             }
         }
 
-        public static string NewJob
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(New_Job, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(New_Job, value);
-            }
-        }
-
-
-        public static string CargoReturn
-        {
-            get
-            {
-                return AppSettings.GetValueOrDefault(Cargo_Return, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(Cargo_Return, value);
-            }
-        }
 
         public static string Email
         {

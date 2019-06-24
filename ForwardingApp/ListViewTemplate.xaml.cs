@@ -80,11 +80,13 @@ namespace ASolute_Mobile
 
                     MessagingCenter.Subscribe<App>((App)Application.Current, "PrintCartonLabel", (sender) =>
                     {
-                        DisplayAlert("Sucess", "Printing label.", "OK");
+                        DisplayAlert("Success", "Printing label.", "OK");
                     });
                     break;
             }
 
+
+            //LGC warehouse
             if (callUri.Contains("Parcel/List"))
             {
                 LGCCartonStack.IsVisible = true;

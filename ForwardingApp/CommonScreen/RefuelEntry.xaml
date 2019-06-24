@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.RefuelEntry" 
@@ -9,96 +9,7 @@
              xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation">
     <ScrollView>
         <StackLayout Padding="15,15,15,15" Spacing="10">
-            <!--<Grid RowSpacing="5" ColumnSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <StackLayout Padding="0,10,0,0" Grid.Row="0" Grid.Column="0">
-                    <Label Text="Station" FontAttributes="Bold" x:Name="lblStation" />
-                </StackLayout>
-                <combobox:SfComboBox x:Name="stationComboBox" Style="{StaticResource comboBoxStyle}" Grid.Row="0" Grid.Column="1" />
-            
-                <StackLayout Padding="0,10,0,0" Grid.Row="1" Grid.Column="0">
-                    <Label Text="Date &amp; Time" FontAttributes="Bold" x:Name="lblDateTime" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <DatePicker x:Name="datePicker" HorizontalOptions="Fill" WidthRequest="130" Format="dd MMMM" BackgroundColor="LightYellow" />
-                    <TimePicker x:Name="timePicker" HorizontalOptions="Fill" WidthRequest="95" Format="HH:mm" BackgroundColor="LightYellow" />
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="2" Grid.Column="0">
-                    <Label Text="Payment" FontAttributes="Bold" x:Name="lblPayment" />
-                </StackLayout>
-                <combobox:SfComboBox x:Name="paymentComboBox" Style="{StaticResource comboBoxStyle}" Grid.Row="2" Grid.Column="1" />
-               
-                <StackLayout Padding="0,10,0,0" Grid.Row="3" Grid.Column="0">
-                    <Label Text="Liter" FontAttributes="Bold" WidthRequest="150" x:Name="lblLiter" />
-                </StackLayout>
-                <controls:CustomEntry x:Name="liter" Grid.Row="3" Grid.Column="1" TextChanged="LiterInput" Keyboard="Numeric" HorizontalTextAlignment="Center" WidthRequest="150" LineColor="LightYellow" HeightRequest="40" />
-                <StackLayout Padding="0,10,0,0" Grid.Row="4" Grid.Column="0">
-                    <Label Text="Cost per Liter" FontAttributes="Bold" x:Name="lblCost" />
-                </StackLayout>
-                <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="costPerLiter" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" Keyboard="Numeric" HorizontalTextAlignment="End" LineColor="LightYellow" TextChanged="CostLiter" />
-                    <Label x:Name="amount" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightGray" WidthRequest="130" FontAttributes="Bold" TextColor="Black" />
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="5" Grid.Column="0">
-                    <Label Text="Odometer" FontAttributes="Bold" x:Name="lblOdometer" />
-                </StackLayout>
-                <controls:CustomEntry x:Name="odometer" HeightRequest="30" LineColor="LightYellow" Grid.Row="5" Grid.Column="1" Keyboard="Numeric" HorizontalOptions="Fill" HorizontalTextAlignment="End" />
-                <StackLayout Padding="0,10,0,0" Grid.Row="6" Grid.Column="0">
-                    <Label Text="Fuel Card" FontAttributes="Bold" x:Name="lblFuelCard" />
-                </StackLayout>
-                <StackLayout Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="fuelCard" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="LightYellow" />
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="fuelCardBarCode_icon">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Handle_Tapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" Grid.Row="7" Grid.Column="0">
-                    <Label Text="Voucher" FontAttributes="Bold" x:Name="lblVoucher" />
-                </StackLayout>
-                <StackLayout Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-                    <controls:CustomEntry x:Name="voucher" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" LineColor="WhiteSmoke">
-                        <controls:CustomEntry.Behaviors>
-                            <validation:MaxLengthValidation MaxLength="20" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="voucherBarCode_icon">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Handle_Tapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <StackLayout Padding="0,10,0,0" IsVisible="false">
-                    <Label Text="Other Ref" FontAttributes="Bold" x:Name="lblOtherRef" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" IsVisible="false">
-                    <controls:CustomEntry x:Name="other" HeightRequest="30" HorizontalOptions="Fill" WidthRequest="150" BackgroundColor="WhiteSmoke">
-                        <controls:CustomEntry.Behaviors>
-                            <validation:MaxLengthValidation MaxLength="15" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                    <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="otherBarCode_icon">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Handle_Tapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-            </Grid>-->
-            
+           
             <StackLayout>
                  <Label Text="Station" FontAttributes="Bold" x:Name="lblStation" />
                 <combobox:SfComboBox x:Name="stationComboBox" Style="{StaticResource comboBoxStyle}"/>

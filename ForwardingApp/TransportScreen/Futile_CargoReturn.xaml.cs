@@ -33,11 +33,7 @@ namespace ASolute_Mobile.TransportScreen
             if(Title.Equals("Cargo Return"))
             {
 
-                if (!(String.IsNullOrEmpty(Ultis.Settings.CargoReturn)))
-                {
-                    string[] sign = Ultis.Settings.CargoReturn.Split(',');
-                    reqSign = sign[2];
-                }
+               
 
                 ReferenceStack.IsVisible = true;
 
@@ -58,7 +54,7 @@ namespace ASolute_Mobile.TransportScreen
 
         public async void ReasonList()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getReasonListURL());
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getReasonListURL(),this);
             clsResponse reason_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(reason_response.IsGood)

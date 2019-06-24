@@ -146,7 +146,7 @@ namespace ASolute_Mobile.WMS_Screen
                 CheckDigit = Convert.ToInt32(checkDigitEntry.Text)  
             };
 
-            var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postPickingDetailURL());
+            var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postPickingDetailURL(),this);
             clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (update_response.IsGood)
@@ -184,7 +184,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GenPallet_Clicked(object sender, EventArgs e)
         {
-            var content = await CommonFunction.PostRequestAsync(null,Ultis.Settings.SessionBaseURI, ControllerUtil.generatePalletURL(linkID));
+            var content = await CommonFunction.CallWebService(1,null,Ultis.Settings.SessionBaseURI, ControllerUtil.generatePalletURL(linkID),this);
             clsResponse genPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(genPallet_response.IsGood)

@@ -42,15 +42,6 @@ namespace ASolute_Mobile.Droid.Services
             base.OnCreate();
             Log.Debug(logTag, "OnCreate called in the Location Service");
 
-            var pm = (PowerManager)GetSystemService(Context.PowerService);
-            _mWakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "PartialWakeLockTag");
-            bool test = pm.IsIgnoringBatteryOptimizations(PackageName);
-            _mWakeLock.Acquire();
-
-            var wf = (WifiManager)GetSystemService(Context.WifiService);
-             _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
-            _wifiLock.Acquire();
-
         }
 
         // This gets called when StartService is called in our App class
@@ -58,32 +49,15 @@ namespace ASolute_Mobile.Droid.Services
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             Log.Debug(logTag, "LocationService started");
-           /* string channelId = "";
-            Notification notification = null;
-            var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(MainActivity)), 0);
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
 
-                channelId = createNotificationChannel("my_channel", "my_background_service");
-                notification = new Notification.Builder(this, channelId)
-                .SetContentIntent(pendingIntent)
-                .SetContentTitle("GPS Tracking")
-                .SetContentText("Getting location.")
-                .SetSmallIcon(Resource.Drawable.appIcon)
-                .Build();
-            }
-            else
-            {
-              
-                notification = new Notification.Builder(this)
-                .SetContentIntent(pendingIntent)
-                .SetContentTitle("GPS Tracking")
-                .SetContentText("Getting location.")
-                .SetSmallIcon(Resource.Drawable.appIcon)
-                .Build();
-            }
+            var pm = (PowerManager)GetSystemService(Context.PowerService);
+            _mWakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "PartialWakeLockTag");
+            _mWakeLock.Acquire();
 
-            StartForeground((int)NotificationFlags.ForegroundService, notification);*/
+            var wf = (WifiManager)GetSystemService(Context.WifiService);
+            _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
+            _wifiLock.Acquire();
+
 
             return StartCommandResult.Sticky;
         }
@@ -142,8 +116,8 @@ namespace ASolute_Mobile.Droid.Services
             Log.Debug(logTag, "Service has been terminated");
             // Stop getting updates from the location manager:
             LocMgr.RemoveUpdates(this);
-            _mWakeLock.Release();
-            _wifiLock.Release();
+            //_mWakeLock.Release();
+            //_wifiLock.Release();
         }
 
         #region ILocationListener implementation

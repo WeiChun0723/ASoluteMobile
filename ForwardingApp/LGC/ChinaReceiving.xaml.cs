@@ -5,17 +5,64 @@ using Newtonsoft.Json;
 using ASolute_Mobile.Utils;
 using ASolute.Mobile.Models;
 using ZXing.Net.Mobile.Forms;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace ASolute_Mobile.LGC
 {
 
     public partial class ChinaReceiving : ContentPage
     {
+        int maxWeight, minLength, minWidth, maxDimension;
+
         public ChinaReceiving()
         {
             InitializeComponent();
 
             Title = "China Receiving";
+
+            GetParcelRules();
+        }
+
+        async void GetParcelRules()
+        {
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getParcelRulesURL(), this);
+            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if(response.IsGood == true)
+            {
+                var rules = JObject.Parse(content)["Result"].ToObject<List<clsKeyCaptionValue>>();
+
+                string allRule = "";
+
+                foreach (clsKeyCaptionValue rule in rules)
+                {
+                    allRule += rule.Caption + ": " + rule.Value + "\r\n";
+
+                    switch(rule.Key)
+                    {
+                        case "MinLength":
+                            minLength = Convert.ToInt16(rule.Value) ;
+                            break;
+
+                        case "MinWidth":
+                            minWidth = Convert.ToInt16(rule.Value);
+                            break;
+
+                        case "MaxDimension":
+                            maxDimension = Convert.ToInt16(rule.Value);
+                            break;
+
+                        case "MaxWeight":
+                            maxWeight = Convert.ToInt16(rule.Value);
+                            break;
+                    }
+
+                }
+
+                rulesDesc.Text = allRule;
+            }
+           
         }
 
         async void Handle_Tapped(object sender, System.EventArgs e)
@@ -57,10 +104,9 @@ namespace ASolute_Mobile.LGC
                     var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.validateConsingmentNoteURL(consigNote.Text), this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                    if (response.IsGood)
+                    if (response.IsGood == true)
                     {
                         recevingStack.IsVisible = true;
-
                     }
                     break;
 
@@ -69,44 +115,51 @@ namespace ASolute_Mobile.LGC
                     if ((!String.IsNullOrEmpty(consigNote.Text)) && (!String.IsNullOrEmpty(cartonBox.Text)) && (!String.IsNullOrEmpty(length.Text)) && (!String.IsNullOrEmpty(width.Text)) &&
                         (!String.IsNullOrEmpty(height.Text)) && (!String.IsNullOrEmpty(unit.Text)))
                     {
-                        if(Convert.ToDouble(unit.Text) > 999)
+                        if(Convert.ToInt16(length.Text) >= minLength && Convert.ToInt16(width.Text) >= minWidth && (Convert.ToInt16(length.Text) * Convert.ToInt16(width.Text) * Convert.ToInt16(height.Text) <= maxDimension)
+                            && Convert.ToInt16(unit.Text) <= maxWeight)
                         {
-                            await DisplayAlert("Error", "Weight cannot more than 999", "OK");
+                            if (Convert.ToDouble(unit.Text) > 999)
+                            {
+                                await DisplayAlert("Error", "Weight cannot more than 999", "OK");
+                            }
+                            else
+                            {
+                                clsParcelModel parcelModel = new clsParcelModel
+                                {
+                                    ConsignmentNo = consigNote.Text,
+                                    CartonNo = cartonBox.Text,
+                                    Length = Convert.ToInt16(length.Text),
+                                    Width = Convert.ToInt16(width.Text),
+                                    Height = Convert.ToInt16(height.Text),
+                                    Weight = Convert.ToDouble(unit.Text),
+                                    Volume = Convert.ToDouble(M3.Text)
+                                };
+
+                                var submit_content = await CommonFunction.CallWebService(1, parcelModel, Ultis.Settings.SessionBaseURI, ControllerUtil.postReceiveAndUpdate(), this);
+                                clsResponse submit_response = JsonConvert.DeserializeObject<clsResponse>(submit_content);
+
+                                if (submit_response.IsGood == true)
+                                {
+                                    await DisplayAlert("Success", "Submit successfully.", "OK");
+
+                                    consigNote.Text = String.Empty;
+                                    length.Text = String.Empty;
+                                    width.Text = String.Empty;
+                                    height.Text = String.Empty;
+                                    M3.Text = String.Empty;
+                                    unit.Text = String.Empty;
+                                    cartonBox.Text = String.Empty;
+
+                                    recevingStack.IsVisible = false;
+
+                                    consigNote.Focus();
+                                }
+                            }
                         }
                         else
                         {
-                            clsParcelModel parcelModel = new clsParcelModel
-                            {
-                                ConsignmentNo = consigNote.Text,
-                                CartonNo = cartonBox.Text,
-                                Length = Convert.ToInt16(length.Text),
-                                Width = Convert.ToInt16(width.Text),
-                                Height = Convert.ToInt16(height.Text),
-                                Weight = Convert.ToDouble(unit.Text),
-                                Volume = Convert.ToDouble(M3.Text)
-                            };
-
-                            var submit_content = await CommonFunction.CallWebService(1, parcelModel, Ultis.Settings.SessionBaseURI, ControllerUtil.postReceiveAndUpdate(), this);
-                            clsResponse submit_response = JsonConvert.DeserializeObject<clsResponse>(submit_content);
-
-                            if (submit_response.IsGood)
-                            {
-                                await DisplayAlert("Success", "Submit successfully.", "OK");
-
-                                consigNote.Text = String.Empty;
-                                length.Text = String.Empty;
-                                width.Text = String.Empty;
-                                height.Text = String.Empty;
-                                M3.Text = String.Empty;
-                                unit.Text = String.Empty;
-                                cartonBox.Text = String.Empty;
-
-                                recevingStack.IsVisible = false;
-
-                                consigNote.Focus();
-                            }
+                            await DisplayAlert("Error", "Please follow the rules given above.", "OK");
                         }
-                        
                     }
                     else
                     {

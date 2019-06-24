@@ -493,9 +493,6 @@
     <Reference Include="Syncfusion.SfAutoComplete.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfAutoComplete.17.1.0.49\lib\MonoAndroid10\Syncfusion.SfAutoComplete.XForms.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.SfMaps.Android">
       <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.17.1.0.49\lib\MonoAndroid10\Syncfusion.SfMaps.Android.dll</HintPath>
     </Reference>
@@ -504,6 +501,9 @@
     </Reference>
     <Reference Include="Syncfusion.SfMaps.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.17.1.0.49\lib\MonoAndroid10\Syncfusion.SfMaps.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

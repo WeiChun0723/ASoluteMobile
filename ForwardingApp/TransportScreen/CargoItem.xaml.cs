@@ -252,7 +252,7 @@ namespace ASolute_Mobile.TransportScreen
                                     cargo.Height = Convert.ToInt32(heightEntry.Text);
                                     cargo.Marking = (!(String.IsNullOrEmpty(mark.Text))) ? mark.Text : "";
 
-                                var content = await CommonFunction.PostRequestAsync(cargo, Ultis.Settings.SessionBaseURI, ControllerUtil.postCargoListURL());
+                                var content = await CommonFunction.CallWebService(1,cargo, Ultis.Settings.SessionBaseURI, ControllerUtil.postCargoListURL(),this);
                                 clsResponse cargo_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                     if (cargo_response.IsGood)
@@ -300,7 +300,7 @@ namespace ASolute_Mobile.TransportScreen
 
         public async void UOMList()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getUOMListURL());
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getUOMListURL(),this);
             clsResponse uom_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(uom_response.IsGood)

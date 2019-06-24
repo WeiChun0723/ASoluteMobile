@@ -236,14 +236,14 @@ namespace ASolute_Mobile.TransportScreen
                     truck.Remarks = " ";
                 }
 
-                var content = await CommonFunction.PostRequestAsync(truck, Ultis.Settings.SessionBaseURI, ControllerUtil.postJobDetailURL(action));
+                var content = await CommonFunction.CallWebService(1,truck, Ultis.Settings.SessionBaseURI, ControllerUtil.postJobDetailURL(action),this);
                 clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if(update_response.IsGood)
                 {
                     Ultis.Settings.RefreshListView = "Yes";
 
-                    Ultis.Settings.CargoReturn = jobID + "," + eventRecordID + "," + reqSign;
+             
                     await DisplayAlert("Success", "Job updated.", "OK");
                     await Navigation.PopAsync();
                 }
@@ -279,7 +279,7 @@ namespace ASolute_Mobile.TransportScreen
 
                 image.FileName = recordImage.photoFileName;
 
-                var content = await CommonFunction.PostRequestAsync(image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventRecordID.ToString()));
+                var content = await CommonFunction.CallWebService(1,image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventRecordID.ToString()),this);
                 clsResponse image_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (image_response.IsGood == true)

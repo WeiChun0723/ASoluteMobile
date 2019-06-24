@@ -90,28 +90,7 @@ namespace ASolute_Mobile
         {
             base.OnAppearing();
 
-            if (Ultis.Settings.NewJob.Equals("Yes"))
-            {
-                CommonFunction.CreateToolBarItem(this);
-            }
-            else
-            {
-                this.ToolbarItems.Clear();
-            }
-
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) =>
-            {
-
-                try
-                {
-                    CommonFunction.NewJobNotification(this);
-                }
-                catch (Exception e)
-                {
-                    DisplayAlert("Notification error", e.Message, "OK");
-                }
-            });
-
+          
             if (Ultis.Settings.DeleteImage == "Yes")
             {
                 DisplayImage();
@@ -195,7 +174,7 @@ namespace ASolute_Mobile
                                     refuel_Data.OtherRef = "";
                                     refuel_Data.CostRate = Convert.ToDouble(costPerLiter.Text);
 
-                                    var content = await CommonFunction.PostRequestAsync(refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL());
+                                    var content = await CommonFunction.CallWebService(1,refuel_Data, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewRecordURL(),this);
                                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                                     if (response.IsGood == true)
@@ -415,32 +394,32 @@ namespace ASolute_Mobile
                                 break;
 
                             case "Liter":
-                                //lblLiter.Text = labelText.Value;
+                               
                                 lblLiter.Hint = labelText.Value;
                                 break;
 
                             case "Cost per Liter":
-                                //lblCost.Text = labelText.Value;
+                               
                                 lblCost.Hint = labelText.Value;
                                 break;
 
                             case "Odometer":
-                                //lblOdometer.Text = labelText.Value;
+                                
                                 lblOdometer.Hint= labelText.Value;
                                 break;
 
                             case "Fuel Card":
-                                //lblFuelCard.Text = labelText.Value;
+                                
                                 lblFuelCard.Hint = labelText.Value;
                                 break;
 
                             case "Voucher":
-                                //lblVoucher.Text = labelText.Value;
+                                
                                 lblVoucher.Hint = labelText.Value;
                                 break;
 
                             case "Other Ref":
-                                //lblOtherRef.Text = labelText.Value;
+                               
                                 break;
 
                         }
@@ -477,7 +456,6 @@ namespace ASolute_Mobile
                         stationComboBox.Text = stations[0];
                     }
 
-
                     foreach (clsKeyValue payment in fuelCostNew.PaymentModes)
                     {
                         paymentMode.Add(payment.Value.ToUpper());
@@ -489,9 +467,7 @@ namespace ASolute_Mobile
                         paymentPicker.Items.Add(fuelCostNew.PaymentModes[j].Value.ToUpper());
                     }*/
 
-
                 }
-
             }
             catch (HttpRequestException)
             {

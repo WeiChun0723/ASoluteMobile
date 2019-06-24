@@ -111,7 +111,7 @@ namespace ASolute_Mobile.Planner
 
         async Task GetEquipmentDetails()
         {
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, ControllerUtil.getEqDetailURL(equipmentNo));
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getEqDetailURL(equipmentNo),this);
             clsResponse equipment_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
 

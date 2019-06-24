@@ -112,7 +112,7 @@ namespace ASolute_Mobile.CustomerTracking
                             register.OSVer = CrossDeviceInfo.Current.VersionNumber.ToString();
                             register.AppVer = CrossDeviceInfo.Current.AppVersion;
 
-                            var content = await CommonFunction.PostRequestAsync(register, Ultis.Settings.SessionBaseURI, ControllerUtil.postBusinessRegisterURL());
+                            var content = await CommonFunction.CallWebService(1,register, Ultis.Settings.SessionBaseURI, ControllerUtil.postBusinessRegisterURL(),this);
                             clsResponse register_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                             if (register_response.IsGood)

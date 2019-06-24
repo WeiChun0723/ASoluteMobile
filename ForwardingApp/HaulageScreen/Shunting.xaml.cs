@@ -47,32 +47,7 @@ namespace ASolute_Mobile.HaulageScreen
             NavigationPage.SetTitleView(this, main);
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (Ultis.Settings.NewJob.Equals("Yes"))
-            {
-                CommonFunction.CreateToolBarItem(this);
-            }
-            else
-            {
-                this.ToolbarItems.Clear();
-            }
-
-            MessagingCenter.Subscribe<App>((App)Application.Current, "Testing", (sender) => {
-
-                try
-                {
-                    CommonFunction.NewJobNotification(this);
-                }
-                catch (Exception e)
-                {
-                    DisplayAlert("Notification error", e.Message, "OK");
-                }
-            });
-        }
-
+       
         protected override void OnDisappearing()
         {
             base.OnDisappearing();

@@ -79,7 +79,7 @@ namespace ASolute_Mobile.WMS_Screen
 
             try
             {
-                var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, uri);
+                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, uri,this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                 if (response.IsGood)
@@ -224,7 +224,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                  };
 
-                 var content = await CommonFunction.PostRequestAsync(tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL());
+                 var content = await CommonFunction.CallWebService(1,tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL(),this);
                  clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                  if (upload_response.IsGood)

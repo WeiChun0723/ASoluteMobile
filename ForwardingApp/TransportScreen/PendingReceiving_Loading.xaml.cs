@@ -85,7 +85,7 @@ namespace ASolute_Mobile.TransportScreen
                 url = ControllerUtil.getPendingReceivingURL();
             }
 
-            var content = await CommonFunction.GetRequestAsync(Ultis.Settings.SessionBaseURI, url);
+            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, url,this);
             clsResponse pending_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if(pending_response.IsGood)

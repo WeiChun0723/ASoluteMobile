@@ -396,7 +396,7 @@ namespace ASolute_Mobile.WMS_Screen
                                 MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue", "")))) ? SearchControl("MfgDate", "GetValue", "") : String.Empty,
                             };
 
-                            var content = await CommonFunction.PostRequestAsync(pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id));
+                            var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id),this);
                             clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                             if (upload_response.IsGood)
