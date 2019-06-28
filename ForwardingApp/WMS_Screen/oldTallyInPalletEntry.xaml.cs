@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
@@ -11,14 +10,12 @@ using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.XForms.ComboBox;
-using Syncfusion.XForms.TextInputLayout;
 using Xamarin.Forms;
-using ZXing.Mobile;
 using ZXing.Net.Mobile.Forms;
 
 namespace ASolute_Mobile.WMS_Screen
 {
-    public partial class TallyInPalletEntry : ContentPage
+    public partial class oldTallyInPalletEntry : ContentPage
     {
         clsWhsItem productPallet = new clsWhsItem();
         string id, productSKU, actionID;
@@ -26,62 +23,53 @@ namespace ASolute_Mobile.WMS_Screen
         List<string> sizes = new List<string>();
         List<string> units = new List<string>();
         List<string> status = new List<string>();
-        SfTextInputLayout inputLayout;
+        CustomEntry customEntry;
         CustomDatePicker customDatePicker;
         List<bool> checkField = new List<bool>();
         string userInput = "", productID;
         bool scanAgain = false;
         string productCode;
 
-        public TallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
+        public oldTallyInPalletEntry(clsWhsItem product, string tallyInID, string action)
         {
-            try
+            InitializeComponent();
+
+            id = tallyInID;
+
+            actionID = action;
+
+            productPallet = product;
+
+            Title = "Tally In # " + productPallet.ProductCode;
+
+            palletDesc.Children.Clear();
+
+            Label topBlank = new Label();
+            palletDesc.Children.Add(topBlank);
+
+            string[] descs = (productPallet.Description.Replace("\r\n", "t")).Split('t');
+
+            foreach (string desc in descs)
             {
-                InitializeComponent();
+                Label caption = new Label();
 
-                id = tallyInID;
-
-                actionID = action;
-
-                productPallet = product;
-
-                Title = "Tally In # " + productPallet.ProductCode;
-
-                palletDesc.Children.Clear();
-
-                Label topBlank = new Label();
-                palletDesc.Children.Add(topBlank);
-
-                string[] descs = (productPallet.Description.Replace("\r\n", "t")).Split('t');
-
-                foreach (string desc in descs)
+                if (desc == "")
                 {
-                    Label caption = new Label();
-
-                    if (desc == "")
-                    {
-                        caption.Text = "    " + desc;
-                        caption.FontAttributes = FontAttributes.Bold;
-                    }
-                    else
-                    {
-                        caption.Text = "    " + desc;
-                    }
-
-                    palletDesc.Children.Add(caption);
+                    caption.Text = "    " + desc;
+                    caption.FontAttributes = FontAttributes.Bold;
+                }
+                else
+                {
+                    caption.Text = "    " + desc;
                 }
 
-                Label bottomBlank = new Label();
-                palletDesc.Children.Add(bottomBlank);
-
-                GetNewPalletList();
-            }
-            catch(Exception ex)
-            {
-                string test = ex.Message;
+                palletDesc.Children.Add(caption);
             }
 
+            Label bottomBlank = new Label();
+            palletDesc.Children.Add(bottomBlank);
 
+            GetNewPalletList();
         }
 
         protected override void OnAppearing()
@@ -107,7 +95,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             var entry = sender as CustomEntry;
 
-            switch(entry.StyleId)
+            switch (entry.StyleId)
             {
                 case "palletNo":
                     quantity.Focus();
@@ -139,7 +127,7 @@ namespace ASolute_Mobile.WMS_Screen
 
             }
         }
-      
+
         void Handle_SelectionChanged(object sender, Syncfusion.XForms.ComboBox.SelectionChangedEventArgs e)
         {
             var picker = sender as SfComboBox;
@@ -197,7 +185,7 @@ namespace ASolute_Mobile.WMS_Screen
                     unitBox.ComboBoxSource = units;
                     statusBox.ComboBoxSource = status;
 
-                    if (newPallet.ControlVolume != "H")
+                    if(newPallet.ControlVolume != "H")
                     {
                         clsAttribute volume = new clsAttribute
                         {
@@ -209,7 +197,7 @@ namespace ASolute_Mobile.WMS_Screen
                         newPallet.Attribute.Add(volume);
                     }
 
-                    if (newPallet.ControlWeight != "H")
+                    if(newPallet.ControlWeight != "H")
                     {
                         clsAttribute weight = new clsAttribute
                         {
@@ -224,10 +212,21 @@ namespace ASolute_Mobile.WMS_Screen
                     int row = 4, column = 0;
                     foreach (clsAttribute attr in newPallet.Attribute)
                     {
+                        customDatePicker = null;
+                        customEntry = null;
 
-                        StackLayout autoGenerateEntryStack = new StackLayout
+                        grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+
+                        Label fieldLbl = new Label
                         {
-                            //Orientation = StackOrientation.Horizontal,
+                            Text = attr.Caption,
+                            FontAttributes = FontAttributes.Bold,
+                            VerticalTextAlignment = TextAlignment.Center
+                        };
+
+                        StackLayout entryStack = new StackLayout
+                        {
+                            Orientation = StackOrientation.Horizontal,
                             StyleId = attr.Key
                         };
 
@@ -245,97 +244,35 @@ namespace ASolute_Mobile.WMS_Screen
                                 DateUnfocus(sender);
                             };
 
-                            Label fieldLbl = new Label
-                            {
-                                Text = attr.Caption,
-                                FontAttributes = FontAttributes.Bold,
-                                VerticalTextAlignment = TextAlignment.Center
-                            };
-
-                            autoGenerateEntryStack.Children.Add(fieldLbl);
-                            autoGenerateEntryStack.Children.Add(customDatePicker);
+                            entryStack.Children.Add(customDatePicker);
                         }
                         else
                         {
-
-                           Entry entry = new Entry
+                            customEntry = new CustomEntry
                             {
                                 StyleId = attr.Key,
                                 HorizontalOptions = LayoutOptions.FillAndExpand,
+
                             };
 
-                            entry.Completed += Handle_Completed;
+                            customEntry.Completed += Handle_Completed;
 
-                            entry.Behaviors.Add(new MaxLengthValidation { MaxLength = 50 });
+                            customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 50 });
 
-                            if (attr.Key == "M3" || attr.Key == "KG")
+                            if(attr.Key == "M3" || attr.Key == "KG")
                             {
-                                entry.Keyboard = Keyboard.Numeric;
+                                customEntry.Keyboard = Keyboard.Numeric;
                             }
 
-                            inputLayout = new SfTextInputLayout();
-                            inputLayout.Hint = attr.Caption;
-                            inputLayout.InputView = entry;
-                            inputLayout.StyleId = attr.Key;
-
-                            /*  customEntry = new CustomEntry
-                             {
-                                 StyleId = attr.Key,
-                                 HorizontalOptions = LayoutOptions.FillAndExpand,
-
-                             };
-
-                             customEntry.Completed += Handle_Completed;
-
-                             customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 50 });
-
-                             //entryStack.Children.Add(customEntry);*/
-
-                            if(attr.Key != "ExpiryDate" && attr.Key != "MfgDate" && attr.Key != "M3" && attr.Key != "KG")
-                            {
-                                Image scan = new Image
-                                {
-                                    Source = "barCode.png",
-                                    WidthRequest = 60,
-                                    HeightRequest = 30,
-                                    VerticalOptions = LayoutOptions.Center,
-                                    StyleId = attr.Key
-                                };
-
-                                var scan_barcode = new TapGestureRecognizer
-                                {
-                                    NumberOfTapsRequired = 1
-                                };
-
-                                scan_barcode.Tapped += (sender, e) =>
-                                {
-                                    var image = sender as Image;
-
-                                    EntryScan(image);
-                                };
-                                scan.GestureRecognizers.Add(scan_barcode);
-
-                                inputLayout.TrailingView = scan;
-                            }
-                           
-
-                            autoGenerateEntryStack.Children.Add(inputLayout);
+                            entryStack.Children.Add(customEntry);
                         }
+
 
                         if (attr.Value == "M")
                         {
-                            /*  if (customEntry != null)
-                             {
-                                 customEntry.LineColor = Color.LightYellow;
-                             }
-                             if (customDatePicker != null)
-                             {
-                                 customDatePicker.BackgroundColor = Color.LightYellow;
-                             }*/
-
-                           if (inputLayout != null)
+                            if (customEntry != null)
                             {
-                                inputLayout.ContainerBackgroundColor = Color.LightYellow;
+                                customEntry.LineColor = Color.LightYellow;
                             }
                             if (customDatePicker != null)
                             {
@@ -344,25 +281,50 @@ namespace ASolute_Mobile.WMS_Screen
                         }
                         else
                         {
-                            /*if (customEntry != null)
+                            if (customEntry != null)
                             {
                                 customEntry.LineColor = Color.WhiteSmoke;
-                            }*/
-                            if (inputLayout != null)
+                            }
+                            else if(customDatePicker != null)
                             {
-                                inputLayout.ContainerBackgroundColor = Color.WhiteSmoke;
+                                customDatePicker.BackgroundColor = Color.WhiteSmoke;
                             }
                         }
 
-                        entryStack.Children.Add(autoGenerateEntryStack);
-                       // entryStack.Children.Add(scan);
+                        if(attr.Key != "ExpiryDate" && attr.Key != "MfgDate" && attr.Key != "M3" && attr.Key != "KG")
+                        {
+                            Image scan = new Image
+                            {
+                                Source = "barCode.png",
+                                WidthRequest = 60,
+                                HeightRequest = 30,
+                                VerticalOptions = LayoutOptions.Center,
+                                StyleId = attr.Key
+                            };
 
-                        //grid.Children.Add(fieldLbl, column, row);
+                            var scan_barcode = new TapGestureRecognizer
+                            {
+                                NumberOfTapsRequired = 1
+                            };
+
+                            scan_barcode.Tapped += (sender, e) =>
+                            {
+                                var image = sender as Image;
+
+                                EntryScan(image);
+                            };
+                            scan.GestureRecognizers.Add(scan_barcode);
+
+                            entryStack.Children.Add(scan);
+                        }
+
+                        grid.Children.Add(fieldLbl, column, row);
                         column++;
-                        //grid.Children.Add(entryStack, column, row);
+                        grid.Children.Add(entryStack, column, row);
                         row++;
                         column = 0;
                     }
+
                 }
                 else
                 {
@@ -380,7 +342,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             var date = sender as CustomDatePicker;
 
-            foreach (View t in entryStack.Children)
+            foreach (View t in grid.Children)
             {
                 if (t.StyleId == date.StyleId)
                 {
@@ -443,10 +405,11 @@ namespace ASolute_Mobile.WMS_Screen
                         if (!(String.IsNullOrEmpty(quantity.Text)) && !(String.IsNullOrEmpty(sizeBox.Text))
                             && !(String.IsNullOrEmpty(statusBox.Text)) && !(String.IsNullOrEmpty(unitBox.Text)) && !(checkField.Contains(false)))
                         {
+
                             clsPallet pallet = new clsPallet
                             {
                                 Id = id,
-                                ProductCode = (actionID == "BARRY") ? palletNo.Text.Substring(0, 16) : productPallet.ProductCode,
+                                ProductCode = (actionID == "BARRY") ? productCode : productPallet.ProductCode,
                                 PalletId = (!(String.IsNullOrEmpty(palletNo.Text))) ? palletNo.Text : String.Empty,
                                 PalletSize = newPallet.PalletSize[sizes.FindIndex(x => x.Equals(sizeBox.Text))].Key,
                                 Qty = Convert.ToInt32(quantity.Text),
@@ -460,7 +423,7 @@ namespace ASolute_Mobile.WMS_Screen
                                 String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue", "")))) ? SearchControl("String06", "GetValue", "") : String.Empty,
                                 ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue", "")))) ? SearchControl("ExpiryDate", "GetValue", "") : String.Empty,
                                 MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue", "")))) ? SearchControl("MfgDate", "GetValue", "") : String.Empty,
-                                Volume = (!(String.IsNullOrEmpty(SearchControl("M3", "GetValue", "")))) ? Convert.ToDouble(SearchControl("M3", "GetValue", "")) : 0,
+                                Volume = (!(String.IsNullOrEmpty(SearchControl("M3", "GetValue", "")))) ? Convert.ToDouble( SearchControl("M3", "GetValue", "")) : 0,
                                 Weight = (!(String.IsNullOrEmpty(SearchControl("KG", "GetValue", "")))) ? Convert.ToDouble(SearchControl("KG", "GetValue", "")) : 0
                             };
 
@@ -494,14 +457,14 @@ namespace ASolute_Mobile.WMS_Screen
 
                                 palletNo.Focus();
                             }
-                            
+                           
                         }
                         else
                         {
                             await DisplayAlert("Missing field", "Please fill in all mandatory field.", "OK");
                         }
                     }
-                    catch (Exception error)
+                    catch (Exception error) 
                     {
                         await DisplayAlert("Error", error.Message, "OK");
                     }
@@ -598,11 +561,10 @@ namespace ASolute_Mobile.WMS_Screen
 
         }
 
-
         async void EntryScan(Image image)
         {
             try
-            {  
+            {
                 var scanPage = new ZXingScannerPage();
                 await Navigation.PushAsync(scanPage);
 
@@ -612,11 +574,10 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         await Navigation.PopAsync();
 
-                        SfTextInputLayout sfInputText = null;
-                        Entry entry = null;
+                        CustomEntry entry = null;
                         CustomDatePicker picker = null;
 
-                        foreach (View t in entryStack.Children)
+                        foreach (View t in grid.Children)
                         {
                             if (t.StyleId == image.StyleId)
                             {
@@ -630,13 +591,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                                         if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
                                         {
-                                            CustomEntry customentry = (CustomEntry)v;
-                                            customentry.Text = result.Text;
-                                        }
-                                        else if(type == "Syncfusion.XForms.TextInputLayout.SfTextInputLayout")
-                                        {
-                                            sfInputText = (SfTextInputLayout)v;
-                                            entry = (Entry)sfInputText.InputView;
+                                            entry = (CustomEntry)v;
                                             entry.Text = result.Text;
                                         }
                                         else if (type == "ASolute_Mobile.CustomRenderer.CustomDatePicker")
@@ -660,7 +615,7 @@ namespace ASolute_Mobile.WMS_Screen
 
         string SearchControl(string controlID, string action, string content)
         {
-            foreach (View t in entryStack.Children)
+            foreach (View t in grid.Children)
             {
                 if (t.StyleId == controlID)
                 {
@@ -674,50 +629,25 @@ namespace ASolute_Mobile.WMS_Screen
 
                             if (type == "ASolute_Mobile.CustomRenderer.CustomEntry")
                             {
-                                Entry entry = (Entry)v;
-
-                                switch(action)
-                                {
-                                    case "GetValue":
-                                        return entry.Text;
-
-
-                                    case "SetValue":
-                                        entry.Text = content;
-                                        break;
-
-                                    case "Focus":
-                                        entry.Focus();
-                                        break;
-
-                                    default:
-                                        entry.Text = String.Empty;
-                                        break;
-                                }
-                               
-                            }
-                            else if(type == "Syncfusion.XForms.TextInputLayout.SfTextInputLayout")
-                            {
-                                SfTextInputLayout sfInputText = (SfTextInputLayout)v;
-
-                                Entry entry = (Entry)sfInputText.InputView;
+                                CustomEntry entry = (CustomEntry)v;
 
                                 switch (action)
                                 {
                                     case "GetValue":
                                         return entry.Text;
 
+
                                     case "SetValue":
                                         entry.Text = content;
-                                    break;
+                                        break;
 
                                     case "Focus":
                                         entry.Focus();
-                                    break;
+                                        break;
 
                                     default:
                                         entry.Text = String.Empty;
-                                    break;
+                                        break;
                                 }
 
                             }
@@ -725,7 +655,8 @@ namespace ASolute_Mobile.WMS_Screen
                             {
                                 CustomDatePicker picker = (CustomDatePicker)v;
 
-                                switch(action)
+
+                                switch (action)
                                 {
                                     case "GetValue":
                                         if (picker.NullableDate == null)
@@ -736,7 +667,7 @@ namespace ASolute_Mobile.WMS_Screen
                                         {
                                             return picker.Date.ToString("yyyy-MM-dd");
                                         }
-                                       
+
 
                                     case "Focus":
                                         picker.Focus();
@@ -751,7 +682,7 @@ namespace ASolute_Mobile.WMS_Screen
                                         break;
 
                                 }
-                             
+
                             }
                         }
                     }
@@ -769,39 +700,39 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     userInput = palletNo.Text;
 
-                        try
+                    try
+                    {
+                        if (actionID == "BARRY")
                         {
-                            if (actionID == "BARRY")
+                            if (userInput.Length < 28)
                             {
-                                if (userInput.Length < 28)
-                                {
-                                    await DisplayAlert("Error", "Please make sure pallet reference have 28 characters.", "OK");
+                                await DisplayAlert("Error", "Please make sure pallet reference have 28 characters.", "OK");
 
-                                    palletNo.Text = String.Empty;
-                                }
-                                else
-                                {
-                                    productCode = userInput.Substring(0, 16);
-                                    string productPackageCode = userInput.Substring(16, 8);
-                                    string productRunningNo = userInput.Substring(25, 1);
-                                    string productQTY = userInput.Substring(26, 2);
-
-                                    quantity.Text = "";
-                                    quantity.Text = productQTY;
-
-                                    SearchControl("String01", "ClearValue", "");
-                                    SearchControl("String01", "SetValue", productPackageCode + productRunningNo);
-
-                                    DisplayScanStatus(userInput + " scanned");
-                                }
-
+                                palletNo.Text = String.Empty;
                             }
-                        }
-                        catch
-                        {
+                            else
+                            {
+                                productCode = userInput.Substring(0, 16);
+                                string productPackageCode = userInput.Substring(16, 8);
+                                string productRunningNo = userInput.Substring(25, 1);
+                                string productQTY = userInput.Substring(26, 2);
+
+                                quantity.Text = "";
+                                quantity.Text = productQTY;
+
+                                SearchControl("String01", "ClearValue", "");
+                                SearchControl("String01", "SetValue", productPackageCode + productRunningNo);
+
+                                DisplayScanStatus(userInput + " scanned");
+                            }
 
                         }
                     }
+                    catch
+                    {
+
+                    }
+                }
 
             }
             catch
@@ -810,6 +741,5 @@ namespace ASolute_Mobile.WMS_Screen
             }
 
         }
-
     }
 }

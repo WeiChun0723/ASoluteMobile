@@ -124,7 +124,8 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         GridTextColumn gridColumn = new GridTextColumn();
                         gridColumn.MappingName = gridField.Key;
-                        gridColumn.Width = (recordDetails.ItemColumns.Count == 3) ? 100 : 150;
+                        //gridColumn.Width = (recordDetails.ItemColumns.Count == 3) ? 100 : 150;
+                        gridColumn.Width = recordDetails.ItemColumns.Count * 33;
 
                         gridColumn.HeaderTemplate = new DataTemplate(() =>
                         {
@@ -152,10 +153,7 @@ namespace ASolute_Mobile.WMS_Screen
                         pickingID = recordDetails.Id;
                     }
                 }
-                else
-                {
-                    await DisplayAlert("Error", response.Message, "OK");
-                }
+                
             }
             catch (Exception ex)
             {
@@ -176,13 +174,13 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     if (record.Category == "TallyIn")
                     {
-                        await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id, recordDetails.Action));
+                        //await Navigation.PushAsync(new TallyInPalletEntry(product, record.Id, recordDetails.Action));
+                        await Navigation.PushAsync(new oldTallyInPalletEntry(product, record.Id, recordDetails.Action));
                     }
                     else
                     {
                         await Navigation.PushAsync(new PickingEntry(product, pickingID, record.Name, recordDetails.Items));
                     }
-
                 }
             }
         }

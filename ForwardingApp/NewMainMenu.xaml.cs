@@ -345,6 +345,7 @@ namespace ASolute_Mobile
                     if(Ultis.Settings.App == "asolute.Mobile.AILSTrucking")
                     {
                         await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
+                       // await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTruckListURL(((ListItems)e.Item).Action)));
                     }
                     else
                     {
@@ -465,7 +466,7 @@ namespace ASolute_Mobile
 
         void Handle_Refreshed(object sender, System.EventArgs e)
         {
-
+            
         }
 
         void Handle_Refreshing(object sender, System.EventArgs e)

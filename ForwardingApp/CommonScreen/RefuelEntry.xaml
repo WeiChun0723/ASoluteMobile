@@ -29,11 +29,8 @@
             </StackLayout>
             
             <inputLayout:SfTextInputLayout Padding="0,10" Hint="Liter" Style="{StaticResource inputStyle}"  x:Name="lblLiter" ContainerBackgroundColor="LightYellow" >
-                <Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"> 
-                 <Entry.Behaviors>
-                    <validation:MaxLengthValidation MaxLength="3"/>
-                </Entry.Behaviors>  
-                </Entry>
+                <Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"/> 
+
             </inputLayout:SfTextInputLayout>
             
             <StackLayout Orientation="Horizontal" HeightRequest="60">

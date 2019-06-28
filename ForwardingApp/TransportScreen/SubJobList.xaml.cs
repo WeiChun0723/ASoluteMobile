@@ -15,21 +15,16 @@ namespace ASolute_Mobile.TransportScreen
         string jobID;
         ObservableCollection<TruckModel> records = new ObservableCollection<TruckModel>();
         
-
         public SubJobList(String JobNo)
         {
             InitializeComponent();
-
             jobID = JobNo;
-
             Title = "Sub Job List";
-
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             GetSubJobList();
         }
 
@@ -47,7 +42,7 @@ namespace ASolute_Mobile.TransportScreen
         protected async void GetSubJobList()
         {
             records.Clear();
-         
+    
             var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getSubJobURL(jobID),this);
             clsResponse pending_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -95,7 +90,6 @@ namespace ASolute_Mobile.TransportScreen
             {
                 await DisplayAlert("JsonError", pending_response.Message, "OK");
             }
-
 
         }
 

@@ -235,6 +235,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\oldTallyInPalletEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -481,6 +485,9 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)LGC\LGCParcelPopUp.xaml.cs">
       <DependentUpon>LGCParcelPopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\oldTallyInPalletEntry.xaml.cs">
+      <DependentUpon>oldTallyInPalletEntry.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,6 @@
     <ScrollView>
         <StackLayout Padding="15,15,15,15" Spacing="20">
             <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
-            <Label x:Name="rulesDesc" FontSize="Medium" FontAttributes="Bold" TextColor="Red"/>
             <inputLayout:SfTextInputLayout Hint="Seller Consigment Note #" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
                 <Entry x:Name="consigNote">
                     <Entry.Behaviors>
@@ -66,6 +65,7 @@
                         </Image>
                     </inputLayout:SfTextInputLayout.TrailingView>
                 </inputLayout:SfTextInputLayout>
+                <Label x:Name="rulesDesc" FontSize="Small" TextColor="Red"/>
                 <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnSubmit" Text="Submit" Clicked="Handle_Clicked" />
             </StackLayout>
         </StackLayout>

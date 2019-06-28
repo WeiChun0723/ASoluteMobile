@@ -310,7 +310,7 @@ namespace ASolute_Mobile.Utils
 
         public static String getReasonListURL()
         {
-            return String.Format("Trucking/ReasonList?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Trucking/ReasonList?SessionId={0}&GeoLoc={1}&viewtype={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), "FUTILE");
         }
 
         public static String postFutileTripURL()
@@ -422,8 +422,6 @@ namespace ASolute_Mobile.Utils
             return String.Format("Trucking/CargoReturn?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-
-
         public static String getDownloadHaulageHistoryURL(string date)
         {
             return String.Format("Haulage/History?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), date);
@@ -433,7 +431,6 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Haulage/Shunting?SessionId={0}&GeoLoc={1}&ContainerNo={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), containerNumber);
         }
-
 
         public static String addJobURL(string container)
         {

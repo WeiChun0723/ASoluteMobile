@@ -1,39 +1,43 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.ListViewTemplate" 
-             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" 
-             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.ListViewTemplate" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <StackLayout Padding="5,10,5,10">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
-        <StackLayout Orientation="Horizontal" x:Name="LGCCartonStack" IsVisible="false">
-            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnPrint" Text="Print Carton Label" Clicked="Handle_Clicked" />
-            <buttons:SfButton Style="{StaticResource buttonStyle}" x:Name="btnCancel" Text="Cancel" Clicked="Handle_Clicked" />
+        <combobox:SfComboBox x:Name="blockComboBox" Watermark="Filter by Block..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged" />
+        <combobox:SfComboBox x:Name="dateComboBox" Watermark="Filter by Closing Date..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged" />
+        <DatePicker x:Name="logBookDate" IsVisible="false" HorizontalOptions="FillAndExpand" DateSelected="Handle_DateSelected" BackgroundColor="LightYellow" />
+        <StackLayout Orientation="Horizontal">
+            <SearchBar x:Name="searchBar" IsVisible="true" Placeholder="Search here to Filter" TextChanged="OnFilterTextChanged" HeightRequest="50" WidthRequest="270"/>
+            <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="truckingScan_icon" IsVisible="false">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="IconTapped" />
+                </Image.GestureRecognizers>
+            </Image>
         </StackLayout>
-        
-        <combobox:SfComboBox x:Name="blockComboBox" Watermark="Filter by Block..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
-        <combobox:SfComboBox x:Name="dateComboBox" Watermark="Filter by Closing Date..." Style="{StaticResource comboBoxStyle}" IsVisible="false" SelectionChanged="Handle_SelectionChanged"/>
-        <DatePicker x:Name="logBookDate" IsVisible="false"  HorizontalOptions="FillAndExpand" DateSelected="Handle_DateSelected" BackgroundColor="LightYellow"/>
-        <SearchBar x:Name="searchBar" IsVisible="true" Placeholder="Search here to Filter" TextChanged="OnFilterTextChanged" HeightRequest="50" />
         <Image Source="nodatafound.png" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData" />
-        <ListView x:Name="listView" ItemTapped="Handle_ItemTapped"  Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true" Style="{StaticResource recordListStyle}" HasUnevenRows="true" >
+        <ListView x:Name="listView" ItemTapped="Handle_ItemTapped" Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true" Style="{StaticResource recordListStyle}" HasUnevenRows="true">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
                             <StackLayout BackgroundColor="{Binding Background}">
-                                <Label Text="{Binding Summary}" FontAttributes="Bold" HorizontalOptions="FillAndExpand"/>
+                                <Label Text="{Binding Summary}" FontAttributes="Bold" HorizontalOptions="FillAndExpand" />
                             </StackLayout>
                         </Frame>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="70" HorizontalOptions="End" x:Name="icon">
-            <Image.GestureRecognizers>
-                <TapGestureRecognizer Tapped="IconTapped" NumberOfTapsRequired="1" />
-            </Image.GestureRecognizers>
-        </Image>
+        <StackLayout Orientation="Horizontal" x:Name="controlStack">
+            <StackLayout Orientation="Horizontal" x:Name="LGCCartonStack" IsVisible="false">
+                <buttons:SfButton Style="{StaticResource buttonStyle}" WidthRequest="120" x:Name="btnPrint" Text="Print Carton Label" Clicked="Handle_Clicked" />
+                <buttons:SfButton Style="{StaticResource buttonStyle}" WidthRequest="120" x:Name="btnCancel" Text="Cancel" Clicked="Handle_Clicked" />
+            </StackLayout>
+            <buttons:SfButton Style="{StaticResource buttonStyle}" IsVisible="false" x:Name="btnCreateCartonBox" Text="Create Carton Box" Clicked="Handle_Clicked" />
+            <Image Source="barcode_scanner.png" WidthRequest="70" HeightRequest="70" HorizontalOptions="EndAndExpand" x:Name="icon">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="IconTapped" NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

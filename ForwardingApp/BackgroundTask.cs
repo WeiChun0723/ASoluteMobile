@@ -387,11 +387,12 @@ namespace ASolute_Mobile
                             eventID = recordImage.id;
                         }
 
+                        recordImage.Uploaded = true;
+                        App.Database.SaveRecordImageAsync(recordImage);
+
                         var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID), null);
                         clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        recordImage.Uploaded = true;
-                        App.Database.SaveRecordImageAsync(recordImage);
                     }
                 }
 

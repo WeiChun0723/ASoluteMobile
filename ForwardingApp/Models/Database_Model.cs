@@ -153,6 +153,7 @@ namespace ASolute_Mobile.Models
         public string JobNoValue { get; set; }
     }
 
+    //AILS Trucking model
     public class TruckModel : Generic
     {
         public string TruckId { get; set; }

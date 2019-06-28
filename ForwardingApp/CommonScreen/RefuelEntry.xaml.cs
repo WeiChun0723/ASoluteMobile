@@ -98,12 +98,7 @@ namespace ASolute_Mobile
             }
         }
 
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-            MessagingCenter.Unsubscribe<App>((App)Application.Current, "Testing");
-        }
+        
 
         async void Handle_Tapped(object sender, System.EventArgs e)
         {
@@ -462,11 +457,7 @@ namespace ASolute_Mobile
                     }
                     paymentComboBox.ComboBoxSource = paymentMode;
                     paymentComboBox.Text = paymentMode[1];
-                    /*for (int j = 0; j < fuelCostNew.PaymentModes.Count; j++)
-                    {
-                        paymentPicker.Items.Add(fuelCostNew.PaymentModes[j].Value.ToUpper());
-                    }*/
-
+                   
                 }
             }
             catch (HttpRequestException)

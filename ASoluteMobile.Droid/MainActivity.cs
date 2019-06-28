@@ -16,7 +16,7 @@ using Haulage.Droid.MobilePrinter;
 namespace ASolute_Mobile.Droid
 {
 
-    [Activity(Label = "ASolute Fleet", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Trucking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static Activity activity;
@@ -40,8 +40,6 @@ namespace ASolute_Mobile.Droid
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
                 ZXing.Mobile.MobileBarcodeScanner.Initialize(Application);
                 Ultis.Settings.App = PackageName;
-
-                
 
                 if ( Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
@@ -137,7 +135,6 @@ namespace ASolute_Mobile.Droid
             Log.Debug(logTag, "OnPause: Location app is moving to background");
             base.OnPause();
         }
-
 
         protected override void OnResume()
         {

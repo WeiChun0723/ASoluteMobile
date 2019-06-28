@@ -42,6 +42,13 @@ namespace ASolute_Mobile.Droid.Services
             base.OnCreate();
             Log.Debug(logTag, "OnCreate called in the Location Service");
 
+            var pm = (PowerManager)GetSystemService(Context.PowerService);
+            _mWakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "PartialWakeLockTag");
+            _mWakeLock.Acquire();
+
+            var wf = (WifiManager)GetSystemService(Context.WifiService);
+            _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
+            _wifiLock.Acquire();
         }
 
         // This gets called when StartService is called in our App class
@@ -50,14 +57,7 @@ namespace ASolute_Mobile.Droid.Services
         {
             Log.Debug(logTag, "LocationService started");
 
-            var pm = (PowerManager)GetSystemService(Context.PowerService);
-            _mWakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "PartialWakeLockTag");
-            _mWakeLock.Acquire();
-
-            var wf = (WifiManager)GetSystemService(Context.WifiService);
-            _wifiLock = wf.CreateWifiLock(Android.Net.WifiMode.Full, "WifiLockTag");
-            _wifiLock.Acquire();
-
+            
 
             return StartCommandResult.Sticky;
         }
@@ -97,17 +97,16 @@ namespace ASolute_Mobile.Droid.Services
             // Get an initial fix on location
             LocMgr.RequestLocationUpdates(LocationManager.GpsProvider, 0, 0, this);
 
-            Device.StartTimer(TimeSpan.FromSeconds(60), ()  =>
-             {
-             Task.Run(async () => {
+            Device.StartTimer(TimeSpan.FromSeconds(60), () =>
+            {
+                Task.Run(async () => {
 
-                 await BackgroundTask.GetGPS();
+                    await BackgroundTask.GetGPS();
 
-                 await Task.Delay(600000);
-             });
-             return true;
+                    await Task.Delay(600000);
+                });
+                return true;
             });
-
         }
 
         public override void OnDestroy()

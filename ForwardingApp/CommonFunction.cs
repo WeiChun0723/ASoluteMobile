@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using ASolute.Mobile.Models;
+using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.TransportScreen;
 using ASolute_Mobile.Ultis;
@@ -23,35 +24,35 @@ namespace ASolute_Mobile.Utils
         static ContentPage pages;
         static string returnResult;
 
-       /* //call when calling the web service to get response
-        public static async Task<string> GetRequestAsync(string baseAdd,string callUri)
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(baseAdd);
-            var uri = callUri;
-            var response = await client.GetAsync(uri);
-            var content = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(content);
+        /* //call when calling the web service to get response
+         public static async Task<string> GetRequestAsync(string baseAdd,string callUri)
+         {
+             var client = new HttpClient();
+             client.BaseAddress = new Uri(baseAdd);
+             var uri = callUri;
+             var response = await client.GetAsync(uri);
+             var content = await response.Content.ReadAsStringAsync();
+             Debug.WriteLine(content);
 
-            return content;
-        }
+             return content;
+         }
 
-        public static async Task<string> PostRequestAsync(object data, string baseAdd, string calllUri)
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(baseAdd);
-            var uri = calllUri;
-            var content = JsonConvert.SerializeObject(data);
-            var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(uri, httpContent);
-            var reply = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(reply);
+         public static async Task<string> PostRequestAsync(object data, string baseAdd, string calllUri)
+         {
+             var client = new HttpClient();
+             client.BaseAddress = new Uri(baseAdd);
+             var uri = calllUri;
+             var content = JsonConvert.SerializeObject(data);
+             var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
+             var response = await client.PostAsync(uri, httpContent);
+             var reply = await response.Content.ReadAsStringAsync();
+             Debug.WriteLine(reply);
 
-            return reply;
-        }*/
+             return reply;
+         }*/
 
         //Get = 0 , Post = 1
-        public static async Task<string> CallWebService(int method,object data, string baseAdd, string calllUri, Page page)
+        public static async Task<string> CallWebService(int method, object data, string baseAdd, string calllUri, Page page)
         {
             try
             {
@@ -74,8 +75,8 @@ namespace ASolute_Mobile.Utils
                 }
 
                 Debug.WriteLine(content);
-
-                if(content != null)
+                    
+                if (content != null)
                 {
                     clsResponse reply = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -98,19 +99,19 @@ namespace ASolute_Mobile.Utils
                     return content;
                 }
             }
-            catch(HttpRequestException requestEx)
+            catch (HttpRequestException requestEx)
             {
                 await page.DisplayAlert("Error", requestEx.Message, "OK");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-               // await page.DisplayAlert("Error", ex.Message, "OK");
+                // await page.DisplayAlert("Error", ex.Message, "OK");
             }
             return null;
         }
 
         //capture image and store local path in db function
-        public static async Task StoreImages(string id, ContentPage contentPage,string imageType)
+        public static async Task StoreImages(string id, ContentPage contentPage, string imageType)
         {
             try
             {
@@ -128,7 +129,7 @@ namespace ASolute_Mobile.Utils
                 if (file == null)
                     return;
 
-                if(id == Ultis.Settings.SessionUserItem.DriverId)
+                if (id == Ultis.Settings.SessionUserItem.DriverId)
                 {
                     App.Database.DeleteUserImage(Ultis.Settings.SessionUserItem.DriverId);
                 }
@@ -170,14 +171,14 @@ namespace ASolute_Mobile.Utils
                 image.imageData = thumbnailByte;
                 App.Database.SaveRecordImageAsync(image);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await contentPage.DisplayAlert("Reminder", ex.Message, "OK");
             }
         }
 
         //covert signature to image and store in local db
-        public static async Task StoreSignature(string id,Stream signature, ContentPage contentPage)
+        public static async Task StoreSignature(string id, Stream signature, ContentPage contentPage)
         {
             try
             {
@@ -232,7 +233,7 @@ namespace ASolute_Mobile.Utils
             }
             catch
             {
-                 pages.DisplayAlert("Error", "Notification error", "OK");
+                pages.DisplayAlert("Error", "Notification error", "OK");
             }
         }
 
@@ -254,9 +255,9 @@ namespace ASolute_Mobile.Utils
 
                 item.Clicked += async (sender, e) =>
                 {
-                   
 
-                    if(Ultis.Settings.App.Contains("Trucking"))
+
+                    if (Ultis.Settings.App.Contains("Trucking"))
                     {
                         await contentPage.Navigation.PushAsync(new NewMasterJob());
                     }
@@ -265,7 +266,7 @@ namespace ASolute_Mobile.Utils
                         var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewCartonBoxURL(), null);
                         clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        if(response.IsGood)
+                        if (response.IsGood)
                         {
                             MessagingCenter.Send<App>((App)Application.Current, "RefreshCartonList");
 
@@ -291,6 +292,7 @@ namespace ASolute_Mobile.Utils
 
         }
 
+        
     }
 
 }

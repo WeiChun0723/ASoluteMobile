@@ -37,13 +37,13 @@ namespace ASolute_Mobile
             "Closing After Tomorrow"
         };
 
-        //record more than 100 store in this and popuplate to list view
+        //record more than 50 store in this and popuplate to list view
         ObservableCollection<ListItems> overloadRecord = new ObservableCollection<ListItems>();
 
         public ListViewTemplate(ListItems items, string callUri)
         {
             InitializeComponent();
-
+            
             //some of the list view require special control for filtering purpose
             switch (items.Id)
             {
@@ -71,7 +71,8 @@ namespace ASolute_Mobile
 
                 //LGC warehouse
                 case "CartonBox":
-                    CommonFunction.CreateToolBarItem(this);
+                    // CommonFunction.CreateToolBarItem(this);
+                    btnCreateCartonBox.IsVisible = true;
 
                     MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshCartonList", (sender) =>
                     {
@@ -90,6 +91,11 @@ namespace ASolute_Mobile
             if (callUri.Contains("Parcel/List"))
             {
                 LGCCartonStack.IsVisible = true;
+            }
+            else if(callUri.Contains("Trucking/List"))
+            {
+                truckingScan_icon.IsVisible = true;
+                controlStack.IsVisible = false;
             }
 
             //define title for and subtitle for the screen
@@ -183,7 +189,7 @@ namespace ASolute_Mobile
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {
-                            if (menuItems.Id == "JobList")
+                            if (menuItems.Id == "JobList" && Ultis.Settings.App == "asolute.Mobile.AILSHaulage")
                             {
                                 scanPage.PauseAnalysis();
                                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.addJobURL(result.Text), this);
@@ -365,19 +371,22 @@ namespace ASolute_Mobile
                                 }
                                 else
                                 {
-                                    summary += summaryItem.Caption + " :  " + summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
+                                    summary += summaryItem.Caption + " :  " + summaryItem.Value + "\r\n" + "\r\n";
                                 }
                             }
                             else if (summaryItem.Caption == "")
                             {
-                                summary += summaryItem.Value + System.Environment.NewLine + System.Environment.NewLine;
+                                if(!(String.IsNullOrEmpty(summaryItem.Value)))
+                                {
+                                    summary += summaryItem.Value + "\r\n" + "\r\n";
+                                }
                             }
                         }
 
                         record.Summary = summary;
                         record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : DateTime.Parse(closingTime);
 
-                        if (records.Count < 100)
+                        if (records.Count < 50)
                         {
                             App.Database.SaveMenuAsync(record);
 
@@ -410,15 +419,14 @@ namespace ASolute_Mobile
                         }
                     }
 
-                    if (records.Count < 100)
+                    if (records.Count < 50)
                     {
                         LoadListData();
                     }
                     else
                     {
                         listView.ItemsSource = overloadRecord;
-                        listView.RowHeight = 130;
-
+                        
                     }
 
                     listView.IsRefreshing = false;
@@ -441,7 +449,7 @@ namespace ASolute_Mobile
             noData.IsVisible = (Item.Count == 0) ? true : false;
         }
 
-        //AILS Yrad container inquiry combo box data
+        //AILS Yard container inquiry combo box data
         async void GetComboBoxData(string getBlockIdUri)
         {
             try
@@ -549,6 +557,29 @@ namespace ASolute_Mobile
                     if(cancel_response.IsGood == true)
                     {
                         await DisplayAlert("Success", "Carton cancelled.", "OK");
+                    }
+                    break;
+
+                case "btnCreateCartonBox":
+                    var create_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewCartonBoxURL(), null);
+                    clsResponse create_response = JsonConvert.DeserializeObject<clsResponse>(create_content);
+
+                    if (create_response.IsGood)
+                    {
+                        MessagingCenter.Send<App>((App)Application.Current, "RefreshCartonList");
+
+                        var answer = await DisplayAlert("", "Added new carton box. Print carton label now?", "Yes", "No");
+                        if (answer.Equals(true))
+                        {
+                            try
+                            {
+                                MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
+                            }
+                            catch
+                            {
+
+                            }
+                        }
                     }
                     break;
             }

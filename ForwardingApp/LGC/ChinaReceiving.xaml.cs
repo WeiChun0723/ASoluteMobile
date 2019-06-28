@@ -111,11 +111,10 @@ namespace ASolute_Mobile.LGC
                     break;
 
                 case "btnSubmit":
-
                     if ((!String.IsNullOrEmpty(consigNote.Text)) && (!String.IsNullOrEmpty(cartonBox.Text)) && (!String.IsNullOrEmpty(length.Text)) && (!String.IsNullOrEmpty(width.Text)) &&
                         (!String.IsNullOrEmpty(height.Text)) && (!String.IsNullOrEmpty(unit.Text)))
                     {
-                        if(Convert.ToInt16(length.Text) >= minLength && Convert.ToInt16(width.Text) >= minWidth && (Convert.ToInt16(length.Text) * Convert.ToInt16(width.Text) * Convert.ToInt16(height.Text) <= maxDimension)
+                        if(Convert.ToInt16(length.Text) >= minLength && Convert.ToInt16(width.Text) >= minWidth && (Convert.ToInt16(length.Text) + Convert.ToInt16(width.Text) + Convert.ToInt16(height.Text) <= maxDimension)
                             && Convert.ToInt16(unit.Text) <= maxWeight)
                         {
                             if (Convert.ToDouble(unit.Text) > 999)
@@ -126,7 +125,7 @@ namespace ASolute_Mobile.LGC
                             {
                                 clsParcelModel parcelModel = new clsParcelModel
                                 {
-                                    ConsignmentNo = consigNote.Text,
+                                    ConsignmentNo = consigNote.Text, 
                                     CartonNo = cartonBox.Text,
                                     Length = Convert.ToInt16(length.Text),
                                     Width = Convert.ToInt16(width.Text),
@@ -141,7 +140,7 @@ namespace ASolute_Mobile.LGC
                                 if (submit_response.IsGood == true)
                                 {
                                     await DisplayAlert("Success", "Submit successfully.", "OK");
-
+                                    
                                     consigNote.Text = String.Empty;
                                     length.Text = String.Empty;
                                     width.Text = String.Empty;
@@ -172,7 +171,7 @@ namespace ASolute_Mobile.LGC
             loading.IsVisible = false;
         }
 
-        async void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
             try
             {
