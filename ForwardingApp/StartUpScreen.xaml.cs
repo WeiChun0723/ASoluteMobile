@@ -12,6 +12,7 @@ using Plugin.Geolocator;
 using Plugin.Media;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile
@@ -72,7 +73,6 @@ namespace ASolute_Mobile
 
         async void GetAction(string deviceID)
         {
-
             try
             {
                 if (Ultis.Settings.FireID.Equals("firebase"))
@@ -81,7 +81,6 @@ namespace ASolute_Mobile
 
                     Ultis.Settings.FireID = firebaseID;
                 }
-
 
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(deviceID, firebaseID), this);
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -118,7 +117,6 @@ namespace ASolute_Mobile
                                 break;
 
                             case "HaulageVolume":
-
                                 Application.Current.MainPage = new MainPage();
                                 break;
                         }
@@ -139,6 +137,8 @@ namespace ASolute_Mobile
 
             try
             {
+                //var position = await Geolocation.GetLastKnownLocationAsync();
+
                 loading.IsVisible = true;
 
                 if (!String.IsNullOrEmpty(startUpEnterprise.Text) || !String.IsNullOrEmpty(startUpEmail.Text))

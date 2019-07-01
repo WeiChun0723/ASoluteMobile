@@ -10,7 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,7 +17,7 @@ namespace ASolute_Mobile
 {
 	public partial class EquipmentInquiry : ContentPage
 	{
-        clsResponse newEqResponse = new clsResponse();
+       
 
         public EquipmentInquiry ()
 		{
@@ -33,35 +32,25 @@ namespace ASolute_Mobile
 
         }
 
-
-
         public async void checkEquipment(object sender, EventArgs e)
         {
-            string equipmentId = equipmentID.Text;
+            loading.IsVisible = true;
 
-            if (NetworkCheck.IsInternet())
+            if (!(String.IsNullOrEmpty(equipmentID.Text)))
             {
                 try
                 {
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-
-                    var eqUri = ControllerUtil.getEquipmentURL(equipmentId);
-
-                    var eqResponse = await client.GetAsync(eqUri);
-                    var eqContent = await eqResponse.Content.ReadAsStringAsync();
-                    Debug.WriteLine(eqContent);
-
-                    newEqResponse = JsonConvert.DeserializeObject<clsResponse>(eqContent);
+                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getEquipmentURL(equipmentID.Text), this);
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                     List<clsCaptionValue> eqInfo = new List<clsCaptionValue>();
 
                     int count = 0;
-                    for (int i = 0; i < newEqResponse.Result.Count; i++)
+                    for (int i = 0; i < response.Result.Count; i++)
                     {
-                        string caption = newEqResponse.Result[i]["Caption"]; 
-                        string value = newEqResponse.Result[i]["Value"];
-                        bool display = newEqResponse.Result[i]["Display"];
+                        string caption = response.Result[i]["Caption"]; 
+                        string value = response.Result[i]["Value"];
+                        bool display = response.Result[i]["Display"];
                         eqInfo.Add(new clsCaptionValue(caption, value, display));
                         
                     }
@@ -125,8 +114,10 @@ namespace ASolute_Mobile
             }
             else
             {
-                await DisplayAlert("Reminder", "Currently offline cant search", "OK");
+                await DisplayAlert("Missing field", "Please key in all mandatory field", "OK");
             }
+
+            loading.IsVisible = false;
         }
 
     }

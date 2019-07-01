@@ -57,8 +57,6 @@ namespace ASolute_Mobile.Droid.Services
         {
             Log.Debug(logTag, "LocationService started");
 
-            
-
             return StartCommandResult.Sticky;
         }
 
@@ -101,7 +99,7 @@ namespace ASolute_Mobile.Droid.Services
             {
                 Task.Run(async () => {
 
-                    await BackgroundTask.GetGPS();
+                    BackgroundTask.GetGPS();
 
                     await Task.Delay(600000);
                 });

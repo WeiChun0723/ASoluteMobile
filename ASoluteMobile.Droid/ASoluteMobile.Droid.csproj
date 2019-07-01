@@ -26,9 +26,7 @@
     <EnableProguard>true</EnableProguard>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -46,6 +44,7 @@
 <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType></DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -671,16 +670,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\printer_profiles.JSON" />
-    <AndroidAsset Include="Assets\Custom.dbf" />
-    <AndroidAsset Include="Assets\Custom.shp" />
-    <AndroidAsset Include="Assets\Custom.shx" />
-    <AndroidAsset Include="Assets\usa_state.dbf" />
-    <AndroidAsset Include="Assets\usa_state.shp" />
-    <AndroidAsset Include="Assets\world1.dbf" />
-    <AndroidAsset Include="Assets\world1.shp" />
-    <AndroidAsset Include="Assets\test.dbf" />
-    <AndroidAsset Include="Assets\test.shp" />
-    <AndroidAsset Include="Assets\test.shx" />
   </ItemGroup>
   <Import Project="..\ForwardingApp\ForwardingApp.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

@@ -1,34 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ASolute_Mobile.EquipmentInquiry">
+             x:Class="ASolute_Mobile.EquipmentInquiry"
+             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
     
-        <StackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            
-            <Label Text="Equipment" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-           
-            <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1" Padding="15,15,15,0">
-                <Entry x:Name="equipmentID" HorizontalTextAlignment="Center" HorizontalOptions="Fill" BackgroundColor="LightYellow" TextChanged="convertUpper"/>
-            </StackLayout>
-
-
-
-            <StackLayout Grid.Row="1" Grid.Column="1" Padding="15,0,0,0">
-                <Button x:Name="btnConfirm" Clicked="checkEquipment" Text="Confirm" Grid.Row="1" Grid.Column="1"/>
-            </StackLayout>
-            
-           
-        </Grid>
+        <StackLayout Padding="15,15,15,15">
+        <inputLayout:SfTextInputLayout  Hint="Equipment ID" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
+               <Entry x:Name="equipmentID" TextChanged="convertUpper"/>
+        </inputLayout:SfTextInputLayout>
+        <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
+        <buttons:SfButton x:Name="btnConfirm" Text="Confirm" Clicked="checkEquipment" Style="{StaticResource buttonStyle}"/>
+        
 
         <ListView x:Name="euipmentList"></ListView>
         </StackLayout>

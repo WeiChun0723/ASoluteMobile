@@ -30,7 +30,7 @@ namespace ASolute_Mobile
         static string address = "";
         static string location = "";
 
-        public static async Task GetGPS()
+        public static async void GetGPS()
         {
             //var locator = CrossGeolocator.Current;
             //position = await locator.GetPositionAsync();
@@ -52,13 +52,26 @@ namespace ASolute_Mobile
                 location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
             }*/
 
-            location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? ""  : String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
-
-            if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet())
+            try
             {
-                try
+               
+
+                location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? "" : String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
+
+                /*if (String.IsNullOrEmpty(location))
                 {
-                    if(Ultis.Settings.SessionUserItem.GetGPS)
+                    var position = await Geolocation.GetLastKnownLocationAsync();
+
+                    if (position != null)
+                    {
+                        location = String.Format("{0:0.000000}", position.Latitude.ToString()) + "," + String.Format("{0:0.000000}", position.Longitude.ToString());
+                    }
+                }*/
+
+                if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet())
+                {
+
+                    if (Ultis.Settings.SessionUserItem.GetGPS)
                     {
                         var client = new HttpClient();
                         client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
@@ -69,11 +82,12 @@ namespace ASolute_Mobile
                         Debug.WriteLine(response);
                     }
                 }
-                catch
-                {
-
-                }
             }
+            catch(Exception ex)
+            {
+
+            }
+
         }
 
         //download the bus stop list and store locally 
@@ -88,7 +102,7 @@ namespace ASolute_Mobile
                 {
                     if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
                     {
-                        if(localStoredOutboundStops.Count == 0)
+                        if (localStoredOutboundStops.Count == 0)
                         {
                             var outbound_content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/host/api/", ControllerUtil.getBusStops("OutboundList"), null);
                             clsResponse outbound_response = JsonConvert.DeserializeObject<clsResponse>(outbound_content);
@@ -111,7 +125,7 @@ namespace ASolute_Mobile
 
                             }
                         }
-                           
+
                     }
                 }
             }
@@ -121,7 +135,7 @@ namespace ASolute_Mobile
             }
         }
 
-        public static void StoreData(string content,string action)
+        public static void StoreData(string content, string action)
         {
             List<clsBusTicket> stops = JObject.Parse(content)["Result"].ToObject<List<clsBusTicket>>();
 
@@ -160,22 +174,22 @@ namespace ASolute_Mobile
 
 
         //search database for pending bus trip and sync to server
-        public  static async Task UploadPendingRecord()
+        public static async Task UploadPendingRecord()
         {
             try
             {
                 if (NetworkCheck.IsInternet())
                 {
-                    if(!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
+                    if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
                     {
                         //upload bus trip record
                         var pendingBusTrip = App.Database.GetPendingTrip();
 
                         List<clsTrip> completeTrips = new List<clsTrip>();
 
-                        foreach(BusTrip busTrip in pendingBusTrip)
+                        foreach (BusTrip busTrip in pendingBusTrip)
                         {
-                            if(busTrip.EndTime != null && busTrip.Uploaded == false)
+                            if (busTrip.EndTime != null && busTrip.Uploaded == false)
                             {
                                 clsTrip trip = new clsTrip
                                 {
@@ -192,15 +206,15 @@ namespace ASolute_Mobile
                                     EndGeoLoc = busTrip.EndGeoLoc,
                                     TrxStatus = 5,
                                     LinkId = "",
-                                    LocationList = {},
-                                    Captions = {}
+                                    LocationList = { },
+                                    Captions = { }
                                 };
 
                                 completeTrips.Add(trip);
                             }
                         }
 
-                        if(completeTrips.Count != 0)
+                        if (completeTrips.Count != 0)
                         {
                             var content = await CommonFunction.CallWebService(1, completeTrips, Ultis.Settings.SessionBaseURI, ControllerUtil.postTrips(), null);
                             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -298,7 +312,7 @@ namespace ASolute_Mobile
             App.Database.DeleteTicket();
             Ultis.Settings.SessionSettingKey = "";
             Ultis.Settings.Language = "";
-            
+
             if (contentPage != null)
             {
                 contentPage.IsBusy = false;
@@ -330,36 +344,36 @@ namespace ASolute_Mobile
 
         public static void StartTimer()
         {
-            Device.StartTimer(TimeSpan.FromSeconds(5),  () =>
-            {
+            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
+           {
 
                 //Task.Run(async () => { await BackgroundUploadImage(); });
 
                 BackgroundUploadImage();
 
-                if (recordImages.Count != 0)
-                {
+               if (recordImages.Count != 0)
+               {
 
-                    return true; // True = Repeat again, False = Stop the timer
+                   return true; // True = Repeat again, False = Stop the timer
                 }
-                else
-                {
-                    return false;
-                }
+               else
+               {
+                   return false;
+               }
 
-            });
+           });
         }
 
 
         public static async void BackgroundUploadImage()
         {
-           
+
             try
             {
                 recordImages = App.Database.GetPendingRecordImages(false);
                 foreach (AppImage recordImage in recordImages)
                 {
-                    if(recordImage.type != "ProfilePic")
+                    if (recordImage.type != "ProfilePic")
                     {
                         clsFileObject image = new clsFileObject();
 
@@ -403,11 +417,10 @@ namespace ASolute_Mobile
             {
 
             }
-           
+
         }
     }
 
 }
-        
 
- 
+
