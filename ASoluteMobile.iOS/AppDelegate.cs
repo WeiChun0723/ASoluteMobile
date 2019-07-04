@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Foundation;
-using Tesseract.iOS;
 using UIKit;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -33,6 +32,8 @@ namespace ASolute_Mobile.iOS
             Syncfusion.SfBusyIndicator.XForms.iOS.SfBusyIndicatorRenderer.Init();
             Syncfusion.XForms.iOS.ComboBox.SfComboBoxRenderer.Init();
             Syncfusion.XForms.iOS.Buttons.SfButtonRenderer.Init();
+            Syncfusion.XForms.iOS.Buttons.SfCheckBoxRenderer.Init();
+            Syncfusion.XForms.iOS.MaskedEdit.SfMaskedEditRenderer.Init();
             Syncfusion.XForms.iOS.TextInputLayout.SfTextInputLayoutRenderer.Init();
             Syncfusion.SfNumericTextBox.XForms.iOS.SfNumericTextBoxRenderer.Init();
             Syncfusion.SfPullToRefresh.XForms.iOS.SfPullToRefreshRenderer.Init();

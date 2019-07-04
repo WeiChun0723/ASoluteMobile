@@ -51,7 +51,6 @@ namespace ASolute_Mobile.CustomerTracking
             {
                 if (Ultis.Settings.AppFirstInstall == "First")
                 {
-
                     Ultis.Settings.AppFirstInstall = "Second";
                     var content = await CommonFunction.CallWebService(0, null,Ultis.Settings.SessionBaseURI, ControllerUtil.getAutoScanURL(),this);
                     clsResponse autoScan_response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -80,13 +79,14 @@ namespace ASolute_Mobile.CustomerTracking
             catch
             {
 
-            }
-                
+            }  
         }
 
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).Id,((ListItems)e.Item).Name));
+            //await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).Id,((ListItems)e.Item).Name));
+            //await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getContainerFullListURL(((ListItems)e.Item).Id)));
+            await Navigation.PushAsync(new NewCategoryPage(((ListItems)e.Item), ControllerUtil.getContainerFullHeaderURL(((ListItems)e.Item).Id)));
         }
 
         protected async void refreshProviderList(object sender, EventArgs e)

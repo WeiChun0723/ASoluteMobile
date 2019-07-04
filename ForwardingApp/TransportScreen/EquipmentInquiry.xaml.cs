@@ -11,14 +11,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
 	public partial class EquipmentInquiry : ContentPage
 	{
-       
-
         public EquipmentInquiry ()
 		{
 			InitializeComponent ();
@@ -52,23 +49,21 @@ namespace ASolute_Mobile
                         string value = response.Result[i]["Value"];
                         bool display = response.Result[i]["Display"];
                         eqInfo.Add(new clsCaptionValue(caption, value, display));
-                        
+
                     }
                     count++;
                     
-                    List <EqDetails> numberRow = new List<EqDetails>();
-                    for(int j = 0; j < count; j++)
+                    List <EqDetails> eqDetailsRow = new List<EqDetails>();
+                    for(int j = 0; j < 1; j++)
                     {
                         EqDetails listRow = new EqDetails();
-                        listRow.count = "true";
+                        listRow.details = "true";
 
-                        numberRow.Add(listRow);
+                        eqDetailsRow.Add(listRow);
                     }
 
-                    ObservableCollection<EqDetails> row = new ObservableCollection<EqDetails>(numberRow);
+                    ObservableCollection<EqDetails> row = new ObservableCollection<EqDetails>(eqDetailsRow);
 
-
-                   
                     var Template = new DataTemplate(() =>
                     {
 
@@ -78,7 +73,6 @@ namespace ASolute_Mobile
                             Padding = new Thickness(10, 20, 20, 20),
                             HorizontalOptions = LayoutOptions.FillAndExpand,
                             VerticalOptions = LayoutOptions.FillAndExpand
-
                         };
 
                         foreach (clsCaptionValue items in eqInfo)
@@ -124,6 +118,6 @@ namespace ASolute_Mobile
 
     class EqDetails
     {
-        public string count { get; set; }
+        public string details { get; set; }
     }
 }

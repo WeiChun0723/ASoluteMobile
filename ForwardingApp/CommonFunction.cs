@@ -4,6 +4,7 @@ using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.TransportScreen;
 using ASolute_Mobile.Ultis;
+using Com.OneSignal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Media;
@@ -24,7 +25,7 @@ namespace ASolute_Mobile.Utils
         static ContentPage pages;
         static string returnResult;
 
-        /* //call when calling the web service to get response
+        /*//call when calling the web service to get response
          public static async Task<string> GetRequestAsync(string baseAdd,string callUri)
          {
              var client = new HttpClient();
@@ -103,9 +104,9 @@ namespace ASolute_Mobile.Utils
             {
                 await page.DisplayAlert("Error", requestEx.Message, "OK");
             }
-            catch (Exception ex)
+            catch 
             {
-                // await page.DisplayAlert("Error", ex.Message, "OK");
+                
             }
             return null;
         }
@@ -249,14 +250,11 @@ namespace ASolute_Mobile.Utils
                 {
                     Icon = "plus.png",
                     Priority = 0,
-                    Order = ToolbarItemOrder.Primary,
-
+                    Order = ToolbarItemOrder.Primary
                 };
 
                 item.Clicked += async (sender, e) =>
                 {
-
-
                     if (Ultis.Settings.App.Contains("Trucking"))
                     {
                         await contentPage.Navigation.PushAsync(new NewMasterJob());
@@ -284,12 +282,29 @@ namespace ASolute_Mobile.Utils
                             }
                         }
                     }
-
                 };
 
                 contentPage.ToolbarItems.Add(item);
             }
+        }
 
+        public static void GetFireBaseID()
+        {
+            try
+            {
+                if (Ultis.Settings.FireID.Equals("firebase") || String.IsNullOrEmpty(Ultis.Settings.FireID))
+                {
+                    string firebaseID = "";
+
+                    OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
+
+                    Ultis.Settings.FireID = firebaseID;
+                }
+            }
+            catch
+            {
+
+            }
         }
 
         

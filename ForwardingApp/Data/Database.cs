@@ -98,7 +98,6 @@ namespace ASolute_Mobile.Data
             item.owner = Ultis.Settings.SessionUserId;
             if (item.tableID != 0)
             {
-
                 return database.Update(item);
             }
             else
@@ -336,6 +335,22 @@ namespace ASolute_Mobile.Data
         public void deleteProvider(string id)
         {
             database.Query<SummaryItems>("DELETE FROM [SummaryItems] WHERE [Code] = ?", id);
+        }
+
+        //get record based on search 
+        public List<ListItems> GetContainerDetail(string category)
+        {
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ?", category);
+        }
+
+        public List<ListItems> GetAllContainerDetail()
+        {
+            return database.Query<ListItems>("SELECT * FROM [ListItems]");
+        }
+
+        public void DeleteRecords()
+        {
+            database.Query<ListItems>("DELETE FROM ListItems");
         }
         #endregion
 

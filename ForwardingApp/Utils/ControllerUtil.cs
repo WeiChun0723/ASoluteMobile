@@ -182,6 +182,7 @@ namespace ASolute_Mobile.Utils
             }
 
             return String.Format("Session/Load?Id={0}&AppName={1}&AppVer={2}", Ultis.Settings.SessionSettingKey, name, CrossDeviceInfo.Current.AppVersion);
+            //return String.Format("Session/Load?Id={0}&FirebaseId={1}&AppName={2}&AppVer={3}", Ultis.Settings.SessionSettingKey, Ultis.Settings.FireID, "Haulage", CrossDeviceInfo.Current.AppVersion);
         }
 
         /* public static String getDownloadMenuURL(string firebase)
@@ -273,7 +274,15 @@ namespace ASolute_Mobile.Utils
             return String.Format("Providers/HaulageVolume?SessionId={0}&ViewDate={1}", Ultis.Settings.SessionSettingKey, dateTime);
         }
 
+        public static String getContainerFullListURL(string code)
+        {
+            return String.Format("Providers/ContainerFullList?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey, code);
+        }
 
+        public static String getContainerFullHeaderURL(string code)
+        {
+            return String.Format("Providers/ContainerFullHeader?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey, code);
+        }
 
         #endregion
 

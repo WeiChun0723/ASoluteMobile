@@ -16,7 +16,7 @@ using Haulage.Droid.MobilePrinter;
 namespace ASolute_Mobile.Droid
 {
 
-    [Activity(Label = "ASolute Fleet", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "AILS Tracking", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static Activity activity;
@@ -29,7 +29,6 @@ namespace ASolute_Mobile.Droid
                 TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
                 ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
                 base.OnCreate(bundle);
-               
                 Xamarin.Essentials.Platform.Init(this, bundle);
                 Rg.Plugins.Popup.Popup.Init(this, bundle);
                 global::Xamarin.Forms.Forms.Init(this, bundle);
@@ -79,7 +78,6 @@ namespace ASolute_Mobile.Droid
 
         public void StartLocationTracking()
         {
-
             LocationApp.Current.LocationServiceConnected += (object sender, ServiceConnectedEventArgs e) =>
             {
                 Log.Debug(logTag, "ServiceConnected Event Raised");
@@ -101,7 +99,6 @@ namespace ASolute_Mobile.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            
             switch (requestCode)
             {
                 case PrinterDiscoveryImplementation.RequestLocationId:

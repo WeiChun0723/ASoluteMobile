@@ -19,7 +19,6 @@ using Syncfusion.XForms.Buttons;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-
 namespace ASolute_Mobile
 {
     //all of the app share this main menu after they login to the app
@@ -83,9 +82,10 @@ namespace ASolute_Mobile
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             try
             {
+                CommonFunction.GetFireBaseID();
+
                 //get the latest store local profile image
                 var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
                 profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
@@ -96,7 +96,6 @@ namespace ASolute_Mobile
             {
 
             }
-           
         }
 
         async void Handle_Tapped(object sender, System.EventArgs e)
@@ -108,6 +107,8 @@ namespace ASolute_Mobile
         {
             try
             {
+                CommonFunction.GetFireBaseID();
+
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -177,8 +178,12 @@ namespace ASolute_Mobile
 
                                         expiryGrid.Children.Add(expiryInfoStack, columnIndex, rowIndex);
                                         columnIndex++;
-                                    }
 
+                                        if(columnIndex >3)
+                                        {
+                                            rowIndex++;
+                                        }
+                                    }
                                 }
                                 break;
 
@@ -262,7 +267,6 @@ namespace ASolute_Mobile
         {
             try
             {
-
                 //load user account info
                 List<SummaryItems> information = App.Database.GetSummarysAsync("Info", "UserInfo");
                 userInfo.Children.Clear();

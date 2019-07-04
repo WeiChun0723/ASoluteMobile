@@ -173,7 +173,6 @@ namespace ASolute_Mobile
                     {
                         //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
                         Ultis.Settings.RefreshListView = "Yes";
-
                         Ultis.Settings.SessionUserId = usernameEntry.Text;
 
                         var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();

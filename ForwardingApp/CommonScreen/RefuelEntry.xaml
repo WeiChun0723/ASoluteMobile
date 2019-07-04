@@ -6,16 +6,16 @@
              BackgroundColor="#e8e5e5" 
              xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" 
              xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms" 
-             xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation">
+             xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation"
+             xmlns:syncmaskededit="clr-namespace:Syncfusion.XForms.MaskedEdit;assembly=Syncfusion.SfMaskedEdit.XForms">
     <ScrollView>
         <StackLayout Padding="15,15,15,15" Spacing="10">
-           
             <StackLayout>
-                 <Label Text="Station" FontAttributes="Bold" x:Name="lblStation" />
+                <Label Text="Station" FontAttributes="Bold" x:Name="lblStation"  />
                 <combobox:SfComboBox x:Name="stationComboBox" Style="{StaticResource comboBoxStyle}"/>
             </StackLayout>
             
-             <StackLayout>
+            <StackLayout>
                  <Label Text="Date &amp; Time" FontAttributes="Bold" x:Name="lblDateTime" />
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <DatePicker x:Name="datePicker" HorizontalOptions="FillAndExpand" Format="dd MMMM" BackgroundColor="LightYellow" />
@@ -29,18 +29,18 @@
             </StackLayout>
             
             <inputLayout:SfTextInputLayout Padding="0,10" Hint="Liter" Style="{StaticResource inputStyle}"  x:Name="lblLiter" ContainerBackgroundColor="LightYellow" >
-                <Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"/> 
-
+               <!--<Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"/>-->
+               <syncmaskededit:SfMaskedEdit x:Name="liter" Mask="000.0000" ValueChanged="LiterInput" Keyboard="Numeric"/>
             </inputLayout:SfTextInputLayout>
             
             <StackLayout Orientation="Horizontal" HeightRequest="60">
-             <inputLayout:SfTextInputLayout  Hint="Cost per Liter" Style="{StaticResource inputStyle}"  x:Name="lblCost"  ContainerBackgroundColor="LightYellow" >
+             <inputLayout:SfTextInputLayout  Hint="Cost per Liter" Style="{StaticResource inputStyle}" x:Name="lblCost" ContainerBackgroundColor="LightYellow" >
                <Entry  x:Name="costPerLiter" TextChanged="CostLiter" Keyboard="Numeric"/> 
             </inputLayout:SfTextInputLayout>
             <Label x:Name="amount" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" HeightRequest="20" BackgroundColor="LightGray"  FontAttributes="Bold" TextColor="Black" />
             </StackLayout>
             
-             <inputLayout:SfTextInputLayout Padding="0,10" Hint="Odometer" Style="{StaticResource inputStyle}"  x:Name="lblOdometer" ContainerBackgroundColor="LightYellow" >
+            <inputLayout:SfTextInputLayout Padding="0,10" Hint="Odometer" Style="{StaticResource inputStyle}"  x:Name="lblOdometer" ContainerBackgroundColor="LightYellow" >
                 <Entry  x:Name="odometer" Keyboard="Numeric"/> 
             </inputLayout:SfTextInputLayout>
             
@@ -57,17 +57,15 @@
             
             <inputLayout:SfTextInputLayout  Hint="Voucher" Style="{StaticResource inputStyle}" x:Name="lblVoucher" >
                 <Entry x:Name="voucher" /> 
-                
                 <inputLayout:SfTextInputLayout.TrailingView>
                     <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="voucherBarCode_icon">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                            <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1"/>
                         </Image.GestureRecognizers>
                     </Image>
                 </inputLayout:SfTextInputLayout.TrailingView>
             </inputLayout:SfTextInputLayout>
-            
-            
+
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="6">
                 <Image Source="camera.png" WidthRequest="55" HeightRequest="60" VerticalOptions="Center" x:Name="camera_icon">
                     <Image.GestureRecognizers>

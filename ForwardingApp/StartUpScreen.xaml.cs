@@ -75,12 +75,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                if (Ultis.Settings.FireID.Equals("firebase"))
-                {
-                    OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
-
-                    Ultis.Settings.FireID = firebaseID;
-                }
+                CommonFunction.GetFireBaseID();
 
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getActionURL(deviceID, firebaseID), this);
                 clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);

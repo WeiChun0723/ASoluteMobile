@@ -185,7 +185,7 @@ namespace ASolute_Mobile.WMS_Screen
                     unitBox.ComboBoxSource = units;
                     statusBox.ComboBoxSource = status;
 
-                    if(newPallet.ControlVolume != "H")
+                   /* if (newPallet.ControlVolume != "H")
                     {
                         clsAttribute volume = new clsAttribute
                         {
@@ -197,7 +197,7 @@ namespace ASolute_Mobile.WMS_Screen
                         newPallet.Attribute.Add(volume);
                     }
 
-                    if(newPallet.ControlWeight != "H")
+                    if (newPallet.ControlWeight != "H")
                     {
                         clsAttribute weight = new clsAttribute
                         {
@@ -207,7 +207,7 @@ namespace ASolute_Mobile.WMS_Screen
                         };
 
                         newPallet.Attribute.Add(weight);
-                    }
+                    }*/
 
                     int row = 4, column = 0;
                     foreach (clsAttribute attr in newPallet.Attribute)
@@ -259,7 +259,7 @@ namespace ASolute_Mobile.WMS_Screen
 
                             customEntry.Behaviors.Add(new MaxLengthValidation { MaxLength = 50 });
 
-                            if(attr.Key == "M3" || attr.Key == "KG")
+                            if (attr.Key == "M3" || attr.Key == "KG")
                             {
                                 customEntry.Keyboard = Keyboard.Numeric;
                             }
@@ -285,13 +285,13 @@ namespace ASolute_Mobile.WMS_Screen
                             {
                                 customEntry.LineColor = Color.WhiteSmoke;
                             }
-                            else if(customDatePicker != null)
+                            else if (customDatePicker != null)
                             {
                                 customDatePicker.BackgroundColor = Color.WhiteSmoke;
                             }
                         }
 
-                        if(attr.Key != "ExpiryDate" && attr.Key != "MfgDate" && attr.Key != "M3" && attr.Key != "KG")
+                        if (attr.Key != "ExpiryDate" && attr.Key != "MfgDate" && attr.Key != "M3" && attr.Key != "KG")
                         {
                             Image scan = new Image
                             {
@@ -409,7 +409,6 @@ namespace ASolute_Mobile.WMS_Screen
                             clsPallet pallet = new clsPallet
                             {
                                 Id = id,
-                                ProductCode = (actionID == "BARRY") ? productCode : productPallet.ProductCode,
                                 PalletId = (!(String.IsNullOrEmpty(palletNo.Text))) ? palletNo.Text : String.Empty,
                                 PalletSize = newPallet.PalletSize[sizes.FindIndex(x => x.Equals(sizeBox.Text))].Key,
                                 Qty = Convert.ToInt32(quantity.Text),
@@ -423,11 +422,20 @@ namespace ASolute_Mobile.WMS_Screen
                                 String06 = (!(String.IsNullOrEmpty(SearchControl("String06", "GetValue", "")))) ? SearchControl("String06", "GetValue", "") : String.Empty,
                                 ExpiryDate = (!(String.IsNullOrEmpty(SearchControl("ExpiryDate", "GetValue", "")))) ? SearchControl("ExpiryDate", "GetValue", "") : String.Empty,
                                 MfgDate = (!(String.IsNullOrEmpty(SearchControl("MfgDate", "GetValue", "")))) ? SearchControl("MfgDate", "GetValue", "") : String.Empty,
-                                Volume = (!(String.IsNullOrEmpty(SearchControl("M3", "GetValue", "")))) ? Convert.ToDouble( SearchControl("M3", "GetValue", "")) : 0,
+                                Volume = (!(String.IsNullOrEmpty(SearchControl("M3", "GetValue", "")))) ? Convert.ToDouble(SearchControl("M3", "GetValue", "")) : 0,
                                 Weight = (!(String.IsNullOrEmpty(SearchControl("KG", "GetValue", "")))) ? Convert.ToDouble(SearchControl("KG", "GetValue", "")) : 0
                             };
 
-                            var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id),this);
+                            if (String.IsNullOrEmpty(palletNo.Text))
+                            {
+                                pallet.ProductCode = productPallet.ProductCode;
+                            }
+                            else
+                            {
+                                pallet.ProductCode = (actionID == "BARRY") ? palletNo.Text.Substring(0, 16) : productPallet.ProductCode;
+                            }
+
+                            var content = await CommonFunction.CallWebService(1, pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postNewPalletURL(id), this);
                             clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                             if (upload_response.IsGood)
@@ -457,14 +465,14 @@ namespace ASolute_Mobile.WMS_Screen
 
                                 palletNo.Focus();
                             }
-                           
+
                         }
                         else
                         {
                             await DisplayAlert("Missing field", "Please fill in all mandatory field.", "OK");
                         }
                     }
-                    catch (Exception error) 
+                    catch (Exception error)
                     {
                         await DisplayAlert("Error", error.Message, "OK");
                     }

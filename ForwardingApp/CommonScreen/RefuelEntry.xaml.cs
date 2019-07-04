@@ -47,7 +47,6 @@ namespace ASolute_Mobile
             imageGridRow.Height = imageWidth;
 
             StackLayout main = new StackLayout();
-
             Label title1 = new Label
             {
                 FontSize = 15,
@@ -70,12 +69,12 @@ namespace ASolute_Mobile
             if (Ultis.Settings.Language.Equals("English"))
             {
                 Title = "Refuel Entry";
-                liter.Placeholder = "Maximum 500 liter.";
+                liter.Watermark = "Maximum 500 liter.";
             }
             else
             {
                 Title = "Isi Minyak";
-                liter.Placeholder = "Maksimum 500 liter.";
+                liter.Watermark = "Maksimum 500 liter.";
             }
 
             if (NetworkCheck.IsInternet())
@@ -89,16 +88,12 @@ namespace ASolute_Mobile
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-          
             if (Ultis.Settings.DeleteImage == "Yes")
             {
                 DisplayImage();
                 Ultis.Settings.DeleteImage = "No";
             }
         }
-
-        
 
         async void Handle_Tapped(object sender, System.EventArgs e)
         {
@@ -138,7 +133,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                double fuelLiter = Convert.ToDouble(liter.Text);
+                double fuelLiter = Convert.ToDouble(liter.Value);
                 if (fuelLiter <= 500.00)
                 {
                     double cost = Convert.ToDouble(costPerLiter.Text);
@@ -151,18 +146,17 @@ namespace ASolute_Mobile
                             string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
 
                             clsFuelCost refuel_Data = new clsFuelCost();
-                            if (paymentComboBox.Text != null && stationComboBox.Text != null && liter.Text != null && fuelCard.Text != null)
+                            if (paymentComboBox.Text != null && stationComboBox.Text != null && liter.Value!= null && fuelCard.Text != null)
                             {
                                 try
                                 {
                                     refuel_Data.TruckId = Ultis.Settings.SessionUserItem.TruckId;
                                     refuel_Data.Odometer = Convert.ToInt32(odometer.Text);
                                     refuel_Data.DriverId = Ultis.Settings.SessionUserItem.DriverId;
-                                    //refuel_Data.VendorCode = fuelCostNew.VendorList[0].Key;
                                     refuel_Data.VendorCode = fuelCostNew.VendorList[stations.FindIndex(x => x.Equals(stationComboBox.Text))].Key;
                                     refuel_Data.PaymentMode = (paymentMode.FindIndex(x => x.Equals(paymentComboBox.Text)) == 1) ? clsFuelCost.PaymentModeEnum.Card : clsFuelCost.PaymentModeEnum.Cash;
                                     refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
-                                    refuel_Data.Quantity = Convert.ToDouble(liter.Text);
+                                    refuel_Data.Quantity = Convert.ToDouble(liter.Value);
                                     refuel_Data.FuelCardNo = (String.IsNullOrEmpty(fuelCard.Text)) ? "" : fuelCard.Text;
                                     refuel_Data.VoucherNo = (String.IsNullOrEmpty(voucher.Text)) ? "" : voucher.Text;
                                     //refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
@@ -189,7 +183,6 @@ namespace ASolute_Mobile
                                         confirm_icon.IsEnabled = false;
                                         confirm_icon.Source = "confirmDisable.png";
                                        
-
                                         await Navigation.PopAsync();
                                     }
                                     else
@@ -250,6 +243,7 @@ namespace ASolute_Mobile
             if (paymentComboBox.SelectedIndex == -1)
             {
                 await DisplayAlert("Error", "Please choose payment method", "Ok");
+                
             }
             else
             {
@@ -271,26 +265,21 @@ namespace ASolute_Mobile
         void Handle_TextChanged(object sender, TextChangedEventArgs e)
         {
             var entry = sender as Entry;
-
-
         }
 
-        public void LiterInput(object sender, TextChangedEventArgs e)
+        public void LiterInput(object sender, Syncfusion.XForms.MaskedEdit.ValueChangedEventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(e.NewTextValue))
+                if (string.IsNullOrEmpty(e.Value.ToString()))
                 {
                     amount.Text = "RM 0.00";
-                    liter.Placeholder = "Maximum 500 liter only";
+                    liter.Watermark = "Maximum 500 liter only";
                 }
                 else
                 {
-
-                    double fuelLiter = Convert.ToDouble(e.NewTextValue);
-
+                    double fuelLiter = Convert.ToDouble(e.Value.ToString());
                     double result = Convert.ToDouble(costPerLiter.Text) * fuelLiter;
-
                     amount.Text = "RM" + Math.Round(result, 2);
                 }
             }
@@ -298,25 +287,20 @@ namespace ASolute_Mobile
             {
 
             }
-
         }
 
         public void CostLiter(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (Convert.ToDouble(liter.Text) == 0.00)
+                if (Convert.ToDouble(liter.Value) == 0.00)
                 {
                     amount.Text = "RM 0.00";
-
                 }
                 else
                 {
-
                     double costLiter = Convert.ToDouble(e.NewTextValue);
-
-                    double result = Convert.ToDouble(liter.Text) * costLiter;
-
+                    double result = Convert.ToDouble(liter.Value) * costLiter;
                     amount.Text = "RM" + Math.Round(result, 2);
                 }
             }
@@ -324,7 +308,6 @@ namespace ASolute_Mobile
             {
 
             }
-
         }
 
         //function to handler scan function
@@ -353,8 +336,9 @@ namespace ASolute_Mobile
                             break;
 
                         case "otherRef":
-                           // other.Text = result.Text;
                             break;
+
+                            
                     }
                 });
             };
@@ -389,37 +373,29 @@ namespace ASolute_Mobile
                                 break;
 
                             case "Liter":
-                               
                                 lblLiter.Hint = labelText.Value;
                                 break;
 
                             case "Cost per Liter":
-                               
                                 lblCost.Hint = labelText.Value;
                                 break;
 
                             case "Odometer":
-                                
                                 lblOdometer.Hint= labelText.Value;
                                 break;
 
                             case "Fuel Card":
-                                
                                 lblFuelCard.Hint = labelText.Value;
                                 break;
 
                             case "Voucher":
-                                
                                 lblVoucher.Hint = labelText.Value;
                                 break;
 
                             case "Other Ref":
-                               
                                 break;
-
                         }
                     }
-
 
                     //assign default time
                     timePicker.Time = fuelCostNew.RefuelDateTime.TimeOfDay;
@@ -434,15 +410,11 @@ namespace ASolute_Mobile
                     //set maximum date that date picker can choose 
                     datePicker.MaximumDate = DateTime.Now;
 
-
                     foreach (clsKeyValue station in fuelCostNew.VendorList)
                     {
                         stations.Add(station.Value.ToUpper());
                     }
-                    /*for (int i = 0; i < fuelCostNew.VendorList.Count; i++)
-                    {
-                        stationPicker.Items.Add(fuelCostNew.VendorList[i].Value.ToUpper());
-                    }*/
+                   
                     stationComboBox.ComboBoxSource = stations;
 
                     //auto select deafult station if picker only 1 item

@@ -52,8 +52,7 @@ namespace ASolute_Mobile
             }
             else
             {
-                 // MainPage = new yardmaptest();
-
+                 // MainPage = new NewCategoryPage();
                  if (sessionKey != "")
                   {
                       MainPage = new MainPage();
@@ -62,25 +61,25 @@ namespace ASolute_Mobile
                   {
                       if (Ultis.Settings.AppFirstInstall == "First")
                       {
-
                           MainPage = new CustomNavigationPage(new StartUpScreen());
                       }
                       else
                       {
                           MainPage = new CustomNavigationPage(new LoginPage());
                       }
-
                   }
             }
 
-            /*OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
+            OneSignal.Current.StartInit("804c5448-99ec-4e95-829f-c98c0ea6acd9")
                        .InFocusDisplaying(Com.OneSignal.Abstractions.OSInFocusDisplayOption.Notification)
                        .HandleNotificationReceived(HandleNotificationReceived)
-                       .EndInit(); */
+                       .EndInit();
+
+            CommonFunction.GetFireBaseID();
 
         }
 
-            void HandleNotificationReceived(OSNotification notification)
+        void HandleNotificationReceived(OSNotification notification)
         {
 
             /*if(!String.IsNullOrEmpty(notification.payload.body))
