@@ -49,7 +49,7 @@ namespace ASolute_Mobile.CommonScreen
                         if (!CrossMedia.Current.IsPickPhotoSupported)
                         {
                             //content page refer to the page that call this function (this)
-                            await DisplayAlert("No Camera", "No camera available", "OK");
+                            await DisplayAlert("No supported", "Device not supported.", "OK");
                             return;
                         }
 
@@ -90,7 +90,14 @@ namespace ASolute_Mobile.CommonScreen
                             //resize the photo and store in different directory 
                             byte[] thumbnailByte;
 
-                            thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
+                            if (Device.RuntimePlatform != Device.iOS)
+                            {
+                                thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
+                            }
+                            else
+                            {
+                                thumbnailByte = imagesAsBytes; 
+                            }
 
                             image.imageData = thumbnailByte;
                             App.Database.SaveRecordImageAsync(image);
@@ -100,7 +107,7 @@ namespace ASolute_Mobile.CommonScreen
                     }
                     catch (Exception ex)
                     {
-                        // await DisplayAlert("Error", ex.Message, "OK");
+                            await DisplayAlert("Error", ex.Message, "OK");
                     }
                     break;
             }

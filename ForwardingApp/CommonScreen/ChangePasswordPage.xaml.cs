@@ -27,7 +27,7 @@ namespace ASolute_Mobile
             {
                 Title = "Change Password";
                 newPassView.Hint = "New Password";
-                confirmPassView.Hint = "New Password";
+                confirmPassView.Hint = "Confirm New Password";
                 SubmitButton.Text = "Confirm";
                 BackButton.Text = "Back to Menu";
             }

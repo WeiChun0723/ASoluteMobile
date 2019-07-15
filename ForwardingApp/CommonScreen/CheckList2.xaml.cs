@@ -32,7 +32,7 @@ namespace ASolute_Mobile
         public CheckList2 (List<clsKeyValue> chkList, string id)
 		{
 			InitializeComponent ();
-
+            
             Title = "Check List (step 2)";
             linkId = id;
             imageWidth = App.DisplayScreenWidth / 3;
@@ -88,7 +88,6 @@ namespace ASolute_Mobile
                 displayImage();
                 Ultis.Settings.DeleteImage = "No";                
             }
-           
         }
 
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)
@@ -97,7 +96,6 @@ namespace ASolute_Mobile
             image.HorizontalOptions = LayoutOptions.FillAndExpand;
             image.VerticalOptions = LayoutOptions.FillAndExpand;
             image.Aspect = Aspect.AspectFill;
-
             var tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.CommandParameter = appImage;
             tapGestureRecognizer.Tapped += async (sender, e) =>
@@ -224,23 +222,15 @@ namespace ASolute_Mobile
                         uri = ControllerUtil.postCheckList(false, remarkEditor.Text, Convert.ToInt32(Odometer.Text));
                     }
 
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                    var content = JsonConvert.SerializeObject(itemList);
-                    var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(uri, httpContent);
-                    var reply = await response.Content.ReadAsStringAsync();
+                    var content = await CommonFunction.CallWebService(1, itemList, Ultis.Settings.SessionBaseURI, uri, this);
+                    clsResponse result = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                    Debug.WriteLine(reply);
-                    clsResponse result = JsonConvert.DeserializeObject<clsResponse>(reply);
                     if (result.IsGood == true)
                     {
                         confirm_icon.IsEnabled = false;
                         confirm_icon.Source = "confirmDisable.png";
 
                         await DisplayAlert("Success", "Check List uploaded", "OK");
-                       
-
                     }
                     else
                     {
@@ -262,7 +252,6 @@ namespace ASolute_Mobile
             {
                 await DisplayAlert("Error", "Odometer cannot be empty and excedd 999999", "OK");
             }
-           
         }
 
     }

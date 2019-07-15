@@ -43,7 +43,7 @@ namespace ASolute_Mobile.HaulageScreen
             imageGridRow.Height = imageWidth;
 
             //display all the job details
-           JobContent();
+            JobContent();
 
             //title and subtitle
             StackLayout main = new StackLayout();
@@ -62,6 +62,7 @@ namespace ASolute_Mobile.HaulageScreen
             main.Children.Add(title1);
             main.Children.Add(title2);
             NavigationPage.SetTitleView(this, main);
+
         }
 
 
@@ -257,7 +258,8 @@ namespace ASolute_Mobile.HaulageScreen
             //indicate the seal no is mandatory, optional or read only
             if (jobItem.ActionId == "Point1_Chk" || jobItem.ActionId == "Point2_Chk")
             {
-                Device.BeginInvokeOnMainThread(() => {
+                Device.BeginInvokeOnMainThread(() =>
+                {
                     switch (jobItem.SealMode)
                     {
                         case "R":
@@ -477,7 +479,7 @@ namespace ASolute_Mobile.HaulageScreen
                             {
                                 InitializeObject();
                             }
-                           
+
                         }
                     }
                     else
@@ -499,62 +501,62 @@ namespace ASolute_Mobile.HaulageScreen
             {
                 //if (contPrefix.Text.Length >= 4 && contNum.Text.Length >= 7)
 
-                    if (!(sealNoView.ContainerBackgroundColor == Color.LightYellow) || (sealNoView.ContainerBackgroundColor == Color.LightYellow && !(String.IsNullOrEmpty(sealNoEntry.Text))))
+                if (!(sealNoView.ContainerBackgroundColor == Color.LightYellow) || (sealNoView.ContainerBackgroundColor == Color.LightYellow && !(String.IsNullOrEmpty(sealNoEntry.Text))))
+                {
+                    if (!(TrailerDetailStack.IsVisible) || (TrailerDetailStack.IsVisible && (chkYes.Checked || chkNo.Checked)))
                     {
-                        if (!(TrailerDetailStack.IsVisible) || (TrailerDetailStack.IsVisible && (chkYes.Checked || chkNo.Checked)))
+                        if (jobItem.ActionId == "EmptyPickup")
                         {
-                            if (jobItem.ActionId == "EmptyPickup")
-                            {
-                                haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.EmptyPickup;
-                                haulageJob.CollectSeal = (chkYes.Checked) ? true : false;
-                                haulageJob.MaxGrossWeight = (!(String.IsNullOrEmpty(mgwEntry.Text))) ? Convert.ToInt32(mgwEntry.Text) : 0;
-                                haulageJob.TareWeight = (!(String.IsNullOrEmpty(tareEntry.Text))) ? Convert.ToInt32(tareEntry.Text) : 0;
-                            }
-                            else
-                            {
-                                haulageJob.ActionId = (jobItem.ActionId == "Point1_Chk") ? clsHaulageModel.HaulageActionEnum.Point1_Chk : clsHaulageModel.HaulageActionEnum.Point2_Chk;
-                            }
-
-                            haulageJob.Id = Ultis.Settings.SessionCurrentJobId;
-                            haulageJob.ContainerNo = contPrefix.Text + contNum.Text;
-                            haulageJob.TrailerId = trailerIDEntry.Text;
-                            haulageJob.Remarks = (!(String.IsNullOrEmpty(remarkTextEditor.Text))) ? remarkTextEditor.Text : "";
-                            haulageJob.SealNo = (!(String.IsNullOrEmpty(sealNoEntry.Text))) ? sealNoEntry.Text : "";
-
-                            var content = await CommonFunction.CallWebService(1, haulageJob, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
-                            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                            if (response.IsGood)
-                            {
-                                Ultis.Settings.RefreshListView = "Yes";
-
-                                if (Ultis.Settings.Language.Equals("English"))
-                                {
-
-                                    await DisplayAlert("Success", "Job updated", "OK");
-                                }
-                                else
-                                {
-                                    await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
-                                }
-
-                                confirm_icon.IsEnabled = false;
-                                confirm_icon.Source = "confirmDisable.png";
-                                futile_icon.IsEnabled = false;
-                                futile_icon.Source = "futileDisable.png";
-                            }
-
+                            haulageJob.ActionId = clsHaulageModel.HaulageActionEnum.EmptyPickup;
+                            haulageJob.CollectSeal = (chkYes.Checked) ? true : false;
+                            haulageJob.MaxGrossWeight = (!(String.IsNullOrEmpty(mgwEntry.Text))) ? Convert.ToInt32(mgwEntry.Text) : 0;
+                            haulageJob.TareWeight = (!(String.IsNullOrEmpty(tareEntry.Text))) ? Convert.ToInt32(tareEntry.Text) : 0;
                         }
                         else
                         {
-                            await DisplayAlert("Error", "Please indicate collect seal.", "OK");
+                            haulageJob.ActionId = (jobItem.ActionId == "Point1_Chk") ? clsHaulageModel.HaulageActionEnum.Point1_Chk : clsHaulageModel.HaulageActionEnum.Point2_Chk;
                         }
+
+                        haulageJob.Id = Ultis.Settings.SessionCurrentJobId;
+                        haulageJob.ContainerNo = contPrefix.Text + contNum.Text;
+                        haulageJob.TrailerId = trailerIDEntry.Text;
+                        haulageJob.Remarks = (!(String.IsNullOrEmpty(remarkTextEditor.Text))) ? remarkTextEditor.Text : "";
+                        haulageJob.SealNo = (!(String.IsNullOrEmpty(sealNoEntry.Text))) ? sealNoEntry.Text : "";
+
+                        var content = await CommonFunction.CallWebService(1, haulageJob, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (response.IsGood)
+                        {
+                            Ultis.Settings.RefreshListView = "Yes";
+
+                            if (Ultis.Settings.Language.Equals("English"))
+                            {
+                                DependencyService.Get<IAudio>().PlayAudioFile("success.mp3");
+                                await DisplayAlert("Success", "Job updated", "OK");
+                            }
+                            else
+                            {
+                                await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
+                            }
+
+                            confirm_icon.IsEnabled = false;
+                            confirm_icon.Source = "confirmDisable.png";
+                            futile_icon.IsEnabled = false;
+                            futile_icon.Source = "futileDisable.png";
+                        }
+
                     }
                     else
                     {
-                        await DisplayAlert("Error", "Please enter seal number.", "OK");
+                        await DisplayAlert("Error", "Please indicate collect seal.", "OK");
                     }
-               
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Please enter seal number.", "OK");
+                }
+
             }
             catch (Exception ex)
             {

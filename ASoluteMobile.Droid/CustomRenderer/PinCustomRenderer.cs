@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
-using Android.Views;
 using Android.Widget;
 using ASolute_Mobile.CustomRenderer;
 using Haulage.Droid.CustomRenderer;

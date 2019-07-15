@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.HaulageScreen.CurrentLocation"
@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:ASolute_Mobile.InputValidation">
     
     <StackLayout Spacing="15" Padding="15,15,15,15">
-        <Image Source="navigation.png" HeightRequest="150" WidthRequest="50"/>
+        <Image Source="map.png" HeightRequest="150" WidthRequest="50"/>
         <inputLayout:SfTextInputLayout Hint="Company Name" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
                 <Entry x:Name="locationName" >
                     <Entry.Behaviors>
@@ -16,7 +16,8 @@
                     </Entry.Behaviors>
                 </Entry>
             </inputLayout:SfTextInputLayout>
-        <buttons:SfButton Style="{StaticResource buttonStyle}" HorizontalOptions="Fill" Text="Submit" Clicked="UpdateLocation" />
+        <buttons:SfButton Style="{StaticResource buttonStyle}" HorizontalOptions="Fill" Text="Submit" Clicked="Handle_Clicked" x:Name="btnSubmit"/>
+        <buttons:SfButton Style="{StaticResource buttonStyle}" HorizontalOptions="Fill" Text="Main Menu" Clicked="Handle_Clicked" x:Name="btnMainMenu"/>
         <ActivityIndicator x:Name="activityIndicator" IsRunning="False" VerticalOptions="Center" HorizontalOptions="Center" />
     </StackLayout>
 </ContentPage>

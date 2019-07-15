@@ -29,8 +29,8 @@
             </StackLayout>
             
             <inputLayout:SfTextInputLayout Padding="0,10" Hint="Liter" Style="{StaticResource inputStyle}"  x:Name="lblLiter" ContainerBackgroundColor="LightYellow" >
-               <!--<Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"/>-->
-               <syncmaskededit:SfMaskedEdit x:Name="liter" Mask="000.0000" ValueChanged="LiterInput" Keyboard="Numeric"/>
+               <Entry  x:Name="liter" TextChanged="LiterInput" Keyboard="Numeric"/>
+               <!--<syncmaskededit:SfMaskedEdit x:Name="liter" Mask="000.0000" ValueChanged="LiterInput" Keyboard="Numeric"/>-->
             </inputLayout:SfTextInputLayout>
             
             <StackLayout Orientation="Horizontal" HeightRequest="60">

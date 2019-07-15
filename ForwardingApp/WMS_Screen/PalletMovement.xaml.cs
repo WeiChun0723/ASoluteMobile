@@ -23,18 +23,14 @@ namespace ASolute_Mobile.WMS_Screen
         public PalletMovement(ListItems item)
         {
             InitializeComponent();
-
             record = item;
-
             Title = record.Name;
-
             chkScan.Checked = true;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             palletIdEntry.Focus();
         }
 
@@ -54,6 +50,7 @@ namespace ASolute_Mobile.WMS_Screen
                     BarCodeScan(fieldName);
                     break;
 
+                case "newLocationScan":
                 case "palletEntryCancel":
                     palletIdEntry.Text = "";
                     palletIdEntry.Focus();
@@ -62,6 +59,11 @@ namespace ASolute_Mobile.WMS_Screen
                 case "confirmEntryCancel":
                     confirmEntry.Text = "";
                     confirmEntry.Focus();
+                    break;
+
+                case "newLocationEntryCancel":
+                    newLocationEntry.Text = "";
+                    newLocationEntry.Focus();
                     break;
             }
         }
@@ -76,11 +78,11 @@ namespace ASolute_Mobile.WMS_Screen
                     GetPalletTrx(palletIdEntry.Text);
                     break;
 
+                case "newLocationEntry":
                 case "confirmEntry":
                     checkDigitEntry.Focus();
                     break;
             }
-
         }
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
@@ -98,17 +100,13 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         palletEntryCancel.IsVisible = false;
                     }
-
                     if(chkScan.Checked)
                     {
                         if(!(String.IsNullOrEmpty(palletIdEntry.Text)))
                         {
-
                             GetPalletTrx(palletIdEntry.Text);
                         }
-
                     }
-
                     break;
 
                 case "confirmEntry":
@@ -120,8 +118,8 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         confirmEntryCancel.IsVisible = false;
                     }
-
                     break;
+
             }
         }
 
@@ -137,7 +135,6 @@ namespace ASolute_Mobile.WMS_Screen
                         chkManual.Checked = false;
                         palletIdEntry.Focus();
                     }
-
                     break;
 
                 case "chkManual":
@@ -159,13 +156,12 @@ namespace ASolute_Mobile.WMS_Screen
                 case "btnVerify":
                     var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletVerificationURL(record.Id, palletIdEntry.Text), this);
                     clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
                     if(response.IsGood)
                     {
                         // see whether web service got return stuff
                         await DisplayAlert("Success", "Pallet verified", "OK");
-
                         palletIdEntry.Text = "";
+                        btnVerify.IsVisible = false;
                         palletDesc.Children.Clear();
                     }
                     break;
@@ -173,6 +169,28 @@ namespace ASolute_Mobile.WMS_Screen
                 case "btnDropOff":
                 case "btnPickUp":
                     PalletUpdate();
+                    break;
+
+                case "btnTransfer":
+                    if(!(String.IsNullOrEmpty(newLocationEntry.Text)) && !(String.IsNullOrEmpty(checkDigitEntry.Text)))
+                    {
+                        pallet.NewLocation = newLocationEntry.Text;
+                        pallet.CheckDigit = Convert.ToInt32(checkDigitEntry.Text);
+                        var transferContent = await CommonFunction.CallWebService(1, pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTransferURL(), this);
+                        clsResponse transferResponse = JsonConvert.DeserializeObject<clsResponse>(transferContent);
+                        if(transferResponse.IsGood)
+                        {
+                            await DisplayAlert("Success", "Pallet Transfered", "OK");
+                            newLocationView.IsVisible = false;
+                            checkDigitView.IsVisible = false;
+                            btnTransfer.IsVisible = false;
+                            palletDesc.IsVisible = false;
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Missing field", "Please enter all mandatory field", "OK");
+                    }
                     break;
             }
         }
@@ -185,6 +203,7 @@ namespace ASolute_Mobile.WMS_Screen
                 if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
                 {
                     pallet.NewLocation = !(String.IsNullOrEmpty(confirmEntry.Text)) ? confirmEntry.Text : "";
+
                     if (!(String.IsNullOrEmpty(checkDigitEntry.Text)))
                     {
                         pallet.CheckDigit = Convert.ToInt32(checkDigitEntry.Text);
@@ -195,7 +214,6 @@ namespace ASolute_Mobile.WMS_Screen
 
                     if (update_response.IsGood)
                     {
-
                         if (pallet.Action.Equals("Pickup"))
                         {
                             GetPalletTrx(palletIdEntry.Text);
@@ -203,21 +221,17 @@ namespace ASolute_Mobile.WMS_Screen
                         else if (pallet.Action.Equals("Dropoff"))
                         {
                             await DisplayAlert("Success", "Putaway updated.", "OK");
-
                             btnPickUp.IsVisible = false;
                             btnDropOff.IsVisible = false;
                             suggestView.IsVisible = false;
                             confirmView.IsVisible = false;
                             checkDigitView.IsVisible = false;
                             palletDesc.IsVisible = false;
-
                             palletIdEntry.Text = String.Empty;
                             confirmEntry.Text = String.Empty;
                             checkDigitEntry.Text = String.Empty;
                         }
-
                     }
-
                 }
                 else
                 {
@@ -233,8 +247,7 @@ namespace ASolute_Mobile.WMS_Screen
         }
 
         async void BarCodeScan(string field)
-        {
-
+        {                                   
             if(tapped)
             {
                 tapped = false;
@@ -259,6 +272,10 @@ namespace ASolute_Mobile.WMS_Screen
                             {
                                 confirmEntry.Text = result.Text;
                             }
+                            else if(field == "NewLocationScan")
+                            {
+                                newLocationEntry.Text = result.Text;
+                            }
 
                         });
                     };
@@ -274,6 +291,16 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GetPalletTrx(string palletID)
         {
+            newLocationView.IsVisible = false;
+            checkDigitView.IsVisible = false;
+            btnTransfer.IsVisible = false;
+            palletDesc.IsVisible = false;
+            btnPickUp.IsVisible = false;
+            btnDropOff.IsVisible = false;
+            suggestView.IsVisible = false;
+            confirmView.IsVisible = false;
+            btnVerify.IsVisible = false;
+
             loading.IsVisible = true;
             try
             {
@@ -283,7 +310,6 @@ namespace ASolute_Mobile.WMS_Screen
                 }
 
                 string encodePalletId = System.Net.WebUtility.UrlEncode(palletID);
-
                 var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(encodePalletId),this);
                 clsResponse newPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -293,37 +319,60 @@ namespace ASolute_Mobile.WMS_Screen
 
                     palletDesc.IsVisible = true;
 
-                    Title = (pallet.Action == "Pickup" || pallet.Action == "Dropoff") ? "Putaway" : record.Name;
+                    Title = (!(String.IsNullOrEmpty(pallet.Action)) && record.Name != "Picking Verification") ? pallet.Action : record.Name;
 
-                    switch(pallet.Action)
+                    //Title = ((pallet.Action == "Pickup" || pallet.Action == "Dropoff") && record.Name != "Picking Verification") ? "Putaway" : record.Name;
+
+                    if (record.Name == "Picking Verification")
+                    {
+                        btnVerify.IsVisible = true;
+                        palletDesc.IsVisible = true;
+                    }
+
+                    switch (pallet.Action)
                     {
                         case "Pickup":
-                            btnPickUp.IsVisible = true;
-                            btnDropOff.IsVisible = false;
-                            suggestView.IsVisible = false;
-                            confirmView.IsVisible = false;
-                            checkDigitView.IsVisible = false;
-                            break;
-
-                        case "Dropoff":
-                            if (!String.IsNullOrEmpty(pallet.NewLocation))
+                            if (record.Name != "Picking Verification")
                             {
-                                btnPickUp.IsVisible = false;
-                                btnDropOff.IsVisible = true;
-                                suggestView.IsVisible = true;
-                                confirmView.IsVisible = true;
-                                checkDigitView.IsVisible = true;
-                                suggestedEntry.Text = pallet.NewLocation;
-
-                                confirmEntry.Focus();
+                                btnPickUp.IsVisible = true;
+                                btnDropOff.IsVisible = false;
+                                suggestView.IsVisible = false;
+                                confirmView.IsVisible = false;
+                                checkDigitView.IsVisible = false;
                             }
                             break;
 
-                        default:
-                            btnVerify.IsVisible = true;
+                        case "Dropoff":
+                            if (record.Name != "Picking Verification")
+                            {
+                                if (!String.IsNullOrEmpty(pallet.NewLocation))
+                                {
+                                    btnPickUp.IsVisible = false;
+                                    btnDropOff.IsVisible = true;
+                                    suggestView.IsVisible = true;
+                                    confirmView.IsVisible = true;
+                                    checkDigitView.IsVisible = true;
+                                    suggestedEntry.Text = pallet.NewLocation;
+                                    confirmEntry.Focus();
+                                }
+                            }
+                            break;
+
+                        case "Transfer":
+                            //btnVerify.IsVisible = true;
+                            if(record.Name != "Picking Verification")
+                            {
+                                newLocationView.IsVisible = true;
+                                checkDigitView.IsVisible = true;
+                                btnTransfer.IsVisible = true;
+                                palletDesc.IsVisible = true;
+                                btnPickUp.IsVisible = false;
+                                btnDropOff.IsVisible = false;
+                                suggestView.IsVisible = false;
+                                confirmView.IsVisible = false;
+                            }
                             break;
                     }
-                
 
                     palletDesc.Children.Clear();
 
@@ -353,6 +402,17 @@ namespace ASolute_Mobile.WMS_Screen
                     };
                     palletDesc.Children.Add(btmblank);
 
+                }
+                else
+                {
+                    newLocationView.IsVisible = false;
+                    checkDigitView.IsVisible = false;
+                    btnTransfer.IsVisible = false;
+                    palletDesc.IsVisible = false;
+                    btnPickUp.IsVisible = false;
+                    btnDropOff.IsVisible = false;
+                    suggestView.IsVisible = false;
+                    confirmView.IsVisible = false;
                 }
                
                 loading.IsVisible = false;

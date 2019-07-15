@@ -86,7 +86,6 @@ namespace ASolute_Mobile
                     break;
             }
 
-
             //LGC warehouse
             if (callUri.Contains("Parcel/List"))
             {
@@ -189,6 +188,8 @@ namespace ASolute_Mobile
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {
+                            DependencyService.Get<IAudio>().PlayAudioFile("success.mp3");
+
                             if (menuItems.Id == "JobList" && Ultis.Settings.App == "asolute.Mobile.AILSHaulage")
                             {
                                 scanPage.PauseAnalysis();
@@ -477,6 +478,7 @@ namespace ASolute_Mobile
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
+               
             }
         }
 

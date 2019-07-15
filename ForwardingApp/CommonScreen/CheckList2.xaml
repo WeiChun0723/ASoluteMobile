@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ASolute_Mobile.CheckList2">
@@ -14,7 +14,7 @@
 
         <StackLayout Spacing="6">
             <Label Text="Remarks" FontAttributes="Bold" FontSize="Medium"/>
-            <Editor x:Name="remarkEditor" HeightRequest="100" BackgroundColor="White"/>
+            <Editor x:Name="remarkEditor" HeightRequest="100" BackgroundColor="LightGray"/>
         </StackLayout>
 
         <StackLayout Spacing="6">

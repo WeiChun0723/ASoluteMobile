@@ -7,6 +7,7 @@ using ASolute.Mobile.Models;
 using ZXing.Net.Mobile.Forms;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using ASolute_Mobile.Models;
 
 namespace ASolute_Mobile.LGC
 {
@@ -14,14 +15,22 @@ namespace ASolute_Mobile.LGC
     public partial class ChinaReceiving : ContentPage
     {
         int maxWeight, minLength, minWidth, maxDimension;
+        string receivingType = "";
 
-        public ChinaReceiving()
+        public ChinaReceiving(ListItems item)
         {
             InitializeComponent();
 
-            Title = "China Receiving";
+            Title = item.Name;
 
             GetParcelRules();
+
+            receivingType = item.Id;
+
+            if(item.Id == "ShipmentIn")
+            {
+                btnNext.Text = "Submit";
+            }
         }
 
         async void GetParcelRules()
@@ -62,13 +71,11 @@ namespace ASolute_Mobile.LGC
 
                 rulesDesc.Text = allRule;
             }
-           
         }
 
         async void Handle_Tapped(object sender, System.EventArgs e)
         {
             var icon = sender as Image;
-
             var scanPage = new ZXingScannerPage();
             await Navigation.PushAsync(scanPage);
 
@@ -95,28 +102,52 @@ namespace ASolute_Mobile.LGC
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
             loading.IsVisible = true;
-
-            var button = sender as SfButton;
-
-            switch (button.StyleId)
+            try
             {
-                case "btnNext":
-                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.validateConsingmentNoteURL(consigNote.Text), this);
-                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if (response.IsGood == true)
-                    {
-                        recevingStack.IsVisible = true;
-                    }
-                    break;
-
-                case "btnSubmit":
-                    if ((!String.IsNullOrEmpty(consigNote.Text)) && (!String.IsNullOrEmpty(cartonBox.Text)) && (!String.IsNullOrEmpty(length.Text)) && (!String.IsNullOrEmpty(width.Text)) &&
-                        (!String.IsNullOrEmpty(height.Text)) && (!String.IsNullOrEmpty(unit.Text)))
-                    {
-                        if(Convert.ToInt16(length.Text) >= minLength && Convert.ToInt16(width.Text) >= minWidth && (Convert.ToInt16(length.Text) + Convert.ToInt16(width.Text) + Convert.ToInt16(height.Text) <= maxDimension)
-                            && Convert.ToInt16(unit.Text) <= maxWeight)
+                var button = sender as SfButton;
+                switch (button.StyleId)
+                {
+                    case "btnNext":
+                        if(!(String.IsNullOrEmpty(consigNote.Text)))
                         {
+                            if (receivingType == "ParcelIn")
+                            {
+                                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.validateConsingmentNoteURL(consigNote.Text), this);
+                                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                                if (response.IsGood == true)
+                                {
+                                    recevingStack.IsVisible = true;
+                                }
+                            }
+                            else if (receivingType == "ShipmentIn")
+                            {
+                                clsParcelModel parcelModel = new clsParcelModel
+                                {
+                                    ConsignmentNo = consigNote.Text
+                                };
+
+                                var submit_content = await CommonFunction.CallWebService(1, parcelModel, Ultis.Settings.SessionBaseURI, ControllerUtil.postReceiveAndUpdate(), this);
+                                clsResponse submit_response = JsonConvert.DeserializeObject<clsResponse>(submit_content);
+
+                                if (submit_response.IsGood)
+                                {
+                                    await DisplayAlert("Success", "Receiving success.", "OK");
+                                    consigNote.Text = "";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            await DisplayAlert("Missing field", "Please enter consigment note.", "OK");
+                        }
+                        break;
+
+                    case "btnSubmit":
+                        if ((!String.IsNullOrEmpty(consigNote.Text)) && (!String.IsNullOrEmpty(cartonBox.Text)) && (!String.IsNullOrEmpty(length.Text)) && (!String.IsNullOrEmpty(width.Text)) &&
+                            (!String.IsNullOrEmpty(height.Text)) && (!String.IsNullOrEmpty(unit.Text)))
+                        {
+
                             if (Convert.ToDouble(unit.Text) > 999)
                             {
                                 await DisplayAlert("Error", "Weight cannot more than 999", "OK");
@@ -125,7 +156,7 @@ namespace ASolute_Mobile.LGC
                             {
                                 clsParcelModel parcelModel = new clsParcelModel
                                 {
-                                    ConsignmentNo = consigNote.Text, 
+                                    ConsignmentNo = consigNote.Text,
                                     CartonNo = cartonBox.Text,
                                     Length = Convert.ToInt16(length.Text),
                                     Width = Convert.ToInt16(width.Text),
@@ -140,7 +171,7 @@ namespace ASolute_Mobile.LGC
                                 if (submit_response.IsGood == true)
                                 {
                                     await DisplayAlert("Success", "Submit successfully.", "OK");
-                                    
+
                                     consigNote.Text = String.Empty;
                                     length.Text = String.Empty;
                                     width.Text = String.Empty;
@@ -150,23 +181,23 @@ namespace ASolute_Mobile.LGC
                                     cartonBox.Text = String.Empty;
 
                                     recevingStack.IsVisible = false;
-
                                     consigNote.Focus();
                                 }
                             }
                         }
                         else
                         {
-                            await DisplayAlert("Error", "Please follow the rules given above.", "OK");
+                            await DisplayAlert("Missing Field", "Please key in all field", "OK");
                         }
-                    }
-                    else
-                    {
-                        await DisplayAlert("Missing Field", "Please key in all field", "OK");
-                    }
-
-                    break;
+                        
+                        break;
+                }
             }
+            catch
+            {
+
+            }
+            
 
             loading.IsVisible = false;
         }

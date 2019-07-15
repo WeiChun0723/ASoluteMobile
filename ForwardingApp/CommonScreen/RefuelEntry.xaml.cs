@@ -69,12 +69,12 @@ namespace ASolute_Mobile
             if (Ultis.Settings.Language.Equals("English"))
             {
                 Title = "Refuel Entry";
-                liter.Watermark = "Maximum 500 liter.";
+                liter.Placeholder = "Maximum 500 liter.";
             }
             else
             {
                 Title = "Isi Minyak";
-                liter.Watermark = "Maksimum 500 liter.";
+                liter.Placeholder = "Maksimum 500 liter.";
             }
 
             if (NetworkCheck.IsInternet())
@@ -133,7 +133,7 @@ namespace ASolute_Mobile
         {
             try
             {
-                double fuelLiter = Convert.ToDouble(liter.Value);
+                double fuelLiter = Convert.ToDouble(liter.Text);
                 if (fuelLiter <= 500.00)
                 {
                     double cost = Convert.ToDouble(costPerLiter.Text);
@@ -146,7 +146,7 @@ namespace ASolute_Mobile
                             string combineDate_Time = datePicker.Date.Year + "-" + datePicker.Date.Month + "-" + datePicker.Date.Day + "T" + timePicker.Time.ToString();
 
                             clsFuelCost refuel_Data = new clsFuelCost();
-                            if (paymentComboBox.Text != null && stationComboBox.Text != null && liter.Value!= null && fuelCard.Text != null)
+                            if (paymentComboBox.Text != null && stationComboBox.Text != null && liter.Text!= null && fuelCard.Text != null)
                             {
                                 try
                                 {
@@ -156,7 +156,7 @@ namespace ASolute_Mobile
                                     refuel_Data.VendorCode = fuelCostNew.VendorList[stations.FindIndex(x => x.Equals(stationComboBox.Text))].Key;
                                     refuel_Data.PaymentMode = (paymentMode.FindIndex(x => x.Equals(paymentComboBox.Text)) == 1) ? clsFuelCost.PaymentModeEnum.Card : clsFuelCost.PaymentModeEnum.Cash;
                                     refuel_Data.RefuelDateTime = Convert.ToDateTime(combineDate_Time);
-                                    refuel_Data.Quantity = Convert.ToDouble(liter.Value);
+                                    refuel_Data.Quantity = Math.Round(Convert.ToDouble(liter.Text),4);
                                     refuel_Data.FuelCardNo = (String.IsNullOrEmpty(fuelCard.Text)) ? "" : fuelCard.Text;
                                     refuel_Data.VoucherNo = (String.IsNullOrEmpty(voucher.Text)) ? "" : voucher.Text;
                                     //refuel_Data.OtherRef = (String.IsNullOrEmpty(other.Text)) ? "" : other.Text;
@@ -185,10 +185,7 @@ namespace ASolute_Mobile
                                        
                                         await Navigation.PopAsync();
                                     }
-                                    else
-                                    {
-                                        await DisplayAlert("", response.Message, "OK");
-                                    }
+                                    
 
                                 }
                                 catch
@@ -267,18 +264,18 @@ namespace ASolute_Mobile
             var entry = sender as Entry;
         }
 
-        public void LiterInput(object sender, Syncfusion.XForms.MaskedEdit.ValueChangedEventArgs e)
+        public void LiterInput(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(e.Value.ToString()))
+                if (string.IsNullOrEmpty(e.NewTextValue))
                 {
                     amount.Text = "RM 0.00";
-                    liter.Watermark = "Maximum 500 liter only";
+                    liter.Placeholder = "Maximum 500 liter only";
                 }
                 else
                 {
-                    double fuelLiter = Convert.ToDouble(e.Value.ToString());
+                    double fuelLiter = Convert.ToDouble(e.NewTextValue);
                     double result = Convert.ToDouble(costPerLiter.Text) * fuelLiter;
                     amount.Text = "RM" + Math.Round(result, 2);
                 }
@@ -293,14 +290,14 @@ namespace ASolute_Mobile
         {
             try
             {
-                if (Convert.ToDouble(liter.Value) == 0.00)
+                if (Convert.ToDouble(liter.Text) == 0.00)
                 {
                     amount.Text = "RM 0.00";
                 }
                 else
                 {
                     double costLiter = Convert.ToDouble(e.NewTextValue);
-                    double result = Convert.ToDouble(liter.Value) * costLiter;
+                    double result = Convert.ToDouble(liter.Text) * costLiter;
                     amount.Text = "RM" + Math.Round(result, 2);
                 }
             }

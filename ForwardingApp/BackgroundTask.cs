@@ -54,9 +54,7 @@ namespace ASolute_Mobile
 
             try
             {
-               
-
-                location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? "" : String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
+                location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? "" : String.Format("{0:0.0000}", App.gpsLocationLat) + "," + String.Format("{0:0.0000}", App.gpsLocationLong);
 
                 /*if (String.IsNullOrEmpty(location))
                 {
@@ -68,7 +66,7 @@ namespace ASolute_Mobile
                     }
                 }*/
 
-                if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet())
+                if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet() && !(String.IsNullOrEmpty(location)))
                 {
 
                     if (Ultis.Settings.SessionUserItem.GetGPS)
@@ -81,6 +79,10 @@ namespace ASolute_Mobile
                         clsResponse gps_response = JsonConvert.DeserializeObject<clsResponse>(response);
                         Debug.WriteLine(response);
                     }
+
+                    App.gpsLocationLat = 0;
+                    App.gpsLocationLong = 0;
+
                 }
             }
             catch(Exception ex)

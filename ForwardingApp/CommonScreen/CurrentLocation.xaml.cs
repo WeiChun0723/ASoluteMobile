@@ -2,6 +2,7 @@
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Rg.Plugins.Popup.Pages;
+using Syncfusion.XForms.Buttons;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,32 +40,42 @@ namespace ASolute_Mobile.HaulageScreen
             return true;
         }
 
-        public async void UpdateLocation(object sender, EventArgs e)
+        public async void Handle_Clicked(object sender, EventArgs e)
         {
-            if (!(String.IsNullOrEmpty(locationName.Text)))
-            {
-                try
-                {
-                    activityIndicator.IsRunning = true;
-                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLocationURL(locationName.Text), this);
-                    clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+            var button = sender as SfButton;
 
-                    if (json_response.IsGood)
-                    {
-                        await DisplayAlert("Success", "Message sent successfully.", "OK");
-                    }
-                   
-                    activityIndicator.IsRunning = false;
-                }
-                catch(Exception exception)
-                {
-                    await DisplayAlert("Error", exception.Message, "OK");
-                }
-            }
-            else
+            switch(button.StyleId)
             {
-                await DisplayAlert("Error", "Please key in location name", "OK");
+                case "btnSubmit":
+                    if (!(String.IsNullOrEmpty(locationName.Text)))
+                    {
+                        try
+                        {
+                            activityIndicator.IsRunning = true;
+                            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLocationURL(locationName.Text), this);
+                            clsResponse json_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if (json_response.IsGood)
+                            {
+                                await DisplayAlert("Success", "Message sent successfully.", "OK");
+                            }
+
+                            activityIndicator.IsRunning = false;
+                        }
+                        catch (Exception exception)
+                        {
+                            await DisplayAlert("Error", exception.Message, "OK");
+                        }
+                    }
+                    break;
+
+                case "btnMainMenu":
+                    Application.Current.MainPage = new MainPage();
+                    break;
             }
+
+           
+           
         }
 
     }

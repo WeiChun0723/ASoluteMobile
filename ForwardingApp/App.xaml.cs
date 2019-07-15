@@ -25,6 +25,7 @@ using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.ZebraPrinter;
 using LinkOS.Plugin.Abstractions;
 using ASolute_Mobile.Yard;
+using ASolute_Mobile.testing;
 
 namespace ASolute_Mobile
 {
@@ -52,8 +53,7 @@ namespace ASolute_Mobile
             }
             else
             {
-                 // MainPage = new NewCategoryPage();
-                 if (sessionKey != "")
+                if (sessionKey != "")
                   {
                       MainPage = new MainPage();
                   }

@@ -1,31 +1,39 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"      
-             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
-             x:Class="ASolute_Mobile.CheckList">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CheckList" xmlns:button="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:syncfusionList="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms">
     <StackLayout x:Name="CheckItem" Spacing="15" Padding="15,15,15,15">
-
-            <StackLayout Orientation="Horizontal">
-                <controls:CheckBox DefaultText="All good" x:Name="selectAll" HorizontalOptions="FillAndExpand" FontSize="25" CheckedChanged="disableList"/>
-            </StackLayout>
-
-            <ListView ItemsSource="{Binding Check}" x:Name="checkList" SeparatorColor="Black" BackgroundColor="White">
-                <ListView.ItemTemplate>
+        <button:SfCheckBox x:Name="selectAll" Text="All good" HorizontalOptions="FillAndExpand" IsChecked="false" FontSize="25" CheckedColor="LightCoral" StateChanged="disableList" />
+        <StackLayout>
+            <syncfusionList:SfListView  IsScrollBarVisible="true" ItemsSource="{Binding Check}" x:Name="checkList" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <syncfusionList:SfListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <controls:CheckBox DefaultText="{Binding Name}"  Checked="{Binding IsSelected}" HorizontalOptions="FillAndExpand" FontSize="15"/>
+                            <ViewCell.View>
+                                <StackLayout>
+                                    <button:SfCheckBox Text="{Binding Name}" HorizontalTextAlignment="Center" IsChecked="{Binding IsSelected}" CheckedColor="LightCoral"  FontSize="20" />
+                                </StackLayout>
+                            </ViewCell.View>
                         </ViewCell>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-
+                </syncfusionList:SfListView.ItemTemplate>
+            </syncfusionList:SfListView>
+        </StackLayout>
+        <!--<ListView ItemsSource="{Binding Check}" x:Name="checkList" SeparatorColor="Black" BackgroundColor="White">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Spacing="15">
+                             <syncfusion:SfCheckBox Text="{Binding Name}" IsChecked="{Binding IsSelected}" CheckedColor="LightCoral" HorizontalOptions="FillAndExpand" FontSize="15" />
+                            <syncfusion:SfCheckBox IsChecked="{Binding IsSelected}" CheckedColor="LightCoral"/>
+                            <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" FontSize="15" VerticalOptions="Center"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
         <Image Source="nextPage.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="End" x:Name="confirm_icon">
             <Image.GestureRecognizers>
-                <TapGestureRecognizer Tapped="toNextPage"/>
+                <TapGestureRecognizer Tapped="toNextPage" />
             </Image.GestureRecognizers>
         </Image>
     </StackLayout>
-  
 </ContentPage>

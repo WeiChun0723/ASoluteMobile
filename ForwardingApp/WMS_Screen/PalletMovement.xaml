@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.WMS_Screen.PalletMovement"
@@ -93,6 +93,34 @@
                 
             
             <inputLayout:SfTextInputLayout 
+                Hint="New Location"
+                ContainerBackgroundColor="LightYellow"
+                FocusedColor="Black" HorizontalOptions="FillAndExpand"
+                TrailingViewPosition="Inside" LeadingViewPosition="Inside" x:Name="newLocationView" IsVisible="false" >   
+                
+            <Entry x:Name="newLocationEntry" TextChanged="Handle_TextChanged" Completed="Handle_Completed">
+                     <Entry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="30"/>
+                </Entry.Behaviors>      
+            </Entry>
+            <inputLayout:SfTextInputLayout.LeadingView> 
+                    <Image Source="barCode.png"  VerticalOptions="Center" x:Name="newLocationScan">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped"  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                     </Image>
+            </inputLayout:SfTextInputLayout.LeadingView>
+                
+           <inputLayout:SfTextInputLayout.TrailingView >
+                      <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="newLocationEntryCancel">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped"  NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                     </Image>    
+            </inputLayout:SfTextInputLayout.TrailingView>    
+            </inputLayout:SfTextInputLayout>
+            
+            <inputLayout:SfTextInputLayout 
                 Hint="Check Digit" 
                 ContainerBackgroundColor="LightYellow"
                 FocusedColor="Black" x:Name="checkDigitView" IsVisible="false">       
@@ -109,6 +137,7 @@
             
             
             <buttons:SfButton Padding="0,10" Text="Verify" Style="{StaticResource buttonStyle}"  IsVisible="false" x:Name="btnVerify" Clicked="Handle_Clicked"/>
+            <buttons:SfButton Text="Transfer"  Style="{StaticResource buttonStyle}"  Clicked="Handle_Clicked" IsVisible="false" x:Name="btnTransfer"/>
             <buttons:SfButton Padding="0,10" Text="Pickup"  Style="{StaticResource buttonStyle}"  Clicked="Handle_Clicked" IsVisible="false" x:Name="btnPickUp"/>
             <buttons:SfButton Text="Dropoff"  Style="{StaticResource buttonStyle}"  Clicked="Handle_Clicked" IsVisible="false" x:Name="btnDropOff"/>
             <!--<Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" HorizontalOptions="Center" x:Name="confirm_icon" IsEnabled="True">

@@ -11,6 +11,8 @@ namespace ASolute_Mobile.Yard
 {
     public partial class YardBlockLists : ContentPage
     {
+        string blockLabel = "";
+
         public YardBlockLists(List<clsYardMapBlock> blocks)
         {
             InitializeComponent();
@@ -23,14 +25,14 @@ namespace ASolute_Mobile.Yard
             {
                 if(!(block.Id.Contains("(")))
                 {
-                    block.Id = block.Id + " " + block.Utilization + "%" + " ";
+                    blockLabel = block.Id + " " + block.Utilization + "%" + " ";
                 }
                
                 grid.RowDefinitions.Add(new RowDefinition { Height = 100 });
 
                 Label label = new Label
                 {
-                    Text = block.Id,
+                    Text = blockLabel,
                     FontSize = 20,
                     HorizontalTextAlignment = TextAlignment.Center,
                     Margin = new Thickness(10,10,0,0)
@@ -43,13 +45,13 @@ namespace ASolute_Mobile.Yard
                     TrackColor = Color.LightBlue,
                     TrackHeight = 40,
                     Margin = new Thickness(0, 10, 10, 0),
-                    CornerRadius = 10,
+                    CornerRadius = 10
                 };
 
                 var recognizer = new TapGestureRecognizer
                 {
                     NumberOfTapsRequired = 1
-                };
+                };      
 
                 recognizer.Tapped += async (sender, e) =>
                 {
@@ -57,16 +59,12 @@ namespace ASolute_Mobile.Yard
 				};
                 linearProgressBar.GestureRecognizers.Add(recognizer);
 
-
                 grid.Children.Add(label, column, row);
                 column++;
                 grid.Children.Add(linearProgressBar, column, row);
                 row++;
                 column = 0;
             }
-
-            //listView.ItemsSource = blocks;
-            //listView.RowHeight = 130;
         }
 
         void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)

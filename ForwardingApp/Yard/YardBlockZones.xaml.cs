@@ -68,7 +68,6 @@ namespace ASolute_Mobile.Yard
 
                             zones.Add(yardZone);
                         }
-
                     }
 
                     if (zones.Count == 0)

@@ -56,15 +56,29 @@ namespace ASolute_Mobile.CustomerTracking
 
             if((Export.IsChecked == false || Import.IsChecked == false || Local.IsChecked == false) && multipleFilterCheck == true)
             {
-                items = null;
+                //items = null;
+                foreach(ListItems item in items.ToList())
+                {
+                    if(item.Action == checkedAction)
+                    {
+                        items.Remove(item);
+                    }
+                }
+
+                if(items.Count == 0)
+                {
+                    items.Clear();
+                }
+
                 multipleFilterCheck = false;
             }
 
             if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
                 (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
             {
+                
                 listView.ItemsSource = categories;
-                items = null;
+                items.Clear();
             }
             else
             {
@@ -72,19 +86,21 @@ namespace ASolute_Mobile.CustomerTracking
 
                 List<ListItems> all = new List<ListItems>(App.Database.GetAllContainerDetail());
 
-                if(items == null)
+                if(items == null || items.Count == 0)
                 {
                     items = all.Where(x => x.Action == checkedAction).ToList();
                 }
                 else
                 {
-                    List<ListItems> secondFilter = all.Where(x => x.Action == checkedAction).ToList();
-
-                    foreach(ListItems listItem in secondFilter)
+                    if(checkBox.IsChecked != false)
                     {
-                        items.Add(listItem);
-                    }
+                        List<ListItems> secondFilter = all.Where(x => x.Action == checkedAction).ToList();
 
+                        foreach (ListItems listItem in secondFilter)
+                        {
+                            items.Add(listItem);
+                        }
+                    }
                     multipleFilterCheck = true;
                 }
 
@@ -94,7 +110,7 @@ namespace ASolute_Mobile.CustomerTracking
                     int count = 0;
                     foreach (ListItems item in items)
                     {
-                        if (item.Category == splitCategory[0])
+                        if (item.Category == splitCategory[0] )
                         {
                             count++;
                         }
@@ -115,8 +131,9 @@ namespace ASolute_Mobile.CustomerTracking
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
+
                     listView.ItemsSource = categories;
-                    items = null;
+                    items.Clear();
                 }
                 else
                 {
@@ -133,7 +150,7 @@ namespace ASolute_Mobile.CustomerTracking
                         foreach (ListItems item in items)
                         {
 
-                            if (item.Category == splitCategory[0])
+                            if (item.Category == splitCategory[0] )
                             {
                                 count++;
                             }
@@ -243,7 +260,7 @@ namespace ASolute_Mobile.CustomerTracking
 
             List<ListItems> categoryItem = null;
 
-            if (items == null)
+            if (items == null || items.Count == 0)
             {
                 categoryItem = new List<ListItems>(App.Database.GetContainerDetail(selectedCategory));
             }
@@ -254,7 +271,7 @@ namespace ASolute_Mobile.CustomerTracking
 
             if (categoryItem.Count != 0)
             {
-                await Navigation.PushAsync(new NewCategoryDetail(categoryItem, selectedCategory));
+                await Navigation.PushAsync(new NewCategoryDetail(categoryItem, selectedCategory, haulier.Id));
             }
         }
 
@@ -263,8 +280,6 @@ namespace ASolute_Mobile.CustomerTracking
             GetContainerHeader(callURL, haulier);
 
             listView.IsRefreshing = false;
-
-
         }
     }
 }

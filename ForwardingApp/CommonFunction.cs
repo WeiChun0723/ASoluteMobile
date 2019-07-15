@@ -25,33 +25,6 @@ namespace ASolute_Mobile.Utils
         static ContentPage pages;
         static string returnResult;
 
-        /*//call when calling the web service to get response
-         public static async Task<string> GetRequestAsync(string baseAdd,string callUri)
-         {
-             var client = new HttpClient();
-             client.BaseAddress = new Uri(baseAdd);
-             var uri = callUri;
-             var response = await client.GetAsync(uri);
-             var content = await response.Content.ReadAsStringAsync();
-             Debug.WriteLine(content);
-
-             return content;
-         }
-
-         public static async Task<string> PostRequestAsync(object data, string baseAdd, string calllUri)
-         {
-             var client = new HttpClient();
-             client.BaseAddress = new Uri(baseAdd);
-             var uri = calllUri;
-             var content = JsonConvert.SerializeObject(data);
-             var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-             var response = await client.PostAsync(uri, httpContent);
-             var reply = await response.Content.ReadAsStringAsync();
-             Debug.WriteLine(reply);
-
-             return reply;
-         }*/
-
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method, object data, string baseAdd, string calllUri, Page page)
         {
@@ -85,6 +58,7 @@ namespace ASolute_Mobile.Utils
                     {
                         if (reply.Message == "Invalid Session !")
                         {
+                            DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
                             BackgroundTask.Logout(page);
                             await page.DisplayAlert("Error", reply.Message, "OK");
                         }
@@ -92,8 +66,8 @@ namespace ASolute_Mobile.Utils
                         {
                             if (!(reply.IsGood))
                             {
+                                DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
                                 await page.DisplayAlert("Error", reply.Message, "OK");
-
                             }
                         }
                     }
@@ -102,6 +76,7 @@ namespace ASolute_Mobile.Utils
             }
             catch (HttpRequestException requestEx)
             {
+                DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
                 await page.DisplayAlert("Error", requestEx.Message, "OK");
             }
             catch 
@@ -110,6 +85,8 @@ namespace ASolute_Mobile.Utils
             }
             return null;
         }
+
+   
 
         //capture image and store local path in db function
         public static async Task StoreImages(string id, ContentPage contentPage, string imageType)
@@ -156,7 +133,14 @@ namespace ASolute_Mobile.Utils
                 byte[] thumbnailByte;
                 if (id == Ultis.Settings.SessionUserItem.DriverId)
                 {
-                    thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
+                    if(Device.RuntimePlatform != Device.iOS)
+                    {
+                        thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
+                    }
+                    else
+                    {
+                        thumbnailByte = imagesAsBytes;
+                    }
                 }
                 else
                 {
@@ -295,9 +279,7 @@ namespace ASolute_Mobile.Utils
                 if (Ultis.Settings.FireID.Equals("firebase") || String.IsNullOrEmpty(Ultis.Settings.FireID))
                 {
                     string firebaseID = "";
-
                     OneSignal.Current.IdsAvailable((playerID, pushToken) => firebaseID = playerID);
-
                     Ultis.Settings.FireID = firebaseID;
                 }
             }

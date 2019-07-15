@@ -7,11 +7,15 @@ namespace ASolute_Mobile.CustomerTracking
 {
     public partial class NewCategoryDetail : ContentPage
     {
-        public NewCategoryDetail(List<ListItems> items, string selectedCategory)
+        string haulierCode = "";
+
+        public NewCategoryDetail(List<ListItems> items, string selectedCategory, string haulier)
         {
             InitializeComponent();
-
+            
             Title = selectedCategory;
+
+            haulierCode = haulier;
 
             loading.IsVisible = true;
 
@@ -22,7 +26,7 @@ namespace ASolute_Mobile.CustomerTracking
 
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-
+            await Navigation.PushAsync(new ContainerDetails(haulierCode, ((ListItems)e.Item).Id));
         }
     }
 }

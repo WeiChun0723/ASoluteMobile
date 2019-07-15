@@ -114,23 +114,18 @@ namespace ASolute_Mobile.WMS_Screen
                     }
                     Label bottomBlank = new Label();
                     desc.Children.Add(bottomBlank);
-
                     dataGrid.AutoGenerateColumns = false;
                     dataGrid.ItemsSource = recordDetails.Items;
-
                     dataGrid.Columns.Clear();
 
                     foreach (clsKeyValue gridField in recordDetails.ItemColumns)
                     {
                         GridTextColumn gridColumn = new GridTextColumn();
                         gridColumn.MappingName = gridField.Key;
-                        //gridColumn.Width = (recordDetails.ItemColumns.Count == 3) ? 100 : 150;
                         gridColumn.Width = recordDetails.ItemColumns.Count * 33;
-
                         gridColumn.HeaderTemplate = new DataTemplate(() =>
                         {
                             ViewCell viewCell = new ViewCell();
-
                             Label label = new Label
                             {
                                 Text = gridField.Value,
@@ -140,7 +135,6 @@ namespace ASolute_Mobile.WMS_Screen
                                 HorizontalTextAlignment = TextAlignment.Center,
                                 FontAttributes = FontAttributes.Bold
                             };
-
                             viewCell.View = label;
                             return viewCell;
                         });
@@ -153,7 +147,6 @@ namespace ASolute_Mobile.WMS_Screen
                         pickingID = recordDetails.Id;
                     }
                 }
-                
             }
             catch (Exception ex)
             {
@@ -210,16 +203,14 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        async void TallyOut(string result)
+        void TallyOut(string result)
         {
-           
              Device.BeginInvokeOnMainThread(async () =>
              {
                  clsPalletTrx tallyOutPallet = new clsPalletTrx
                  {
                      LinkId = record.Id,
                      Id = result
-
                  };
 
                  var content = await CommonFunction.CallWebService(1,tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL(),this);
@@ -236,17 +227,13 @@ namespace ASolute_Mobile.WMS_Screen
                      };
 
                      tallyOutItems.Add(item);
-
                      dataGrid.ItemsSource = null;
-
                      dataGrid.ItemsSource = tallyOutItems;
-                     
                      palletIdEntry.Text = String.Empty;
                  }
                  else
                  {
                      DisplayToast(palletIdEntry.Text + " " + upload_response.Message);
-
                  }
              });
 

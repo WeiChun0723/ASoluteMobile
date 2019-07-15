@@ -85,11 +85,9 @@ namespace ASolute_Mobile
             try
             {
                 CommonFunction.GetFireBaseID();
-
                 //get the latest store local profile image
                 var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
                 profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
-
                 LoadMainMenu();
             }
             catch
@@ -108,7 +106,6 @@ namespace ASolute_Mobile
             try
             {
                 CommonFunction.GetFireBaseID();
-
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
@@ -242,7 +239,7 @@ namespace ASolute_Mobile
                             summaryItem.Type = "ContextMenu";
                             App.Database.SaveSummarysAsync(summaryItem);
                             index++;
-                        }
+                        }   
                     }
 
                     LoadMainMenu();
@@ -252,6 +249,8 @@ namespace ASolute_Mobile
                         CheckList chkList = new CheckList(checkItems, menu.CheckListLinkId);
                         NavigationPage.SetHasBackButton(chkList, false);
                         await Navigation.PushAsync(chkList);
+
+                        
                     }
                 }
                 loading.IsVisible = false;
@@ -273,15 +272,12 @@ namespace ASolute_Mobile
                 foreach (SummaryItems userSummary in information)
                 {
                     string labelStyle = (userSummary.Caption == "") ? "ProfileNameLabel" : "ProfileTagLabel";
-
                     Label info = new Label
                     {
                         Style = (Xamarin.Forms.Style)Application.Current.Resources[labelStyle],
                         HorizontalTextAlignment = TextAlignment.Center
                     };
-
                     info.Text = (userSummary.Caption == "") ? userSummary.Value : userSummary.Caption + ": " + userSummary.Value;
-
                     userInfo.Children.Add(info);
                 }
 
@@ -312,7 +308,6 @@ namespace ASolute_Mobile
             }
             catch 
             {
-
             }
         }
 
@@ -332,7 +327,7 @@ namespace ASolute_Mobile
                 case "EqInquiry":
                     await Navigation.PushAsync(new EquipmentInquiry());
                     break;
-
+                    
                 case "CargoRec":
                     await Navigation.PushAsync(new TransportScreen.PendingReceiving_Loading(menuAction));
                     break;
@@ -456,10 +451,11 @@ namespace ASolute_Mobile
                     await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getCartonBoxListURL()));
                     break;
 
+                case "ShipmentIn":
                 case "ParcelIn":
-                    await Navigation.PushAsync(new ChinaReceiving());
+                    await Navigation.PushAsync(new ChinaReceiving(((ListItems)e.Item)));
                     break;
-
+                
                 case "ShipmentOut":
                     await Navigation.PushAsync(new OutFromChina());
                     break;
@@ -469,8 +465,7 @@ namespace ASolute_Mobile
         }
 
         void Handle_Refreshed(object sender, System.EventArgs e)
-        {
-            
+        {   
         }
 
         void Handle_Refreshing(object sender, System.EventArgs e)
@@ -480,7 +475,6 @@ namespace ASolute_Mobile
 
         void Handle_Pulling(object sender, Syncfusion.SfPullToRefresh.XForms.PullingEventArgs e)
         {
-
         }
 
         #region AILS BUS function

@@ -33,7 +33,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
-    <CodesignProvision>IOSTesting</CodesignProvision>
+    <CodesignProvision>ASolute Fleet</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <Optimize>true</Optimize>
@@ -46,7 +46,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
-    <CodesignProvision>AILS Tracking</CodesignProvision>
+    <CodesignProvision>ASolute Fleet</CodesignProvision>
     <AssemblyName>AILSTracking.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
@@ -84,7 +84,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <AssemblyName>ASoluteFleet.iOS</AssemblyName>
-    <CodesignProvision>IOSTesting</CodesignProvision>
+    <CodesignProvision>ASolute Fleet</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
@@ -426,6 +426,12 @@
     <Reference Include="Syncfusion.SfMaskedEdit.XForms.iOS">
       <HintPath>..\packages\Syncfusion.Xamarin.SfMaskedEdit.17.1.0.49\lib\Xamarin.iOS10\Syncfusion.SfMaskedEdit.XForms.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.SimpleAudioPlayer.Abstractions">
+      <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.3.0\lib\Xamarin.iOS10\Plugin.SimpleAudioPlayer.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.SimpleAudioPlayer">
+      <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.3.0\lib\Xamarin.iOS10\Plugin.SimpleAudioPlayer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -471,6 +477,7 @@
     <Compile Include="CustomRenderer\CustomEntryIOS.cs" />
     <Compile Include="CustomRenderer\CustomPickerIOS.cs" />
     <Compile Include="CustomRenderer\CustomSwitchIOS.cs" />
+    <Compile Include="AudioService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\call.png" />
@@ -492,6 +499,9 @@
     <BundleResource Include="Resources\user_icon.png" />
     <BundleResource Include="Resources\warehouseheader.png" />
     <BundleResource Include="Resources\truckingheader.png" />
+    <BundleResource Include="Resources\error.mp3" />
+    <BundleResource Include="Resources\success.mp3" />
+    <BundleResource Include="Resources\appIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\refuel.png" />
@@ -546,9 +556,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\appIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\plusIcon.png" />

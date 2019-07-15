@@ -247,6 +247,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\beepSound.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)sound\test.mp3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -503,6 +508,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\NewCategoryDetail.xaml.cs">
       <DependentUpon>NewCategoryDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)testing\beepSound.xaml.cs">
+      <DependentUpon>beepSound.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)IAudio.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -521,6 +530,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\" />
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\HoneywellPrinter\" />
     <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
+    <Folder Include="$(MSBuildThisFileDirectory)sound\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

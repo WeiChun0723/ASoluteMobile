@@ -10,7 +10,6 @@ using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-
 namespace ASolute_Mobile.Planner
 {
     public partial class AllTruckMap : ContentPage
@@ -98,22 +97,40 @@ namespace ASolute_Mobile.Planner
                     }
                 }
 
-                GoogleMap.MapPins = pins;
+                int count = pins.Count;
 
-                foreach(Pin pin in pins)
+                //GoogleMap.Pins = pins;
+
+                if(pins.Count != 0)
                 {
-                    GoogleMap.Pins.Add(pin);
+                    try
+                    {
+                        GoogleMap.MapPins = pins;
+
+                        foreach (Pin pin in pins)
+                        {
+                            GoogleMap.Pins.Add(pin);
+                        }
+
+                        double lowestLat = latitudes.Min();
+                        double highestLat = latitudes.Max();
+                        double lowestLong = longitudes.Min();
+                        double highestLong = longitudes.Max();
+                        double finalLat = (lowestLat + highestLat) / 2;
+                        double finalLong = (lowestLong + highestLong) / 2;
+                        double distance = DistanceCalculation.GeoCodeCalc.CalcDistance(lowestLat, lowestLong, highestLat, highestLong, DistanceCalculation.GeoCodeCalcMeasurement.Kilometers);
+
+                        GoogleMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance)));
+                    }
+                   catch
+                    {
+                        await DisplayAlert("Error", "Some error occur.", "OK");
+                    }
                 }
-
-                double lowestLat = latitudes.Min();
-                double highestLat = latitudes.Max();
-                double lowestLong = longitudes.Min();
-                double highestLong = longitudes.Max();
-                double finalLat = (lowestLat + highestLat) / 2;
-                double finalLong = (lowestLong + highestLong) / 2;
-                double distance = DistanceCalculation.GeoCodeCalc.CalcDistance(lowestLat, lowestLong, highestLat, highestLong, DistanceCalculation.GeoCodeCalcMeasurement.Kilometers);
-
-                GoogleMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), Distance.FromKilometers(distance)));
+                else
+                {
+      
+                }
             }
 
             loading.IsVisible = false;

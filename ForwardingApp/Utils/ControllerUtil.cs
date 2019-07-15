@@ -624,6 +624,11 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/Picking/GenPallet?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), linkid);
         }
 
+        public static String postTransferURL()
+        {
+            return String.Format("Wms/Pallet/Transfer?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
         #endregion
 
         #region getPosition
