@@ -31,6 +31,11 @@ namespace ASolute_Mobile.CustomerTracking
 
             GetContainerHeader(URL, item);
             Title = item.Name + " Summary";
+
+            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshCategory", (sender) =>
+            {
+                GetContainerHeader(URL, item);
+            });
         }
 
         private void CheckBox_StateChanged(object sender, StateChangedEventArgs e)
@@ -192,7 +197,8 @@ namespace ASolute_Mobile.CustomerTracking
                         Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
                         Category = data.Caption,
                         Name = item.Name,
-                        Action = data.Action
+                        Action = data.Action,
+                        IsVisible = (data.Caption == "Pending Acknowledgement") ? true : false
                     };
 
                     //store summary of the record for search 

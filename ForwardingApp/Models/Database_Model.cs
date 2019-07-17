@@ -110,6 +110,7 @@ namespace ASolute_Mobile.Models
         public string Summary { get; set; }
         public string Background { get; set; }
         public string Action { get; set; }
+        public bool IsVisible { get; set; }
 
         //Tracking property
         public string Booking { get; set; }

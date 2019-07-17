@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.HaulageScreen.NewJobDetails" 
              xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms"
@@ -109,74 +109,7 @@
                 </inputLayout:SfTextInputLayout>
                 
             </StackLayout>
-            <!--<Grid Padding="5,10,15,0" x:Name="TrailerGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Label Text="Trailer Id" Style="{StaticResource readOnlyLabel}" Grid.Row="0" Grid.Column="0" />
-                <controls:CustomEntry x:Name="trailerIDEntry" Style="{StaticResource customEntry}" LineColor="LightYellow" Grid.Row="0" Grid.Column="1">
-                    <controls:CustomEntry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="10" />
-                    </controls:CustomEntry.Behaviors>
-                </controls:CustomEntry>
-                <Label Text="Container No." Style="{StaticResource readOnlyLabel}" Grid.Row="1" Grid.Column="0" />
-                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                    <controls:CustomEntry x:Name="contPrefix" Style="{StaticResource customEntry}" LineColor="LightYellow" TextChanged="Handle_TextChanged">
-                        <controls:CustomEntry.Behaviors>
-                            <local:MaxLengthValidation MaxLength="5" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                    <controls:CustomEntry x:Name="contNum" Style="{StaticResource customEntry}" LineColor="LightYellow" Keyboard="Numeric" TextChanged="Handle_TextChanged">
-                        <controls:CustomEntry.Behaviors>
-                            <local:MaxLengthValidation MaxLength="7" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                </StackLayout>
-                <Label Text="Seal No" Style="{StaticResource readOnlyLabel}" Grid.Row="2" Grid.Column="0" x:Name="sealNo" />
-                <controls:CustomEntry x:Name="sealNoEntry" Style="{StaticResource customEntry}" LineColor="White" Grid.Row="2" Grid.Column="1">
-                    <controls:CustomEntry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="20" />
-                    </controls:CustomEntry.Behaviors>
-                </controls:CustomEntry>
-            </Grid>
-            <Grid Padding="5,0,15,0" x:Name="TrailerDetailGrid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Text="Collect Seal" Style="{StaticResource readOnlyLabel}" Grid.Row="0" Grid.Column="0" />
-                <StackLayout Spacing="5" Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                    <chkBox:CheckBox x:Name="chkYes" DefaultText="Yes" HorizontalOptions="StartAndExpand" Scale="1.5" CheckedChanged="Handle_CheckedChanged" />
-                    <chkBox:CheckBox x:Name="chkNo" DefaultText="No" HorizontalOptions="StartAndExpand" Scale="1.5" CheckedChanged="Handle_CheckedChanged" />
-                </StackLayout>
-                <Label Text="MGW(KG)" Style="{StaticResource readOnlyLabel}" Grid.Row="1" Grid.Column="0" />
-                <controls:CustomEntry x:Name="mgwEntry" Style="{StaticResource customEntry}" LineColor="White" Grid.Row="1" Grid.Column="1" Keyboard="Numeric" TextChanged="Handle_TextChanged" HorizontalTextAlignment="End">
-                    <controls:CustomEntry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="5" />
-                    </controls:CustomEntry.Behaviors>
-                </controls:CustomEntry>
-                <Label Text="Tare(KG)" Style="{StaticResource readOnlyLabel}" Grid.Row="2" Grid.Column="0" />
-                <controls:CustomEntry x:Name="tareEntry" Style="{StaticResource customEntry}" LineColor="White" Grid.Row="2" Grid.Column="1" Keyboard="Numeric" HorizontalTextAlignment="End">
-                    <controls:CustomEntry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="4" />
-                    </controls:CustomEntry.Behaviors>
-                </controls:CustomEntry>
-            </Grid>-->
-            
-            
-            <!--End-->
+          
             <StackLayout Spacing="0" Padding="5,10,0,0" x:Name="remarkStack">
                 <Label Text="Remark" FontAttributes="Bold" />
                 <Editor x:Name="remarkTextEditor" HeightRequest="100" BackgroundColor="WhiteSmoke" />

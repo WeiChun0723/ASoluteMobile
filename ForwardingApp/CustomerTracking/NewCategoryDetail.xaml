@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CustomerTracking.NewCategoryDetail" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CustomerTracking.NewCategoryDetail" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <StackLayout Padding="15,15,15,15">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
         <ListView x:Name="categoryDetail" ItemTapped="Handle_ItemTapped" IsPullToRefreshEnabled="false" Style="{StaticResource recordListStyle}" HasUnevenRows="true">
@@ -8,7 +8,8 @@
                     <ViewCell>
                         <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
                             <StackLayout BackgroundColor="{Binding Background}">
-                                <Label Text="{Binding Summary}" FontAttributes="Bold" />
+                                <Label Text="{Binding Summary}" FontAttributes="Bold" HorizontalOptions = "FillAndExpand"/>
+                                <buttons:SfButton Text="Confirm Delivery" HeightRequest="50" Clicked="Handle_Clicked" HorizontalOptions = "EndAndExpand" IsVisible="{Binding IsVisible}" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed"  />
                             </StackLayout>
                         </Frame>
                     </ViewCell>

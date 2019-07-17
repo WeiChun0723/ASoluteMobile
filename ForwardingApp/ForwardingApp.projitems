@@ -251,7 +251,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)sound\test.mp3" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Forwarding\JobListTabbedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -291,7 +294,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\MasterPageItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCheck.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\CloseApp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonFunction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
@@ -512,6 +514,10 @@
       <DependentUpon>beepSound.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)IAudio.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Forwarding\JobListTabbedPage.xaml.cs">
+      <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\CloseApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -530,7 +536,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\ZebraPrinter\" />
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\HoneywellPrinter\" />
     <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
-    <Folder Include="$(MSBuildThisFileDirectory)sound\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Forwarding\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

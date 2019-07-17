@@ -12,6 +12,39 @@ namespace ASolute_Mobile.Utils
 {
     public class ControllerUtil
     {
+        #region AILS Forwarding
+
+        public static String getDownloadJobListURL()
+        {
+            return String.Format("Fwd/List?key={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getUploadImageURL()
+        {
+            return String.Format("Fwd/Upload?key={0}&GeoLoc={1}&JobId={2}&FileName={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), "","");
+        }
+
+        public static String getUpdateJobURL(string jobId,string jobRemark)
+        {
+            String remarks = jobRemark;
+            if (!String.IsNullOrEmpty(remarks))
+            {
+                remarks = System.Net.WebUtility.UrlEncode(jobRemark).Replace("+", "%20");
+            }
+            return String.Format("Fwd/Update?key={0}&GeoLoc={1}&JobId={2}&DateTime={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobId, System.Net.WebUtility.UrlEncode(DateTime.Now.ToString("o")), remarks);
+        }
+
+        public static String getFutileJobURL(string jobId, string jobRemark)
+        {
+            String remarks = jobRemark;
+            if (!String.IsNullOrEmpty(remarks))
+            {
+                remarks = System.Net.WebUtility.UrlEncode(jobRemark).Replace("+", "%20");
+            }
+            return String.Format("Fwd/Futile?key={0}&GeoLoc={1}&JobId={2}&ReasonCode={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobId, "R1", remarks);
+        }
+        #endregion
+
         #region AILS Yard
         public static String getPendingStorage()
         {
@@ -284,6 +317,10 @@ namespace ASolute_Mobile.Utils
             return String.Format("Providers/ContainerFullHeader?SessionId={0}&Code={1}", Ultis.Settings.SessionSettingKey, code);
         }
 
+        public static String updatePODURL(string code, string containerId)
+        {
+            return String.Format("Providers/UpdatePOD?SessionId={0}&Code={1}&ContainerId={2}", Ultis.Settings.SessionSettingKey, code, containerId);
+        }
         #endregion
 
         #region trucking url

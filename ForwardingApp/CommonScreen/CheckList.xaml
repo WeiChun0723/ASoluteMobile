@@ -9,7 +9,7 @@
                         <ViewCell>
                             <ViewCell.View>
                                 <StackLayout>
-                                    <button:SfCheckBox Text="{Binding Name}" HorizontalTextAlignment="Center" IsChecked="{Binding IsSelected}" CheckedColor="LightCoral"  FontSize="20" />
+                                    <button:SfCheckBox Text="{Binding Name}" IsChecked="{Binding IsSelected}" CheckedColor="LightCoral"  FontSize="20" />
                                 </StackLayout>
                             </ViewCell.View>
                         </ViewCell>

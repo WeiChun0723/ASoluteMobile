@@ -1,47 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ASolute_Mobile.CheckList2">
-             
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CheckList2" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
     <ScrollView>
-    <StackLayout Spacing="15" Padding="15,15,15,15">
-        <StackLayout Spacing="5">
-        <Label x:Name="lblCount" FontAttributes="Bold"/>
-        <Label x:Name="lblCheckedItem" FontAttributes="Bold"/>
-        </StackLayout>
-
-        <Entry x:Name="Odometer" Placeholder="Odometer" BackgroundColor="LightYellow" Keyboard="Numeric"/>
-
-        <StackLayout Spacing="6">
-            <Label Text="Remarks" FontAttributes="Bold" FontSize="Medium"/>
-            <Editor x:Name="remarkEditor" HeightRequest="100" BackgroundColor="LightGray"/>
-        </StackLayout>
-
-        <StackLayout Spacing="6">
-            <Label Text="Image" FontAttributes="Bold" FontSize="Medium"/>
-            <Label x:Name="lblReminder" TextColor="Red" FontSize="Medium" FontAttributes="Bold"/>
-            <Grid  x:Name="imageGrid" RowSpacing="0" ColumnSpacing="0"></Grid>
-        </StackLayout>
-
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10,10,10,10" Spacing="30">
-            <!-- <Image Source="cancel.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="cancel_icon">
+        <StackLayout Spacing="15" Padding="15,15,15,15">
+            <StackLayout Spacing="5">
+                <Label x:Name="lblCount" FontAttributes="Bold" />
+                <Label x:Name="lblCheckedItem" FontAttributes="Bold" />
+            </StackLayout>
+            <inputLayout:SfTextInputLayout Hint="Odometer" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow" >
+                <Entry x:Name="Odometer" Keyboard="Numeric" />
+            </inputLayout:SfTextInputLayout>
+            <StackLayout Spacing="6">
+                <Label Text="Remarks" FontAttributes="Bold" FontSize="Medium" />
+                <Editor x:Name="remarkEditor" HeightRequest="100" BackgroundColor="LightGray" />
+            </StackLayout>
+            <StackLayout Spacing="6">
+                <Label Text="Image" FontAttributes="Bold" FontSize="Medium" />
+                <Label x:Name="lblReminder" TextColor="Red" FontSize="Medium" FontAttributes="Bold" />
+                <Grid x:Name="imageGrid" RowSpacing="0" ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="imageGridRow" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10,10,10,10" Spacing="30">
+                <Image Source="camera.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="camera_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="cancelList"/>
+                        <TapGestureRecognizer Tapped="takeImage" />
                     </Image.GestureRecognizers>
-                </Image>-->
-
-            <Image Source="camera.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="camera_icon" >
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="takeImage"/>
-                </Image.GestureRecognizers>
-            </Image>
-
-            <Image Source="confirm.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" x:Name="confirm_icon">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="confirmCheck"/>
-                </Image.GestureRecognizers>
-            </Image>
+                </Image>
+                <Image Source="confirm.png" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" x:Name="confirm_icon">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="confirmCheck" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
         </StackLayout>
-    </StackLayout>
     </ScrollView>
 </ContentPage>

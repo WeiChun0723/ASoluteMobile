@@ -46,9 +46,7 @@
 <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -515,7 +513,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloseApplication.cs" />
     <Compile Include="CustomRenderer\CustomEditorDroid.cs" />
     <Compile Include="CustomRenderer\CustomEntryDroid.cs" />
     <Compile Include="CustomRenderer\CustomPickerDroid.cs" />
@@ -539,6 +536,7 @@
     <Compile Include="MobilePrinter\PrinterDiscoveryImplementation.cs" />
     <Compile Include="CustomRenderer\HideKeyBoardEntryRenderer.cs" />
     <Compile Include="Services\AudioService.cs" />
+    <Compile Include="CloseApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

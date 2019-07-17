@@ -1,18 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.CustomerTracking.NewCategoryPage" 
-             xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
-             xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" 
-             xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation" 
-             xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CustomerTracking.NewCategoryPage" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:syncfusion="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:validation="clr-namespace:ASolute_Mobile.InputValidation" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
     <StackLayout Padding="15,15,15,15">
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" />
         <StackLayout Orientation="Horizontal" Spacing="10">
-            <syncfusion:SfCheckBox x:Name="Export" IsChecked="false" Text="Export" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged"/>
-            <syncfusion:SfCheckBox x:Name="Import" IsChecked="false" Text="Import" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged"/>
-            <syncfusion:SfCheckBox x:Name="Local" IsChecked="false" Text="Local" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged"/>
+            <syncfusion:SfCheckBox x:Name="Export" IsChecked="false" Text="Export" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged" />
+            <syncfusion:SfCheckBox x:Name="Import" IsChecked="false" Text="Import" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged" />
+            <syncfusion:SfCheckBox x:Name="Local" IsChecked="false" Text="Local" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged" />
         </StackLayout>
-        <inputLayout:SfTextInputLayout Hint="Shipper / Consignee" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow" >
+        <inputLayout:SfTextInputLayout Hint="Filter any text" Style="{StaticResource inputStyle}">
             <Entry x:Name="shipperConsignee" TextChanged="Handle_TextChanged">
                 <Entry.Behaviors>
                     <validation:MaxLengthValidation MaxLength="99" />
@@ -20,11 +15,11 @@
             </Entry>
         </inputLayout:SfTextInputLayout>
         <ListView x:Name="listView" ItemTapped="Handle_ItemTapped" Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true" Style="{StaticResource recordListStyle}" HasUnevenRows="true">
-             <ListView.ItemTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Frame HasShadow="true" Margin="5" >
-                            <StackLayout >
+                        <Frame HasShadow="true" Margin="5">
+                            <StackLayout>
                                 <Label Text="{Binding}" FontAttributes="Bold" HorizontalOptions="FillAndExpand" />
                             </StackLayout>
                         </Frame>

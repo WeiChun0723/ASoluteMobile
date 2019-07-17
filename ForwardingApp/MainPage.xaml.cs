@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomerTracking;
+using ASolute_Mobile.Forwarding;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
@@ -35,6 +37,20 @@ namespace ASolute_Mobile
                 case "com.asolute.AILSBusiness":
                     Detail = new CustomNavigationPage(new BusinessChartTable());
                     break;
+
+                case "asolute.Mobile.Forwarding":
+                case "com.asolute.Forwarding":
+                    Detail = new JobListTabbedPage();
+                    MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Task.Run(async () => { await BackgroundTask.DownloadLatestJobs(null); }).Wait();
+                            Task.Run(async () => { await BackgroundTask.UploadLatestJobs(); }).Wait();
+                        });
+                    });
+                    break;
+
 
                 default:
                     Detail = new CustomNavigationPage(new NewMainMenu());

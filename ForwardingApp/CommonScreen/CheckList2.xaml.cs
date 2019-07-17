@@ -19,8 +19,8 @@ using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile
 {
-	public partial class CheckList2 : ContentPage
-	{
+    public partial class CheckList2 : ContentPage
+    {
         public CheckList previousPage;
         string uri, display, faultyItems, linkId;
         double imageWidth;
@@ -29,22 +29,18 @@ namespace ASolute_Mobile
         List<AppImage> listImage = new List<AppImage>();
         bool firstline = true;
 
-        public CheckList2 (List<clsKeyValue> chkList, string id)
-		{
-			InitializeComponent ();
-            
+        public CheckList2(List<clsKeyValue> chkList, string id)
+        {
+            InitializeComponent();
+
             Title = "Check List (step 2)";
             linkId = id;
             imageWidth = App.DisplayScreenWidth / 3;
-            imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(imageWidth) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-
+            imageGridRow.Height = imageWidth;
             itemList = new List<clsKeyValue>(chkList);
             faultyItems = "";
 
-            if(itemList.Count != 0)
+            if (itemList.Count != 0)
             {
                 if (Ultis.Settings.Language == "English")
                 {
@@ -61,7 +57,7 @@ namespace ASolute_Mobile
                 foreach (clsKeyValue item in itemList)
                 {
                     if (firstline)
-                    {                        
+                    {
                         faultyItems += item.Value;
                         firstline = false;
                     }
@@ -79,14 +75,14 @@ namespace ASolute_Mobile
             }
         }
 
-        protected override  void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
             if (Ultis.Settings.DeleteImage == "Yes")
             {
-                displayImage();
-                Ultis.Settings.DeleteImage = "No";                
+                DisplayImage();
+                Ultis.Settings.DeleteImage = "No";
             }
         }
 
@@ -98,10 +94,7 @@ namespace ASolute_Mobile
             image.Aspect = Aspect.AspectFill;
             var tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.CommandParameter = appImage;
-            tapGestureRecognizer.Tapped += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new ImageViewer((AppImage)((TappedEventArgs)e).Parameter));
-            };
+            tapGestureRecognizer.Tapped += async (sender, e) => await Navigation.PushAsync(new ImageViewer((AppImage)((TappedEventArgs)e).Parameter));
             image.GestureRecognizers.Add(tapGestureRecognizer);
             int noOfImages = imageGrid.Children.Count();
             int noOfCols = imageGrid.ColumnDefinitions.Count();
@@ -112,84 +105,20 @@ namespace ASolute_Mobile
 
         public async void takeImage(object sender, EventArgs e)
         {
-            try
-            {
-                lblReminder.IsVisible = false;
-                await CommonFunction.StoreImages(linkId, this, "NormalImage");
+            lblReminder.IsVisible = false;
 
-                displayImage();
+            await CommonFunction.StoreImages(linkId, this, "NormalImage"); 
 
-                BackgroundTask.StartTimer();
+            DisplayImage();
 
-                /*List<AppImage> uploadImages = App.Database.GetRecordImagesAsync(linkId, false);
-
-                foreach (AppImage uploadImage in uploadImages)
-                {
-                    clsFileObject capturedImage = new clsFileObject();
-                    if (uploadImage.photoScaledFileLocation == null)
-                    {
-                        byte[] originalPhotoImageBytes = File.ReadAllBytes(uploadImage.photoFileLocation);
-                        byte[] scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
-
-                        capturedImage.Content = scaledImageByte;
-                        capturedImage.FileName = uploadImage.photoFileName;
-
-                        string scaledFolder = HelperUtil.GetScaledFolder(uploadImage.photoFileLocation);
-
-                        if (!Directory.Exists(scaledFolder))
-                        {
-                            Directory.CreateDirectory(scaledFolder);
-                        }
-                        uploadImage.photoScaledFileLocation = Path.Combine(scaledFolder, HelperUtil.GetPhotoFileName(uploadImage.photoFileLocation));
-                        File.WriteAllBytes(uploadImage.photoScaledFileLocation, scaledImageByte);
-                        App.Database.SaveRecordImageAsync(uploadImage);
-                    }
-
-                    try
-                    {
-                        var imageClient = new HttpClient();
-                        imageClient.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                        var imageUri = ControllerUtil.UploadImageURL(linkId);
-                        var content = JsonConvert.SerializeObject(capturedImage);
-                        var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-
-                        HttpResponseMessage imageResponse = await imageClient.PostAsync(imageUri, httpContent);
-                        var Imagereply = await imageResponse.Content.ReadAsStringAsync();
-                        Debug.WriteLine(Imagereply);
-                        clsResponse Imageresult = JsonConvert.DeserializeObject<clsResponse>(Imagereply);
-
-                        if (Imageresult.IsGood == true)
-                        {
-                            uploadImage.Uploaded = true;
-                            App.Database.SaveRecordImageAsync(uploadImage);
-                            await DisplayAlert("Success", "Images uploaded", "Ok");
-                        }
-                        else
-                        {
-                            await DisplayAlert("Error", Imageresult.Message, "OK");
-                        }
-                    }
-                    catch (HttpRequestException)
-                    {
-                        await DisplayAlert("Unable to connect", "Please try again later", "Ok");
-                    }
-                    catch (Exception exception)
-                    {
-                        await DisplayAlert("Error", exception.Message, "Ok");
-                    }
-                }*/
-            }
-            catch
-            {
-
-            }
+            BackgroundTask.StartTimer();
         }
 
-        public async void displayImage()
+        public async void DisplayImage()
         {
             images.Clear();
             imageGrid.Children.Clear();
-            images = App.Database.GetUplodedRecordImagesAsync(linkId,"NormalImage");
+            images = App.Database.GetUplodedRecordImagesAsync(linkId, "NormalImage");
             foreach (AppImage Image in images)
             {
                 IFile actualFile = await FileSystem.Current.GetFileFromPathAsync(Image.photoThumbnailFileLocation);
@@ -209,7 +138,7 @@ namespace ASolute_Mobile
 
         public async void confirmCheck(object sender, EventArgs e)
         {
-            if(Odometer.Text != null && Convert.ToInt32(Odometer.Text) != 0 && Convert.ToInt32(Odometer.Text) < 999999)
+            if (Odometer.Text != null && Convert.ToInt32(Odometer.Text) != 0 && Convert.ToInt32(Odometer.Text) <= 9999999)
             {
                 try
                 {

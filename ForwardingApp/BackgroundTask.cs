@@ -30,41 +30,14 @@ namespace ASolute_Mobile
         static string address = "";
         static string location = "";
 
+
+        #region Gps Tracking
+        ////Get gps from phone and send to server
         public static async void GetGPS()
         {
-            //var locator = CrossGeolocator.Current;
-            //position = await locator.GetPositionAsync();
-            /*var position = await Geolocation.GetLastKnownLocationAsync();
-           
-            if (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0))
-            {
-                if (position != null)
-                {
-                    location = String.Format("{0:0.000000}", position.Latitude.ToString()) + "," + String.Format("{0:0.000000}", position.Longitude.ToString());
-                }
-                else
-                {
-                    location = "0,0";
-                }
-            }
-            else
-            {
-                location = String.Format("{0:0.000000}", App.gpsLocationLat) + "," + String.Format("{0:0.000000}", App.gpsLocationLong);
-            }*/
-
             try
             {
                 location = (App.gpsLocationLat.Equals(0) || App.gpsLocationLong.Equals(0)) ? "" : String.Format("{0:0.0000}", App.gpsLocationLat) + "," + String.Format("{0:0.0000}", App.gpsLocationLong);
-
-                /*if (String.IsNullOrEmpty(location))
-                {
-                    var position = await Geolocation.GetLastKnownLocationAsync();
-
-                    if (position != null)
-                    {
-                        location = String.Format("{0:0.000000}", position.Latitude.ToString()) + "," + String.Format("{0:0.000000}", position.Longitude.ToString());
-                    }
-                }*/
 
                 if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)) && NetworkCheck.IsInternet() && !(String.IsNullOrEmpty(location)))
                 {
@@ -85,96 +58,27 @@ namespace ASolute_Mobile
 
                 }
             }
-            catch(Exception ex)
-            {
-
-            }
-
-        }
-
-        //download the bus stop list and store locally 
-        public static async Task DownloadBusStopList()
-        {
-            try
-            {
-                var localStoredOutboundStops = new ObservableCollection<ListItems>(App.Database.GetMainMenu("OutboundList"));
-                var localStoredInboundStops = new ObservableCollection<ListItems>(App.Database.GetMainMenu("InboundList"));
-
-                if (NetworkCheck.IsInternet())
-                {
-                    if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
-                    {
-                        if (localStoredOutboundStops.Count == 0)
-                        {
-                            var outbound_content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/host/api/", ControllerUtil.getBusStops("OutboundList"), null);
-                            clsResponse outbound_response = JsonConvert.DeserializeObject<clsResponse>(outbound_content);
-
-                            if (outbound_response.IsGood)
-                            {
-                                StoreData(outbound_content, "OutboundList");
-
-                            }
-                        }
-
-                        if (localStoredInboundStops.Count == 0)
-                        {
-                            var inbound_content = await CommonFunction.CallWebService(0, null, "https://api.asolute.com/host/api/", ControllerUtil.getBusStops("InboundList"), null);
-                            clsResponse inbound_response = JsonConvert.DeserializeObject<clsResponse>(inbound_content);
-
-                            if (inbound_response.IsGood)
-                            {
-                                StoreData(inbound_content, "InboundList");
-
-                            }
-                        }
-
-                    }
-                }
-            }
             catch
             {
 
             }
-        }
 
-        public static void StoreData(string content, string action)
+        }
+        #endregion
+
+        #region Forwarding data sync
+        public static Task UploadLatestJobs()
         {
-            List<clsBusTicket> stops = JObject.Parse(content)["Result"].ToObject<List<clsBusTicket>>();
-
-            App.Database.deleteRecords(action);
-            App.Database.deleteRecordSummary(action);
-
-            foreach (clsBusTicket stop in stops)
-            {
-                ListItems items = new ListItems
-                {
-                    StopId = stop.StopId,
-                    StopName = stop.StopName,
-                    Rate = stop.Rate,
-                    Category = action
-                };
-
-                App.Database.SaveMenuAsync(items);
-
-                foreach (ListItems station in stop.Stops)
-                {
-                    SummaryItems summaryItem = new SummaryItems
-                    {
-                        Id = stop.StopId,
-                        StopId = station.StopId,
-                        StopName = station.StopName,
-                        Rate = station.Rate,
-                        BackColor = "#ffffff"
-                    };
-                    summaryItem.Type = action;
-
-
-                    App.Database.SaveSummarysAsync(summaryItem);
-                }
-            }
+            throw new NotImplementedException();
         }
 
+        public static Task DownloadLatestJobs(object p)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
+        #region AILS BUS data sync
         //search database for pending bus trip and sync to server
         public static async Task UploadPendingRecord()
         {
@@ -295,7 +199,10 @@ namespace ASolute_Mobile
 
             }
         }
+        #endregion
 
+
+        #region logout function
         public static void Logout()
         {
             Logout(null);
@@ -343,31 +250,32 @@ namespace ASolute_Mobile
             }
             return GetMainPage((Xamarin.Forms.Page)page.Parent);
         }
+        #endregion
 
-        public static void StartTimer()
+
+        #region Image sync
+        //start timer to check db for every 5 second 
+        public static  void StartTimer()
         {
             Device.StartTimer(TimeSpan.FromSeconds(5), () =>
-           {
+            {
+                Task.Run(async () => { await BackgroundUploadImage(); });
 
-                //Task.Run(async () => { await BackgroundUploadImage(); });
+                if (recordImages.Count != 0)
+                {
 
-                BackgroundUploadImage();
-
-               if (recordImages.Count != 0)
-               {
-
-                   return true; // True = Repeat again, False = Stop the timer
+                    return true; // True = Repeat again, False = Stop the timer
                 }
-               else
-               {
-                   return false;
-               }
+                else
+                {
+                    return false;
+                }
 
-           });
+            });
         }
 
-
-        public static async void BackgroundUploadImage()
+        //search image store in db (except profile pic) and send it to server with respective record link id
+        public static async Task BackgroundUploadImage()
         {
 
             try
@@ -421,6 +329,7 @@ namespace ASolute_Mobile
             }
 
         }
+        #endregion
     }
 
 }

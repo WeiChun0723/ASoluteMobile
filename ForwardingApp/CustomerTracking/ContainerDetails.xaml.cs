@@ -4,6 +4,7 @@ using ASolute.Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Geolocator;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -29,10 +30,28 @@ namespace ASolute_Mobile.CustomerTracking
 
         }
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
+            await StartListening();
             await GetContainerDetail();
         }
+
+        public async Task StartListening()
+        {
+            if (CrossGeolocator.Current.IsListening)
+                return;
+
+            await CrossGeolocator.Current.StartListeningAsync(TimeSpan.FromSeconds(60), 0, true, new Plugin.Geolocator.Abstractions.ListenerSettings
+            {
+                ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
+                AllowBackgroundUpdates = true,
+                DeferLocationUpdates = true,
+                DeferralDistanceMeters = 1,
+                ListenForSignificantChanges = true,
+                PauseLocationUpdatesAutomatically = true
+            });
+        }
+
 
         void ShowOnMap()
         {

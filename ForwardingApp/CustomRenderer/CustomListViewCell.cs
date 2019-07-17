@@ -56,22 +56,6 @@ namespace ASolute_Mobile
 
                     bool firstSummaryLine = true;
 
-                    /*if (Ultis.Settings.List == "provider_List")
-                    {
-                       /* foreach (ProviderInfo items in providers)
-                        {
-                            Label label = new Label();
-                            label.FontAttributes = FontAttributes.Bold;
-                            label.Text = items.Name;
-                            cellTextWrapper.Children.Add(label);
-                        }
-                    }
-                    else
-                    {
-
-                      
-                    }*/
-
                     foreach (SummaryItems items in summaryRecord)
                     {
                         Label label = new Label();

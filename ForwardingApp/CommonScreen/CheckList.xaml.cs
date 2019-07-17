@@ -25,8 +25,13 @@ namespace ASolute_Mobile
             Title = "Check list";
             chkid = id;
             BindingContext = new CheckListViewModel(items);
+
+            checkList.ItemTapped += (object sender, Syncfusion.ListView.XForms.ItemTappedEventArgs e) =>
+            {
+                checkList.SelectedItem = null;
+            };
         }
-        
+
         protected override bool OnBackButtonPressed()
         {
             Device.BeginInvokeOnMainThread(async () =>
