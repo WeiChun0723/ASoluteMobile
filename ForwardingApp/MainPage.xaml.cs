@@ -152,7 +152,6 @@ namespace ASolute_Mobile
                             {
                                
                             }
-
                         }
                     }
                     else if (item.Id.Equals("Language"))
@@ -210,7 +209,6 @@ namespace ASolute_Mobile
 
                                 if (logoutResponse.IsGood)
                                 {
-
                                     //App.DropDatabase(); the app will crash
                                     BackgroundTask.Logout(this);
                                 }
@@ -234,6 +232,7 @@ namespace ASolute_Mobile
         public static explicit operator ContentPage(MainPage v)
         {
             throw new NotImplementedException();
+                
         }
 
         public async void refreshMainPage()

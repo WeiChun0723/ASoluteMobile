@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ASolute.Mobile.Models;
+using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator;
 using Rg.Plugins.Popup.Services;
+using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-using Xamarin.Forms.Xaml;
 
 namespace ASolute_Mobile.CustomerTracking
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContainerDetails : ContentPage
     {
-        string provider_code, provider_container, latitude, longtitude, rfcValue, rfcHours;
+        string provider_code, provider_container, latitude, longtitude, rfcValue, rfcHours,category;
+        
         public ProviderDetails previousPage;
 
-        public ContainerDetails(string code, string container)
+        public ContainerDetails(string code, ListItems container)
         {
             InitializeComponent();
             provider_code = code;
-            provider_container = container;
+            provider_container = container.Id;
+            category = container.Category;
 
-            MessagingCenter.Subscribe<App>((App)Application.Current, "OnCategoryCreated",async  (sender)  => {
+            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshDetail",async  (sender)  => {
                 await GetContainerDetail();
             });
 
+            if(category == "Pending Acknowledgement")
+            {
+                confirmBtn.IsVisible = true;
+            }
         }
 
         protected override async void OnAppearing()
@@ -88,15 +94,35 @@ namespace ASolute_Mobile.CustomerTracking
                 GoogleMap.IsVisible = false;
                 switchChange.IsVisible = false;
             }
-        
         }
 
-        public async void updateRFC(object sender, EventArgs e)
+        public async void Handle_Clicked(object sender, EventArgs e)
         {
-            PopUp up = new PopUp(provider_code, rfcValue, rfcHours, provider_container);
+            var button = sender as SfButton;
+
+            switch(button.StyleId)
+            {
+                case "rfcBtn":
+                    PopUp up = new PopUp(provider_code, rfcValue, rfcHours, provider_container,"containerDetail");
+                    await PopupNavigation.Instance.PushAsync(up);
+                    break;
+
+                case "confirmBtn":
+                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.updatePODURL(provider_code, provider_container), this);
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if(response.IsGood)
+                    {
+                        await Navigation.PopAsync();
+
+                        MessagingCenter.Send<App,string>((App)Application.Current, "RefreshContainers",provider_container);
+
+                        MessagingCenter.Send<App>((App)Application.Current, "RefreshCategory");
+                    }
+                    break;
+            }
+
             
-            await PopupNavigation.Instance.PushAsync(up);
-           
         }
 
         public void switchMap(object sender, ToggledEventArgs e)
@@ -114,75 +140,75 @@ namespace ASolute_Mobile.CustomerTracking
         public async Task GetContainerDetail()
         {
             var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerDetailURL(provider_code, provider_container),this);
-            clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-            if(container_response.IsGood)
+            if(content != null)
             {
-                rfc.IsVisible = false;
-                var containers = JObject.Parse(content)["Result"].ToObject<clsDataRow>();
-                containerDetails.Children.Clear();
+                clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                foreach (clsCaptionValue details in containers.Details)
+                if (container_response.IsGood)
                 {
-                    StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
+                    rfcBtn.IsVisible = false;
+                    var containers = JObject.Parse(content)["Result"].ToObject<clsDataRow>();
+                    containerDetails.Children.Clear();
 
-
-                    if (details.Display == true)
+                    foreach (clsCaptionValue details in containers.Details)
                     {
-                        Label captionLabel = new Label()
+                        StackLayout stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, Padding = new Thickness(0, 0, 0, 10) };
+
+                        if (details.Display == true)
                         {
-                            FontAttributes = FontAttributes.Bold,
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            Text = details.Caption + ":  ",
-                            WidthRequest = 120
-                         };
-                        Label valueLabel = new Label()
+                            Label captionLabel = new Label()
+                            {
+                                FontAttributes = FontAttributes.Bold,
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                                Text = details.Caption + ":  ",
+                                WidthRequest = 120
+                            };
+                            Label valueLabel = new Label()
+                            {
+                                FontAttributes = FontAttributes.Bold,
+                                Text = details.Value
+                            };
+
+                            stackLayout.Children.Add(captionLabel);
+                            stackLayout.Children.Add(valueLabel);
+                            containerDetails.Children.Add(stackLayout);
+                        }
+
+                        if (details.Caption.Equals("Container No."))
                         {
-                            FontAttributes = FontAttributes.Bold,
-                            Text = details.Value
-                        };
+                            Title = details.Value;
+                        }
+                        else if (String.IsNullOrEmpty(Title))
+                        {
+                            Title = provider_container;
+                        }
 
-                        stackLayout.Children.Add(captionLabel);
-                        stackLayout.Children.Add(valueLabel);
-                        containerDetails.Children.Add(stackLayout);
+                        if (details.Caption.Equals("Latitude"))
+                        {
+                            latitude = details.Value;
+                        }
+                        if (details.Caption.Equals("Longitude"))
+                        {
+                            longtitude = details.Value;
+                        }
+
+                        if (details.Caption.Equals("RFC"))
+                        {
+                            rfcValue = details.Value;
+                            rfcBtn.IsVisible = true;
+                        }
+                        else if (details.Caption.Equals("RFC Hour"))
+                        {
+                            rfcHours = details.Value;
+                            rfcBtn.IsVisible = true;
+                        }
                     }
 
-                    if(details.Caption.Equals("Container No."))
-                    {
-                        Title = details.Value;
-                    }
-                    else if(String.IsNullOrEmpty(Title))
-                    {
-                        Title = provider_container;
-                    }
-
-                    if (details.Caption.Equals("Latitude"))
-                    {
-                        latitude = details.Value;
-                    }
-                    if (details.Caption.Equals("Longitude"))
-                    {
-                        longtitude = details.Value;
-                    }
-
-                    if(details.Caption.Equals("RFC"))
-                    {
-                        rfcValue = details.Value;
-                        rfc.IsVisible = true;
-                    }
-                    else if (details.Caption.Equals("RFC Hour"))
-                    {
-                        rfcHours = details.Value;
-                        rfc.IsVisible = true;
-                    }
+                    ShowOnMap();
                 }
-
-                ShowOnMap();
+                
             }
-            else
-            {
-                await DisplayAlert("JsonError", container_response.Message, "OK");
-            }
+            
         }
     }
 }

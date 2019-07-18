@@ -1,22 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="ASolute_Mobile.CustomerTracking.ContainerDetails" 
-             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
-    <ScrollView> 
-    <StackLayout Padding="15,15,15,15">
-        
-        <buttons:SfButton Text="RFC" BackgroundColor="#87ceeb" WidthRequest="100" IsVisible="false" x:Name="rfc" Clicked="updateRFC"/>
-       
-        <StackLayout x:Name="containerDetails" Padding="0,5,0,5"  HorizontalOptions="Start" VerticalOptions="Center"></StackLayout>
-       
-       
-        <maps:Map x:Name="GoogleMap" IsShowingUser="true" MapType="Street" HeightRequest="300" WidthRequest="800" IsVisible="false" />
-        <StackLayout Orientation="Horizontal" x:Name="switchChange">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.CustomerTracking.ContainerDetails" xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+    <ScrollView>
+        <StackLayout Padding="15,15,15,15">
+            <StackLayout x:Name="containerDetails" Padding="0,5,0,5" HorizontalOptions="Start" VerticalOptions="Center">
+            </StackLayout>
+            <maps:Map x:Name="GoogleMap" IsShowingUser="true" MapType="Street" HeightRequest="300" WidthRequest="800" IsVisible="false" />
+            <StackLayout Orientation="Horizontal" x:Name="switchChange">
                 <Switch x:Name="changeMap" Toggled="switchMap" />
-                <Label Text="Satelite map "/>
-         </StackLayout>
-    </StackLayout>
-  </ScrollView>
+                <Label Text="Satelite map " />
+            </StackLayout>
+            <buttons:SfButton Text="RFC"  IsVisible="false" x:Name="rfcBtn" Clicked="Handle_Clicked" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" HorizontalOptions="FillAndExpand"/>
+            <buttons:SfButton x:Name="confirmBtn" Text="Confirm Delivery" HeightRequest="50" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" IsVisible="false" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" />
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

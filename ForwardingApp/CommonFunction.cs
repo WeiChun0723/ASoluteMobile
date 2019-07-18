@@ -77,12 +77,9 @@ namespace ASolute_Mobile.Utils
             catch (HttpRequestException requestEx)
             {
                 DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
-                await page.DisplayAlert("Error", requestEx.Message, "OK");
+                await page.DisplayAlert("No internet", requestEx + " .Unable connect to internet", "OK");
             }
-            catch 
-            {
-                
-            }
+            
             return null;
         }
 
@@ -255,14 +252,9 @@ namespace ASolute_Mobile.Utils
                             var answer = await contentPage.DisplayAlert("", "Added new carton box. Print carton label now?", "Yes", "No");
                             if (answer.Equals(true))
                             {
-                                try
-                                {
+                                
                                     MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
-                                }
-                                catch
-                                {
 
-                                }
                             }
                         }
                     }
@@ -283,9 +275,9 @@ namespace ASolute_Mobile.Utils
                     Ultis.Settings.FireID = firebaseID;
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                string error = ex.ToString();
             }
         }
 

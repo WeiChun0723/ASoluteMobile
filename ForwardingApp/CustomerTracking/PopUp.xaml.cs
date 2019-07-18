@@ -10,10 +10,10 @@ namespace ASolute_Mobile.CustomerTracking
 {
     public partial class PopUp : PopupPage
     {
-        string provider_code, process_id, rfcHours, provider_container;
-        public ContainerDetails previousPage;
+        string provider_code, process_id, rfcHours, provider_container, previousPage;
+        
 
-        public PopUp(string code, string rfc,string rfcHour,string container)
+        public PopUp(string code, string rfc,string rfcHour,string container,string lastPage)
         {
             InitializeComponent();
            
@@ -21,10 +21,9 @@ namespace ASolute_Mobile.CustomerTracking
             process_id = rfc;
             rfcHours = rfcHour;
             provider_container = container;
-
+            previousPage = lastPage;
             datePicker.MinimumDate = DateTime.Now;
 
-          
             for (int i = 0; i <= 23.5 * 60; i += 30)
             {
                 int h = i / 60;
@@ -42,39 +41,57 @@ namespace ASolute_Mobile.CustomerTracking
 
         public async void updateRFC(object sender, EventArgs e)
         {
-
-            DateTime compareTime = DateTime.Now.AddHours(Convert.ToInt32(rfcHours));
-
-            string currentTime = datePicker.Date.ToString("yyyy-MM-dd") + " " + timePicker.SelectedItem;
-
-            if (Convert.ToDateTime(currentTime) > compareTime)
+            try
             {
-                if(String.IsNullOrEmpty(remarks.Text))
+                if(rfcHours != "")
                 {
-                    remarks.Text = "";
-                }
-             
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.updateContainerRFCURL(provider_code, process_id, currentTime, remarks.Text),this);
-                clsResponse rfc_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    DateTime compareTime = DateTime.Now.AddHours(Convert.ToInt32(rfcHours));
 
-                if(rfc_response.IsGood)
-                {
-                    await PopupNavigation.Instance.PopAsync(true);
-                    MessagingCenter.Send<App>((App)Application.Current, "OnCategoryCreated");
+                    string currentTime = datePicker.Date.ToString("yyyy-MM-dd") + " " + timePicker.SelectedItem;
+
+                    if (Convert.ToDateTime(currentTime) > compareTime)
+                    {
+                        if (String.IsNullOrEmpty(remarks.Text))
+                        {
+                            remarks.Text = "";
+                        }
+
+                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.updateContainerRFCURL(provider_code, process_id, currentTime, remarks.Text), this);
+                        clsResponse rfc_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (rfc_response.IsGood)
+                        {
+
+                            await PopupNavigation.Instance.PopAsync(true);
+
+                            datePicker.Unfocus();
+
+                            if (previousPage == "containerDetail")
+                            {
+                                MessagingCenter.Send<App>((App)Application.Current, "RefreshDetail");
+                            }
+
+                            MessagingCenter.Send<App, string>((App)Application.Current, "RefreshContainers", provider_container);
+                            MessagingCenter.Send<App>((App)Application.Current, "RefreshCategory");
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "Required Date & Time must be later than " + compareTime.ToString("yyyy-MM-dd hh:mm"), "OK");
+                    }
                 }
                 else
                 {
-                    await DisplayAlert("JsonError", rfc_response.Message, "OK");
+                    await DisplayAlert("Error", "This record not available for RFC.", "OK");
                 }
+              
             }
-            else
+           catch
             {
-                await DisplayAlert("Error", "Required Date & Time must be later than " + compareTime.ToString("yyyy-MM-dd hh:mm"), "OK");
-            }
 
+            }
 
         }
 
-    
     }
 }

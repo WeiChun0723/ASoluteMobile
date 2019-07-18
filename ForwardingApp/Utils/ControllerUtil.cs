@@ -666,6 +666,31 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/Pallet/Transfer?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
+        public static String getCycleCountListURL()
+        {
+            return String.Format("Wms/CycleCount/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+        }
+
+        public static String getZoneListURL(string id)
+        {
+            return String.Format("Wms/CycleCount/Zone?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id);
+        }
+
+        public static String getRackListURL(string id,string zone)
+        {
+            return String.Format("Wms/CycleCount/Rack?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,zone);
+        }
+
+        public static String getLevelListURL(string id, string zone, string rack)
+        {
+            return String.Format("Wms/CycleCount/Level?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}&RackId={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,zone,rack);
+        }
+
+        public static String getCycleCountLoadURL(string id, string zone, string rack, string ascending)
+        {
+            return String.Format("Wms/CycleCount/Load?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}&RackId={4}&Ascending={5}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id, zone, rack, ascending);
+        }
+
         #endregion
 
         #region getPosition

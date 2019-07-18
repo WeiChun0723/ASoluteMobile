@@ -44,7 +44,7 @@ namespace ASolute_Mobile.CustomerTracking
         {
             base.OnAppearing();
         }
-       
+
         protected async void refreshContainerList(object sender, EventArgs e)
         {
             App.Database.deleteRecords("Container");
@@ -62,7 +62,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 if (string.IsNullOrEmpty(searchKey))
                 {
-                   loadContainerList();
+                    loadContainerList();
                 }
 
                 else
@@ -90,70 +90,72 @@ namespace ASolute_Mobile.CustomerTracking
         {
 
             await GetContainer();
-   
+
         }
 
 
 
         public async void selectContainer(object sender, ItemTappedEventArgs e)
         {
-
-            await Navigation.PushAsync(new ContainerDetails(providerCode, ((ListItems)e.Item).Id));
+            await Navigation.PushAsync(new ContainerDetails(providerCode, ((ListItems)e.Item)));
         }
 
         public async Task GetContainer()
         {
-            var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerListURL(providerCode, categorycode),this);
-            clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerListURL(providerCode, categorycode), this);
 
-            if (container_response.IsGood)
+            if (content != null)
             {
-                 List<clsDataRow> containers = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
-               
-                foreach (clsDataRow container in containers)
+                clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (container_response.IsGood)
                 {
-                    string summary = "";
-                    bool firstLine = true;
-                    ListItems menu = new ListItems();
-                    menu.Id = container.Id;
-                    menu.Category = "Container";
+                    List<clsDataRow> containers = JObject.Parse(content)["Result"].ToObject<List<clsDataRow>>();
 
-                    menu.Background = (!(String.IsNullOrEmpty(container.BackColor)))? container.BackColor : "#ffffff";
-                   
-                    foreach (clsCaptionValue summaryList in container.Summary)
+                    foreach (clsDataRow container in containers)
                     {
-                        if(firstLine)
-                        {
-                            summary += summaryList.Value + "\r\n" + "\r\n";
-                            firstLine = false;
-                        }
-                        else
-                        {
-                            summary += summaryList.Caption + "  :  " + summaryList.Value + "\r\n" + "\r\n";
-                        }
+                        string summary = "";
+                        bool firstLine = true;
+                        ListItems menu = new ListItems();
+                        menu.Id = container.Id;
+                        menu.Category = "Container";
 
-                        if (String.IsNullOrEmpty(summaryList.Caption) || summaryList.Caption == "")
-                        {
-                            menu.Name = summaryList.Value;
-                        }
-                        if(summaryList.Caption.Equals("Booking"))
-                        {
-                            menu.Booking = summaryList.Value;
-                        }
-                        if (summaryList.Caption.Equals("Customer Ref"))
-                        {
-                            menu.CustomerRef = summaryList.Value;
-                        }
+                        menu.Background = (!(String.IsNullOrEmpty(container.BackColor))) ? container.BackColor : "#ffffff";
 
+                        foreach (clsCaptionValue summaryList in container.Summary)
+                        {
+                            if (firstLine)
+                            {
+                                summary += summaryList.Value + "\r\n" + "\r\n";
+                                firstLine = false;
+                            }
+                            else
+                            {
+                                summary += summaryList.Caption + "  :  " + summaryList.Value + "\r\n" + "\r\n";
+                            }
+
+                            if (String.IsNullOrEmpty(summaryList.Caption) || summaryList.Caption == "")
+                            {
+                                menu.Name = summaryList.Value;
+                            }
+                            if (summaryList.Caption.Equals("Booking"))
+                            {
+                                menu.Booking = summaryList.Value;
+                            }
+                            if (summaryList.Caption.Equals("Customer Ref"))
+                            {
+                                menu.CustomerRef = summaryList.Value;
+                            }
+
+                        }
+                        menu.Summary = summary;
+
+                        App.Database.SaveMenuAsync(menu);
                     }
-                    menu.Summary = summary;
 
-                    App.Database.SaveMenuAsync(menu);
+                    loadContainerList();
                 }
-
-                loadContainerList();
             }
-           
         }
 
 
@@ -162,8 +164,8 @@ namespace ASolute_Mobile.CustomerTracking
             List<ListItems> Item = new List<ListItems>(App.Database.GetMainMenu("Container"));
             container_list.ItemsSource = Item;
             container_list.HasUnevenRows = true;
-   
-            if(Device.RuntimePlatform == Device.iOS)
+
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 container_list.RowHeight = 300;
             }

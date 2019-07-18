@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.WMS_Screen.CycleCountEntry" 
+             xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+    <StackLayout Padding="15,15,15,15" Spacing="15">
+        <StackLayout >
+            <Label Text="Zone" FontAttributes="Bold" x:Name="zonelbl" />
+            <combobox:SfComboBox HeightRequest="40" x:Name="zoneBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="HandleSelection_Changed" />
+        </StackLayout >
+        <StackLayout>
+            <Label Text="Rack Id" FontAttributes="Bold" x:Name="racklbl"  />
+            <combobox:SfComboBox HeightRequest="40" x:Name="rackBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="HandleSelection_Changed"/>
+        </StackLayout>
+        <StackLayout>
+            <Label Text="Level" FontAttributes="Bold" x:Name="lvllbl" />
+            <combobox:SfComboBox HeightRequest="40" x:Name="lvlBox" MaximumDropDownHeight="200" BackgroundColor="LightYellow" SelectionChanged="HandleSelection_Changed"/>
+        </StackLayout>
+        
+        <buttons:SfButton  Text="Confirm" Clicked="Handle_Clicked"  HorizontalOptions="FillAndExpand"  BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="50"  FontAttributes="Bold"  />        
+    </StackLayout>
+</ContentPage>

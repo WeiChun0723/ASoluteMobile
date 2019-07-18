@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.WMS_Screen.CycleCountDetailsEntry" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:local="clr-namespace:ASolute_Mobile.InputValidation">
+    <StackLayout Padding="15,15,15,15">
+        <StackLayout Orientation="Horizontal" HeightRequest="60">
+            <inputLayout:SfTextInputLayout Hint="Location" ContainerBackgroundColor="LightYellow" FocusedColor="Black" HorizontalOptions="FillAndExpand" MinimumHeightRequest="50">
+                <Entry x:Name="locationEntry">
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="99" />
+                    </Entry.Behaviors>
+                </Entry>
+            </inputLayout:SfTextInputLayout>
+            <buttons:SfButton x:Name="btnReverse" Text="Reverse" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" BackgroundColor="#ED1C24" CornerRadius="20"   FontAttributes="Bold" />
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

@@ -258,7 +258,7 @@ namespace ASolute_Mobile
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Exception", ex.Message, "OK");
+                //await DisplayAlert("Exception", ex.Message, "OK");
             }
         }
 
@@ -459,6 +459,11 @@ namespace ASolute_Mobile
                 case "ShipmentOut":
                     await Navigation.PushAsync(new OutFromChina());
                     break;
+
+                case "CycleCount":
+                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getCycleCountListURL()));
+                    break;
+
             }
 
             listView.SelectedItem = null;

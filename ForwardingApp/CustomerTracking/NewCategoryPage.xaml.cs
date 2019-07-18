@@ -20,22 +20,37 @@ namespace ASolute_Mobile.CustomerTracking
         List<clsDataRow> records;
         ListItems haulier;
         string callURL;
-        bool multipleFilterCheck = false;
-        
+        bool multipleFilterCheck = false, savedCheck = true;
 
         public NewCategoryPage(ListItems item, string URL)
         {
-            InitializeComponent();
-            haulier = item;
-            callURL = URL;
-
-            GetContainerHeader(URL, item);
-            Title = item.Name + " Summary";
-
-            MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshCategory", (sender) =>
+            try
             {
+                InitializeComponent();
+                haulier = item;
+                callURL = URL;
+
                 GetContainerHeader(URL, item);
-            });
+
+                Title = item.Name + " Summary";
+
+                MessagingCenter.Subscribe<App>((App)Application.Current, "RefreshCategory", (sender) =>
+                {
+                    GetContainerHeader(URL, item);
+                });
+
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        void ClearEntry(object sender, System.EventArgs e)
+        {
+            shipperConsignee.Text = "";
+            cancel.IsVisible = false;
         }
 
         private void CheckBox_StateChanged(object sender, StateChangedEventArgs e)
@@ -44,97 +59,69 @@ namespace ASolute_Mobile.CustomerTracking
 
             var checkBox = sender as SfCheckBox;
 
-            switch (checkBox.StyleId)
+            if (savedCheck == false)
             {
-                case "Export":
-                    checkedAction = "E";
-                    break;
 
-                case "Import":
-                    checkedAction = "I";
-                    break;
-
-                case "Local":
-                    checkedAction = "L";
-                    break;
-            }
-
-            if((Export.IsChecked == false || Import.IsChecked == false || Local.IsChecked == false) && multipleFilterCheck == true)
-            {
-                //items = null;
-                foreach(ListItems item in items.ToList())
+                switch (checkBox.StyleId)
                 {
-                    if(item.Action == checkedAction)
-                    {
-                        items.Remove(item);
-                    }
-                }
-
-                if(items.Count == 0)
-                {
-                    items.Clear();
-                }
-
-                multipleFilterCheck = false;
-            }
-
-            if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
-                (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
-            {
-                
-                listView.ItemsSource = categories;
-                items.Clear();
-            }
-            else
-            {
-                filterCategories.Clear();
-
-                List<ListItems> all = new List<ListItems>(App.Database.GetAllContainerDetail());
-
-                if(items == null || items.Count == 0)
-                {
-                    items = all.Where(x => x.Action == checkedAction).ToList();
-                }
-                else
-                {
-                    if(checkBox.IsChecked != false)
-                    {
-                        List<ListItems> secondFilter = all.Where(x => x.Action == checkedAction).ToList();
-
-                        foreach (ListItems listItem in secondFilter)
+                    case "Export":
+                        checkedAction = "E";
+                        if (Export.IsChecked == true)
                         {
-                            items.Add(listItem);
+                            Ultis.Settings.ExportCheck = "E";
                         }
-                    }
-                    multipleFilterCheck = true;
+                        else
+                        {
+                            Ultis.Settings.ExportCheck = "false";
+                        }
+                        break;
+
+                    case "Import":
+                        checkedAction = "I";
+                        if (Import.IsChecked == true)
+                        {
+                            Ultis.Settings.ImportCheck = "I";
+                        }
+                        else
+                        {
+                            Ultis.Settings.ImportCheck = "false";
+                        }
+                        break;
+
+                    case "Local":
+                        checkedAction = "L";
+                        if (Local.IsChecked == true)
+                        {
+                            Ultis.Settings.LocalCheck = "L";
+                        }
+                        else
+                        {
+                            Ultis.Settings.LocalCheck = "false";
+                        }
+                        break;
                 }
 
-                foreach (string category in categories)
+                if ((Export.IsChecked == false || Import.IsChecked == false || Local.IsChecked == false) && multipleFilterCheck == true)
                 {
-                    string[] splitCategory = category.Split('(');
-                    int count = 0;
-                    foreach (ListItems item in items)
+                    //items = null;
+                    foreach (ListItems item in items.ToList())
                     {
-                        if (item.Category == splitCategory[0] )
+                        if (item.Action == checkedAction)
                         {
-                            count++;
+                            items.Remove(item);
                         }
                     }
 
-                    filterCategories.Add(splitCategory[0] + "( " + count + " )");
+                    if (items.Count == 0)
+                    {
+                        items.Clear();
+                    }
+
+                    multipleFilterCheck = false;
                 }
 
-                listView.ItemsSource = filterCategories;
-            }
-        }
-
-        async void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
-        {
-            try
-            {
-                string searchKey = shipperConsignee.Text;
-
-                if (string.IsNullOrEmpty(searchKey))
+                if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
+                    (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
                 {
 
                     listView.ItemsSource = categories;
@@ -146,22 +133,99 @@ namespace ASolute_Mobile.CustomerTracking
 
                     List<ListItems> all = new List<ListItems>(App.Database.GetAllContainerDetail());
 
-                    items = all.Where(x => x.Summary.Contains(searchKey)).ToList();
+                    if (items == null || items.Count == 0)
+                    {
+                        items = all.Where(x => x.Action == checkedAction).ToList();
+                    }
+                    else
+                    {
+                        if (checkBox.IsChecked != false)
+                        {
+                            List<ListItems> secondFilter = all.Where(x => x.Action == checkedAction).ToList();
+
+                            foreach (ListItems listItem in secondFilter)
+                            {
+                                items.Add(listItem);
+                            }
+                        }
+                        multipleFilterCheck = true;
+                    }
 
                     foreach (string category in categories)
                     {
-                        string[] splitCategory = category.Split('(');
+                        string[] splitCategory = category.Split(" (");
                         int count = 0;
                         foreach (ListItems item in items)
                         {
-
-                            if (item.Category == splitCategory[0] )
+                            if (item.Category == splitCategory[0])
                             {
                                 count++;
                             }
                         }
 
-                        filterCategories.Add(splitCategory[0] + "( " + count + " )");
+                        filterCategories.Add(splitCategory[0] + " (" + count + ")");
+                    }
+
+                    listView.ItemsSource = filterCategories;
+                }
+            }
+        }
+
+        async void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
+        {
+            cancel.IsVisible = true;
+
+            try
+            {
+                string searchKey = shipperConsignee.Text;
+
+                if (string.IsNullOrEmpty(searchKey))
+                {
+                    items.Clear();
+
+                    if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
+                    (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
+                    {
+                        listView.ItemsSource = categories;
+                    }
+                    else
+                    {
+                        if (Export.IsChecked == true)
+                        {
+                            checkContainerList("E", Export);
+                        }
+                        if (Import.IsChecked == true)
+                        {
+                            checkContainerList("I", Import);
+                        }
+                        if (Local.IsChecked == true)
+                        {
+                            checkContainerList("L", Local);
+                        }
+                    }
+                }
+                else
+                {
+                    filterCategories.Clear();
+
+                    List<ListItems> all = new List<ListItems>(App.Database.GetAllContainerDetail());
+
+                    items = all.Where(x => x.Summary.Contains(searchKey)).ToList();
+
+                    foreach (string category in categories)
+                    {
+                        string[] splitCategory = category.Split(" (");
+                        int count = 0;
+                        foreach (ListItems item in items)
+                        {
+
+                            if (item.Category == splitCategory[0])
+                            {
+                                count++;
+                            }
+                        }
+
+                        filterCategories.Add(splitCategory[0] + " (" + count + ")");
                     }
 
                     listView.ItemsSource = filterCategories;
@@ -182,75 +246,109 @@ namespace ASolute_Mobile.CustomerTracking
                 categories.Clear();
                 #region GetFullContainerList
                 var container_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerFullListURL(item.Id), this);
-                clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(container_content);
 
-                App.Database.DeleteRecords();
-
-                //clsHaulageModel inherit clsDataRow
-                records = JObject.Parse(container_content)["Result"].ToObject<List<clsDataRow>>();
-
-                foreach (clsDataRow data in records)
+                if (container_content != null)
                 {
-                    ListItems record = new ListItems
-                    {
-                        Id = data.Id,
-                        Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
-                        Category = data.Caption,
-                        Name = item.Name,
-                        Action = data.Action,
-                        IsVisible = (data.Caption == "Pending Acknowledgement") ? true : false
-                    };
+                    clsResponse container_response = JsonConvert.DeserializeObject<clsResponse>(container_content);
 
-                    //store summary of the record for search 
-                    string summary = "";
-                    int count = 0;
-                    foreach (clsCaptionValue summaryItem in data.Summary)
+                    App.Database.DeleteRecords();
+
+                    if (container_response.IsGood)
                     {
-                        count++;
-                        if (!(String.IsNullOrEmpty(summaryItem.Caption)))
+                        //clsHaulageModel inherit clsDataRow
+                        records = JObject.Parse(container_content)["Result"].ToObject<List<clsDataRow>>();
+
+                        foreach (clsDataRow data in records)
                         {
-                            if (count == data.Summary.Count)
+                            ListItems record = new ListItems
                             {
-                                summary += summaryItem.Caption + " :  " + summaryItem.Value;
-                            }
-                            else
+                                Id = data.Id,
+                                Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
+                                Category = data.Caption,
+                                Name = item.Name,
+                                Action = data.Action,
+                                IsVisible = (data.Caption == "Pending Acknowledgement" || data.Caption == "Pending RFC") ? true : false
+                            };
+
+                            if (data.Caption == "Pending Acknowledgement")
                             {
-                                summary += summaryItem.Caption + " :  " + summaryItem.Value + "\r\n" + "\r\n";
+                                record.ButtonName = "Confirm Delivery";
                             }
+                            else if (data.Caption == "Pending RFC")
+                            {
+                                record.ButtonName = "RFC";
+                            }
+
+                            //store summary of the record for search 
+                            string summary = "";
+                            int count = 0;
+                            foreach (clsCaptionValue summaryItem in data.Summary)
+                            {
+                                count++;
+                                if (!(String.IsNullOrEmpty(summaryItem.Caption)))
+                                {
+                                    if (count == data.Summary.Count)
+                                    {
+                                        summary += summaryItem.Caption + " :  " + summaryItem.Value;
+                                    }
+                                    else
+                                    {
+                                        summary += summaryItem.Caption + " :  " + summaryItem.Value + "\r\n" + "\r\n";
+                                    }
+                                }
+                                else if (summaryItem.Caption == "")
+                                {
+                                    if (!(String.IsNullOrEmpty(summaryItem.Value)))
+                                    {
+                                        summary += summaryItem.Value + "\r\n" + "\r\n";
+                                    }
+                                }
+                            }
+                            record.Summary = summary;
+                            App.Database.SaveMenuAsync(record);
                         }
-                        else if (summaryItem.Caption == "")
+                        #endregion
+
+                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, url, this);
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        foreach (string category in response.Result)
                         {
-                            if (!(String.IsNullOrEmpty(summaryItem.Value)))
+                            int count = 0;
+                            foreach (clsDataRow record in records)
                             {
-                                summary += summaryItem.Value + "\r\n" + "\r\n";
+                                if (record.Caption == category)
+                                {
+                                    count++;
+                                }
                             }
+
+                            categories.Add(category + " (" + count + ")");
                         }
+
+                        listView.ItemsSource = categories;
+
+                        if (Ultis.Settings.ExportCheck == "E")
+                        {
+                            Export.IsChecked = true;
+                            checkContainerList("E", Export);
+                        }
+                        if (Ultis.Settings.ImportCheck == "I")
+                        {
+                            Import.IsChecked = true;
+                            checkContainerList("I", Import);
+                        }
+                        if (Ultis.Settings.LocalCheck == "L")
+                        {
+                            Local.IsChecked = true;
+                            checkContainerList("L", Local);
+                        }
+
+                        savedCheck = false;
                     }
-                    record.Summary = summary;
-                    App.Database.SaveMenuAsync(record);
                 }
-                #endregion
-
-                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, url, this);
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                foreach (string category in response.Result)
-                {
-                    int count = 0;
-                    foreach (clsDataRow record in records)
-                    {
-                        if (record.Caption == category)
-                        {
-                            count++;
-                        }
-                    }
-
-                    categories.Add(category + "( " + count + " )");
-                }
-
-                listView.ItemsSource = categories;
             }
-            catch
+            catch (Exception ex)
             {
 
             }
@@ -258,9 +356,68 @@ namespace ASolute_Mobile.CustomerTracking
             loading.IsVisible = false;
         }
 
+        void checkContainerList(string checkedAction, SfCheckBox checkBox)
+        {
+            try
+            {
+                if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
+                    (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
+                {
+
+                    listView.ItemsSource = categories;
+                    items.Clear();
+                }
+                else
+                {
+                    filterCategories.Clear();
+
+                    List<ListItems> all = new List<ListItems>(App.Database.GetAllContainerDetail());
+
+                    if (items == null || items.Count == 0)
+                    {
+                        items = all.Where(x => x.Action == checkedAction).ToList();
+                    }
+                    else
+                    {
+                        if (checkBox.IsChecked != false)
+                        {
+                            List<ListItems> secondFilter = all.Where(x => x.Action == checkedAction).ToList();
+
+                            foreach (ListItems listItem in secondFilter)
+                            {
+                                items.Add(listItem);
+                            }
+                        }
+                        multipleFilterCheck = true;
+                    }
+
+                    foreach (string category in categories)
+                    {
+                        string[] splitCategory = category.Split(" (");
+                        int count = 0;
+                        foreach (ListItems item in items)
+                        {
+                            if (item.Category == splitCategory[0])
+                            {
+                                count++;
+                            }
+                        }
+
+                        filterCategories.Add(splitCategory[0] + " (" + count + ")");
+                    }
+
+                    listView.ItemsSource = filterCategories;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-            string[] split = e.Item.ToString().Split('(');
+            string[] split = e.Item.ToString().Split(" (");
 
             string selectedCategory = split[0];
 

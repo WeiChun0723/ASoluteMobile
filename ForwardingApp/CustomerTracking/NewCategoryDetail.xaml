@@ -9,7 +9,7 @@
                         <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
                             <StackLayout BackgroundColor="{Binding Background}">
                                 <Label Text="{Binding Summary}" FontAttributes="Bold" HorizontalOptions = "FillAndExpand"/>
-                                <buttons:SfButton Text="Confirm Delivery" HeightRequest="50" Clicked="Handle_Clicked" HorizontalOptions = "EndAndExpand" IsVisible="{Binding IsVisible}" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed"  />
+                                <buttons:SfButton Text="{Binding ButtonName}" HeightRequest="50" Clicked="Handle_Clicked" HorizontalOptions = "EndAndExpand" IsVisible="{Binding IsVisible}" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed"  />
                             </StackLayout>
                         </Frame>
                     </ViewCell>

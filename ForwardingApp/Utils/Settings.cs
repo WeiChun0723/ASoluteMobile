@@ -44,6 +44,49 @@ namespace ASolute_Mobile.Ultis
         private const string UpdateTimes = "update_time";
         private const string StartEndTrip = "startEnd_Trip";
         private const string TripID = "trip_ID";
+
+        private const string Export = "export";
+        private const string Import = "import";
+        private const string Local = "local";
+        #endregion
+
+
+        #region AILS Tracking setting
+        public static string ExportCheck
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(Export, "false");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(Export, value);
+            }
+        }
+
+        public static string ImportCheck
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(Import, "false");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(Import, value);
+            }
+        }
+
+        public static string LocalCheck
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(Local, "false");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(Local, value);
+            }
+        }
         #endregion
 
         #region AILS Bus setting 

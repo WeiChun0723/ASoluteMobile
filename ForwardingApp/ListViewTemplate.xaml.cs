@@ -298,6 +298,9 @@ namespace ASolute_Mobile
                     case "CartonBox":
                         await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getParcelList(((ListItems)e.Item).Id)));
                         break;
+                    case "CycleCount":
+                        await Navigation.PushAsync(new CycleCountEntry(((ListItems)e.Item)));
+                        break;
                 }
             }
 
@@ -387,7 +390,7 @@ namespace ASolute_Mobile
                         record.Summary = summary;
                         record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : DateTime.Parse(closingTime);
 
-                        if (records.Count < 50)
+                        if (records.Count < 50 && menuItems.Id != "CycleCount")
                         {
                             App.Database.SaveMenuAsync(record);
 
@@ -420,7 +423,7 @@ namespace ASolute_Mobile
                         }
                     }
 
-                    if (records.Count < 50)
+                    if (records.Count < 50 && menuItems.Id != "CycleCount")
                     {
                         LoadListData();
                     }

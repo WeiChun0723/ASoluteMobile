@@ -7,20 +7,20 @@ using ASolute.Mobile.Models;
 using ASolute_Mobile.Ultis;
 
 namespace ASolute_Mobile.Data
-    
+
 {
     public class Database
     {
         readonly SQLiteConnection database;
 
-		public Database(string dbPath)
-		{
+        public Database(string dbPath)
+        {
             database = new SQLiteConnection(dbPath);
             //database.CreateTable<ChatRecord>();
             database.CreateTable<UserItem>();
             database.CreateTable<SummaryItems>();
             database.CreateTable<DetailItems>();
-            database.CreateTable<ListItems>();                            
+            database.CreateTable<ListItems>();
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
             database.CreateTable<TruckModel>();
@@ -29,14 +29,14 @@ namespace ASolute_Mobile.Data
             database.CreateTable<SoldTicket>();
         }
 
-		public void DropDB()
-		{
+        public void DropDB()
+        {
             //database.DropTable<ChatRecord>();
             database.DropTable<UserItem>();
             database.DropTable<SummaryItems>();
             database.DropTable<DetailItems>();
-            database.DropTable<ListItems>();          
-            database.DropTable<AppImage>();               
+            database.DropTable<ListItems>();
+            database.DropTable<AppImage>();
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
             database.DropTable<BusTrip>();
@@ -96,14 +96,15 @@ namespace ASolute_Mobile.Data
         public int SaveMenuAsync(ListItems item)
         {
             item.owner = Ultis.Settings.SessionUserId;
+
             if (item.tableID != 0)
             {
                 return database.Update(item);
             }
             else
             {
-
                 return database.Insert(item);
+
             }
 
         }
@@ -170,7 +171,7 @@ namespace ASolute_Mobile.Data
             //return database.Table<SummaryItem>().ToListAsync();
         }
 
-     
+
         #endregion
 
         #region get/store app image
@@ -194,7 +195,7 @@ namespace ASolute_Mobile.Data
 
         public void DeleteImage(string imageType)
         {
-            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [type] = ?" , imageType);
+            database.Query<AppImage>("DELETE FROM [AppImage] WHERE [type] = ?", imageType);
         }
 
         public int SaveRecordImageAsync(AppImage image)
@@ -286,7 +287,7 @@ namespace ASolute_Mobile.Data
 
         public void DeleteBusTrip()
         {
-            database.Query<BusTrip>("DELETE FROM BusTrip" );
+            database.Query<BusTrip>("DELETE FROM BusTrip");
         }
 
         public void DeleteTicket()
@@ -328,7 +329,7 @@ namespace ASolute_Mobile.Data
         public int DeleteMenu(ListItems menu)
         {
             deleteProvider(menu.Id);
-           
+
             return database.Delete(menu);
         }
 
@@ -413,7 +414,7 @@ namespace ASolute_Mobile.Data
             return database.Table<JobNoList>().Where(i => i.JobNoValue == id).FirstOrDefault();
         }
 
-        public List<ListItems> GetStops(string category,string stopId)
+        public List<ListItems> GetStops(string category, string stopId)
         {
             return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ? AND [StopId] = ?", category, stopId);
         }
@@ -443,7 +444,7 @@ namespace ASolute_Mobile.Data
             database.Query<JobNoList>("DELETE FROM [JobNoList]");
         }
 
-     
+
 
         public int SaveJobNoAsync(JobNoList item)
         {

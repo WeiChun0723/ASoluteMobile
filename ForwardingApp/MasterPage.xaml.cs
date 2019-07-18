@@ -11,6 +11,7 @@ namespace ASolute_Mobile
     {
         public ListView ListView { get { return listView; } }
 
+        //app build : ios , appversion : android
         public MasterPage()
         {
             InitializeComponent();

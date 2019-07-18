@@ -115,6 +115,7 @@ namespace ASolute_Mobile.Models
         //Tracking property
         public string Booking { get; set; }
         public string CustomerRef { get; set; }
+        public string ButtonName { get; set; }
 
         //Yard
         public DateTime? ClosingDate { get; set; }

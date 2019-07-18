@@ -46,7 +46,9 @@
 <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -57,12 +59,13 @@
     <AndroidSigningKeyStore>/Users/asolute/Library/Developer/Xamarin/Keystore/asolute/asolute.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>723996</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>asolute</AndroidSigningKeyAlias>
-    <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
     <EnableProguard>false</EnableProguard>
     <PlatformTarget>anycpu</PlatformTarget>
     <WarningsNotAsErrors></WarningsNotAsErrors>
+    <AndroidSigningKeyPass>723996</AndroidSigningKeyPass>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AndHUD, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">

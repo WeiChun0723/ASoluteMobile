@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.LoginPage" 
              xmlns:controls="clr-namespace:ASolute_Mobile.CustomRenderer" 
              xmlns:lc="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms" 
@@ -16,11 +16,8 @@
             </StackLayout>
             <Label TextColor="Black" FontSize="Small" x:Name="AppLabel" HorizontalOptions="Center" FontAttributes="Bold" />
             <inputLayout:SfTextInputLayout Hint="User ID" Style="{StaticResource inputStyle}" >
-                <Entry x:Name="usernameEntry" >
-                    <Entry.Behaviors>
-                        <local:MaxLengthValidation MaxLength="10" />
-                    </Entry.Behaviors>
-                </Entry>
+                <Entry x:Name="usernameEntry" />
+                   
                 <inputLayout:SfTextInputLayout.LeadingView>
                     <Image Source="user" />
                 </inputLayout:SfTextInputLayout.LeadingView>

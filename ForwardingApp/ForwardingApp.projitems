@@ -255,6 +255,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountDetailsEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -518,6 +526,12 @@
       <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Utils\CloseApp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountEntry.xaml.cs">
+      <DependentUpon>CycleCountEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountDetailsEntry.xaml.cs">
+      <DependentUpon>CycleCountDetailsEntry.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

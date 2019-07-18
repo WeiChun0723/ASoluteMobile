@@ -250,9 +250,9 @@ namespace ASolute_Mobile
                                         var logoAckResp = await client.GetAsync(downloadLogoAckURI);
 
                                     }
-                                    catch (Exception exception)
+                                    catch 
                                     {
-                                        await DisplayAlert("Error", exception.Message, "OK");
+                                        //await DisplayAlert("Error", exception.Message, "OK");
                                     }
                                 }
                                 else

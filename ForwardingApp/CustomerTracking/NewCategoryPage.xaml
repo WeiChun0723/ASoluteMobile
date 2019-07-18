@@ -7,12 +7,19 @@
             <syncfusion:SfCheckBox x:Name="Import" IsChecked="false" Text="Import" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged" />
             <syncfusion:SfCheckBox x:Name="Local" IsChecked="false" Text="Local" CheckedColor="LightCoral" StateChanged="CheckBox_StateChanged" />
         </StackLayout>
-        <inputLayout:SfTextInputLayout Hint="Filter any text" Style="{StaticResource inputStyle}">
+        <inputLayout:SfTextInputLayout Hint="Filter any text" Style="{StaticResource inputStyle}" TrailingViewPosition="Inside">
             <Entry x:Name="shipperConsignee" TextChanged="Handle_TextChanged">
                 <Entry.Behaviors>
                     <validation:MaxLengthValidation MaxLength="99" />
                 </Entry.Behaviors>
             </Entry>
+            <inputLayout:SfTextInputLayout.TrailingView>
+                <Image Source="cancel.png" VerticalOptions="Center" IsVisible="false" x:Name="cancel">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ClearEntry" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </inputLayout:SfTextInputLayout.TrailingView>
         </inputLayout:SfTextInputLayout>
         <ListView x:Name="listView" ItemTapped="Handle_ItemTapped" Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true" Style="{StaticResource recordListStyle}" HasUnevenRows="true">
             <ListView.ItemTemplate>

@@ -21,6 +21,7 @@ namespace ASolute_Mobile
         public static List<SummaryItems> summaryRecord;
        // public static List<ProviderInfo> providers;
         string color;
+        string CountSheet = "";
 
         public CustomListViewCell()
         {
@@ -58,6 +59,7 @@ namespace ASolute_Mobile
 
                     foreach (SummaryItems items in summaryRecord)
                     {
+
                         Label label = new Label();
                         label.FontSize = 15;
 
