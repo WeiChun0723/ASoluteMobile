@@ -32,6 +32,10 @@ namespace ASolute_Mobile.WMS_Screen
             switch(comboBox.StyleId)
             {
                 case "zoneBox":
+                    racks.Clear();
+                    levels.Clear();
+                    lvlBox.ComboBoxSource = null;
+
                     var rack_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getRackListURL(selectedItem.Id,zoneBox.Text), this);
                     if (rack_content != null)
                     {
@@ -45,12 +49,15 @@ namespace ASolute_Mobile.WMS_Screen
                                 racks.Add(rack.Value);
                             }
 
+                            rackBox.ComboBoxSource = null;
                             rackBox.ComboBoxSource = racks;
                         }
                     }
                     break;
 
                 case "rackBox":
+                    levels.Clear();
+
                     var level_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLevelListURL(selectedItem.Id, zoneBox.Text,rackBox.Text), this);
                     if (level_content != null)
                     {
@@ -64,12 +71,11 @@ namespace ASolute_Mobile.WMS_Screen
                                 levels.Add(level.Value);
                             }
 
+                            lvlBox.ComboBoxSource = null;
                             lvlBox.ComboBoxSource = levels;
                         }
                     }
                     break;
-
-
             }
         }
 

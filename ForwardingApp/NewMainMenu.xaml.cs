@@ -249,8 +249,6 @@ namespace ASolute_Mobile
                         CheckList chkList = new CheckList(checkItems, menu.CheckListLinkId);
                         NavigationPage.SetHasBackButton(chkList, false);
                         await Navigation.PushAsync(chkList);
-
-                        
                     }
                 }
                 loading.IsVisible = false;
@@ -277,6 +275,7 @@ namespace ASolute_Mobile
                         Style = (Xamarin.Forms.Style)Application.Current.Resources[labelStyle],
                         HorizontalTextAlignment = TextAlignment.Center
                     };
+                   
                     info.Text = (userSummary.Caption == "") ? userSummary.Value : userSummary.Caption + ": " + userSummary.Value;
                     userInfo.Children.Add(info);
                 }
@@ -286,7 +285,7 @@ namespace ASolute_Mobile
                 Ultis.Settings.List = "Main_Menu";
                 ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
                 listView.ItemsSource = Item;
-                //listView.HeightRequest = (expiryStack.IsVisible == false) ? Item.Count * 120 : Item.Count * 130;
+                listView.HeightRequest = Item.Count * 150;
                 listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
                 System.TimeSpan interval = new System.TimeSpan();

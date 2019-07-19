@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.WMS_Screen.CycleCountDetailsEntry" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:syncIndicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms" xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms" xmlns:local="clr-namespace:ASolute_Mobile.InputValidation">
-    <StackLayout Padding="15,15,15,15">
+    <StackLayout Padding="15,15,15,15" Spacing="15">
         <StackLayout Orientation="Horizontal" HeightRequest="60">
             <inputLayout:SfTextInputLayout Hint="Location" ContainerBackgroundColor="LightYellow" FocusedColor="Black" HorizontalOptions="FillAndExpand" MinimumHeightRequest="50">
                 <Entry x:Name="locationEntry">
@@ -9,7 +9,50 @@
                     </Entry.Behaviors>
                 </Entry>
             </inputLayout:SfTextInputLayout>
-            <buttons:SfButton x:Name="btnReverse" Text="Reverse" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" BackgroundColor="#ED1C24" CornerRadius="20"   FontAttributes="Bold" />
+            <buttons:SfButton x:Name="reverseBtn" Text="Reverse" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" BackgroundColor="#ED1C24" CornerRadius="20" FontAttributes="Bold" />
         </StackLayout>
+        <inputLayout:SfTextInputLayout Hint="Pallet ID" ContainerBackgroundColor="LightYellow" FocusedColor="Black" HorizontalOptions="FillAndExpand" TrailingViewPosition="Inside" LeadingViewPosition="Inside" MinimumHeightRequest="50">
+            <Entry x:Name="palletIdEntry" TextChanged="Handle_TextChanged" Completed="Handle_Completed">
+                <Entry.Behaviors>
+                    <local:MaxLengthValidation MaxLength="100" />
+                </Entry.Behaviors>
+            </Entry>
+            <inputLayout:SfTextInputLayout.LeadingView>
+                <Image Source="barCode.png" HeightRequest="100" VerticalOptions="Center" x:Name="palletScan">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </inputLayout:SfTextInputLayout.LeadingView>
+            <inputLayout:SfTextInputLayout.TrailingView>
+                <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="palletEntryCancel">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </inputLayout:SfTextInputLayout.TrailingView>
+        </inputLayout:SfTextInputLayout>
+        <StackLayout Orientation="Horizontal">
+            <buttons:SfCheckBox Text="Empty Location" CheckedColor="LightCoral" FontSize="20" />
+            <buttons:SfCheckBox Text="Full Pallet" CheckedColor="LightCoral" FontSize="20" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <buttons:SfCheckBox Text="Loose Quantity" CheckedColor="LightCoral" FontSize="20" />
+            <inputLayout:SfTextInputLayout FocusedColor="Black" HorizontalOptions="FillAndExpand" TrailingViewPosition="Inside"  MinimumHeightRequest="50">
+                <Entry x:Name="loseQuantityEntry" TextChanged="Handle_TextChanged" Completed="Handle_Completed">
+                    <Entry.Behaviors>
+                        <local:MaxLengthValidation MaxLength="100"/>
+                    </Entry.Behaviors>
+                </Entry>
+                <inputLayout:SfTextInputLayout.TrailingView>
+                    <Image Source="cancel.png" HeightRequest="100" VerticalOptions="Center" IsVisible="false" x:Name="losseQuantityCancel">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </inputLayout:SfTextInputLayout.TrailingView>
+            </inputLayout:SfTextInputLayout>
+        </StackLayout>
+        <buttons:SfButton Text="Confirm" Clicked="Handle_Clicked" x:Name="confirmBtn" HorizontalOptions="FillAndExpand" BackgroundColor="#ED1C24" CornerRadius="20" HeightRequest="50" FontAttributes="Bold" />
     </StackLayout>
 </ContentPage>
