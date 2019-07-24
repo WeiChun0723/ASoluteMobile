@@ -205,7 +205,6 @@ namespace ASolute_Mobile.WMS_Screen
                             Caption = "M3",
                             Value = newPallet.ControlVolume
                         };
-
                         newPallet.Attribute.Add(volume);
                     }
 
@@ -217,7 +216,6 @@ namespace ASolute_Mobile.WMS_Screen
                             Caption = "KG",
                             Value = newPallet.ControlWeight
                         };
-
                         newPallet.Attribute.Add(weight);
                     }
 

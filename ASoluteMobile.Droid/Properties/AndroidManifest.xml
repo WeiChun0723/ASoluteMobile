@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSWMS" android:installLocation="auto" android:versionCode="46" android:versionName="2.3">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.Forwarding" android:installLocation="auto" android:versionCode="48" android:versionName="2.3">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28" />
 	<uses-feature android:name="android.hardware.location.gps" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +13,7 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<!--<permission android:name="asolute.Mobile.AILSHaulage.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="asolute.Mobile.AILSHaulage.permission.C2D_MESSAGE" />-->
-	<application android:name="ASolute Fleet" android:theme="@style/MyTheme" android:label="AILS WMS" android:icon="@drawable/appIcon" android:vmSafeMode="true">
+	<application android:name="ASolute Fleet" android:theme="@style/MyTheme" android:label="Forwarding" android:icon="@drawable/appIcon" android:vmSafeMode="true">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>

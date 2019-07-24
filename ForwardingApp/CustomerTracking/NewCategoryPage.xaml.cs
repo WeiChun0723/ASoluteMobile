@@ -272,7 +272,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                             if (data.Caption == "Pending Acknowledgement")
                             {
-                                record.ButtonName = "Confirm Delivery";
+                                record.ButtonName = "Confirm Receive";
                             }
                             else if (data.Caption == "Pending RFC")
                             {
@@ -305,7 +305,7 @@ namespace ASolute_Mobile.CustomerTracking
                                 }
                             }
                             record.Summary = summary;
-                            App.Database.SaveMenuAsync(record);
+                            App.Database.SaveItemAsync(record);
                         }
                         #endregion
 

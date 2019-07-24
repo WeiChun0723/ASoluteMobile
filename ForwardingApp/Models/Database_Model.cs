@@ -17,6 +17,7 @@ namespace ASolute_Mobile.Models
         public string owner { get; set; }
         public DateTime? updatedDate { get; set; }
         public bool Uploaded { get; set; }
+        public int Done { get; set; }
     }
 
 
@@ -117,7 +118,7 @@ namespace ASolute_Mobile.Models
         public string CustomerRef { get; set; }
         public string ButtonName { get; set; }
 
-        //Yard
+        //Yard property
         public DateTime? ClosingDate { get; set; }
 
         //Bus property

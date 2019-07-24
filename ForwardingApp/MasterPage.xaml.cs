@@ -18,8 +18,16 @@ namespace ASolute_Mobile
 
             LogoImage.Source = (File.Exists(Ultis.Settings.GetAppLogoFileLocation())) ? ImageSource.FromFile(Ultis.Settings.GetAppLogoFileLocation()) : "user_icon.png";
             ownerName.Text = Ultis.Settings.SessionUserId;
-            appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppVersion;
 
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppBuild;
+            }
+            else
+            {
+                appVersion.Text = "App version: " + CrossDeviceInfo.Current.AppVersion;
+            }
+            
             List<SummaryItems> contextMenu = App.Database.GetSummarysAsync("ContextMenu");
 
             var masterPageItems = new List<MasterPageItem>();

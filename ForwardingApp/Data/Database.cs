@@ -36,7 +36,7 @@ namespace ASolute_Mobile.Data
             database.DropTable<SummaryItems>();
             database.DropTable<DetailItems>();
             database.DropTable<ListItems>();
-            database.DropTable<AppImage>();
+            //database.DropTable<AppImage>();
             database.DropTable<JobNoList>();
             database.DropTable<TruckModel>();
             database.DropTable<BusTrip>();
@@ -92,8 +92,16 @@ namespace ASolute_Mobile.Data
         }
         #endregion
 
+        #region forwarding
+        public List<ListItems> GetJobs(string category, int status)
+        {
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ? AND [Done] = ?", category, status);
+        }
+
+        #endregion
+
         #region general 
-        public int SaveMenuAsync(ListItems item)
+        public int SaveItemAsync(ListItems item)
         {
             item.owner = Ultis.Settings.SessionUserId;
 
@@ -124,7 +132,7 @@ namespace ASolute_Mobile.Data
             }
         }
 
-        public List<ListItems> GetMainMenu(string category)
+        public  List<ListItems> GetMainMenu(string category)
         {
             return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ?", category);
         }
@@ -155,6 +163,7 @@ namespace ASolute_Mobile.Data
             return database.Delete(item);
         }
 
+        
         public List<SummaryItems> GetSummarysAsync(string type)
         {
             return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Type] = ?", type);

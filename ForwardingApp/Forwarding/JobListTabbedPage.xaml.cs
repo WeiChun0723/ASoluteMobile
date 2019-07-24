@@ -14,6 +14,7 @@ namespace ASolute_Mobile.Forwarding
             InitializeComponent();
             this.BarBackgroundColor = Color.FromHex("#9A2116");
             this.Title = "Job List";
+           
         }
     }
 }

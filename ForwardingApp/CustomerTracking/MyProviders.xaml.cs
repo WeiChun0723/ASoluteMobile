@@ -113,7 +113,7 @@ namespace ASolute_Mobile.CustomerTracking
                     menu.Id = provider.Code;
                     menu.Name = provider.Name;
                     menu.Category = "ProviderList";
-                    App.Database.SaveMenuAsync(menu);
+                    App.Database.SaveItemAsync(menu);
 
                     SummaryItems summaryItem = new SummaryItems();
                     summaryItem.Id = provider.Code;

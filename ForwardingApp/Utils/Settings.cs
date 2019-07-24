@@ -44,7 +44,7 @@ namespace ASolute_Mobile.Ultis
         private const string UpdateTimes = "update_time";
         private const string StartEndTrip = "startEnd_Trip";
         private const string TripID = "trip_ID";
-
+        private const string OwnerId = "owner_Id";
         private const string Export = "export";
         private const string Import = "import";
         private const string Local = "local";
@@ -116,6 +116,8 @@ namespace ASolute_Mobile.Ultis
             }
         }
         #endregion
+
+        
 
         public static string UpdateTime
         {

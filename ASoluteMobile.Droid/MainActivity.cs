@@ -15,59 +15,55 @@ using Haulage.Droid.MobilePrinter;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS WMS", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Forwarding", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static Activity activity;
         readonly string logTag = "MainActivity";
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            try
+
+            TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
+            ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
+            base.OnCreate(savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
+            Xamarin.FormsGoogleMaps.Init(this, savedInstanceState);
+            UserDialogs.Init(this);
+            ImageCircleRenderer.Init();
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            ZXing.Mobile.MobileBarcodeScanner.Initialize(Application);
+            Ultis.Settings.App = PackageName;
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
-                TabLayoutResource = Haulage.Droid.Resource.Layout.Tabbar;
-                ToolbarResource = Haulage.Droid.Resource.Layout.Toolbar;
-                base.OnCreate(bundle);
-                Xamarin.Essentials.Platform.Init(this, bundle);
-                Rg.Plugins.Popup.Popup.Init(this, bundle);
-                global::Xamarin.Forms.Forms.Init(this, bundle);
-                Xamarin.FormsMaps.Init(this, bundle);
-                Xamarin.FormsGoogleMaps.Init(this, bundle);
-                UserDialogs.Init(this);
-                ImageCircleRenderer.Init();
-                ZXing.Net.Mobile.Forms.Android.Platform.Init();
-                ZXing.Mobile.MobileBarcodeScanner.Initialize(Application);
-                Ultis.Settings.App = PackageName;
-
-                if ( Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                if (PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
-                    if (PackageName.Equals("asolute.Mobile.AILSHaulage"))
-                    {
-                        RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
-                    }
-
-                    if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
-                    {
-                        StartLocationTracking();
-                    }
+                    RequestPermissions(new String[] { Manifest.Permission.AccessFineLocation }, 1);
                 }
 
-                if(PackageName.Equals("asolute.Mobile.AILSBUS"))
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) == Permission.Granted && PackageName.Equals("asolute.Mobile.AILSHaulage"))
                 {
-                    var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
-                    var alarmManagerBackgroundDataSync = GetSystemService(AlarmService).JavaCast<AlarmManager>();
-                    alarmManagerBackgroundDataSync.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), 60000, backgroundDataSyncPendingIntent);
+                    StartLocationTracking();
                 }
-
-                App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
-                App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
-
-                LoadApplication(new App());
             }
-            catch
+
+            if (PackageName.Equals("asolute.Mobile.AILSBUS") || PackageName.Equals("asolute.Mobile.Forwarding") || PackageName.Equals("com.asolute.Forwarding"))
             {
-
+                var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);
+                var alarmManagerBackgroundDataSync = GetSystemService(AlarmService).JavaCast<AlarmManager>();
+                alarmManagerBackgroundDataSync.SetRepeating(AlarmType.ElapsedRealtimeWakeup, SystemClock.ElapsedRealtime(), 60000, backgroundDataSyncPendingIntent);
             }
+
+
+            App.DisplayScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
+            App.DisplayScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
+
+            LoadApplication(new App());
+
         }
 
         internal static Activity GetActivity()
@@ -124,7 +120,7 @@ namespace ASolute_Mobile.Droid
                     }
                 }
             }
-           
+
         }
 
         protected override void OnPause()

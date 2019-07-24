@@ -15,9 +15,7 @@ using ASolute_Mobile.Data;
 using ASolute.Mobile.Models;
 using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
-using static ASolute_Mobile.BusTicketing.StopsList;
 using System.Collections.ObjectModel;
-using Xamarin.Essentials;
 
 namespace ASolute_Mobile
 {
@@ -67,14 +65,79 @@ namespace ASolute_Mobile
         #endregion
 
         #region Forwarding data sync
-        public static Task UploadLatestJobs()
+        public async static Task UploadLatestJobs()
         {
-            throw new NotImplementedException();
+
         }
 
-        public static Task DownloadLatestJobs(object p)
+        public static async Task DownloadLatestJobs(object p)
         {
-            throw new NotImplementedException();
+            if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
+            {
+                if (NetworkCheck.IsInternet())
+                {
+
+                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadJobListURL(), null);
+
+                    if (content != null)
+                    {
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (response.IsGood)
+                        {
+                            var fwdJobs = JObject.Parse(content)["Result"].ToObject<List<clsTruckingModel>>();
+
+                            foreach (clsTruckingModel fwdJob in fwdJobs)
+                            {
+
+                                ListItems existingRecord = App.Database.GetJobRecordAsync(fwdJob.Id);
+
+                                if (existingRecord == null)
+                                {
+                                    ListItems item = new ListItems
+                                    {
+                                        Id = fwdJob.Id,
+                                        Latitude = fwdJob.Latitude,
+                                        Longitude = fwdJob.Longitude,
+                                        EventRecordId = fwdJob.EventRecordId,
+                                        Category = "fwd",
+                                        Done = 0,
+                                        ReqSign = fwdJob.ReqSign,
+                                        TelNo = fwdJob.TelNo
+                                    };
+
+                                    App.Database.SaveItemAsync(item);
+
+                                    foreach (clsCaptionValue summaryList in fwdJob.Summary)
+                                    {
+                                        SummaryItems summaryItem = new SummaryItems();
+
+                                        summaryItem.Id = fwdJob.Id;
+                                        summaryItem.Caption = summaryList.Caption;
+                                        summaryItem.Value = summaryList.Value;
+                                        summaryItem.Display = summaryList.Display;
+                                        summaryItem.Type = "fwd";
+                                        summaryItem.BackColor = "#ffffff";
+                                        App.Database.SaveSummarysAsync(summaryItem);
+                                    }
+
+                                    foreach (clsCaptionValue detailList in fwdJob.Details)
+                                    {
+                                        DetailItems detailItem = new DetailItems();
+                                        detailItem.Id = fwdJob.Id;
+                                        detailItem.Caption = detailList.Caption;
+                                        detailItem.Value = detailList.Value;
+                                        detailItem.Display = detailList.Display;
+                                        App.Database.SaveDetailsAsync(detailItem);
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+            }
         }
         #endregion
 
@@ -82,122 +145,118 @@ namespace ASolute_Mobile
         //search database for pending bus trip and sync to server
         public static async Task UploadPendingRecord()
         {
-            try
+
+            if (NetworkCheck.IsInternet())
             {
-                if (NetworkCheck.IsInternet())
+                if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
                 {
-                    if (!(String.IsNullOrEmpty(Ultis.Settings.SessionSettingKey)))
+                    //upload bus trip record
+                    var pendingBusTrip = App.Database.GetPendingTrip();
+
+                    List<clsTrip> completeTrips = new List<clsTrip>();
+
+                    foreach (BusTrip busTrip in pendingBusTrip)
                     {
-                        //upload bus trip record
-                        var pendingBusTrip = App.Database.GetPendingTrip();
-
-                        List<clsTrip> completeTrips = new List<clsTrip>();
-
-                        foreach (BusTrip busTrip in pendingBusTrip)
+                        if (busTrip.EndTime != null && busTrip.Uploaded == false)
                         {
-                            if (busTrip.EndTime != null && busTrip.Uploaded == false)
+                            clsTrip trip = new clsTrip
                             {
-                                clsTrip trip = new clsTrip
-                                {
-                                    Id = busTrip.Id,
-                                    TruckId = busTrip.TruckId,
-                                    DriverId = busTrip.DriverId,
-                                    StartTime = busTrip.StartTime,
-                                    StartOdometer = 0,
-                                    StartLocationName = "",
-                                    StartGeoLoc = busTrip.StartGeoLoc,
-                                    EndTime = busTrip.EndTime,
-                                    EndOdometer = 0,
-                                    EndLocationName = "",
-                                    EndGeoLoc = busTrip.EndGeoLoc,
-                                    TrxStatus = 5,
-                                    LinkId = "",
-                                    LocationList = { },
-                                    Captions = { }
-                                };
+                                Id = busTrip.Id,
+                                TruckId = busTrip.TruckId,
+                                DriverId = busTrip.DriverId,
+                                StartTime = busTrip.StartTime,
+                                StartOdometer = 0,
+                                StartLocationName = "",
+                                StartGeoLoc = busTrip.StartGeoLoc,
+                                EndTime = busTrip.EndTime,
+                                EndOdometer = 0,
+                                EndLocationName = "",
+                                EndGeoLoc = busTrip.EndGeoLoc,
+                                TrxStatus = 5,
+                                LinkId = "",
+                                LocationList = { },
+                                Captions = { }
+                            };
 
-                                completeTrips.Add(trip);
-                            }
+                            completeTrips.Add(trip);
                         }
-
-                        if (completeTrips.Count != 0)
-                        {
-                            var content = await CommonFunction.CallWebService(1, completeTrips, Ultis.Settings.SessionBaseURI, ControllerUtil.postTrips(), null);
-                            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                            if (response.IsGood)
-                            {
-                                /*foreach (clsTrip uploadedTrip in completeTrips)
-                                {
-                                    var completedTrip = App.Database.GetUploadedTrip(uploadedTrip.Id);
-
-                                    if (completedTrip != null)
-                                    {
-                                        completedTrip.Uploaded = true;
-
-                                        App.Database.SaveBusTrip(completedTrip);
-                                    }
-                                }*/
-
-                                App.Database.DeleteBusTrip();
-
-                                //upload bus ticket record
-                                var pendingTicket = App.Database.GetSoldTicket();
-                                List<clsTicket> tickets = new List<clsTicket>();
-                                foreach (SoldTicket soldTicket in pendingTicket)
-                                {
-                                    if (!(String.IsNullOrEmpty(soldTicket.TripId)))
-                                    {
-                                        clsTicket ticket = new clsTicket
-                                        {
-                                            TrxTime = soldTicket.TrxTime,
-                                            TruckId = soldTicket.TruckId,
-                                            DriverId = soldTicket.DriverId,
-                                            TripId = soldTicket.TripId,
-                                            RouteId = soldTicket.RouteId,
-                                            StopId = soldTicket.StopId,
-                                            TicketType = soldTicket.TicketType,
-                                            PaymentType = soldTicket.PaymentType,
-                                            Amount = soldTicket.Amount
-                                        };
-
-                                        tickets.Add(ticket);
-                                    }
-                                }
-
-                                if (tickets.Count != 0)
-                                {
-                                    var ticket_content = await CommonFunction.CallWebService(1, tickets, Ultis.Settings.SessionBaseURI, ControllerUtil.postTickets(), null);
-                                    clsResponse ticket_response = JsonConvert.DeserializeObject<clsResponse>(ticket_content);
-
-                                    if (ticket_response.IsGood)
-                                    {
-                                        /*foreach (clsTicket ticket in tickets)
-                                        {
-                                            var completeTicket = App.Database.GetUploadedTicket(ticket.);
-
-                                            if (completeTicket != null)
-                                            {
-                                                completeTicket.Uploaded = true;
-
-                                                App.Database.SaveTicketTransaction(completeTicket);
-                                            }
-                                        }*/
-                                        App.Database.DeleteTicket();
-
-                                        var test = App.Database.gettesting();
-                                    }
-                                }
-                            }
-                        }
-
                     }
+
+                    if (completeTrips.Count != 0)
+                    {
+                        var content = await CommonFunction.CallWebService(1, completeTrips, Ultis.Settings.SessionBaseURI, ControllerUtil.postTrips(), null);
+                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                        if (response.IsGood)
+                        {
+                            /*foreach (clsTrip uploadedTrip in completeTrips)
+                            {
+                                var completedTrip = App.Database.GetUploadedTrip(uploadedTrip.Id);
+
+                                if (completedTrip != null)
+                                {
+                                    completedTrip.Uploaded = true;
+
+                                    App.Database.SaveBusTrip(completedTrip);
+                                }
+                            }*/
+
+                            App.Database.DeleteBusTrip();
+
+                            //upload bus ticket record
+                            var pendingTicket = App.Database.GetSoldTicket();
+                            List<clsTicket> tickets = new List<clsTicket>();
+                            foreach (SoldTicket soldTicket in pendingTicket)
+                            {
+                                if (!(String.IsNullOrEmpty(soldTicket.TripId)))
+                                {
+                                    clsTicket ticket = new clsTicket
+                                    {
+                                        TrxTime = soldTicket.TrxTime,
+                                        TruckId = soldTicket.TruckId,
+                                        DriverId = soldTicket.DriverId,
+                                        TripId = soldTicket.TripId,
+                                        RouteId = soldTicket.RouteId,
+                                        StopId = soldTicket.StopId,
+                                        TicketType = soldTicket.TicketType,
+                                        PaymentType = soldTicket.PaymentType,
+                                        Amount = soldTicket.Amount
+                                    };
+
+                                    tickets.Add(ticket);
+                                }
+                            }
+
+                            if (tickets.Count != 0)
+                            {
+                                var ticket_content = await CommonFunction.CallWebService(1, tickets, Ultis.Settings.SessionBaseURI, ControllerUtil.postTickets(), null);
+                                clsResponse ticket_response = JsonConvert.DeserializeObject<clsResponse>(ticket_content);
+
+                                if (ticket_response.IsGood)
+                                {
+                                    /*foreach (clsTicket ticket in tickets)
+                                    {
+                                        var completeTicket = App.Database.GetUploadedTicket(ticket.);
+
+                                        if (completeTicket != null)
+                                        {
+                                            completeTicket.Uploaded = true;
+
+                                            App.Database.SaveTicketTransaction(completeTicket);
+                                        }
+                                    }*/
+                                    App.Database.DeleteTicket();
+
+                                    var test = App.Database.gettesting();
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
-            catch
-            {
 
-            }
+
         }
         #endregion
 
@@ -255,7 +314,7 @@ namespace ASolute_Mobile
 
         #region Image sync
         //start timer to check db for every 5 second 
-        public static  void StartTimer()
+        public static void StartTimer()
         {
             Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
@@ -278,55 +337,47 @@ namespace ASolute_Mobile
         public static async Task BackgroundUploadImage()
         {
 
-            try
+            recordImages = App.Database.GetPendingRecordImages(false);
+            foreach (AppImage recordImage in recordImages)
             {
-                recordImages = App.Database.GetPendingRecordImages(false);
-                foreach (AppImage recordImage in recordImages)
+                if (recordImage.type != "ProfilePic")
                 {
-                    if (recordImage.type != "ProfilePic")
+                    clsFileObject image = new clsFileObject();
+
+                    if (recordImage.type == "signature")
                     {
-                        clsFileObject image = new clsFileObject();
-
-                        if (recordImage.type == "signature")
-                        {
-                            image.Content = recordImage.imageData;
-                        }
-                        else
-                        {
-                            byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
-                            scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
-                            image.Content = scaledImageByte;
-                        }
-
-                        image.FileName = recordImage.photoFileName;
-
-                        string eventID;
-
-                        if (!(String.IsNullOrEmpty(imageEventID)))
-                        {
-                            eventID = imageEventID;
-                        }
-                        else
-                        {
-                            eventID = recordImage.id;
-                        }
-
-                        recordImage.Uploaded = true;
-                        App.Database.SaveRecordImageAsync(recordImage);
-
-                        var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID), null);
-                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
+                        image.Content = recordImage.imageData;
                     }
+                    else
+                    {
+                        byte[] originalPhotoImageBytes = File.ReadAllBytes(recordImage.photoFileLocation);
+                        scaledImageByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(originalPhotoImageBytes, 1024, 1024, 100);
+                        image.Content = scaledImageByte;
+                    }
+
+                    image.FileName = recordImage.photoFileName;
+
+                    string eventID;
+
+                    if (!(String.IsNullOrEmpty(imageEventID)))
+                    {
+                        eventID = imageEventID;
+                    }
+                    else
+                    {
+                        eventID = recordImage.id;
+                    }
+
+                    recordImage.Uploaded = true;
+                    App.Database.SaveRecordImageAsync(recordImage);
+
+                    var content = await CommonFunction.CallWebService(1, image, Ultis.Settings.SessionBaseURI, ControllerUtil.UploadImageURL(eventID), null);
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
                 }
-
-                //uploadedImage = false;
-                imageEventID = "";
             }
-            catch
-            {
 
-            }
+            imageEventID = "";
 
         }
         #endregion

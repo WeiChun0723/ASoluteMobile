@@ -135,11 +135,12 @@ namespace ASolute_Mobile.WMS_Screen
                                 HorizontalTextAlignment = TextAlignment.Center,
                                 FontAttributes = FontAttributes.Bold
                             };
-                            viewCell.View = label;
+                            viewCell.View = label;  
                             return viewCell;
                         });
 
                         dataGrid.Columns.Add(gridColumn);
+                        
                     }
 
                     if (!(String.IsNullOrEmpty(recordDetails.Id)))
@@ -346,9 +347,7 @@ namespace ASolute_Mobile.WMS_Screen
                 {
                     TallyOut(palletIdEntry.Text);
                 }
-
             }
-
         }
 
         void Handle_Completed(object sender, System.EventArgs e)
@@ -368,10 +367,8 @@ namespace ASolute_Mobile.WMS_Screen
                 case "chkScan":
                     if (chkManual.Checked && chkScan.Checked)
                     {
-
                         palletIdEntry.Focus();
                         chkManual.Checked = false;
-                        
                     }
 
                     break;

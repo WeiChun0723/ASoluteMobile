@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms" 
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-            x:Class="ASolute_Mobile.Forwarding.JobListTabbedPage">
-<!-- <NavigationPage Title="Latest">
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.Forwarding.JobListTabbedPage" xmlns:local="clr-namespace:ASolute_Mobile.Forwarding">
+    <NavigationPage Title="Latest">
         <x:Arguments>
             <local:JobLists>
                 <x:Arguments>
@@ -28,5 +26,5 @@
                 </x:Arguments>
             </local:JobLists>
         </x:Arguments>
-    </NavigationPage>-->
+    </NavigationPage>
 </TabbedPage>

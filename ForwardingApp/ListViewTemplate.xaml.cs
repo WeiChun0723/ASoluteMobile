@@ -313,127 +313,130 @@ namespace ASolute_Mobile
             {
                 overloadRecord.Clear();
                 var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                if (response.IsGood == true)
+                if (content != null)
                 {
-                    App.Database.deleteRecords(menuItems.Id);
-                    App.Database.deleteRecordSummary(menuItems.Id);
-                    App.Database.deleteRecordDetails();
-
-                    //clsHaulageModel inherit clsDataRow
-                    records = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
-
-                    foreach (clsHaulageModel data in records)
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    if (response.IsGood == true)
                     {
-                        Guid objectID = Guid.NewGuid();
-                        ListItems record = new ListItems
-                        {
-                            Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id,
-                            Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
-                            Category = menuItems.Id,
-                            Name = menuItems.Name,
-                            Action = data.Action
-                        };
+                        App.Database.deleteRecords(menuItems.Id);
+                        App.Database.deleteRecordSummary(menuItems.Id);
+                        App.Database.deleteRecordDetails();
 
-                        if (menuItems.Id == "JobList")
+                        //clsHaulageModel inherit clsDataRow
+                        records = JObject.Parse(content)["Result"].ToObject<List<clsHaulageModel>>();
+
+                        foreach (clsHaulageModel data in records)
                         {
-                            record.TruckId = data.TruckId;
-                            record.ReqSign = data.ReqSign;
-                            record.Latitude = data.Latitude;
-                            record.Longitude = data.Longitude;
-                            record.TelNo = data.TelNo;
-                            record.EventRecordId = data.EventRecordId;
-                            record.TrailerId = data.TrailerId;
-                            record.ContainerNo = data.ContainerNo;
-                            record.MaxGrossWeight = data.MaxGrossWeight;
-                            record.TareWeight = data.TareWeight;
-                            record.CollectSeal = data.CollectSeal;
-                            record.SealNo = data.SealNo;
-                            record.ActionId = data.ActionId.ToString();
-                            record.ActionMessage = data.ActionMessage;
-                            record.Title = data.Title;
-                            record.SealMode = data.SealMode;
+                            Guid objectID = Guid.NewGuid();
+                            ListItems record = new ListItems
+                            {
+                                Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id,
+                                Background = (!(String.IsNullOrEmpty(data.BackColor))) ? data.BackColor : "#ffffff",
+                                Category = menuItems.Id,
+                                Name = menuItems.Name,
+                                Action = data.Action
+                            };
+
+                            if (menuItems.Id == "JobList")
+                            {
+                                record.TruckId = data.TruckId;
+                                record.ReqSign = data.ReqSign;
+                                record.Latitude = data.Latitude;
+                                record.Longitude = data.Longitude;
+                                record.TelNo = data.TelNo;
+                                record.EventRecordId = data.EventRecordId;
+                                record.TrailerId = data.TrailerId;
+                                record.ContainerNo = data.ContainerNo;
+                                record.MaxGrossWeight = data.MaxGrossWeight;
+                                record.TareWeight = data.TareWeight;
+                                record.CollectSeal = data.CollectSeal;
+                                record.SealNo = data.SealNo;
+                                record.ActionId = data.ActionId.ToString();
+                                record.ActionMessage = data.ActionMessage;
+                                record.Title = data.Title;
+                                record.SealMode = data.SealMode;
+                            }
+
+                            //store summary of the record for search 
+                            string summary = "", closingTime = "";
+                            int count = 0;
+                            foreach (clsCaptionValue summaryItem in data.Summary)
+                            {
+                                count++;
+
+                                if (summaryItem.Caption == "Closing Date")
+                                {
+                                    closingTime = summaryItem.Value.Replace('-', '/');
+                                }
+                                else if (!(String.IsNullOrEmpty(summaryItem.Caption)))
+                                {
+                                    if (count == data.Summary.Count)
+                                    {
+                                        summary += summaryItem.Caption + " :  " + summaryItem.Value;
+                                    }
+                                    else
+                                    {
+                                        summary += summaryItem.Caption + " :  " + summaryItem.Value + "\r\n" + "\r\n";
+                                    }
+                                }
+                                else if (summaryItem.Caption == "")
+                                {
+                                    if (!(String.IsNullOrEmpty(summaryItem.Value)))
+                                    {
+                                        summary += summaryItem.Value + "\r\n" + "\r\n";
+                                    }
+                                }
+                            }
+
+                            record.Summary = summary;
+                            record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : DateTime.Parse(closingTime);
+
+                            if (records.Count < 50 && menuItems.Id != "CycleCount")
+                            {
+                                App.Database.SaveItemAsync(record);
+
+                                foreach (clsCaptionValue summaryList in data.Summary)
+                                {
+                                    SummaryItems summaryItem = new SummaryItems();
+
+                                    summaryItem.Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id;
+                                    summaryItem.Caption = summaryList.Caption;
+                                    summaryItem.Value = summaryList.Value;
+                                    summaryItem.Display = summaryList.Display;
+                                    summaryItem.Type = menuItems.Id;
+                                    summaryItem.BackColor = data.BackColor;
+                                    App.Database.SaveSummarysAsync(summaryItem);
+                                }
+
+                                foreach (clsCaptionValue detailList in data.Details)
+                                {
+                                    DetailItems detailItem = new DetailItems();
+                                    detailItem.Id = data.Id;
+                                    detailItem.Caption = detailList.Caption;
+                                    detailItem.Value = detailList.Value;
+                                    detailItem.Display = detailList.Display;
+                                    App.Database.SaveDetailsAsync(detailItem);
+                                }
+                            }
+                            else
+                            {
+                                overloadRecord.Add(record);
+                            }
                         }
-
-                        //store summary of the record for search 
-                        string summary = "", closingTime = "";
-                        int count = 0;
-                        foreach (clsCaptionValue summaryItem in data.Summary)
-                        {
-                            count++;
-
-                            if (summaryItem.Caption == "Closing Date")
-                            {
-                                closingTime = summaryItem.Value.Replace('-', '/');
-                            }
-                            else if (!(String.IsNullOrEmpty(summaryItem.Caption)))
-                            {
-                                if (count == data.Summary.Count)
-                                {
-                                    summary += summaryItem.Caption + " :  " + summaryItem.Value;
-                                }
-                                else
-                                {
-                                    summary += summaryItem.Caption + " :  " + summaryItem.Value + "\r\n" + "\r\n";
-                                }
-                            }
-                            else if (summaryItem.Caption == "")
-                            {
-                                if(!(String.IsNullOrEmpty(summaryItem.Value)))
-                                {
-                                    summary += summaryItem.Value + "\r\n" + "\r\n";
-                                }
-                            }
-                        }
-
-                        record.Summary = summary;
-                        record.ClosingDate = (String.IsNullOrEmpty(closingTime)) ? DateTime.Now : DateTime.Parse(closingTime);
 
                         if (records.Count < 50 && menuItems.Id != "CycleCount")
                         {
-                            App.Database.SaveMenuAsync(record);
-
-                            foreach (clsCaptionValue summaryList in data.Summary)
-                            {
-                                SummaryItems summaryItem = new SummaryItems();
-
-                                summaryItem.Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id;
-                                summaryItem.Caption = summaryList.Caption;
-                                summaryItem.Value = summaryList.Value;
-                                summaryItem.Display = summaryList.Display;
-                                summaryItem.Type = menuItems.Id;
-                                summaryItem.BackColor = data.BackColor;
-                                App.Database.SaveSummarysAsync(summaryItem);
-                            }
-
-                            foreach (clsCaptionValue detailList in data.Details)
-                            {
-                                DetailItems detailItem = new DetailItems();
-                                detailItem.Id = data.Id;
-                                detailItem.Caption = detailList.Caption;
-                                detailItem.Value = detailList.Value;
-                                detailItem.Display = detailList.Display;
-                                App.Database.SaveDetailsAsync(detailItem);
-                            }
+                            LoadListData();
                         }
                         else
                         {
-                            overloadRecord.Add(record);
+                            listView.ItemsSource = overloadRecord;
+
                         }
-                    }
 
-                    if (records.Count < 50 && menuItems.Id != "CycleCount")
-                    {
-                        LoadListData();
+                        listView.IsRefreshing = false;
                     }
-                    else
-                    {
-                        listView.ItemsSource = overloadRecord;
-                        
-                    }
-
-                    listView.IsRefreshing = false;
                 }
             }
             catch (Exception ex)

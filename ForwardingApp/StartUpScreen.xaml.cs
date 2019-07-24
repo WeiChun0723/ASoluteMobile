@@ -39,7 +39,7 @@ namespace ASolute_Mobile
                     Ultis.Settings.DeviceUniqueID = Guid.NewGuid().ToString("N");
                 }
 
-                GetAction(Ultis.Settings.DeviceUniqueID);
+                Task.Run(async () => { await GetAction(Ultis.Settings.DeviceUniqueID); }); 
             }
             else
             {
@@ -71,7 +71,7 @@ namespace ASolute_Mobile
             }
         }
 
-        async void GetAction(string deviceID)
+        async Task GetAction(string deviceID)
         {
             try
             {

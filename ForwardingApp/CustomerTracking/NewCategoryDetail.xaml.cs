@@ -55,7 +55,7 @@ namespace ASolute_Mobile.CustomerTracking
           
             switch (button.Text)
             {
-                case "Confirm Delivery":
+                case "Confirm Receive":
                     var cd_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.updatePODURL(haulierCode, item.Id), this);
                     clsResponse cd_response = JsonConvert.DeserializeObject<clsResponse>(cd_content);
 
@@ -73,6 +73,7 @@ namespace ASolute_Mobile.CustomerTracking
                     var rfc_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getContainerDetailURL(haulierCode, item.Id), this);
                     clsResponse rfc_response = JsonConvert.DeserializeObject<clsResponse>(rfc_content);
 
+                    
                     if(rfc_response.IsGood)
                     {
                         var containers = JObject.Parse(rfc_content)["Result"].ToObject<clsDataRow>();
@@ -93,8 +94,6 @@ namespace ASolute_Mobile.CustomerTracking
                     }
                     break;
             }
-
-           
 
         }
 

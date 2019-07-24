@@ -2,6 +2,7 @@
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
+using Syncfusion.XForms.Buttons;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,47 +15,90 @@ using Xamarin.Forms;
 
 namespace ASolute_Mobile
 {
-	public partial class EquipmentInquiry : ContentPage
-	{
-        public EquipmentInquiry ()
-		{
-			InitializeComponent ();
+    public partial class EquipmentInquiry : ContentPage
+    {
+        string terminateDriverId = "";
+
+        public EquipmentInquiry()
+        {
+            InitializeComponent();
             Title = "Equipment Inquiry";
-		}
+        }
 
         public void convertUpper(object sender, TextChangedEventArgs e)
         {
             string upperCase = equipmentID.Text.ToUpper();
             equipmentID.Text = upperCase;
-
         }
 
-        public async void checkEquipment(object sender, EventArgs e)
+        public async void Handle_Clicked(object sender, EventArgs e)
         {
             loading.IsVisible = true;
+            
 
-            if (!(String.IsNullOrEmpty(equipmentID.Text)))
+            var button = sender as SfButton;
+
+            switch (button.StyleId)
             {
-                try
-                {
-                    var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getEquipmentURL(equipmentID.Text), this);
-                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                case "btnConfirm":
+                    btnTerminate.IsVisible = false;
+                    equipmentDetails.IsVisible = false;
+                    if (!(String.IsNullOrEmpty(equipmentID.Text)))
+                    {
+                        GetEquipmentDetail();
+                    }
+                    else
+                    {
+                        await DisplayAlert("Missing field", "Please key in all mandatory field", "OK");
+                    }
+                    break;
 
+                case "btnTerminate":
+                    var answer = await DisplayAlert("", "Terminate session?", "Yes", "No");
+
+                    if (answer.Equals(true))
+                    {
+                        var terminate_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.terminateSessionURL(terminateDriverId), this);
+                        clsResponse terminate_response = JsonConvert.DeserializeObject<clsResponse>(terminate_content);
+
+                        if (terminate_response.IsGood)
+                        {
+                            await DisplayAlert("Success", "Session terminated", "OK");
+                            btnTerminate.IsVisible = false;
+
+                            GetEquipmentDetail();
+                        }
+                    }
+                    break;
+            }
+
+            loading.IsVisible = false;
+        }
+
+        async void GetEquipmentDetail()
+        {
+            try
+            {
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getEquipmentURL(equipmentID.Text), this);
+                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (response.IsGood)
+                {
                     List<clsCaptionValue> eqInfo = new List<clsCaptionValue>();
 
                     int count = 0;
                     for (int i = 0; i < response.Result.Count; i++)
                     {
-                        string caption = response.Result[i]["Caption"]; 
+                        string caption = response.Result[i]["Caption"];
                         string value = response.Result[i]["Value"];
                         bool display = response.Result[i]["Display"];
                         eqInfo.Add(new clsCaptionValue(caption, value, display));
 
                     }
                     count++;
-                    
-                    List <EqDetails> eqDetailsRow = new List<EqDetails>();
-                    for(int j = 0; j < 1; j++)
+
+                    List<EqDetails> eqDetailsRow = new List<EqDetails>();
+                    for (int j = 0; j < 1; j++)
                     {
                         EqDetails listRow = new EqDetails();
                         listRow.details = "true";
@@ -77,44 +121,50 @@ namespace ASolute_Mobile
 
                         foreach (clsCaptionValue items in eqInfo)
                         {
-
-                            Label label = new Label
+                            if (items.Caption == "DriverId" && !(String.IsNullOrEmpty(items.Caption)))
                             {
-                                Text = items.Caption + ": " + items.Value
-                            };
-                          
-                            label.FontAttributes = FontAttributes.Bold;
-                            
+                                terminateDriverId = items.Value;
+                                btnTerminate.IsVisible = true;
+                            }
 
-                            cellWrapper.Children.Add(label);
+                            if (items.Display != false)
+                            {
+                                Label label = new Label
+                                {
+                                    Text = items.Caption + ": " + items.Value
+                                };
+
+                                label.FontAttributes = FontAttributes.Bold;
+
+
+                                cellWrapper.Children.Add(label);
+                            }
+                        }
+
+
+                        if (cellWrapper.Children.Count != 0)
+                        {
+                            absoluteLayout.Children.Add(cellWrapper);
 
                         }
 
-                        absoluteLayout.Children.Add(cellWrapper);
-
-
                         return new ViewCell { View = absoluteLayout };
-
                     });
 
-                    euipmentList.ItemsSource = row;
-                    euipmentList.HasUnevenRows = true;
-                    euipmentList.ItemTemplate = Template;
-                }
-                catch (HttpRequestException)
-                {
-                    await DisplayAlert("Unable to connect", "Please try again later", "Ok");
+                    equipmentDetails.IsVisible = true;
+                    equipmentDetails.ItemsSource = row;
+                    equipmentDetails.HasUnevenRows = true;
+                    equipmentDetails.ItemTemplate = Template;
                 }
             }
-            else
+            catch (HttpRequestException)
             {
-                await DisplayAlert("Missing field", "Please key in all mandatory field", "OK");
+                await DisplayAlert("Unable to connect", "Please try again later", "Ok");
             }
-
-            loading.IsVisible = false;
         }
-
     }
+
+   
 
     class EqDetails
     {

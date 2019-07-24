@@ -28,6 +28,7 @@ namespace ASolute_Mobile.Utils
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method, object data, string baseAdd, string calllUri, Page page)
         {
+
             try
             {
                 var client = new HttpClient();
@@ -49,7 +50,7 @@ namespace ASolute_Mobile.Utils
                 }
 
                 Debug.WriteLine(content);
-                    
+
                 if (content != null)
                 {
                     clsResponse reply = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -66,8 +67,12 @@ namespace ASolute_Mobile.Utils
                         {
                             if (!(reply.IsGood))
                             {
-                                DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
-                                await page.DisplayAlert("Error", reply.Message, "OK");
+                                Device.BeginInvokeOnMainThread(async () =>
+                                {
+                                    DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
+                                    await page.DisplayAlert("Error", reply.Message, "OK");
+                                });
+
                             }
                         }
                     }
@@ -76,14 +81,27 @@ namespace ASolute_Mobile.Utils
             }
             catch (HttpRequestException requestEx)
             {
-                DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
-                await page.DisplayAlert("No internet", requestEx + " .Unable connect to internet", "OK");
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    string error = requestEx.Message;
+
+                    DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
+                    await page.DisplayAlert("No internet", "Unable connect to internet", "OK");
+                });
             }
-            
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await page.DisplayAlert("Error", ex.Message, "OK");
+                });
+
+            }
+
             return null;
         }
 
-   
+
 
         //capture image and store local path in db function
         public static async Task StoreImages(string id, ContentPage contentPage, string imageType)
@@ -130,7 +148,7 @@ namespace ASolute_Mobile.Utils
                 byte[] thumbnailByte;
                 if (id == Ultis.Settings.SessionUserItem.DriverId)
                 {
-                    if(Device.RuntimePlatform != Device.iOS)
+                    if (Device.RuntimePlatform != Device.iOS)
                     {
                         thumbnailByte = DependencyService.Get<IThumbnailHelper>().ResizeImage(imagesAsBytes, 720, 1080, 100);
                     }
@@ -252,8 +270,8 @@ namespace ASolute_Mobile.Utils
                             var answer = await contentPage.DisplayAlert("", "Added new carton box. Print carton label now?", "Yes", "No");
                             if (answer.Equals(true))
                             {
-                                
-                                    MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
+
+                                MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
 
                             }
                         }
@@ -275,13 +293,13 @@ namespace ASolute_Mobile.Utils
                     Ultis.Settings.FireID = firebaseID;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string error = ex.ToString();
             }
         }
 
-        
+
     }
 
 }

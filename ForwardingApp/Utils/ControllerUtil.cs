@@ -16,12 +16,12 @@ namespace ASolute_Mobile.Utils
 
         public static String getDownloadJobListURL()
         {
-            return String.Format("Fwd/List?key={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
+            return String.Format("Fwd/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
         public static String getUploadImageURL()
         {
-            return String.Format("Fwd/Upload?key={0}&GeoLoc={1}&JobId={2}&FileName={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), "","");
+            return String.Format("Fwd/Upload?SessionId={0}&GeoLoc={1}&JobId={2}&FileName={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), "","");
         }
 
         public static String getUpdateJobURL(string jobId,string jobRemark)
@@ -434,6 +434,11 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("FuelCost/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
+
+        public static String terminateSessionURL(string driverId)
+        {
+            return String.Format("Util/Terminate?OwnerId={0}&UserId={1}&DriverId={2}", Ultis.Settings.EnterpriseName, Ultis.Settings.SessionUserId,driverId);
+        }
         #endregion
 
         #region haulage url
@@ -690,6 +695,12 @@ namespace ASolute_Mobile.Utils
         {
             return String.Format("Wms/CycleCount/Load?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}&RackId={4}&Ascending={5}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id, zone, rack, ascending);
         }
+
+        public static String getCycleCountSaveURL(string countResult)
+        {
+            return String.Format("Wms/CycleCount/Save?SessionId={0}&GeoLoc={1}&CountResult={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), countResult);
+        }
+
 
         #endregion
 

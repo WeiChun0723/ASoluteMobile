@@ -143,7 +143,6 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         sizeBox.Text = size;
                     }
-
                 }
             }
         }
@@ -185,7 +184,7 @@ namespace ASolute_Mobile.WMS_Screen
                     unitBox.ComboBoxSource = units;
                     statusBox.ComboBoxSource = status;
 
-                   /* if (newPallet.ControlVolume != "H")
+                   if (newPallet.ControlVolume != "H")
                     {
                         clsAttribute volume = new clsAttribute
                         {
@@ -207,7 +206,7 @@ namespace ASolute_Mobile.WMS_Screen
                         };
 
                         newPallet.Attribute.Add(weight);
-                    }*/
+                    }
 
                     int row = 4, column = 0;
                     foreach (clsAttribute attr in newPallet.Attribute)
@@ -266,7 +265,6 @@ namespace ASolute_Mobile.WMS_Screen
 
                             entryStack.Children.Add(customEntry);
                         }
-
 
                         if (attr.Value == "M")
                         {
@@ -526,14 +524,12 @@ namespace ASolute_Mobile.WMS_Screen
 
                                     await Navigation.PopAsync();
                                 }
-
                             }
                         }
                         catch
                         {
                             DisplayScanStatus("Please scan again");
                         }
-
                     });
                 };
             }

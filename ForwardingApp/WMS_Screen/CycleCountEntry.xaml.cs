@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
@@ -22,7 +23,8 @@ namespace ASolute_Mobile.WMS_Screen
             InitializeComponent();
             Title = "Cycle Count";
             selectedItem = item;
-            GetZonesData();
+
+            Task.Run(async () => { await GetZonesData(); });
         }
 
         async void HandleSelection_Changed(object sender, SelectionChangedEventArgs e)
@@ -91,7 +93,7 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        async void GetZonesData()
+        async Task GetZonesData()
         {
             zones.Clear();
 

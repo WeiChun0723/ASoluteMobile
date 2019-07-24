@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.CustomRenderer;
+using ASolute_Mobile.Forwarding;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using ASolute_Mobile.WoosimPrinterService;
@@ -33,10 +34,24 @@ namespace ASolute_Mobile.HaulageScreen
         string jobCode, bookingCode;
         bool connectedPrinter = false, signed = false;
         double imageWidth;
+        public JobLists previousPage;
 
         public NewJobDetails()
         {
             InitializeComponent();
+
+            switch (Ultis.Settings.App)
+            {
+                case "asolute.Mobile.Forwarding":
+                    NavigationPage.SetHasNavigationBar(this, false);
+                    break;
+
+                case "asolute.Mobile.AILSHaulage":
+                    haulageJobStack.IsVisible = true;
+                    barCode_icon.IsVisible = true;
+                    break;
+            }
+
 
             //initialized height for image grid row
             imageWidth = App.DisplayScreenWidth / 3;
@@ -77,6 +92,8 @@ namespace ASolute_Mobile.HaulageScreen
             }
         }
 
+        #region AILS Haulage Arrived
+        //refresh the job content when haulage job arrived button press 
         async void RefreshJobContent()
         {
             App.Database.deleteRecords("JobList");
@@ -114,7 +131,7 @@ namespace ASolute_Mobile.HaulageScreen
                         Title = job.Title,
                         SealMode = job.SealMode
                     };
-                    App.Database.SaveMenuAsync(record);
+                    App.Database.SaveItemAsync(record);
 
                     foreach (clsCaptionValue summaryList in job.Summary)
                     {
@@ -150,6 +167,7 @@ namespace ASolute_Mobile.HaulageScreen
                 }
             }
         }
+        #endregion
 
         void JobContent()
         {
@@ -424,73 +442,101 @@ namespace ASolute_Mobile.HaulageScreen
                     break;
 
                 case "futile_icon":
-                    await Navigation.PushAsync(new FutileTrip_CargoReturn());
+                    if (Ultis.Settings.App == "asolute.Mobile.Forwarding")
+                    {
+                        var answer = await DisplayAlert("", "Update job as futile ?", "Yes", "No");
+                        if (answer.Equals(true))
+                        {
+                            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getFutileJobURL(jobItem.Id, remarkTextEditor.Text), this);
+
+                            if (content != null)
+                            {
+                                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                                if (response.IsGood)
+                                {
+                                    await DisplayAlert("Success", "Job updated as futile", "OK");
+
+                                    await Navigation.PopAsync();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new FutileTrip_CargoReturn());
+                    }
                     break;
 
                 case "confirm_icon":
-                    UpdateJob();
-                    break;
-            }
-        }
+                    bool done = false;
 
-        async void UpdateJob()
-        {
-            try
-            {
-                bool done = false;
-
-                if (signatureStack.IsVisible == true)
-                {
-                    Stream signatureImage = await signature.GetImageStreamAsync(SignatureImageFormat.Png, strokeColor: Color.Black, fillColor: Color.White);
-
-                    if (signatureImage != null)
+                    if (signatureStack.IsVisible == true)
                     {
-                        if (signed == false)
+                        Stream signatureImage = await signature.GetImageStreamAsync(SignatureImageFormat.Png, strokeColor: Color.Black, fillColor: Color.White);
+
+                        if (signatureImage != null)
                         {
-                            await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
-                            done = true;
-                            BackgroundTask.StartTimer();
+                            if (signed == false)
+                            {
+                                await CommonFunction.StoreSignature(jobItem.EventRecordId.ToString(), signatureImage, this);
+                                done = true;
+                                BackgroundTask.StartTimer();
 
-                            signed = true;
-                        }
-                    }
-                    else
-                    {
-                        await DisplayAlert("Signature Error", "Please sign for the job.", "OK");
-
-                    }
-                }
-
-                if (done == true || signatureStack.IsVisible == false)
-                {
-                    if (!(String.IsNullOrEmpty(trailerIDEntry.Text)) && !(String.IsNullOrEmpty(contPrefix.Text)) && !(String.IsNullOrEmpty(contNum.Text)))
-                    {
-                        clsCommonFunc checker = new clsCommonFunc();
-                        bool status = checker.CheckContainerDigit(contPrefix.Text + contNum.Text);
-
-                        if (status)
-                        {
-                            InitializeObject();
+                                signed = true;
+                            }
                         }
                         else
                         {
-                            var answer = await DisplayAlert("Error", "Invalid container check digit, continue?", "Yes", "No");
-                            if (answer.Equals(true))
-                            {
-                                InitializeObject();
-                            }
+                            await DisplayAlert("Signature Error", "Please sign for the job.", "OK");
+                        }
+                    }
 
+                    if(Ultis.Settings.App == "asolute.Mobile.Forwarding")
+                    {
+                        try
+                        {
+                            jobItem.Done = 1;
+                            jobItem.Remark = remarkTextEditor.Text;
+                            App.Database.SaveItemAsync(jobItem);
+                            previousPage.gotoCompletedPage = true;
+                            await Navigation.PopAsync();
+                        }
+                        catch(Exception ex)
+                        {
+                            string excep = ex.Message;
                         }
                     }
                     else
                     {
-                        await DisplayAlert("Error", "Please enter all mandatory field.", "OK");
+                        if (done == true || signatureStack.IsVisible == false)
+                        {
+                            if (!(String.IsNullOrEmpty(trailerIDEntry.Text)) && !(String.IsNullOrEmpty(contPrefix.Text)) && !(String.IsNullOrEmpty(contNum.Text)))
+                            {
+                                clsCommonFunc checker = new clsCommonFunc();
+                                bool status = checker.CheckContainerDigit(contPrefix.Text + contNum.Text);
+
+                                if (status)
+                                {
+                                    InitializeObject();
+                                }
+                                else
+                                {
+                                    var answer = await DisplayAlert("Error", "Invalid container check digit, continue?", "Yes", "No");
+                                    if (answer.Equals(true))
+                                    {
+                                        InitializeObject();
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                await DisplayAlert("Error", "Please enter all mandatory field.", "OK");
+                            }
+                        }
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
+                    break;
             }
         }
 
@@ -524,28 +570,33 @@ namespace ASolute_Mobile.HaulageScreen
                         haulageJob.SealNo = (!(String.IsNullOrEmpty(sealNoEntry.Text))) ? sealNoEntry.Text : "";
 
                         var content = await CommonFunction.CallWebService(1, haulageJob, Ultis.Settings.SessionBaseURI, ControllerUtil.updateHaulageJobURL(), this);
-                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        if (response.IsGood)
+                        if (content != null)
                         {
-                            Ultis.Settings.RefreshListView = "Yes";
 
-                            if (Ultis.Settings.Language.Equals("English"))
-                            {
-                                DependencyService.Get<IAudio>().PlayAudioFile("success.mp3");
-                                await DisplayAlert("Success", "Job updated", "OK");
-                            }
-                            else
-                            {
-                                await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
-                            }
 
-                            confirm_icon.IsEnabled = false;
-                            confirm_icon.Source = "confirmDisable.png";
-                            futile_icon.IsEnabled = false;
-                            futile_icon.Source = "futileDisable.png";
+                            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if (response.IsGood)
+                            {
+                                Ultis.Settings.RefreshListView = "Yes";
+
+                                if (Ultis.Settings.Language.Equals("English"))
+                                {
+                                    DependencyService.Get<IAudio>().PlayAudioFile("success.mp3");
+                                    await DisplayAlert("Success", "Job updated", "OK");
+                                }
+                                else
+                                {
+                                    await DisplayAlert("Berjaya", "Kemas kini berjaya.", "OK");
+                                }
+
+                                confirm_icon.IsEnabled = false;
+                                confirm_icon.Source = "confirmDisable.png";
+                                futile_icon.IsEnabled = false;
+                                futile_icon.Source = "futileDisable.png";
+                            }
                         }
-
                     }
                     else
                     {
@@ -566,6 +617,7 @@ namespace ASolute_Mobile.HaulageScreen
             loading.IsVisible = false;
         }
 
+        #region get and display image in grid
         //add capture image to the image grid
         private void AddThumbnailToImageGrid(Image image, AppImage appImage)
         {
@@ -610,7 +662,9 @@ namespace ASolute_Mobile.HaulageScreen
                 AddThumbnailToImageGrid(image, Image);
             }
         }
+        #endregion
 
+        #region AILS Haulage print function
         async void PrintConsigmentNote()
         {
             print.IsVisible = true;
@@ -698,5 +752,6 @@ namespace ASolute_Mobile.HaulageScreen
         {
             await stream.WriteAsync(data, 0, data.Length);
         }
+        #endregion
     }
 }

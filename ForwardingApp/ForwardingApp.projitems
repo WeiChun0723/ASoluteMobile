@@ -532,6 +532,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountDetailsEntry.xaml.cs">
       <DependentUpon>CycleCountDetailsEntry.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Forwarding\JobLists.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />

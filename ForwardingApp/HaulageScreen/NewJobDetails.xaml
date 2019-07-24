@@ -21,7 +21,7 @@
                         <TapGestureRecognizer Tapped="IconTapped" NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>
-                <Image Source="barcode_scanner.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="barCode_icon">
+                <Image Source="barcode_scanner.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" x:Name="barCode_icon" IsVisible="false">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="IconTapped" NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
@@ -49,6 +49,7 @@
                 </StackLayout>
             </StackLayout>
             
+            <StackLayout x:Name="haulageJobStack" IsVisible="false">
             <StackLayout Padding="5,10,15,0" x:Name="TrailerStack">
                 <inputLayout:SfTextInputLayout  Hint="TrailerId" Style="{StaticResource inputStyle}" ContainerBackgroundColor="LightYellow">
                     <Entry  x:Name="trailerIDEntry" >
@@ -107,6 +108,8 @@
                         </Entry.Behaviors>
                     </Entry>
                 </inputLayout:SfTextInputLayout>
+                
+            </StackLayout>
                 
             </StackLayout>
           

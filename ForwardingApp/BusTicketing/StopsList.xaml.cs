@@ -220,7 +220,7 @@ namespace ASolute_Mobile.BusTicketing
                             Category = action
                         };
 
-                        App.Database.SaveMenuAsync(items);
+                        App.Database.SaveItemAsync(items);
 
                         foreach (ListItems station in stop.Stops)
                         {

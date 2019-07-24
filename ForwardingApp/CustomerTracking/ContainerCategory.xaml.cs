@@ -68,7 +68,7 @@ namespace ASolute_Mobile.CustomerTracking
                     menu.Id = category.Caption;
                     menu.Name = category.Value;
                     menu.Category = "Category";
-                    App.Database.SaveMenuAsync(menu);
+                    App.Database.SaveItemAsync(menu);
 
                     SummaryItems summaryItem = new SummaryItems();
                     summaryItem.Id = category.Caption;

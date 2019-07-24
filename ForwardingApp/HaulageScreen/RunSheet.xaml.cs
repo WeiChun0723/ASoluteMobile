@@ -385,7 +385,7 @@ namespace ASolute_Mobile.HaulageScreen
                                 SealMode = data.SealMode
                             };
 
-                            App.Database.SaveMenuAsync(record);
+                            App.Database.SaveItemAsync(record);
 
                             foreach (clsCaptionValue summaryList in data.Summary)
                             {

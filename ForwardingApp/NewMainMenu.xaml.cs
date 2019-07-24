@@ -195,6 +195,7 @@ namespace ASolute_Mobile
                                 int index = 0;
                                 foreach (clsCaptionValue summaryList in mainMenu.Summary)
                                 {
+                                   
                                     SummaryItems summaryItem = null;
                                     if (index < existingSummaryItems.Capacity)
                                     {
@@ -220,7 +221,7 @@ namespace ASolute_Mobile
                                     App.Database.SaveSummarysAsync(summaryItem);
                                     index++;
                                 }
-                                App.Database.SaveMenuAsync(mainMenuItems);
+                                App.Database.SaveItemAsync(mainMenuItems);
                                 break;
                         }
                     }

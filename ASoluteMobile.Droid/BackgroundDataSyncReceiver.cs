@@ -21,8 +21,16 @@ namespace ASolute_Mobile.Droid
             {
                 wakeLock.Acquire();
 
-                //Task.Run(async () => { await BackgroundTask.DownloadBusStopList(); });
-                Task.Run( async () => {await BackgroundTask.UploadPendingRecord(); });
+                if (Ultis.Settings.App.Equals("asolute.Mobile.AILSBUS"))
+                {
+                    //Task.Run(async () => { await BackgroundTask.DownloadBusStopList(); });
+                    Task.Run(async () => { await BackgroundTask.UploadPendingRecord(); });
+                }
+                else if(Ultis.Settings.App.Equals("asolute.Mobile.Forwarding") || Ultis.Settings.App.Equals("com.asolute.Forwarding"))
+                {
+                    Task.Run(async () => { await BackgroundTask.DownloadLatestJobs(null); });
+                    Task.Run(async () => { await BackgroundTask.UploadLatestJobs(); }).Wait();
+                }
 
                 wakeLock.Release();
             }

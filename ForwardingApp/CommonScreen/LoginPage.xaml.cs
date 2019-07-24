@@ -71,6 +71,10 @@ namespace ASolute_Mobile
                 case "asolute.Mobile.AILSTrucking":
                     name = "AILS Trucking Ver.";
                     break;
+
+                case "asolute.Mobile.Forwarding":
+                    name = "Forwarding";
+                    break;
             }
 
             AppLabel.Text = name + CrossDeviceInfo.Current.AppVersion;
@@ -167,92 +171,99 @@ namespace ASolute_Mobile
                     var content = (Ultis.Settings.App == "asolute.Mobile.ASOLUTEFLEET") ?
                                     await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword, equipmentEntry.Text), this)
                                     : await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLoginURL(encryptedUserId, encryptedPassword), this);
-                    clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                    if (login_response.IsGood )
+                    if (content != null)
                     {
-                        //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
-                        Ultis.Settings.RefreshListView = "Yes";
-                        Ultis.Settings.SessionUserId = usernameEntry.Text;
+                        clsResponse login_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                        var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-
-                        foreach (clsDataRow contextMenu in login_user.ContextMenu)
+                        if (login_response.IsGood)
                         {
-                            List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
+                            //save user equipment into db and which use to display it on list for user to choose (similar to auto complete)
+                            Ultis.Settings.RefreshListView = "Yes";
+                            Ultis.Settings.SessionUserId = usernameEntry.Text;
 
-                            int index = 0;
-                            foreach (clsCaptionValue summaryList in contextMenu.Summary)
+                            var login_user = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+
+                            foreach (clsDataRow contextMenu in login_user.ContextMenu)
                             {
-                                SummaryItems summaryItem = null;
-                                if (index < existingSummaryItems.Capacity)
+                                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
+
+                                int index = 0;
+                                foreach (clsCaptionValue summaryList in contextMenu.Summary)
                                 {
-                                    summaryItem = existingSummaryItems.ElementAt(index);
-                                }
-
-                                if (summaryItem == null)
-                                {
-                                    summaryItem = new SummaryItems();
-                                }
-
-                                summaryItem.Id = contextMenu.Id;
-                                summaryItem.Caption = summaryList.Caption;
-                                summaryItem.Value = summaryList.Value;
-                                summaryItem.Display = summaryList.Display;
-                                summaryItem.Type = "ContextMenu";
-                                App.Database.SaveSummarysAsync(summaryItem);
-                                index++;
-                            }
-
-                            if (existingSummaryItems != null)
-                            {
-                                for (; index < existingSummaryItems.Count; index++)
-                                {
-                                    App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
-                                }
-                            }
-                        }
-
-                        var userObject = JObject.Parse(content)["Result"].ToObject<UserItem>();
-                        //Save user info to constant
-                        Ultis.Settings.SessionUserItem = userObject;
-                        Ultis.Settings.SessionSettingKey = System.Net.WebUtility.UrlEncode(login_user.SessionId);
-
-                        if (login_user.Language == 0)
-                        {
-                            Ultis.Settings.Language = "English";
-                        }
-                        else
-                        {
-                            Ultis.Settings.Language = "Malay";
-                        }
-
-                        if (login_user.GetLogo || !File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
-                        {
-                            var client = new HttpClient();
-                            client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
-                            var downloadLogoURI = ControllerUtil.getDownloadLogoURL();
-                            var logo = await client.GetAsync(downloadLogoURI);
-                            var logo_byte = await logo.Content.ReadAsStringAsync();
-                            clsResponse logo_response = JsonConvert.DeserializeObject<clsResponse>(logo_byte);
-
-                            if (logo_response.IsGood)
-                            {
-                                if (logo_response.Result != null)
-                                {
-                                    byte[] bytes = Convert.FromBase64String(logo_response.Result);
-                                    File.WriteAllBytes(Ultis.Settings.GetAppLogoFileLocation(), bytes);
-                                    File.WriteAllBytes(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text), bytes);
-
-                                    try
+                                    SummaryItems summaryItem = null;
+                                    if (index < existingSummaryItems.Capacity)
                                     {
-                                        var downloadLogoAckURI = ControllerUtil.getDownloadLogoAcknowledgementURL();
-                                        var logoAckResp = await client.GetAsync(downloadLogoAckURI);
-
+                                        summaryItem = existingSummaryItems.ElementAt(index);
                                     }
-                                    catch 
+
+                                    if (summaryItem == null)
                                     {
-                                        //await DisplayAlert("Error", exception.Message, "OK");
+                                        summaryItem = new SummaryItems();
+                                    }
+
+                                    summaryItem.Id = contextMenu.Id;
+                                    summaryItem.Caption = summaryList.Caption;
+                                    summaryItem.Value = summaryList.Value;
+                                    summaryItem.Display = summaryList.Display;
+                                    summaryItem.Type = "ContextMenu";
+                                    App.Database.SaveSummarysAsync(summaryItem);
+                                    index++;
+                                }
+
+                                if (existingSummaryItems != null)
+                                {
+                                    for (; index < existingSummaryItems.Count; index++)
+                                    {
+                                        App.Database.DeleteSummaryItem(existingSummaryItems.ElementAt(index));
+                                    }
+                                }
+                            }
+
+                            var userObject = JObject.Parse(content)["Result"].ToObject<UserItem>();
+                            //Save user info to constant
+                            Ultis.Settings.SessionUserItem = userObject;
+                            Ultis.Settings.SessionSettingKey = System.Net.WebUtility.UrlEncode(login_user.SessionId);
+
+                            if (login_user.Language == 0)
+                            {
+                                Ultis.Settings.Language = "English";
+                            }
+                            else
+                            {
+                                Ultis.Settings.Language = "Malay";
+                            }
+
+                            if (login_user.GetLogo || !File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
+                            {
+                                var client = new HttpClient();
+                                client.BaseAddress = new Uri(Ultis.Settings.SessionBaseURI);
+                                var downloadLogoURI = ControllerUtil.getDownloadLogoURL();
+                                var logo = await client.GetAsync(downloadLogoURI);
+                                var logo_byte = await logo.Content.ReadAsStringAsync();
+                                clsResponse logo_response = JsonConvert.DeserializeObject<clsResponse>(logo_byte);
+
+                                if (logo_response.IsGood)
+                                {
+                                    if (logo_response.Result != null)
+                                    {
+                                        byte[] bytes = Convert.FromBase64String(logo_response.Result);
+                                        File.WriteAllBytes(Ultis.Settings.GetAppLogoFileLocation(), bytes);
+                                        File.WriteAllBytes(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text), bytes);
+
+                                        try
+                                        {
+                                            var downloadLogoAckURI = ControllerUtil.getDownloadLogoAcknowledgementURL();
+                                            var logoAckResp = await client.GetAsync(downloadLogoAckURI);
+
+                                        }
+                                        catch
+                                        {
+                                            //await DisplayAlert("Error", exception.Message, "OK");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        await DisplayAlert("Download Logo Error", "No image.", "Ok");
                                     }
                                 }
                                 else
@@ -262,25 +273,21 @@ namespace ASolute_Mobile
                             }
                             else
                             {
-                                await DisplayAlert("Download Logo Error", "No image.", "Ok");
-                            }
-                        }
-                        else
-                        {
-                            if (File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
-                            {
-                                if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
+                                if (File.Exists(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text)))
                                 {
-                                    File.Delete(Ultis.Settings.GetAppLogoFileLocation());
+                                    if (File.Exists(Ultis.Settings.GetAppLogoFileLocation()))
+                                    {
+                                        File.Delete(Ultis.Settings.GetAppLogoFileLocation());
+                                    }
+                                    File.Copy(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text), Ultis.Settings.GetAppLogoFileLocation());
                                 }
-                                File.Copy(Ultis.Settings.GetAppLogoFileLocation(usernameEntry.Text), Ultis.Settings.GetAppLogoFileLocation());
                             }
+
+
+                            // Task.Run(async () => { await BackgroundTask.UploadPendingRecord(); }).Wait();
+
+                            Application.Current.MainPage = new MainPage();
                         }
-
-
-                       // Task.Run(async () => { await BackgroundTask.UploadPendingRecord(); }).Wait();
-
-                        Application.Current.MainPage = new MainPage();
                     }
                    
                 }
@@ -290,9 +297,9 @@ namespace ASolute_Mobile
                     Application.Current.MainPage = new LoginPage();
 
                 }
-                catch
+                catch(Exception ex)
                 {
-                   
+                    await DisplayAlert("Error", ex.Message, "OK");
                 }
 
                 this.activityIndicator.IsRunning = false;

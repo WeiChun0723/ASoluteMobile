@@ -40,7 +40,7 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.Forwarding":
                 case "com.asolute.Forwarding":
-                    Detail = new JobListTabbedPage();
+                    Detail = new CustomNavigationPage(new JobListTabbedPage());
                     MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
                     {
                         Device.BeginInvokeOnMainThread(() =>
@@ -209,7 +209,7 @@ namespace ASolute_Mobile
 
                                 if (logoutResponse.IsGood)
                                 {
-                                    //App.DropDatabase(); the app will crash
+                                    App.DropDatabase();// the app will crash
                                     BackgroundTask.Logout(this);
                                 }
                             }

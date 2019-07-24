@@ -11,10 +11,9 @@
                <Entry x:Name="equipmentID" TextChanged="convertUpper"/>
         </inputLayout:SfTextInputLayout>
         <syncIndicator:SfBusyIndicator x:Name="loading" AnimationType="HorizontalPulsingBox" Title="Loading..." TextColor="Red" IsVisible="false" />
-        <buttons:SfButton x:Name="btnConfirm" Text="Confirm" Clicked="checkEquipment" Style="{StaticResource buttonStyle}"/>
-        
-
-        <ListView x:Name="euipmentList"></ListView>
+        <buttons:SfButton x:Name="btnConfirm" Text="Confirm" Clicked="Handle_Clicked" Style="{StaticResource buttonStyle}"/>
+        <buttons:SfButton x:Name="btnTerminate" Text="Terminate Session" Clicked="Handle_Clicked" Style="{StaticResource buttonStyle}" IsVisible="false"/>
+        <ListView x:Name="equipmentDetails" IsVisible="false"></ListView>
         </StackLayout>
    
 </ContentPage>

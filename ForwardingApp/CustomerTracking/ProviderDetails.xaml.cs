@@ -150,7 +150,7 @@ namespace ASolute_Mobile.CustomerTracking
                         }
                         menu.Summary = summary;
 
-                        App.Database.SaveMenuAsync(menu);
+                        App.Database.SaveItemAsync(menu);
                     }
 
                     loadContainerList();
