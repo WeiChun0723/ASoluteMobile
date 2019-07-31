@@ -284,7 +284,7 @@ namespace ASolute_Mobile
                             }
 
 
-                            // Task.Run(async () => { await BackgroundTask.UploadPendingRecord(); }).Wait();
+                            
 
                             Application.Current.MainPage = new MainPage();
                         }

@@ -28,7 +28,6 @@ namespace ASolute_Mobile.Utils
         //Get = 0 , Post = 1
         public static async Task<string> CallWebService(int method, object data, string baseAdd, string calllUri, Page page)
         {
-
             try
             {
                 var client = new HttpClient();
@@ -67,12 +66,9 @@ namespace ASolute_Mobile.Utils
                         {
                             if (!(reply.IsGood))
                             {
-                                Device.BeginInvokeOnMainThread(async () =>
-                                {
-                                    DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
-                                    await page.DisplayAlert("Error", reply.Message, "OK");
-                                });
 
+                                DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
+                                await page.DisplayAlert("Error", reply.Message, "OK");
                             }
                         }
                     }
@@ -81,27 +77,20 @@ namespace ASolute_Mobile.Utils
             }
             catch (HttpRequestException requestEx)
             {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    string error = requestEx.Message;
 
-                    DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
-                    await page.DisplayAlert("No internet", "Unable connect to internet", "OK");
-                });
+                string error = requestEx.Message;
+
+                DependencyService.Get<IAudio>().PlayAudioFile("error.mp3");
+                await page.DisplayAlert("No internet", "Unable connect to internet", "OK");
+
             }
             catch (Exception ex)
             {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    await page.DisplayAlert("Error", ex.Message, "OK");
-                });
-
+                await page.DisplayAlert("Error", ex.Message, "OK");
             }
 
             return null;
         }
-
-
 
         //capture image and store local path in db function
         public static async Task StoreImages(string id, ContentPage contentPage, string imageType)
@@ -252,33 +241,35 @@ namespace ASolute_Mobile.Utils
                     Order = ToolbarItemOrder.Primary
                 };
 
-                item.Clicked += async (sender, e) =>
-                {
-                    if (Ultis.Settings.App.Contains("Trucking"))
-                    {
-                        await contentPage.Navigation.PushAsync(new NewMasterJob());
-                    }
-                    else
-                    {
-                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewCartonBoxURL(), null);
-                        clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-
-                        if (response.IsGood)
-                        {
-                            MessagingCenter.Send<App>((App)Application.Current, "RefreshCartonList");
-
-                            var answer = await contentPage.DisplayAlert("", "Added new carton box. Print carton label now?", "Yes", "No");
-                            if (answer.Equals(true))
-                            {
-
-                                MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
-
-                            }
-                        }
-                    }
-                };
+                item.Clicked += Item_Clicked;
 
                 contentPage.ToolbarItems.Add(item);
+            }
+        }
+
+        async static void Item_Clicked(object sender, EventArgs e)
+        {
+            if (Ultis.Settings.App.Contains("Trucking"))
+            {
+                await pages.Navigation.PushAsync(new NewMasterJob());
+            }
+            else
+            {
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getNewCartonBoxURL(), null);
+                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                if (response.IsGood)
+                {
+                    MessagingCenter.Send<App>((App)Application.Current, "RefreshCartonList");
+
+                    var answer = await pages.DisplayAlert("", "Added new carton box. Print carton label now?", "Yes", "No");
+                    if (answer.Equals(true))
+                    {
+
+                        MessagingCenter.Send<App>((App)Application.Current, "PrintCartonLabel");
+
+                    }
+                }
             }
         }
 

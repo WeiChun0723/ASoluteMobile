@@ -46,9 +46,7 @@
 <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -505,14 +503,14 @@
     <Reference Include="Syncfusion.SfMaps.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.17.1.0.49\lib\MonoAndroid10\Syncfusion.SfMaps.XForms.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Plugin.SimpleAudioPlayer.Abstractions">
       <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.3.0\lib\MonoAndroid10\Plugin.SimpleAudioPlayer.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.SimpleAudioPlayer">
       <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.3.0\lib\MonoAndroid10\Plugin.SimpleAudioPlayer.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

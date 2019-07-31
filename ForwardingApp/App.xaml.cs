@@ -1,31 +1,9 @@
-﻿using System;
-using Xamarin.Forms.Xaml;
-using System.Diagnostics;
-using System.Text;
-using PCLCrypto;
-using System.Net.Http;
-using Newtonsoft.Json;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using ASolute_Mobile.Data;
-using ASolute_Mobile.CustomerTracking;
 using Com.OneSignal;
 using Com.OneSignal.Abstractions;
-using System.Collections.Generic;
-using ASolute_Mobile.Models;
-using ASolute_Mobile.HaulageScreen;
-using ASolute_Mobile.WMS_Screen;
-using System.Threading.Tasks;
-using Plugin.Geolocator;
 using ASolute_Mobile.Utils;
-using ASolute.Mobile.Models;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
-using ASolute_Mobile.Planner;
-using ASolute_Mobile.BusTicketing;
-using ASolute_Mobile.ZebraPrinter;
 using LinkOS.Plugin.Abstractions;
-using ASolute_Mobile.Yard;
-using ASolute_Mobile.testing;
 
 namespace ASolute_Mobile
 {

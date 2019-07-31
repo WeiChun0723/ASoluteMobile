@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.CommonScreen;
@@ -56,6 +57,8 @@ namespace ASolute_Mobile
                     break;
             }
 
+
+            //assign page subtitle 
             StackLayout main = new StackLayout();
             title1 = new Label
             {
@@ -73,6 +76,8 @@ namespace ASolute_Mobile
             main.Children.Add(title2);
             NavigationPage.SetTitleView(this, main);
 
+
+            //AILS BUS start end button
             if (!(String.IsNullOrEmpty(Ultis.Settings.StartEndStatus)))
             {
                 StartEndButton.Text = Ultis.Settings.StartEndStatus;
@@ -82,18 +87,13 @@ namespace ASolute_Mobile
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            try
-            {
-                CommonFunction.GetFireBaseID();
-                //get the latest store local profile image
-                var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
-                profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
-                LoadMainMenu();
-            }
-            catch
-            {
 
-            }
+            CommonFunction.GetFireBaseID();
+            //get the latest store local profile image
+            var image = App.Database.GetUserProfilePicture(Ultis.Settings.SessionUserItem.DriverId);
+            profilePicture.Source = (image != null && image.imageData != null) ? ImageSource.FromStream(() => new MemoryStream(image.imageData)) : "user_icon.png";
+            LoadMainMenu();
+
         }
 
         async void Handle_Tapped(object sender, System.EventArgs e)
@@ -103,212 +103,206 @@ namespace ASolute_Mobile
 
         async void GetMainMenu()
         {
-            try
+
+            CommonFunction.GetFireBaseID();
+            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
+            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+            if (response.IsGood == true)
             {
-                CommonFunction.GetFireBaseID();
-                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                var menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
+                Ultis.Settings.SubTitle = menu.SubTitle;
+                title2.Text = Ultis.Settings.SubTitle;
 
-                if (response.IsGood == true)
+                //clear and load value from the menu in json response "CheckList"
+                checkItems.Clear();
+                for (int check = 0; check < response.Result["Checklist"].Count; check++)
                 {
-                    var menu = JObject.Parse(content)["Result"].ToObject<clsLogin>();
-                    Ultis.Settings.SubTitle = menu.SubTitle;
-                    title2.Text = Ultis.Settings.SubTitle;
+                    string itemKey = response.Result["Checklist"][check]["Key"];
+                    string itemValue = response.Result["Checklist"][check]["Value"];
+                    checkItems.Add(new clsKeyValue(itemKey, itemValue));
+                }
 
-                    //clear and load value from the menu in json response "CheckList"
-                    checkItems.Clear();
-                    for (int check = 0; check < response.Result["Checklist"].Count; check++)
+                // clear the db before insert to it to prevent duplicate
+                App.Database.deleteRecords("MainMenu");
+                App.Database.deleteRecordSummary("MainMenu");
+                App.Database.deleteRecordSummary("UserInfo");
+                App.Database.deleteRecordSummary("ContextMenu");
+                foreach (clsDataRow mainMenu in menu.MainMenu)
+                {
+                    switch (mainMenu.Id)
                     {
-                        string itemKey = response.Result["Checklist"][check]["Key"];
-                        string itemValue = response.Result["Checklist"][check]["Value"];
-                        checkItems.Add(new clsKeyValue(itemKey, itemValue));
-                    }
+                        //display expiry date info
+                        case "Expiry":
+                            expiryStack.IsVisible = true;
+                            if (expiryGrid.IsVisible == true)
+                            {
+                                expiryGrid.ColumnDefinitions.Clear();
+                            }
+                            mainGrid.Children.Add(expiryStack, 0, 2);
+                            expiryLabel.Text = mainMenu.Caption;
+                            expiryGrid.Children.Clear();
 
-                    // clear the db before insert to it to prevent duplicate
-                    App.Database.deleteRecords("MainMenu");
-                    App.Database.deleteRecordSummary("MainMenu");
-                    App.Database.deleteRecordSummary("UserInfo");
-                    App.Database.deleteRecordSummary("ContextMenu");
-                    foreach (clsDataRow mainMenu in menu.MainMenu)
-                    {
-                        switch (mainMenu.Id)
-                        {
-                            //display expiry date info
-                            case "Expiry":
-                                expiryStack.IsVisible = true;
-                                if (expiryGrid.IsVisible == true)
+                            int rowIndex = 0, columnIndex = 0;
+                            foreach (clsCaptionValue expiryInfo in mainMenu.Summary)
+                            {
+                                if (expiryInfo.Caption != "")
                                 {
-                                    expiryGrid.ColumnDefinitions.Clear();
-                                }
-                                mainGrid.Children.Add(expiryStack, 0, 2);
-                                expiryLabel.Text = mainMenu.Caption;
-                                expiryGrid.Children.Clear();
-
-                                int rowIndex = 0, columnIndex = 0;
-                                foreach (clsCaptionValue expiryInfo in mainMenu.Summary)
-                                {
-                                    if (expiryInfo.Caption != "")
+                                    expiryGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                                    StackLayout expiryInfoStack = new StackLayout
                                     {
-                                        expiryGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                                        StackLayout expiryInfoStack = new StackLayout
-                                        {
-                                            BackgroundColor = Color.FromHex(mainMenu.BackColor),
-                                            Padding = new Thickness(0, 10, 0, 10)
-                                        };
+                                        BackgroundColor = Color.FromHex(mainMenu.BackColor),
+                                        Padding = new Thickness(0, 10, 0, 10)
+                                    };
 
-                                        Label date = new Label
-                                        {
-                                            Style = (Xamarin.Forms.Style)Application.Current.Resources["StatsNumberLabel"],
-                                            Text = expiryInfo.Value,
-                                            TextColor = Color.FromHex("#696969")
-                                        };
+                                    Label date = new Label
+                                    {
+                                        Style = (Xamarin.Forms.Style)Application.Current.Resources["StatsNumberLabel"],
+                                        Text = expiryInfo.Value,
+                                        TextColor = Color.FromHex("#696969")
+                                    };
 
-                                        Label caption = new Label
-                                        {
-                                            Style = (Xamarin.Forms.Style)Application.Current.Resources["StatsCaptionLabel"],
-                                            Text = expiryInfo.Caption,
-                                            TextColor = Color.FromHex("#696969")
-                                        };
+                                    Label caption = new Label
+                                    {
+                                        Style = (Xamarin.Forms.Style)Application.Current.Resources["StatsCaptionLabel"],
+                                        Text = expiryInfo.Caption,
+                                        TextColor = Color.FromHex("#696969")
+                                    };
 
-                                        expiryInfoStack.Children.Add(date);
-                                        expiryInfoStack.Children.Add(caption);
+                                    expiryInfoStack.Children.Add(date);
+                                    expiryInfoStack.Children.Add(caption);
 
-                                        expiryGrid.Children.Add(expiryInfoStack, columnIndex, rowIndex);
-                                        columnIndex++;
+                                    expiryGrid.Children.Add(expiryInfoStack, columnIndex, rowIndex);
+                                    columnIndex++;
 
-                                        if(columnIndex >3)
-                                        {
-                                            rowIndex++;
-                                        }
+                                    if (columnIndex > 3)
+                                    {
+                                        rowIndex++;
                                     }
                                 }
-                                break;
+                            }
+                            break;
 
-                            default:
-                                ListItems mainMenuItems = new ListItems();
-                                mainMenuItems.Id = mainMenu.Id;
-                                mainMenuItems.Name = mainMenu.Caption;
-                                mainMenuItems.Action = mainMenu.Action;
-                                mainMenuItems.Category = (mainMenu.Id == "Info") ? "UserInfo" : "MainMenu";
+                        default:
+                            ListItems mainMenuItems = new ListItems();
+                            mainMenuItems.Id = mainMenu.Id;
+                            mainMenuItems.Name = mainMenu.Caption;
+                            mainMenuItems.Action = mainMenu.Action;
+                            mainMenuItems.Category = (mainMenu.Id == "Info") ? "UserInfo" : "MainMenu";
 
-                                List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, mainMenuItems.Category);
-                                int index = 0;
-                                foreach (clsCaptionValue summaryList in mainMenu.Summary)
+                            List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(mainMenu.Id, mainMenuItems.Category);
+                            int index = 0;
+                            foreach (clsCaptionValue summaryList in mainMenu.Summary)
+                            {
+
+                                SummaryItems summaryItem = null;
+                                if (index < existingSummaryItems.Capacity)
                                 {
-                                   
-                                    SummaryItems summaryItem = null;
-                                    if (index < existingSummaryItems.Capacity)
-                                    {
-                                        summaryItem = existingSummaryItems.ElementAt(index);
-                                    }
-
-                                    if (summaryItem == null)
-                                    {
-                                        summaryItem = new SummaryItems();
-                                    }
-
-                                    if (String.IsNullOrEmpty(summaryList.Caption))
-                                    {
-                                        mainMenuItems.Name = summaryList.Value;
-                                    }
-
-                                    summaryItem.Id = mainMenu.Id;
-                                    summaryItem.Caption = summaryList.Caption;
-                                    summaryItem.Value = summaryList.Value;
-                                    summaryItem.Display = summaryList.Display;
-                                    summaryItem.Type = mainMenuItems.Category;
-                                    summaryItem.BackColor = mainMenu.BackColor;
-                                    App.Database.SaveSummarysAsync(summaryItem);
-                                    index++;
+                                    summaryItem = existingSummaryItems.ElementAt(index);
                                 }
-                                App.Database.SaveItemAsync(mainMenuItems);
-                                break;
-                        }
-                    }
 
-                    foreach (clsDataRow contextMenu in menu.ContextMenu)
+                                if (summaryItem == null)
+                                {
+                                    summaryItem = new SummaryItems();
+                                }
+
+                                if (String.IsNullOrEmpty(summaryList.Caption))
+                                {
+                                    mainMenuItems.Name = summaryList.Value;
+                                }
+
+                                summaryItem.Id = mainMenu.Id;
+                                summaryItem.Caption = summaryList.Caption;
+                                summaryItem.Value = summaryList.Value;
+                                summaryItem.Display = summaryList.Display;
+                                summaryItem.Type = mainMenuItems.Category;
+                                summaryItem.BackColor = mainMenu.BackColor;
+                                App.Database.SaveSummarysAsync(summaryItem);
+                                index++;
+                            }
+                            App.Database.SaveItemAsync(mainMenuItems);
+                            break;
+                    }
+                }
+
+                foreach (clsDataRow contextMenu in menu.ContextMenu)
+                {
+                    List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
+                    int index = 0;
+                    foreach (clsCaptionValue summaryList in contextMenu.Summary)
                     {
-                        List<SummaryItems> existingSummaryItems = App.Database.GetSummarysAsync(contextMenu.Id, "ContextMenu");
-                        int index = 0;
-                        foreach (clsCaptionValue summaryList in contextMenu.Summary)
-                        {
-                            SummaryItems summaryItem = new SummaryItems();
-                            summaryItem.Id = contextMenu.Id;
-                            summaryItem.Caption = summaryList.Caption;
-                            summaryItem.Value = summaryList.Value;
-                            summaryItem.Display = summaryList.Display;
-                            summaryItem.Type = "ContextMenu";
-                            App.Database.SaveSummarysAsync(summaryItem);
-                            index++;
-                        }   
+                        SummaryItems summaryItem = new SummaryItems();
+                        summaryItem.Id = contextMenu.Id;
+                        summaryItem.Caption = summaryList.Caption;
+                        summaryItem.Value = summaryList.Value;
+                        summaryItem.Display = summaryList.Display;
+                        summaryItem.Type = "ContextMenu";
+                        App.Database.SaveSummarysAsync(summaryItem);
+                        index++;
                     }
+                }
 
-                    LoadMainMenu();
+                LoadMainMenu();
 
-                    if (checkItems.Count != 0)
-                    {
-                        CheckList chkList = new CheckList(checkItems, menu.CheckListLinkId);
-                        NavigationPage.SetHasBackButton(chkList, false);
-                        await Navigation.PushAsync(chkList);
-                    }
+                if (checkItems.Count != 0)
+                {
+                    CheckList chkList = new CheckList(checkItems, menu.CheckListLinkId);
+                    NavigationPage.SetHasBackButton(chkList, false);
+                    await Navigation.PushAsync(chkList);
                 }
                 loading.IsVisible = false;
                 pullToRefresh.IsRefreshing = false;
             }
-            catch (Exception ex)
-            {
-                //await DisplayAlert("Exception", ex.Message, "OK");
-            }
+
         }
 
-        async void LoadMainMenu()
+        void LoadMainMenu()
         {
-            try
+
+            //load user account info
+            List<SummaryItems> information = App.Database.GetSummarysAsync("Info", "UserInfo");
+            userInfo.Children.Clear();
+            foreach (SummaryItems userSummary in information)
             {
-                //load user account info
-                List<SummaryItems> information = App.Database.GetSummarysAsync("Info", "UserInfo");
-                userInfo.Children.Clear();
-                foreach (SummaryItems userSummary in information)
+                string labelStyle = (userSummary.Caption == "") ? "ProfileNameLabel" : "ProfileTagLabel";
+                Label info = new Label
                 {
-                    string labelStyle = (userSummary.Caption == "") ? "ProfileNameLabel" : "ProfileTagLabel";
-                    Label info = new Label
-                    {
-                        Style = (Xamarin.Forms.Style)Application.Current.Resources[labelStyle],
-                        HorizontalTextAlignment = TextAlignment.Center
-                    };
-                   
-                    info.Text = (userSummary.Caption == "") ? userSummary.Value : userSummary.Caption + ": " + userSummary.Value;
-                    userInfo.Children.Add(info);
-                }
+                    Style = (Xamarin.Forms.Style)Application.Current.Resources[labelStyle],
+                    HorizontalTextAlignment = TextAlignment.Center
+                };
 
-                //load menu item with custom template
-                loading.IsVisible = true;
-                Ultis.Settings.List = "Main_Menu";
-                ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
-                listView.ItemsSource = Item;
-                listView.HeightRequest = Item.Count * 150;
-                listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+                info.Text = (userSummary.Caption == "") ? userSummary.Value : userSummary.Caption + ": " + userSummary.Value;
+                userInfo.Children.Add(info);
+            }
 
-                System.TimeSpan interval = new System.TimeSpan();
-                if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
+            //load menu item with custom template
+            loading.IsVisible = true;
+            Ultis.Settings.List = "Main_Menu";
+            ObservableCollection<ListItems> Item = new ObservableCollection<ListItems>(App.Database.GetMainMenu("MainMenu"));
+            listView.ItemsSource = Item;
+            listView.HeightRequest = Item.Count * 150;
+            listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
+
+
+            //Save the time refreshed the menu 
+            System.TimeSpan interval = new System.TimeSpan();
+            if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
+            {
+                DateTime enteredDate = DateTime.Parse(Ultis.Settings.UpdateTime);
+                interval = DateTime.Now.Subtract(enteredDate);
+            }
+
+            if (NetworkCheck.IsInternet())
+            {
+                if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
                 {
-                    DateTime enteredDate = DateTime.Parse(Ultis.Settings.UpdateTime);
-                    interval = DateTime.Now.Subtract(enteredDate);
-                }
-
-                if (NetworkCheck.IsInternet())
-                {
-                    if (Item.Count == 0 || userInfo.Children.Count == 0 || Ultis.Settings.RefreshListView == "Yes" || interval.Hours >= 1 || interval.Hours < 0)
-                    {
-                        GetMainMenu();
-                        Ultis.Settings.RefreshListView = "No";
-                        Ultis.Settings.UpdateTime = DateTime.Now.ToString();
-                    }
+                    GetMainMenu(); 
+                    Ultis.Settings.RefreshListView = "No";
+                    Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                 }
             }
-            catch 
-            {
-            }
+
+
         }
 
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
@@ -327,7 +321,7 @@ namespace ASolute_Mobile
                 case "EqInquiry":
                     await Navigation.PushAsync(new EquipmentInquiry());
                     break;
-                    
+
                 case "CargoRec":
                     await Navigation.PushAsync(new TransportScreen.PendingReceiving_Loading(menuAction));
                     break;
@@ -341,10 +335,10 @@ namespace ASolute_Mobile
                     break;
 
                 case "JobList":
-                    if(Ultis.Settings.App == "asolute.Mobile.AILSTrucking")
+                    if (Ultis.Settings.App == "asolute.Mobile.AILSTrucking")
                     {
                         await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
-                       // await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTruckListURL(((ListItems)e.Item).Action)));
+                        // await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTruckListURL(((ListItems)e.Item).Action)));
                     }
                     else
                     {
@@ -455,7 +449,7 @@ namespace ASolute_Mobile
                 case "ParcelIn":
                     await Navigation.PushAsync(new ChinaReceiving(((ListItems)e.Item)));
                     break;
-                
+
                 case "ShipmentOut":
                     await Navigation.PushAsync(new OutFromChina());
                     break;
@@ -470,12 +464,12 @@ namespace ASolute_Mobile
         }
 
         void Handle_Refreshed(object sender, System.EventArgs e)
-        {   
+        {
         }
 
         void Handle_Refreshing(object sender, System.EventArgs e)
         {
-            GetMainMenu();
+            GetMainMenu(); 
         }
 
         void Handle_Pulling(object sender, Syncfusion.SfPullToRefresh.XForms.PullingEventArgs e)
@@ -484,28 +478,10 @@ namespace ASolute_Mobile
 
         #region AILS BUS function
         //visible for bus ticketing app for record start time and end time of the trip
-        void Handle_Clicked(object sender, System.EventArgs e)
+        async void Handle_Clicked(object sender, System.EventArgs e)
         {
             var button = sender as SfButton;
 
-            switch (button.Text)
-            {
-                case "Start":
-                    Ultis.Settings.StartEndStatus = "End";
-                    SaveOfflineTrip("Start");
-                    break;
-
-                case "End":
-                    Ultis.Settings.StartEndStatus = "Start";
-                    SaveOfflineTrip("End");
-                    break;
-            }
-
-            StartEndButton.Text = Ultis.Settings.StartEndStatus;
-        }
-
-        async void SaveOfflineTrip(string startEnd)
-        {
             try
             {
                 BusTrip busTrip;
@@ -530,7 +506,7 @@ namespace ASolute_Mobile
 
                 var location = await Geolocation.GetLastKnownLocationAsync();
 
-                switch (startEnd)
+                switch (button.Text)
                 {
                     case "Start":
                         busTrip.StartTime = DateTime.Now;
@@ -551,7 +527,10 @@ namespace ASolute_Mobile
                 await DisplayAlert("Error", ex.Message, "OK");
             }
 
+            StartEndButton.Text = Ultis.Settings.StartEndStatus;
         }
+
+        
         #endregion
     }
 }

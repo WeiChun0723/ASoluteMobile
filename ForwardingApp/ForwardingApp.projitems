@@ -247,10 +247,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)testing\beepSound.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Forwarding\JobListTabbedPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -321,7 +317,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\AccountActivation.xaml.cs">
       <DependentUpon>AccountActivation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\AppNavigation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\MyProviders.xaml.cs">
       <DependentUpon>MyProviders.xaml</DependentUpon>
     </Compile>
@@ -366,8 +361,6 @@
       <DependentUpon>CheckList2.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\CustomNavigationPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IFileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -424,7 +417,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)StartUpScreen.xaml.cs">
       <DependentUpon>StartUpScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CommonScreen\IThumbnailHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Planner\AllTruckMap.xaml.cs">
       <DependentUpon>AllTruckMap.xaml</DependentUpon>
     </Compile>
@@ -518,14 +510,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomerTracking\NewCategoryDetail.xaml.cs">
       <DependentUpon>NewCategoryDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)testing\beepSound.xaml.cs">
-      <DependentUpon>beepSound.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)IAudio.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Forwarding\JobListTabbedPage.xaml.cs">
       <DependentUpon>JobListTabbedPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\CloseApp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountEntry.xaml.cs">
       <DependentUpon>CycleCountEntry.xaml</DependentUpon>
     </Compile>
@@ -533,6 +520,11 @@
       <DependentUpon>CycleCountDetailsEntry.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Forwarding\JobLists.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyService\IAudio.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyService\IFileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyService\IThumbnailHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomNavigationPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyService\CloseApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -552,6 +544,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)MobilePrinter\HoneywellPrinter\" />
     <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
     <Folder Include="$(MSBuildThisFileDirectory)Forwarding\" />
+    <Folder Include="$(MSBuildThisFileDirectory)DependencyService\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

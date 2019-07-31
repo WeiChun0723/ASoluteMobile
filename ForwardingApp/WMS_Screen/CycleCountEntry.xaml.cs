@@ -14,6 +14,7 @@ namespace ASolute_Mobile.WMS_Screen
     public partial class CycleCountEntry : ContentPage
     {
         ListItems selectedItem;
+        int countVer;
         List<string> zones = new List<string>();
         List<string> racks = new List<string>();
         List<string> levels = new List<string>();
@@ -24,8 +25,13 @@ namespace ASolute_Mobile.WMS_Screen
             Title = "Cycle Count";
             selectedItem = item;
 
-            Task.Run(async () => { await GetZonesData(); });
+            string[] ver = selectedItem.Name.Split('/');
+
+            countVer = Convert.ToInt16(ver[1]);
+
+            GetZonesData(); 
         }
+
 
         async void HandleSelection_Changed(object sender, SelectionChangedEventArgs e)
         {
@@ -36,9 +42,11 @@ namespace ASolute_Mobile.WMS_Screen
                 case "zoneBox":
                     racks.Clear();
                     levels.Clear();
+                    rackBox.Text = "";
+                    lvlBox.Text = "";
                     lvlBox.ComboBoxSource = null;
 
-                    var rack_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getRackListURL(selectedItem.Id,zoneBox.Text), this);
+                    var rack_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getRackListURL(selectedItem.Id,zoneBox.Text, countVer), this);
                     if (rack_content != null)
                     {
                         clsResponse rack_response = JsonConvert.DeserializeObject<clsResponse>(rack_content);
@@ -48,7 +56,11 @@ namespace ASolute_Mobile.WMS_Screen
 
                             foreach (clsKeyValue rack in rackList)
                             {
-                                racks.Add(rack.Value);
+                                if(!(String.IsNullOrEmpty(rack.Value)))
+                                {
+                                    racks.Add(rack.Value);
+                                }
+                               
                             }
 
                             rackBox.ComboBoxSource = null;
@@ -60,7 +72,7 @@ namespace ASolute_Mobile.WMS_Screen
                 case "rackBox":
                     levels.Clear();
 
-                    var level_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLevelListURL(selectedItem.Id, zoneBox.Text,rackBox.Text), this);
+                    var level_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getLevelListURL(selectedItem.Id, zoneBox.Text,rackBox.Text, countVer), this);
                     if (level_content != null)
                     {
                         clsResponse level_response = JsonConvert.DeserializeObject<clsResponse>(level_content);
@@ -70,7 +82,11 @@ namespace ASolute_Mobile.WMS_Screen
 
                             foreach (clsKeyValue level in levelList)
                             {
-                                levels.Add(level.Value);
+                                if(!(String.IsNullOrEmpty(level.Value)))
+                                {
+                                    levels.Add(level.Value);
+                                }
+                                
                             }
 
                             lvlBox.ComboBoxSource = null;
@@ -85,7 +101,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             if(!(String.IsNullOrEmpty(zoneBox.Text)) && !(String.IsNullOrEmpty(rackBox.Text)) && !(String.IsNullOrEmpty(lvlBox.Text)))
             {
-                await Navigation.PushAsync(new CycleCountDetailsEntry(selectedItem.Id, zoneBox.Text, rackBox.Text, lvlBox.Text));
+                await Navigation.PushAsync(new CycleCountDetailsEntry(selectedItem.Id, zoneBox.Text, rackBox.Text, lvlBox.Text,countVer));
             }
             else
             {
@@ -93,26 +109,37 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        async Task GetZonesData()
+        async void GetZonesData()
         {
-            zones.Clear();
-
-            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getZoneListURL(selectedItem.Id), this);
-            if(content != null)
+            try
             {
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-                if(response.IsGood)
-                {
-                    var zoneList = JObject.Parse(content)["Result"].ToObject<List<clsKeyValue>>();
+                zones.Clear();
 
-                    foreach(clsKeyValue zone in zoneList)
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getZoneListURL(selectedItem.Id, countVer), this);
+                if (content != null)
+                {
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    if (response.IsGood)
                     {
-                        zones.Add(zone.Value);
+                        var zoneList = JObject.Parse(content)["Result"].ToObject<List<clsKeyValue>>();
+
+                        foreach (clsKeyValue zone in zoneList)
+                        {
+                            if (!(String.IsNullOrEmpty(zone.Value)))
+                            {
+                                zones.Add(zone.Value);
+                            }
+
+                        }
+
+                        zoneBox.ComboBoxSource = zones;
                     }
 
-                    zoneBox.ComboBoxSource = zones;
                 }
-                
+            }
+            catch(Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
             }
             
         }

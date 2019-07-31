@@ -63,7 +63,7 @@ namespace ASolute_Mobile.Forwarding
 
             var layout = new StackLayout();
 
-            ObservableCollection<ListItems> jobItems = new ObservableCollection<ListItems>(App.Database.GetJobs("fwd", doneStatus));
+            ObservableCollection<ListItems> jobItems = new ObservableCollection<ListItems>(App.Database.GetJobs(doneStatus));
 
             Ultis.Settings.List = "fwd";
 
@@ -98,7 +98,7 @@ namespace ASolute_Mobile.Forwarding
                 }
 
                 ListView list = (ListView)sender;
-                list.ItemsSource = App.Database.GetJobs("fwd", doneStatus);
+                list.ItemsSource = App.Database.GetJobs( doneStatus);
                 list.IsRefreshing = false;
             };
 

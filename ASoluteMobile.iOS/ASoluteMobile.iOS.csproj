@@ -417,9 +417,6 @@
     <Reference Include="Syncfusion.SfMaps.XForms.iOS">
       <HintPath>..\packages\Syncfusion.Xamarin.SfMaps.17.1.0.49\lib\Xamarin.iOS10\Syncfusion.SfMaps.XForms.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="ASolute.Mobile.Models">
-      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.SfMaskedEdit.XForms">
       <HintPath>..\packages\Syncfusion.Xamarin.SfMaskedEdit.17.1.0.49\lib\Xamarin.iOS10\Syncfusion.SfMaskedEdit.XForms.dll</HintPath>
     </Reference>
@@ -431,6 +428,9 @@
     </Reference>
     <Reference Include="Plugin.SimpleAudioPlayer">
       <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.3.0\lib\Xamarin.iOS10\Plugin.SimpleAudioPlayer.dll</HintPath>
+    </Reference>
+    <Reference Include="ASolute.Mobile.Models">
+      <HintPath>..\ASolute.Mobile.Models.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

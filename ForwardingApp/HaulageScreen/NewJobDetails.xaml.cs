@@ -301,6 +301,23 @@ namespace ASolute_Mobile.HaulageScreen
                     }
                 });
             }
+
+
+            //for fowarding job
+            if(jobItem.Done == 1 || jobItem.Done == 2)
+            {
+                confirm_icon.IsEnabled = false;
+                confirm_icon.Source = "confirmDisable.png";
+                futile_icon.IsEnabled = false;
+                futile_icon.Source = "futileDisable.png";
+
+                if(!(String.IsNullOrEmpty(jobItem.Remark)))
+                {
+                    remarkTextEditor.Text = jobItem.Remark;
+                }
+
+                Task.Run(async () => { await DisplayImage(); }); 
+            }
         }
 
         void SplitContainerNumber()
@@ -494,18 +511,13 @@ namespace ASolute_Mobile.HaulageScreen
 
                     if(Ultis.Settings.App == "asolute.Mobile.Forwarding")
                     {
-                        try
-                        {
+                        
                             jobItem.Done = 1;
                             jobItem.Remark = remarkTextEditor.Text;
                             App.Database.SaveItemAsync(jobItem);
                             previousPage.gotoCompletedPage = true;
                             await Navigation.PopAsync();
-                        }
-                        catch(Exception ex)
-                        {
-                            string excep = ex.Message;
-                        }
+                        
                     }
                     else
                     {

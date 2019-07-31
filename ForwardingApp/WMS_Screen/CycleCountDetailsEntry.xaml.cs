@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 using ZXing.Net.Mobile.Forms;
@@ -13,58 +13,86 @@ namespace ASolute_Mobile.WMS_Screen
 {
     public partial class CycleCountDetailsEntry : ContentPage
     {
-        string cycleCountId, cycleCountZone, cycleCountRack, ascending = "true";
+        string cycleCountId, cycleCountZone, cycleCountRack, cycleCountLevel, ascending = "true";
+        int cycleCountVer;
+        clsPalletTrx pallet = new clsPalletTrx();
 
-        public CycleCountDetailsEntry(string id, string zone, string rack, string level)
+        public CycleCountDetailsEntry(string id, string zone, string rack, string level, int countVer)
         {
             InitializeComponent();
 
             cycleCountId = id;
             cycleCountZone = zone;
             cycleCountRack = rack;
+            cycleCountLevel = level;
+            cycleCountVer = countVer;
 
-            Task.Run(async () => { await LoadCycleCount(); });
+            LoadCycleCount();
 
             Title = "Cycle Count Detail";
         }
 
         async void Handle_Clicked(object sender, EventArgs e)
         {
+            loading.IsVisible = true;
+
             var button = sender as SfButton;
             switch (button.StyleId)
             {
                 case "reverseBtn":
-                    await LoadCycleCount();
+                    LoadCycleCount();
                     break;
 
                 case "confirmBtn":
-                    if(emptyLocation.IsChecked == true || fullPallet.IsChecked == true || losseQty.IsChecked == true)
+                    if (emptyLocation.IsChecked == true || fullPallet.IsChecked == true || losseQty.IsChecked == true && (!(String.IsNullOrEmpty(locationEntry.Text))))
                     {
-                        if(losseQty.IsChecked == true )
+                        if (losseQty.IsChecked == true)
                         {
-                            if(!(String.IsNullOrEmpty(loseQuantityEntry.Text)) && Convert.ToInt32(loseQuantityEntry.Text) > 0)
+                            if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
                             {
-                                await PostCycleCount("Q");
+                                if (!(String.IsNullOrEmpty(loseQuantityEntry.Text)) && Convert.ToInt32(loseQuantityEntry.Text) > 0)
+                                {
+
+                                    PostCycleCount("Q");
+                                }
+                                else
+                                {
+                                    await DisplayAlert("Error", "Quantity must more than 0", "OK");
+                                }
+                            }
+                            else
+                            {
+                                await DisplayAlert("Error", "Please enter pallet id.", "OK");
                             }
                         }
                         else
                         {
-                            if(emptyLocation.IsChecked == true)
+                            if (emptyLocation.IsChecked == true)
                             {
-                               await PostCycleCount("E");
+                                PostCycleCount("E");
                             }
                             else if (fullPallet.IsChecked == true)
                             {
-                               await PostCycleCount("");
+                                if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
+                                {
+                                    PostCycleCount("");
+                                }
+                                else
+                                {
+                                    await DisplayAlert("Error", "Please enter pallet id.", "OK");
+                                }
+
                             }
                         }
                     }
                     else
                     {
-                        await DisplayAlert("Missing field", "Please select at least 1 of the option.", "OK");
+                        await DisplayAlert("Missing field", "Please key in all mandatory field and select at least 1 of the option.", "OK");
                     }
                     break;
             }
+
+            loading.IsVisible = false;
         }
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
@@ -97,11 +125,13 @@ namespace ASolute_Mobile.WMS_Screen
 
                         scanPage.OnScanResult += (result) =>
                         {
-                            Device.BeginInvokeOnMainThread(async () =>
+                            Device.BeginInvokeOnMainThread( () =>
                             {
-                                await Navigation.PopAsync();
+                                Navigation.PopAsync();
 
                                 palletIdEntry.Text = result.Text;
+
+                                GetPallet();
                             });
                         };
                     }
@@ -123,18 +153,12 @@ namespace ASolute_Mobile.WMS_Screen
             }
         }
 
-        async void Handle_Completed(object sender, System.EventArgs e)
+        void Handle_Completed(object sender, System.EventArgs e)
         {
-            var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(cycleCountId), this);
-            if (content != null)
-            {
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-                if (response.IsGood)
-                {
-
-                }
-            }
+            GetPallet();
         }
+
+
 
         private void CheckBox_StateChanged(object sender, StateChangedEventArgs e)
         {
@@ -148,6 +172,11 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         fullPallet.IsChecked = false;
                         losseQty.IsChecked = false;
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            palletIdContainer.ContainerBackgroundColor = Color.WhiteSmoke;
+                        });
                     }
                     break;
 
@@ -156,7 +185,13 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         emptyLocation.IsChecked = false;
                         losseQty.IsChecked = false;
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            palletIdContainer.ContainerBackgroundColor = Color.LightYellow;
+                        });
                     }
+
                     break;
 
                 case "losseQty":
@@ -164,41 +199,141 @@ namespace ASolute_Mobile.WMS_Screen
                     {
                         fullPallet.IsChecked = false;
                         emptyLocation.IsChecked = false;
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            palletIdContainer.ContainerBackgroundColor = Color.LightYellow;
+                        });
                     }
                     break;
 
             }
         }
 
-        async Task LoadCycleCount()
+        async void GetPallet()
         {
-            var reverse_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getCycleCountLoadURL(cycleCountId, cycleCountZone, cycleCountRack, ascending), this);
-            if (reverse_content != null)
+            try
             {
-                clsResponse reverse_response = JsonConvert.DeserializeObject<clsResponse>(reverse_content);
-                if (reverse_response.IsGood)
+
+                loading.IsVisible = true;
+
+                desc.Children.Clear();
+
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getPalletInquiryURL(palletIdEntry.Text), this);
+                if (content != null)
                 {
-                    ascending = (ascending == "false") ? "true" : "false";
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    if (response.IsGood)
+                    {
+                        pallet = JObject.Parse(content)["Result"].ToObject<clsPalletTrx>();
+
+                        Label topBlank = new Label();
+                        desc.Children.Add(topBlank);
+                        foreach (clsCaptionValue summary in pallet.Summary)
+                        {
+                            Label caption = new Label();
+                            caption.FontSize = 13;
+                            if (summary.Caption.Equals(""))
+                            {
+                                caption.Text = "    " + summary.Value;
+                            }
+                            else
+                            {
+                                caption.Text = "    " + summary.Caption + ": " + summary.Value;
+                            }
+
+                            desc.Children.Add(caption);
+                        }
+                        Label bottomBlank = new Label();
+                        desc.Children.Add(bottomBlank);
+                    }
+
+                    loading.IsVisible = false;
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        async void LoadCycleCount()
+        {
+            try
+            {
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getCycleCountLoadURL(cycleCountId, cycleCountZone, cycleCountRack, cycleCountLevel, ascending, cycleCountVer), this);
+                if (content != null)
+                {
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    if (response.IsGood)
+                    {
+                        ascending = (ascending == "false") ? "true" : "false";
+
+                        List<clsKeyValue> location = JObject.Parse(content)["Result"].ToObject<List<clsKeyValue>>();
+
+                        if (location.Count != 0)
+                        {
+                            if (!(String.IsNullOrEmpty(location[0].Value)))
+                            {
+                                locationEntry.Text = location[0].Value;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
             }
         }
 
-        async Task PostCycleCount(string countResult)
+        async void PostCycleCount(string countResult)
         {
-            clsPalletTrx pallet = new clsPalletTrx
+            try
             {
-                LinkId = cycleCountId
-            };
+                loading.IsVisible = true;
 
-            var content = await CommonFunction.CallWebService(1, pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.getCycleCountSaveURL(countResult), this);
-            if (content != null)
-            {
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
-                if (response.IsGood)
+                clsPalletTrx confirmedPallet = new clsPalletTrx();
+                confirmedPallet.LinkId = cycleCountId;
+                confirmedPallet.NewLocation = locationEntry.Text;
+
+                if (!(String.IsNullOrEmpty(palletIdEntry.Text)))
                 {
-
+                    confirmedPallet.Id = palletIdEntry.Text;
+                    confirmedPallet.Quantity = (!(String.IsNullOrEmpty(loseQuantityEntry.Text))) ? Convert.ToInt32(loseQuantityEntry.Text) : 0;
+                    confirmedPallet.CargoId = pallet.CargoId;
                 }
+
+                var content = await CommonFunction.CallWebService(1, confirmedPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.getCycleCountSaveURL(countResult, cycleCountVer), this);
+                if (content != null)
+                {
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                    if (response.IsGood)
+                    {
+                        await DisplayAlert("Success", "Cycle count succeed.", "OK");
+
+                        locationEntry.Text = "";
+                        palletIdEntry.Text = "";
+                        loseQuantityEntry.Text = "";
+                        palletEntryCancel.IsVisible = false;
+                        losseQuantityCancel.IsVisible = false;
+
+                        desc.Children.Clear();
+
+                        emptyLocation.IsChecked = false;
+                        fullPallet.IsChecked = false;
+                        losseQty.IsChecked = false;
+                    }
+                }
+
+                loading.IsVisible = false;
             }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+
         }
     }
 }

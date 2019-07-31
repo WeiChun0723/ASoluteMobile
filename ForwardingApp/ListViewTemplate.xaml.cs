@@ -365,12 +365,17 @@ namespace ASolute_Mobile
                             {
                                 count++;
 
-                                if (summaryItem.Caption == "Closing Date")
+                                if (!(String.IsNullOrEmpty(summaryItem.Caption)))
                                 {
-                                    closingTime = summaryItem.Value.Replace('-', '/');
-                                }
-                                else if (!(String.IsNullOrEmpty(summaryItem.Caption)))
-                                {
+                                    if (summaryItem.Caption == "Count Sheet")
+                                    {
+                                        record.Name += "/" + summaryItem.Value;
+                                    }
+                                    else if(summaryItem.Caption == "Closing Date")
+                                    {
+                                        closingTime = summaryItem.Value.Replace('-', '/');
+                                    }
+
                                     if (count == data.Summary.Count)
                                     {
                                         summary += summaryItem.Caption + " :  " + summaryItem.Value;
@@ -456,6 +461,8 @@ namespace ASolute_Mobile
             noData.IsVisible = (Item.Count == 0) ? true : false;
         }
 
+
+        #region AILS Yard search funtion
         //AILS Yard container inquiry combo box data
         async void GetComboBoxData(string getBlockIdUri)
         {
@@ -540,7 +547,10 @@ namespace ASolute_Mobile
                 await DisplayAlert("Error", ex.Message, "OK");
             }
         }
+        #endregion
 
+
+        #region Lgc function
         //LGC button clicked
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
@@ -592,5 +602,6 @@ namespace ASolute_Mobile
                     break;
             }
         }
+        #endregion LGC 
     }
 }

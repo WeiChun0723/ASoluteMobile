@@ -93,9 +93,9 @@ namespace ASolute_Mobile.Data
         #endregion
 
         #region forwarding
-        public List<ListItems> GetJobs(string category, int status)
+        public List<ListItems> GetJobs(int status)
         {
-            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Category] = ? AND [Done] = ?", category, status);
+            return database.Query<ListItems>("SELECT * FROM [ListItems] WHERE [Done] = ?", status);
         }
 
         #endregion
@@ -116,7 +116,6 @@ namespace ASolute_Mobile.Data
             }
 
         }
-
 
         public int SaveSummarysAsync(SummaryItems item)
         {

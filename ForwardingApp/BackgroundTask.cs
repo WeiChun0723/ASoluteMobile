@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using ASolute_Mobile.Ultis;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Xamarin.Forms;
 using ASolute_Mobile.Models;
-using ASolute_Mobile.Data;
 using ASolute.Mobile.Models;
-using Plugin.Geolocator;
 using Newtonsoft.Json.Linq;
-using System.Collections.ObjectModel;
+
 
 namespace ASolute_Mobile
 {
@@ -67,7 +62,30 @@ namespace ASolute_Mobile
         #region Forwarding data sync
         public async static Task UploadLatestJobs()
         {
+            if (Ultis.Settings.SessionSettingKey != null && Ultis.Settings.SessionSettingKey != "")
+            {
+                if (NetworkCheck.IsInternet())
+                {
+                    List<ListItems> pendingItems = App.Database.GetJobs(1);
 
+                    foreach (ListItems item in pendingItems)
+                    {
+                        var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getUpdateJobURL(item.Id, item.Remark), null);
+
+                        if (content != null)
+                        {
+                            clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                            if(response.IsGood)
+                            {
+                                item.Done = 2;
+
+                                App.Database.SaveItemAsync(item);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static async Task DownloadLatestJobs(object p)
@@ -76,7 +94,6 @@ namespace ASolute_Mobile
             {
                 if (NetworkCheck.IsInternet())
                 {
-
                     var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadJobListURL(), null);
 
                     if (content != null)

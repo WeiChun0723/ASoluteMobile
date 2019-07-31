@@ -10,7 +10,7 @@
                 <Label Text="Satelite map " />
             </StackLayout>
             <buttons:SfButton Text="RFC"  IsVisible="false" x:Name="rfcBtn" Clicked="Handle_Clicked" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" HorizontalOptions="FillAndExpand"/>
-            <buttons:SfButton x:Name="confirmBtn" Text="Confirm Delivery" HeightRequest="50" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" IsVisible="false" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" />
+            <buttons:SfButton x:Name="confirmBtn" Text="Confirm Receive" HeightRequest="50" Clicked="Handle_Clicked" HorizontalOptions="FillAndExpand" IsVisible="false" Style="{StaticResource buttonStyle}" BackgroundColor="#6495ed" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

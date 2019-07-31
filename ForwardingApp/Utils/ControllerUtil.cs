@@ -19,10 +19,6 @@ namespace ASolute_Mobile.Utils
             return String.Format("Fwd/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String getUploadImageURL()
-        {
-            return String.Format("Fwd/Upload?SessionId={0}&GeoLoc={1}&JobId={2}&FileName={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(), "","");
-        }
 
         public static String getUpdateJobURL(string jobId,string jobRemark)
         {
@@ -31,7 +27,7 @@ namespace ASolute_Mobile.Utils
             {
                 remarks = System.Net.WebUtility.UrlEncode(jobRemark).Replace("+", "%20");
             }
-            return String.Format("Fwd/Update?key={0}&GeoLoc={1}&JobId={2}&DateTime={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobId, System.Net.WebUtility.UrlEncode(DateTime.Now.ToString("o")), remarks);
+            return String.Format("Fwd/Save?SessionId={0}&GeoLoc={1}&JobId={2}&DateTime={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobId, System.Net.WebUtility.UrlEncode(DateTime.Now.ToString("o")), remarks);
         }
 
         public static String getFutileJobURL(string jobId, string jobRemark)
@@ -41,7 +37,7 @@ namespace ASolute_Mobile.Utils
             {
                 remarks = System.Net.WebUtility.UrlEncode(jobRemark).Replace("+", "%20");
             }
-            return String.Format("Fwd/Futile?key={0}&GeoLoc={1}&JobId={2}&ReasonCode={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobId, "R1", remarks);
+            return String.Format("Fwd/Futile?SessionId={0}&GeoLoc={1}&JobId={2}&ReasonCode={3}&Remarks={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(), jobId, "R1", remarks);
         }
         #endregion
 
@@ -676,29 +672,29 @@ namespace ASolute_Mobile.Utils
             return String.Format("Wms/CycleCount/List?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
-        public static String getZoneListURL(string id)
+        public static String getZoneListURL(string id,int countVer)
         {
-            return String.Format("Wms/CycleCount/Zone?SessionId={0}&GeoLoc={1}&Id={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id);
+            return String.Format("Wms/CycleCount/Zone?SessionId={0}&GeoLoc={1}&Id={2}&CountVer={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,countVer);
         }
 
-        public static String getRackListURL(string id,string zone)
+        public static String getRackListURL(string id,string zone, int countVer)
         {
-            return String.Format("Wms/CycleCount/Rack?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,zone);
+            return String.Format("Wms/CycleCount/Rack?SessionId={0}&GeoLoc={1}&Id={2}&CountVer={3}&ZoneCode={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,countVer,zone);
         }
 
-        public static String getLevelListURL(string id, string zone, string rack)
+        public static String getLevelListURL(string id, string zone, string rack,int countVer)
         {
-            return String.Format("Wms/CycleCount/Level?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}&RackId={4}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,zone,rack);
+            return String.Format("Wms/CycleCount/Level?SessionId={0}&GeoLoc={1}&Id={2}&CountVer={3}&ZoneCode={4}&RackId={5}", Ultis.Settings.SessionSettingKey, getPositionAsync(),id,countVer,zone,rack);
         }
 
-        public static String getCycleCountLoadURL(string id, string zone, string rack, string ascending)
+        public static String getCycleCountLoadURL(string id, string zone, string rack, string level,string ascending, int countVer)
         {
-            return String.Format("Wms/CycleCount/Load?SessionId={0}&GeoLoc={1}&Id={2}&ZoneCode={3}&RackId={4}&Ascending={5}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id, zone, rack, ascending);
+            return String.Format("Wms/CycleCount/Load?SessionId={0}&GeoLoc={1}&Id={2}&CountVer={3}&ZoneCode={4}&RackId={5}&LevelNo={6}&Ascending={7}", Ultis.Settings.SessionSettingKey, getPositionAsync(), id,countVer, zone, rack,level, ascending);
         }
 
-        public static String getCycleCountSaveURL(string countResult)
+        public static String getCycleCountSaveURL(string countResult, int countVer)
         {
-            return String.Format("Wms/CycleCount/Save?SessionId={0}&GeoLoc={1}&CountResult={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), countResult);
+            return String.Format("Wms/CycleCount/Save?SessionId={0}&GeoLoc={1}&CountVer={2}&CountResult={3}", Ultis.Settings.SessionSettingKey, getPositionAsync(),countVer, countResult);
         }
 
 
