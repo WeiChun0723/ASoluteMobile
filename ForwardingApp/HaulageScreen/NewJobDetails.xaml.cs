@@ -42,6 +42,7 @@ namespace ASolute_Mobile.HaulageScreen
 
             switch (Ultis.Settings.App)
             {
+
                 case "asolute.Mobile.Forwarding":
                     NavigationPage.SetHasNavigationBar(this, false);
                     break;
@@ -50,6 +51,8 @@ namespace ASolute_Mobile.HaulageScreen
                     haulageJobStack.IsVisible = true;
                     barCode_icon.IsVisible = true;
                     break;
+
+
             }
 
 
@@ -304,19 +307,19 @@ namespace ASolute_Mobile.HaulageScreen
 
 
             //for fowarding job
-            if(jobItem.Done == 1 || jobItem.Done == 2)
+            if (jobItem.Done == 1 || jobItem.Done == 2)
             {
                 confirm_icon.IsEnabled = false;
                 confirm_icon.Source = "confirmDisable.png";
                 futile_icon.IsEnabled = false;
                 futile_icon.Source = "futileDisable.png";
 
-                if(!(String.IsNullOrEmpty(jobItem.Remark)))
+                if (!(String.IsNullOrEmpty(jobItem.Remark)))
                 {
                     remarkTextEditor.Text = jobItem.Remark;
                 }
 
-                Task.Run(async () => { await DisplayImage(); }); 
+                Task.Run(async () => { await DisplayImage(); });
             }
         }
 
@@ -472,6 +475,10 @@ namespace ASolute_Mobile.HaulageScreen
 
                                 if (response.IsGood)
                                 {
+                                    jobItem.Done = 2;
+
+                                    App.Database.SaveItemAsync(jobItem);
+
                                     await DisplayAlert("Success", "Job updated as futile", "OK");
 
                                     await Navigation.PopAsync();
@@ -509,16 +516,17 @@ namespace ASolute_Mobile.HaulageScreen
                         }
                     }
 
-                    if(Ultis.Settings.App == "asolute.Mobile.Forwarding")
+                    if (Ultis.Settings.App == "asolute.Mobile.Forwarding")
                     {
-                        
-                            jobItem.Done = 1;
-                            jobItem.Remark = remarkTextEditor.Text;
-                            App.Database.SaveItemAsync(jobItem);
-                            previousPage.gotoCompletedPage = true;
-                            await Navigation.PopAsync();
-                        
+
+                        jobItem.Done = 1;
+                        jobItem.Remark = remarkTextEditor.Text;
+                        App.Database.SaveItemAsync(jobItem);
+                        previousPage.gotoCompletedPage = true;
+                        await Navigation.PopAsync();
+
                     }
+                  
                     else
                     {
                         if (done == true || signatureStack.IsVisible == false)
@@ -530,14 +538,14 @@ namespace ASolute_Mobile.HaulageScreen
 
                                 if (status)
                                 {
-                                    InitializeObject();
+                                    UpdateJob();
                                 }
                                 else
                                 {
                                     var answer = await DisplayAlert("Error", "Invalid container check digit, continue?", "Yes", "No");
                                     if (answer.Equals(true))
                                     {
-                                        InitializeObject();
+                                        UpdateJob();
                                     }
 
                                 }
@@ -552,12 +560,12 @@ namespace ASolute_Mobile.HaulageScreen
             }
         }
 
-        async void InitializeObject()
+        async void UpdateJob()
         {
             loading.IsVisible = true;
             try
             {
-                //if (contPrefix.Text.Length >= 4 && contNum.Text.Length >= 7)
+
 
                 if (!(sealNoView.ContainerBackgroundColor == Color.LightYellow) || (sealNoView.ContainerBackgroundColor == Color.LightYellow && !(String.IsNullOrEmpty(sealNoEntry.Text))))
                 {
@@ -585,8 +593,6 @@ namespace ASolute_Mobile.HaulageScreen
 
                         if (content != null)
                         {
-
-
                             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
 
                             if (response.IsGood)

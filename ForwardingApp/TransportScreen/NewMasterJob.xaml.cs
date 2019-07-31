@@ -118,9 +118,7 @@ namespace ASolute_Mobile.TransportScreen
             {
                 await DisplayAlert("Missing field", "Please enter all mandatory field", "OK");
             }
-
         }
-
     }
 
     public class Lists

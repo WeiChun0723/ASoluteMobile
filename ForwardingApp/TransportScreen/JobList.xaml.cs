@@ -16,7 +16,7 @@ namespace ASolute_Mobile.TransportScreen
     public partial class JobList : ContentPage
     {
 
-        List<TruckModel> records = new List<TruckModel>();
+        List<ListItems> records = new List<ListItems>();
         string webServiceAction;
 
         public JobList(string action, string name)
@@ -52,7 +52,7 @@ namespace ASolute_Mobile.TransportScreen
 
         public async void selectJob(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new TransportScreen.JobDetails(((TruckModel)e.Item)));
+            await Navigation.PushAsync(new TransportScreen.JobDetails(((ListItems)e.Item)));
         }
 
         protected void pendingJobRefresh(object sender, EventArgs e)
@@ -105,8 +105,7 @@ namespace ASolute_Mobile.TransportScreen
                 {
                     try
                     {
-                        List<TruckModel> Item = new List<TruckModel>(App.Database.GetPendingRecord());
-                        jobList.ItemsSource = Item.Where(x => x.Summary.Contains(searchKey));
+                        jobList.ItemsSource = records.Where(x => x.Summary.Contains(searchKey));
 
                     }
                     catch
@@ -188,8 +187,7 @@ namespace ASolute_Mobile.TransportScreen
             {
                 records.Clear();
 
-                App.Database.DeleteTruckModel();
-                App.Database.DeleteTruckModeDetail();
+                App.Database.deleteRecordDetails();
 
                 List<clsTruckingModel> trucks = JObject.Parse(content)["Result"].ToObject<List<clsTruckingModel>>();
         
@@ -197,10 +195,10 @@ namespace ASolute_Mobile.TransportScreen
                 {
 
                     string summary = "";
-                    TruckModel record = new TruckModel
+                    ListItems record = new ListItems
                     {
                         TruckId = truck.TruckId,
-                        RecordId = truck.Id,
+                        Id = truck.Id,
                         Action = truck.Action,
                         EventRecordId = truck.EventRecordId,
                         Latitude = truck.Latitude,
@@ -211,11 +209,11 @@ namespace ASolute_Mobile.TransportScreen
 
                     if (!(String.IsNullOrEmpty(truck.BackColor)))
                     {
-                        record.BackColor = truck.BackColor;
+                        record.Background = truck.BackColor;
                     }
                     else
                     {
-                        record.BackColor = "#ffffff";
+                        record.Background = "#ffffff";
                     }
 
                     foreach (clsCaptionValue truckSummary in truck.Summary)
@@ -238,9 +236,7 @@ namespace ASolute_Mobile.TransportScreen
                     }
 
                     record.Summary = summary;
-
-                    App.Database.SaveTruckModelAsync(record);
-
+                    records.Add(record);
                 }
                 loadJobList();
             }
@@ -252,15 +248,15 @@ namespace ASolute_Mobile.TransportScreen
 
         public void loadJobList()
         {
-            List<TruckModel> Item = new List<TruckModel>(App.Database.GetPendingRecord());
-            jobList.ItemsSource = Item;
+            
+            jobList.ItemsSource = records;
             jobList.HasUnevenRows = true;
 
             loading.IsRunning = false;
             loading.IsVisible = false;
             loading.IsEnabled = false;
 
-            if (Item.Count == 0)
+            if (records.Count == 0)
             {
                 jobList.IsVisible = true;
                 noData.IsVisible = true;

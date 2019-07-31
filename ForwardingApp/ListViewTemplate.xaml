@@ -11,7 +11,6 @@
         <!--LogBook-->
         <DatePicker x:Name="logBookDate" IsVisible="false" HorizontalOptions="FillAndExpand" DateSelected="Handle_DateSelected" BackgroundColor="LightYellow" />
         <!--LogBook-->
-
         
         <StackLayout Orientation="Horizontal">
             <SearchBar x:Name="searchBar" IsVisible="true" Placeholder="Search here to Filter" TextChanged="OnFilterTextChanged" HeightRequest="50" WidthRequest="270" HorizontalOptions="FillAndExpand"/>

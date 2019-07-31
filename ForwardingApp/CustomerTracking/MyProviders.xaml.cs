@@ -85,7 +85,6 @@ namespace ASolute_Mobile.CustomerTracking
         public async void selectProvider(object sender, ItemTappedEventArgs e)
         {
             //await Navigation.PushAsync(new ContainerCategory(((ListItems)e.Item).Id,((ListItems)e.Item).Name));
-            //await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getContainerFullListURL(((ListItems)e.Item).Id)));
             await Navigation.PushAsync(new NewCategoryPage(((ListItems)e.Item), ControllerUtil.getContainerFullHeaderURL(((ListItems)e.Item).Id)));
         }
 

@@ -13,7 +13,7 @@ namespace ASolute_Mobile.TransportScreen
     public partial class SubJobList : ContentPage
     {
         string jobID;
-        ObservableCollection<TruckModel> records = new ObservableCollection<TruckModel>();
+        ObservableCollection<ListItems> records = new ObservableCollection<ListItems>();
         
         public SubJobList(String JobNo)
         {
@@ -36,7 +36,7 @@ namespace ASolute_Mobile.TransportScreen
 
         public async void selectSubJob(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new TransportScreen.CargoItem(((TruckModel)e.Item).RecordId));
+            await Navigation.PushAsync(new TransportScreen.CargoItem(((ListItems)e.Item).Id));
         }
 
         protected async void GetSubJobList()
@@ -48,17 +48,16 @@ namespace ASolute_Mobile.TransportScreen
 
             if (pending_response.IsGood)
             {
-                App.Database.DeleteTruckModel();
 
                 List<clsTruckingModel> trucks = JObject.Parse(content)["Result"].ToObject<List<clsTruckingModel>>();
 
                 foreach (clsTruckingModel truck in trucks)
                 {
                     string summary = "";
-                    TruckModel record = new TruckModel();
+                    ListItems record = new ListItems();
 
                     record.TruckId = truck.TruckId;
-                    record.RecordId = truck.Id;
+                    record.Id = truck.Id;
 
                     foreach (clsCaptionValue truckValue in truck.Summary)
                     {
@@ -79,8 +78,6 @@ namespace ASolute_Mobile.TransportScreen
                     }
 
                     record.Summary = summary;
-
-                    //App.Database.SaveTruckModelAsync(record);
                     records.Add(record);
                 }
 
@@ -104,13 +101,10 @@ namespace ASolute_Mobile.TransportScreen
 
             if (records.Count == 0)
             {
-
                 noData.IsVisible = true;
-
             }
             else
             {
-
                 noData.IsVisible = false;
             }
         }

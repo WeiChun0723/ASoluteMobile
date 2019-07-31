@@ -16,14 +16,13 @@ namespace ASolute_Mobile.Data
         public Database(string dbPath)
         {
             database = new SQLiteConnection(dbPath);
-            //database.CreateTable<ChatRecord>();
+
             database.CreateTable<UserItem>();
             database.CreateTable<SummaryItems>();
             database.CreateTable<DetailItems>();
             database.CreateTable<ListItems>();
             database.CreateTable<AppImage>();
             database.CreateTable<JobNoList>();
-            database.CreateTable<TruckModel>();
             database.CreateTable<AutoComplete>();
             database.CreateTable<BusTrip>();
             database.CreateTable<SoldTicket>();
@@ -38,7 +37,6 @@ namespace ASolute_Mobile.Data
             database.DropTable<ListItems>();
             //database.DropTable<AppImage>();
             database.DropTable<JobNoList>();
-            database.DropTable<TruckModel>();
             database.DropTable<BusTrip>();
             database.DropTable<SoldTicket>();
         }
@@ -129,6 +127,25 @@ namespace ASolute_Mobile.Data
 
                 return database.Insert(item);
             }
+        }
+
+        public int SaveDetailsAsync(DetailItems item)
+        {
+            if (item.tableID != 0)
+            {
+
+                return database.Update(item);
+            }
+            else
+            {
+
+                return database.Insert(item);
+            }
+        }
+
+        public void DeleteTruckModeDetail()
+        {
+            database.Query<DetailItems>("DELETE FROM DetailItems");
         }
 
         public  List<ListItems> GetMainMenu(string category)
@@ -364,50 +381,9 @@ namespace ASolute_Mobile.Data
         #endregion
 
         #region Trucking
-        public int SaveTruckModelAsync(TruckModel record)
-        {
-            record.owner = Ultis.Settings.SessionUserId;
-            if (record.tableID != 0)
-            {
 
-                return database.Update(record);
-            }
-            else
-            {
 
-                return database.Insert(record);
-            }
-
-        }
-
-        public List<TruckModel> GetPendingRecord()
-        {
-            return database.Query<TruckModel>("SELECT * FROM [TruckModel] WHERE [owner] = ?", Ultis.Settings.SessionUserId);
-        }
-
-        public void DeleteTruckModel()
-        {
-            database.Query<TruckModel>("DELETE FROM TruckModel");
-        }
-
-        public int SaveDetailsAsync(DetailItems item)
-        {
-            if (item.tableID != 0)
-            {
-
-                return database.Update(item);
-            }
-            else
-            {
-
-                return database.Insert(item);
-            }
-        }
-
-        public void DeleteTruckModeDetail()
-        {
-            database.Query<DetailItems>("DELETE FROM DetailItems");
-        }
+        
         #endregion 
 
 

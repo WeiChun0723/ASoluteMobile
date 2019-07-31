@@ -143,7 +143,7 @@ namespace ASolute_Mobile.Models
         public bool ReqSign { get; set; }
         public long EventRecordId { get; set; }
         public string Remark { get; set; }
-        public string RefNo { get; set; }
+        public string JobNo { get; set; }
         public string ReasonCode { get; set; }
         public string SealMode { get; set; }
     }
@@ -156,30 +156,12 @@ namespace ASolute_Mobile.Models
         public string JobNoValue { get; set; }
     }
 
-    //AILS Trucking model
-    public class TruckModel : Generic
-    {
-        public string TruckId { get; set; }
-        public string TelNo { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public bool ReqSign { get; set; }
-        public long EventRecordId { get; set; }
-        public string Title { get; set; }
-        public string RefNo { get; set; }
-        public string ReasonCode { get; set; }
-        public string Remark { get; set; }
-        public string RecordId { get; set; }
-        public string Summary { get; set; }
-        public string JobNo { get; set; }
-        public string BackColor { get; set; }
-        public string Action { get; set; }
-    }
-
     public class AutoComplete : Generic
     {
         public string Value { get; set; }
         public string Type { get; set; }
     }
 
+
+ 
 }

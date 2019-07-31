@@ -43,7 +43,7 @@ namespace ASolute_Mobile
         public ListViewTemplate(ListItems items, string callUri)
         {
             InitializeComponent();
-            
+
             //some of the list view require special control for filtering purpose
             switch (items.Id)
             {
@@ -91,7 +91,7 @@ namespace ASolute_Mobile
             {
                 LGCCartonStack.IsVisible = true;
             }
-            else if(callUri.Contains("Trucking/List"))
+            else if (callUri.Contains("Trucking/List"))
             {
                 truckingScan_icon.IsVisible = true;
                 controlStack.IsVisible = false;
@@ -243,9 +243,9 @@ namespace ASolute_Mobile
 
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-            if(uri.Contains("Parcel/List"))
+            if (uri.Contains("Parcel/List"))
             {
-               await PopupNavigation.Instance.PushAsync(new LGCParcelPopUp(((ListItems)e.Item)));
+                await PopupNavigation.Instance.PushAsync(new LGCParcelPopUp(((ListItems)e.Item)));
             }
             else
             {
@@ -371,7 +371,7 @@ namespace ASolute_Mobile
                                     {
                                         record.Name += "/" + summaryItem.Value;
                                     }
-                                    else if(summaryItem.Caption == "Closing Date")
+                                    else if (summaryItem.Caption == "Closing Date")
                                     {
                                         closingTime = summaryItem.Value.Replace('-', '/');
                                     }
@@ -425,9 +425,10 @@ namespace ASolute_Mobile
                                 }
                             }
                             else
-                            {
+                            { 
                                 overloadRecord.Add(record);
                             }
+
                         }
 
                         if (records.Count < 50 && menuItems.Id != "CycleCount")
@@ -437,10 +438,9 @@ namespace ASolute_Mobile
                         else
                         {
                             listView.ItemsSource = overloadRecord;
-
                         }
 
-                        listView.IsRefreshing = false;
+                       listView.IsRefreshing = false;
                     }
                 }
             }
@@ -491,7 +491,7 @@ namespace ASolute_Mobile
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
-               
+
             }
         }
 
@@ -572,7 +572,7 @@ namespace ASolute_Mobile
                     var cancel_content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.cancelCartonURL(menuItems.Id), this);
                     clsResponse cancel_response = JsonConvert.DeserializeObject<clsResponse>(cancel_content);
 
-                    if(cancel_response.IsGood == true)
+                    if (cancel_response.IsGood == true)
                     {
                         await DisplayAlert("Success", "Carton cancelled.", "OK");
                     }

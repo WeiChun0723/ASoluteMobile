@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.TransportScreen.JobList">
@@ -20,8 +20,8 @@
                 <DataTemplate>
                      <ViewCell>
                             
-                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding BackColor}">
-                       <StackLayout BackgroundColor="{Binding BackColor}">
+                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
+                       <StackLayout BackgroundColor="{Binding Background}">
                                 
                                 <Label Text="{Binding Summary}" FontAttributes="Bold" />
                         </StackLayout>

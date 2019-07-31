@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>ASolute Fleet</string>
+	<string>AILS Tracking</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.asolute.ASoluteFleet</string>
+	<string>com.asolute.AILSTracking</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -45,13 +45,13 @@
 	<string>This app needs access to the GPS location.</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>CFBundleShortVersionString</key>
-	<string>45</string>
 	<key>CFBundleVersion</key>
-	<string>2.6</string>
+	<string>2.4</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to the photo library for picture selection.</string>
 	<key>CFBundleName</key>
-	<string>ASoluteFleet</string>
+	<string>AILS Tracking</string>
+	<key>CFBundleShortVersionString</key>
+	<string>50</string>
 </dict>
 </plist>

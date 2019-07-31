@@ -301,8 +301,6 @@ namespace ASolute_Mobile
                     Ultis.Settings.UpdateTime = DateTime.Now.ToString();
                 }
             }
-
-
         }
 
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
@@ -338,7 +336,6 @@ namespace ASolute_Mobile
                     if (Ultis.Settings.App == "asolute.Mobile.AILSTrucking")
                     {
                         await Navigation.PushAsync(new TransportScreen.JobList(((ListItems)e.Item).Action, ((ListItems)e.Item).Name));
-                        // await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getTruckListURL(((ListItems)e.Item).Action)));
                     }
                     else
                     {

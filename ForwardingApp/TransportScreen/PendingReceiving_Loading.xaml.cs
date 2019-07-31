@@ -14,7 +14,7 @@ namespace ASolute_Mobile.TransportScreen
     {
 
         string title = "";
-        ObservableCollection<TruckModel> records = new ObservableCollection<TruckModel>();
+        ObservableCollection<ListItems> records = new ObservableCollection<ListItems>();
 
         public PendingReceiving_Loading(string pageTitle)
         {
@@ -49,11 +49,11 @@ namespace ASolute_Mobile.TransportScreen
          
             if(Title.Equals("Cargo Measuring"))
             {
-                await Navigation.PushAsync(new SubJobList(((TruckModel)e.Item).RecordId));
+                await Navigation.PushAsync(new SubJobList(((ListItems)e.Item).Id));
             }
             else
             {
-                await Navigation.PushAsync(new CargoEntry(((TruckModel)e.Item).TruckId, ((TruckModel)e.Item).RecordId, title));
+                await Navigation.PushAsync(new CargoEntry(((ListItems)e.Item).TruckId, ((ListItems)e.Item).Id, title));
             }
 
         }
@@ -90,17 +90,16 @@ namespace ASolute_Mobile.TransportScreen
 
             if(pending_response.IsGood)
             {
-                App.Database.DeleteTruckModel();
 
                 List<clsTruckingModel> trucks = JObject.Parse(content)["Result"].ToObject<List<clsTruckingModel>>();
                
                 foreach (clsTruckingModel truck in trucks)
                 {
                     string summary = "";
-                    TruckModel record = new TruckModel();
+                    ListItems record = new ListItems();
 
                     record.TruckId = truck.TruckId;
-                    record.RecordId = truck.Id;
+                    record.Id = truck.Id;
 
                     foreach(clsCaptionValue truckValue in truck.Summary)
                     {
@@ -114,8 +113,6 @@ namespace ASolute_Mobile.TransportScreen
                     }
 
                     record.Summary = summary;
-
-                    //App.Database.SaveTruckModelAsync(record);
                     records.Add(record);
                 }
 

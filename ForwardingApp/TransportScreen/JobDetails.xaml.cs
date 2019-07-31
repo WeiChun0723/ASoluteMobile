@@ -23,11 +23,11 @@ namespace ASolute_Mobile.TransportScreen
         private byte[] scaledImageByte;
         List<AppImage> images = new List<AppImage>();
 
-        public JobDetails(TruckModel record)
+        public JobDetails(ListItems record)
         {
             InitializeComponent();
 
-            jobID = record.RecordId;
+            jobID = record.Id;
             eventRecordID = record.EventRecordId;
             action = record.Action;
 
