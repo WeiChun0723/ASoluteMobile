@@ -16,8 +16,8 @@ namespace ASolute_Mobile.CustomerTracking
     {
         ObservableCollection<string> categories = new ObservableCollection<string>();
         ObservableCollection<string> filterCategories = new ObservableCollection<string>();
-        List<ListItems> items;
-        List<clsDataRow> records;
+        List<ListItems> items = new List<ListItems>();
+        List<clsDataRow> records = new List<clsDataRow>();
         ListItems haulier;
         string callURL;
         bool multipleFilterCheck = false, savedCheck = true;
@@ -61,7 +61,6 @@ namespace ASolute_Mobile.CustomerTracking
 
             if (savedCheck == false)
             {
-
                 switch (checkBox.StyleId)
                 {
                     case "Export":
@@ -103,7 +102,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                 if ((Export.IsChecked == false || Import.IsChecked == false || Local.IsChecked == false) && multipleFilterCheck == true)
                 {
-                    //items = null;
+                    /*//items = null;
                     foreach (ListItems item in items.ToList())
                     {
                         if (item.Action == checkedAction)
@@ -115,21 +114,40 @@ namespace ASolute_Mobile.CustomerTracking
                     if (items.Count == 0)
                     {
                         items.Clear();
+                        
                     }
 
-                    multipleFilterCheck = false;
+                    multipleFilterCheck = false;*/
+
+                    
                 }
+
+                items.Clear();
 
                 if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
                     (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
                 {
-
+                    multipleFilterCheck = true;
                     listView.ItemsSource = categories;
-                    items.Clear();
+                   
                 }
                 else
                 {
-                    filterCategories.Clear();
+
+                    if (Export.IsChecked == true)
+                    {
+                        checkContainerList("E", Export);
+                    }
+                    if (Import.IsChecked == true)
+                    {
+                        checkContainerList("I", Import);
+                    }
+                    if (Local.IsChecked == true)
+                    {
+                        checkContainerList("L", Local);
+                    }
+
+                   /* filterCategories.Clear();
 
                     List<ListItems> all = new List<ListItems>(App.Database.GetAllContainerDetail());
 
@@ -166,7 +184,7 @@ namespace ASolute_Mobile.CustomerTracking
                         filterCategories.Add(splitCategory[0] + " (" + count + ")");
                     }
 
-                    listView.ItemsSource = filterCategories;
+                    listView.ItemsSource = filterCategories;*/
                 }
             }
         }
@@ -186,6 +204,7 @@ namespace ASolute_Mobile.CustomerTracking
                     if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
                     (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
                     {
+                       
                         listView.ItemsSource = categories;
                     }
                     else
@@ -227,7 +246,7 @@ namespace ASolute_Mobile.CustomerTracking
 
                         filterCategories.Add(splitCategory[0] + " (" + count + ")");
                     }
-
+                    
                     listView.ItemsSource = filterCategories;
                 }
             }
@@ -328,6 +347,10 @@ namespace ASolute_Mobile.CustomerTracking
 
                         listView.ItemsSource = categories;
 
+                        //filter the data when selected categories
+
+                        items.Clear();
+
                         if (Ultis.Settings.ExportCheck == "E")
                         {
                             Export.IsChecked = true;
@@ -363,7 +386,7 @@ namespace ASolute_Mobile.CustomerTracking
                 if ((Export.IsChecked == false && Import.IsChecked == false && Local.IsChecked == false) ||
                     (Export.IsChecked == true && Import.IsChecked == true && Local.IsChecked == true))
                 {
-
+                    
                     listView.ItemsSource = categories;
                     items.Clear();
                 }
@@ -417,25 +440,29 @@ namespace ASolute_Mobile.CustomerTracking
 
         async void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-            string[] split = e.Item.ToString().Split(" (");
-
-            string selectedCategory = split[0];
+            string[] category = e.Item.ToString().Split(" (");
+            string[] categoryCount = category[1].Split(")");
+            string selectedCategory = category[0];
 
             List<ListItems> categoryItem = null;
 
-            if (items == null || items.Count == 0)
+            if(Convert.ToInt32(categoryCount[0]) !=0)
             {
-                categoryItem = new List<ListItems>(App.Database.GetContainerDetail(selectedCategory));
-            }
-            else
-            {
-                categoryItem = items.Where(x => x.Category.Contains(selectedCategory)).ToList();
-            }
+                if (items == null || items.Count == 0)
+                {
+                    categoryItem = new List<ListItems>(App.Database.GetContainerDetail(selectedCategory));
+                }
+                else
+                {
+                    categoryItem = items.Where(x => x.Category.Contains(selectedCategory)).ToList();
+                }
 
-            if (categoryItem.Count != 0)
-            {
-                await Navigation.PushAsync(new NewCategoryDetail(categoryItem, selectedCategory, haulier.Id));
+                if (categoryItem.Count != 0)
+                {
+                    await Navigation.PushAsync(new NewCategoryDetail(categoryItem, selectedCategory, haulier.Id));
+                }
             }
+            
         }
 
         protected void Handle_Refreshing(object sender, EventArgs e)

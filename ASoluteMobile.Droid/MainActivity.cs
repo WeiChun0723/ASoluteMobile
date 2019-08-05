@@ -15,7 +15,7 @@ using Haulage.Droid.MobilePrinter;
 
 namespace ASolute_Mobile.Droid
 {
-    [Activity(Label = "AILS Haulage", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Asolute Fleet", Icon = "@drawable/appIcon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static Activity activity;
@@ -51,6 +51,7 @@ namespace ASolute_Mobile.Droid
                 }
             }
 
+            //ails bus or forwarding app run timer that download latest record and upload down record
             if (PackageName.Equals("asolute.Mobile.AILSBUS") || PackageName.Equals("asolute.Mobile.Forwarding") || PackageName.Equals("com.asolute.Forwarding"))
             {
                 var backgroundDataSyncPendingIntent = PendingIntent.GetBroadcast(this, 0, new Intent(this, typeof(BackgroundDataSyncReceiver)), PendingIntentFlags.UpdateCurrent);

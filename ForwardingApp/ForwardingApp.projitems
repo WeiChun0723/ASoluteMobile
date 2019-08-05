@@ -219,10 +219,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Yard\yardmaptest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)LGC\ChinaReceiving.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -256,6 +252,14 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)WMS_Screen\CycleCountDetailsEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)JCTesting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)jcTestFolder\MyFirstPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -489,9 +493,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)TransportScreen\NewMasterJobPopUp.xaml.cs">
       <DependentUpon>NewMasterJobPopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Yard\yardmaptest.xaml.cs">
-      <DependentUpon>yardmaptest.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)LGC\ChinaReceiving.xaml.cs">
       <DependentUpon>ChinaReceiving.xaml</DependentUpon>
     </Compile>
@@ -525,6 +526,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyService\IThumbnailHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenderer\CustomNavigationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyService\CloseApp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JCTesting.xaml.cs">
+      <DependentUpon>JCTesting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)jcTestFolder\MyFirstPage.xaml.cs">
+      <DependentUpon>MyFirstPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Data\" />
@@ -545,6 +552,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)LGC\" />
     <Folder Include="$(MSBuildThisFileDirectory)Forwarding\" />
     <Folder Include="$(MSBuildThisFileDirectory)DependencyService\" />
+    <Folder Include="$(MSBuildThisFileDirectory)jcTestFolder\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)FleetScreen\LogEntry.xaml">

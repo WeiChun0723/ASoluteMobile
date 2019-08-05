@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.jcTestFolder.MyFirstPage">
+        <StackLayout Padding = "20, 100, 20, 0" >
+        
+        <!--LogBook-->
+        <DatePicker x:Name="logBookDate" HorizontalOptions="FillAndExpand" DateSelected="DateSelectedEvent" BackgroundColor="LightYellow" />
+        <!--LogBook-->
+        
+        
+            <!--<Label TextColor="#000000" FontSize = "20" Text="Default" x:Name ="chgPassTitle"  HorizontalOptions="Center" FontAttributes="Bold, Italic"/> -->
+           
+        <Image Source="nodatafound.png"  HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="noData"/>
+        
+        <ListView x:Name="listView" Style="{StaticResource recordListStyle}" HasUnevenRows="true"  ItemTapped="Handle_ItemTapped" Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell>
+                            
+                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
+                       <StackLayout BackgroundColor="{Binding Background}">
+                                
+                                <Label Text="{Binding Summary}" FontAttributes="Bold" />
+                        </StackLayout>
+                    </Frame>
+                         
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+             </ListView>
+             <Image Source="barCode.png" WidthRequest="60" HeightRequest="30" VerticalOptions="Center" x:Name="tapIcon">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="IconTapped" />
+                </Image.GestureRecognizers>
+            </Image>
+    </StackLayout>
+        
+</ContentPage>

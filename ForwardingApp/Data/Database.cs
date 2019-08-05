@@ -187,7 +187,7 @@ namespace ASolute_Mobile.Data
 
         public List<SummaryItems> GetSummarysAsync(string id, string type)
         {
-            return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Id] = ? AND [Type] = ?", id, type);
+            return database.Query<SummaryItems>("SELECT * FROM [SummaryItems] WHERE [Id] = ? AND [Type] = ?", id,type);  //SELECT * FROM [SummaryItems] WHERE [Id] = ? AND [Type] = ?
         }
 
         public List<DetailItems> GetDetailsAsync(string id)

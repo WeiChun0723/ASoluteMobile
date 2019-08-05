@@ -1,6 +1,7 @@
 ﻿using Acr.UserDialogs;
 using ASolute.Mobile.Models;
 using ASolute.Mobile.Models.Warehouse;
+using ASolute_Mobile.jcTestFolder;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.TransportScreen;
 using ASolute_Mobile.Ultis;
@@ -25,7 +26,7 @@ namespace ASolute_Mobile.Utils
         static ContentPage pages;
         static string returnResult;
 
-        //Get = 0 , Post = 1
+        //Get = 0 , Post = 1, data can be null if no need post
         public static async Task<string> CallWebService(int method, object data, string baseAdd, string calllUri, Page page)
         {
             try
@@ -34,7 +35,7 @@ namespace ASolute_Mobile.Utils
                 client.BaseAddress = new Uri(baseAdd);
                 var uri = calllUri;
                 var content = "";
-
+                
                 if (method == 0)
                 {
                     var response = await client.GetAsync(uri);
@@ -290,7 +291,5 @@ namespace ASolute_Mobile.Utils
             }
         }
 
-
     }
-
 }

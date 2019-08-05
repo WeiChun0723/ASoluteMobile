@@ -518,7 +518,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                     if (Ultis.Settings.App == "asolute.Mobile.Forwarding")
                     {
-
+                        
                         jobItem.Done = 1;
                         jobItem.Remark = remarkTextEditor.Text;
                         App.Database.SaveItemAsync(jobItem);
@@ -526,7 +526,8 @@ namespace ASolute_Mobile.HaulageScreen
                         await Navigation.PopAsync();
 
                     }
-                  
+
+                    //Haulage
                     else
                     {
                         if (done == true || signatureStack.IsVisible == false)

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.JCTesting">
+   <StackLayout Padding="0,0,0,0">
+        
+        
+        <ListView x:Name="listView" Style="{StaticResource recordListStyle}" HasUnevenRows="true"  ItemTapped="Handle_ItemTapped" Refreshing="Handle_Refreshing" IsPullToRefreshEnabled="true">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                     <ViewCell>
+                            
+                     <Frame HasShadow="true" Margin="5" BackgroundColor="{Binding Background}">
+                       <StackLayout BackgroundColor="{Binding Background}">
+                                
+                                <Label Text="{Binding Summary}" FontAttributes="Bold" />
+                        </StackLayout>
+                    </Frame>
+                         
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+             </ListView>
+    </StackLayout>
+    
+</ContentPage>

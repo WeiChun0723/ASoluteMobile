@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ASolute_Mobile.LogEntry" 
              xmlns:autocomplete="clr-namespace:Syncfusion.SfAutoComplete.XForms;assembly=Syncfusion.SfAutoComplete.XForms"
@@ -104,12 +104,12 @@
             <StackLayout Orientation="Horizontal" Spacing="6" HorizontalOptions="Center">
                 <Image Source="camera.png" WidthRequest="55" HeightRequest="70" VerticalOptions="Center" x:Name="camera_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Handle_Tapped" />
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1"/>
                     </Image.GestureRecognizers>
                 </Image>
                 <Image Source="confirm.png" WidthRequest="70" HeightRequest="70" VerticalOptions="Center" x:Name="confirm_icon">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Handle_Tapped" />
+                        <TapGestureRecognizer Tapped="Handle_Tapped" NumberOfTapsRequired="1"/>
                     </Image.GestureRecognizers>
                 </Image>
             </StackLayout>

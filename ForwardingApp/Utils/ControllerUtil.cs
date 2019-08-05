@@ -400,6 +400,8 @@ namespace ASolute_Mobile.Utils
             return String.Format("Trip/Save?SessionId={0}&GeoLoc={1}", Ultis.Settings.SessionSettingKey, getPositionAsync());
         }
 
+
+        //{0}{1}{2} is paramaters
         public static String getLogHistoryURL(string date)
         {
             return String.Format("Trip/List?SessionId={0}&GeoLoc={1}&ViewDate={2}", Ultis.Settings.SessionSettingKey, getPositionAsync(), date);

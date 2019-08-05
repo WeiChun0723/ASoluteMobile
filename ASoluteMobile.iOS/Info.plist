@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>AILS Tracking</string>
+	<string>Forwarding</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.asolute.AILSTracking</string>
+	<string>com.asolute.Forwarding</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -46,12 +46,12 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleVersion</key>
-	<string>2.4</string>
+	<string>2.5</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to the photo library for picture selection.</string>
-	<key>CFBundleName</key>
-	<string>AILS Tracking</string>
 	<key>CFBundleShortVersionString</key>
 	<string>50</string>
+	<key>CFBundleName</key>
+	<string>Forwarding</string>
 </dict>
 </plist>

@@ -89,7 +89,7 @@ namespace ASolute_Mobile.Forwarding
 
             listView.Refreshing += (sender, e) =>
             {
-                if (doneStatus == 0)
+                if (doneStatus == 0 || doneStatus== 1)
                 {
                     Task.Run(async () => {
                         await BackgroundTask.DownloadLatestJobs(this);

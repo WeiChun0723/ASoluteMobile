@@ -46,7 +46,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
-    <CodesignProvision>ASolute Fleet</CodesignProvision>
+    <CodesignProvision>AILS Tracking</CodesignProvision>
     <AssemblyName>AILSTracking.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
@@ -84,7 +84,7 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
     <AssemblyName>ASoluteFleet.iOS</AssemblyName>
-    <CodesignProvision>ASolute Fleet</CodesignProvision>
+    <CodesignProvision>IOSTesting</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />

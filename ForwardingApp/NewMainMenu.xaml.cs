@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ASolute.Mobile.Models;
 using ASolute_Mobile.BusTicketing;
 using ASolute_Mobile.CommonScreen;
+using ASolute_Mobile.jcTestFolder;
 using ASolute_Mobile.LGC;
 using ASolute_Mobile.Models;
 using ASolute_Mobile.Planner;
@@ -30,7 +31,7 @@ namespace ASolute_Mobile
         string firebaseID = "";
 
         public NewMainMenu()
-        {
+        {  
             InitializeComponent();
 
             switch (Ultis.Settings.App)
@@ -103,7 +104,6 @@ namespace ASolute_Mobile
 
         async void GetMainMenu()
         {
-
             CommonFunction.GetFireBaseID();
             var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, ControllerUtil.getDownloadMenuURL(), this);
             clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
@@ -283,7 +283,6 @@ namespace ASolute_Mobile
             listView.HeightRequest = Item.Count * 150;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCell));
 
-
             //Save the time refreshed the menu 
             System.TimeSpan interval = new System.TimeSpan();
             if (!(String.IsNullOrEmpty(Ultis.Settings.UpdateTime)))
@@ -309,7 +308,11 @@ namespace ASolute_Mobile
             switch (menuAction)
             {
                 case "LogBook":
-                    await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("yyyy-MM-dd"))));
+                    //PushAsync means push to new screen, e.Item is the thing that you tapped, URL refers to the new screen URL
+
+                    //await Navigation.PushAsync(new ListViewTemplate(((ListItems)e.Item), ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("yyyy-MM-dd"))));
+                    //await Navigation.PushAsync(new JCTesting(((ListItems)e.Item), ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("yyyy-MM-dd"))));
+                    await Navigation.PushAsync(new MyFirstPage(((ListItems)e.Item),ControllerUtil.getLogHistoryURL(DateTime.Now.ToString("yyyy-MM-dd"))));
                     break;
 
                 case "FuelCost":

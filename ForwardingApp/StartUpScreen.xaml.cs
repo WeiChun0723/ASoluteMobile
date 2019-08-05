@@ -39,11 +39,12 @@ namespace ASolute_Mobile
                     Ultis.Settings.DeviceUniqueID = Guid.NewGuid().ToString("N");
                 }
 
-                Task.Run(async () => { await GetAction(Ultis.Settings.DeviceUniqueID); }); 
+                 GetAction(Ultis.Settings.DeviceUniqueID); 
             }
             else
             {
                 title.Text = "Please enter enterprise.";
+                
             }
         }
 
@@ -71,7 +72,7 @@ namespace ASolute_Mobile
             }
         }
 
-        async Task GetAction(string deviceID)
+        async void GetAction(string deviceID)
         {
             try
             {
@@ -88,11 +89,11 @@ namespace ASolute_Mobile
                     Ultis.Settings.SessionSettingKey = result.SessionId;
                     Ultis.Settings.SessionUserId = result.UserName;
 
-
+                    #region tracking and business
                     if (result.MainMenu.Count == 1)
                     {
                         loading.IsVisible = false;
-                        loading.IsEnabled = false;
+                        //loading.IsEnabled = false;
 
                         string action = result.MainMenu[0].Id;
 
@@ -117,6 +118,7 @@ namespace ASolute_Mobile
                         }
 
                     }
+                    #endregion
                 }
 
             }

@@ -51,7 +51,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <Debugger>Xamarin</Debugger>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>

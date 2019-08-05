@@ -38,7 +38,11 @@ namespace ASolute_Mobile.CustomerTracking
 
         protected override async void OnAppearing()
         {
-            await StartListening();
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                await StartListening();
+            }
+
             await GetContainerDetail();
         }
 

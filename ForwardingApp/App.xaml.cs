@@ -20,6 +20,7 @@ namespace ASolute_Mobile
 
         public App()
         {
+            //syncfusion license key
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTA3Mzg5QDMxMzcyZTMxMmUzMEFvL1Y2Sk9XWU9SUU5ENzYxSEZNYUZvWG5OSFM4Uk1hcnFOYng1YmphSE09");
 
             InitializeComponent();

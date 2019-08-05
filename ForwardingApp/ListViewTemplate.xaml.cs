@@ -181,6 +181,7 @@ namespace ASolute_Mobile
                 }
                 else
                 {
+                    //bar code
                     var scanPage = new ZXingScannerPage();
                     await Navigation.PushAsync(scanPage);
 
@@ -283,7 +284,7 @@ namespace ASolute_Mobile
                         break;
                     case "LogBook":
                         string logId = ((ListItems)e.Item).Id;
-                        if (logId != "")
+                        if (!(logId.Contains("/LogBook")))
                         {
                             await Navigation.PushAsync(new LogEntry(logId, menuItems.Name));
                         }
@@ -328,6 +329,9 @@ namespace ASolute_Mobile
 
                         foreach (clsHaulageModel data in records)
                         {
+
+                            //If logbook doesn't have id, then only use GUID to generate ID
+
                             Guid objectID = Guid.NewGuid();
                             ListItems record = new ListItems
                             {
@@ -337,6 +341,11 @@ namespace ASolute_Mobile
                                 Name = menuItems.Name,
                                 Action = data.Action
                             };
+
+                            if(menuItems.Id == "LogBook" && String.IsNullOrEmpty(data.Id) )
+                            {
+                                record.Id = objectID.ToString() + "/LogBook";
+                            }
 
                             if (menuItems.Id == "JobList")
                             {
@@ -405,7 +414,7 @@ namespace ASolute_Mobile
                                 {
                                     SummaryItems summaryItem = new SummaryItems();
 
-                                    summaryItem.Id = (menuItems.Id == "PendingCollection") ? objectID.ToString() : data.Id;
+                                    summaryItem.Id = record.Id;
                                     summaryItem.Caption = summaryList.Caption;
                                     summaryItem.Value = summaryList.Value;
                                     summaryItem.Display = summaryList.Display;

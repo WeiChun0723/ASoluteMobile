@@ -26,7 +26,7 @@ namespace ASolute_Mobile
 
             Master = masterPage;
 
-            switch(Ultis.Settings.App)
+            switch (Ultis.Settings.App)
             {
                 case "asolute.Mobile.AILSTracking":
                 case "com.asolute.AILSTracking":
@@ -40,15 +40,23 @@ namespace ASolute_Mobile
 
                 case "asolute.Mobile.Forwarding":
                 case "com.asolute.Forwarding":
+
                     Detail = new CustomNavigationPage(new JobListTabbedPage());
-                    MessagingCenter.Subscribe<object, string>(this, "JobSync", (s, e) =>
-                    {
+
+                    
+                        //if fowarding job updated call this to get new job data and upload job in background
+                        MessagingCenter.Subscribe<App>((App)Application.Current, "JobSync", async (sender) => {
                         Device.BeginInvokeOnMainThread(() =>
                         {
-                            Task.Run(async () => { await BackgroundTask.DownloadLatestJobs(null); }).Wait();
-                            Task.Run(async () => { await BackgroundTask.UploadLatestJobs(); }).Wait();
+                            if (NetworkCheck.IsInternet())
+                            {
+                                Task.Run(async () => { await BackgroundTask.DownloadLatestJobs(null); }).Wait();
+                                Task.Run(async () => { await BackgroundTask.UploadLatestJobs(); }).Wait();
+                            }
+                            
                         });
                     });
+
                     break;
 
 
@@ -92,7 +100,7 @@ namespace ASolute_Mobile
                             }
                             catch
                             {
-                              
+
                             }
                         }
 
@@ -126,9 +134,9 @@ namespace ASolute_Mobile
                         {
                             Device.OpenUri(new Uri(String.Format("tel:{0}", Ultis.Settings.SessionUserItem.OperationPhone)));
                         }
-                        catch 
+                        catch
                         {
-                           
+
                         }
                     }
                     else if (item.Id.Equals("CallMe"))
@@ -148,9 +156,9 @@ namespace ASolute_Mobile
                                     await DisplayAlert("", reply, "Okay");
                                 }
                             }
-                            catch 
+                            catch
                             {
-                               
+
                             }
                         }
                     }
@@ -186,7 +194,7 @@ namespace ASolute_Mobile
                                     refreshMainPage();
                                 }
                             }
-                            catch 
+                            catch
                             {
 
                             }
@@ -213,7 +221,7 @@ namespace ASolute_Mobile
                                     BackgroundTask.Logout(this);
                                 }
                             }
-                            catch 
+                            catch
                             {
 
                             }
@@ -232,7 +240,7 @@ namespace ASolute_Mobile
         public static explicit operator ContentPage(MainPage v)
         {
             throw new NotImplementedException();
-                
+
         }
 
         public async void refreshMainPage()
