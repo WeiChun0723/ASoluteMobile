@@ -45,6 +45,7 @@ namespace ASolute_Mobile.HaulageScreen
 
                 case "asolute.Mobile.Forwarding":
                     NavigationPage.SetHasNavigationBar(this, false);
+                    futile_icon.IsVisible = false;
                     break;
 
                 case "asolute.Mobile.AILSHaulage":

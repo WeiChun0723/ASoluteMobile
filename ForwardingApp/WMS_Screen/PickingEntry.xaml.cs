@@ -29,7 +29,6 @@ namespace ASolute_Mobile.WMS_Screen
 
             LoadPickingSummary(pickingSummary.Summary);
 
-
         }
 
         protected override void OnAppearing()
@@ -43,7 +42,7 @@ namespace ASolute_Mobile.WMS_Screen
         {
             var entry = sender as Entry;
 
-            switch(entry.StyleId)
+            switch (entry.StyleId)
             {
                 case "confirmEntry":
                     checkDigitEntry.Focus();
@@ -79,6 +78,14 @@ namespace ASolute_Mobile.WMS_Screen
                 if (desc.Caption.Equals("Pallet"))
                 {
                     Title = pickingTitle + " # " + desc.Value;
+                }
+
+                if (desc.Caption.Equals("Ref No."))
+                {
+                    if (!(String.IsNullOrEmpty(desc.Value)))
+                    {
+                        Title = pickingTitle + " # " + desc.Value;
+                    }
                 }
 
                 pickingDesc.Children.Add(caption);
@@ -143,10 +150,10 @@ namespace ASolute_Mobile.WMS_Screen
                 LinkId = linkID,
                 OldLocation = confirmEntry.Text,
                 Id = palletIDEntry.Text,
-                CheckDigit = Convert.ToInt32(checkDigitEntry.Text)  
+                CheckDigit = Convert.ToInt32(checkDigitEntry.Text)
             };
 
-            var content = await CommonFunction.CallWebService(1,pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postPickingDetailURL(),this);
+            var content = await CommonFunction.CallWebService(1, pallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postPickingDetailURL(), this);
             clsResponse update_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
             if (update_response.IsGood)
@@ -184,10 +191,10 @@ namespace ASolute_Mobile.WMS_Screen
 
         async void GenPallet_Clicked(object sender, EventArgs e)
         {
-            var content = await CommonFunction.CallWebService(1,null,Ultis.Settings.SessionBaseURI, ControllerUtil.generatePalletURL(linkID),this);
+            var content = await CommonFunction.CallWebService(1, null, Ultis.Settings.SessionBaseURI, ControllerUtil.generatePalletURL(linkID), this);
             clsResponse genPallet_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-            if(genPallet_response.IsGood)
+            if (genPallet_response.IsGood)
             {
                 await DisplayAlert("Success", "Pallet generated.", "OK");
                 await Navigation.PopAsync();

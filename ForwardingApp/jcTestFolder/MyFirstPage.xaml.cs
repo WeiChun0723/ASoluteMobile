@@ -7,6 +7,7 @@ using ASolute_Mobile.Models;
 using ASolute_Mobile.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.XForms.Buttons;
 using Xamarin.Forms;
 
 namespace ASolute_Mobile.jcTestFolder
@@ -22,6 +23,18 @@ namespace ASolute_Mobile.jcTestFolder
         public MyFirstPage(ListItems TestingItem, string TestingUri)
         {
             InitializeComponent();
+
+            //StackLayout stk = new StackLayout();
+            //stk.HorizontalOptions = LayoutOptions.Center;
+            //SfButton sf = new SfButton();
+            //stk.Children.Add(sf);
+            //this.Content = stk;
+
+            
+            //sf.Text = "Testing Button";
+            //sf.IsCheckable = true;
+
+
             items = TestingItem;
             TestingUri1 = TestingUri;
 
@@ -36,8 +49,8 @@ namespace ASolute_Mobile.jcTestFolder
             noData.IsVisible = false;
 
             var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, Uri, this);
-
-            if(content!=null)
+            
+            if (content!=null)
             {
                 clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
                
@@ -47,7 +60,9 @@ namespace ASolute_Mobile.jcTestFolder
                     App.Database.deleteRecords(CategoryID);
                     App.Database.deleteRecordSummary(CategoryID);
 
-                    foreach(clsDataRow item in items)
+                    
+
+                    foreach (clsDataRow item in items)
                     {
                         ListItems mainMenuItems = new ListItems();
                         mainMenuItems.Category = CategoryID;

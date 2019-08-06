@@ -79,73 +79,74 @@ namespace ASolute_Mobile.WMS_Screen
 
             try
             {
-                var content = await CommonFunction.CallWebService(0,null,Ultis.Settings.SessionBaseURI, uri,this);
-                clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+                var content = await CommonFunction.CallWebService(0, null, Ultis.Settings.SessionBaseURI, uri, this);
 
-                if (response.IsGood)
+                if (content != null)
                 {
-                    recordDetails = JObject.Parse(content)["Result"].ToObject<clsWhsHeader>();
 
-                    desc.Children.Clear();
 
-                    Label topBlank = new Label();
-                    desc.Children.Add(topBlank);
-                    foreach (clsCaptionValue summary in recordDetails.Summary)
+                    clsResponse response = JsonConvert.DeserializeObject<clsResponse>(content);
+
+                    if (response.IsGood)
                     {
-                        Label caption = new Label();
-                        caption.FontSize = 13;
-                        if (summary.Caption.Equals(""))
-                        {
-                            caption.Text = "    " + summary.Value;
-                            caption.FontAttributes = FontAttributes.Bold;
-                            Title = record.Name + " # " + summary.Value;
-                        }
-                        else
-                        {
-                            caption.Text = "    " + summary.Caption + ": " + summary.Value;
-                        }
+                        recordDetails = JObject.Parse(content)["Result"].ToObject<clsWhsHeader>();
 
-                        if (summary.Caption.Equals(""))
-                        {
-                            Title = record.Name + " # " + summary.Value;
-                        }
+                        desc.Children.Clear();
 
-                        desc.Children.Add(caption);
-                    }
-                    Label bottomBlank = new Label();
-                    desc.Children.Add(bottomBlank);
-                    dataGrid.AutoGenerateColumns = false;
-                    dataGrid.ItemsSource = recordDetails.Items;
-                    dataGrid.Columns.Clear();
-
-                    foreach (clsKeyValue gridField in recordDetails.ItemColumns)
-                    {
-                        GridTextColumn gridColumn = new GridTextColumn();
-                        gridColumn.MappingName = gridField.Key;
-                        gridColumn.Width = recordDetails.ItemColumns.Count * 33;
-                        gridColumn.HeaderTemplate = new DataTemplate(() =>
+                        Label topBlank = new Label();
+                        desc.Children.Add(topBlank);
+                        foreach (clsCaptionValue summary in recordDetails.Summary)
                         {
-                            ViewCell viewCell = new ViewCell();
-                            Label label = new Label
+                            Label caption = new Label();
+                            caption.FontSize = 13;
+                            if (summary.Caption.Equals(""))
                             {
-                                Text = gridField.Value,
-                                BackgroundColor = Color.Transparent,
-                                VerticalOptions = LayoutOptions.CenterAndExpand,
-                                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                                HorizontalTextAlignment = TextAlignment.Center,
-                                FontAttributes = FontAttributes.Bold
-                            };
-                            viewCell.View = label;  
-                            return viewCell;
-                        });
+                                caption.Text = "    " + summary.Value;
+                                caption.FontAttributes = FontAttributes.Bold;
+                                Title = record.Name + " # " + summary.Value;
+                            }
+                            else
+                            {
+                                caption.Text = "    " + summary.Caption + ": " + summary.Value;
+                            }
 
-                        dataGrid.Columns.Add(gridColumn);
-                        
-                    }
+                            desc.Children.Add(caption);
+                        }
+                        Label bottomBlank = new Label();
+                        desc.Children.Add(bottomBlank);
+                        dataGrid.AutoGenerateColumns = false;
+                        dataGrid.ItemsSource = recordDetails.Items;
+                        dataGrid.Columns.Clear();
 
-                    if (!(String.IsNullOrEmpty(recordDetails.Id)))
-                    {
-                        pickingID = recordDetails.Id;
+                        foreach (clsKeyValue gridField in recordDetails.ItemColumns)
+                        {
+                            GridTextColumn gridColumn = new GridTextColumn();
+                            gridColumn.MappingName = gridField.Key;
+                            gridColumn.Width = recordDetails.ItemColumns.Count * 33;
+                            gridColumn.HeaderTemplate = new DataTemplate(() =>
+                            {
+                                ViewCell viewCell = new ViewCell();
+                                Label label = new Label
+                                {
+                                    Text = gridField.Value,
+                                    BackgroundColor = Color.Transparent,
+                                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                    HorizontalTextAlignment = TextAlignment.Center,
+                                    FontAttributes = FontAttributes.Bold
+                                };
+                                viewCell.View = label;
+                                return viewCell;
+                            });
+
+                            dataGrid.Columns.Add(gridColumn);
+
+                        }
+
+                        if (!(String.IsNullOrEmpty(recordDetails.Id)))
+                        {
+                            pickingID = recordDetails.Id;
+                        }
                     }
                 }
             }
@@ -206,37 +207,37 @@ namespace ASolute_Mobile.WMS_Screen
 
         void TallyOut(string result)
         {
-             Device.BeginInvokeOnMainThread(async () =>
-             {
-                 clsPalletTrx tallyOutPallet = new clsPalletTrx
-                 {
-                     LinkId = record.Id,
-                     Id = result
-                 };
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                clsPalletTrx tallyOutPallet = new clsPalletTrx
+                {
+                    LinkId = record.Id,
+                    Id = result
+                };
 
-                 var content = await CommonFunction.CallWebService(1,tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL(),this);
-                 clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
+                var content = await CommonFunction.CallWebService(1, tallyOutPallet, Ultis.Settings.SessionBaseURI, ControllerUtil.postTallyOutDetailURL(), this);
+                clsResponse upload_response = JsonConvert.DeserializeObject<clsResponse>(content);
 
-                 if (upload_response.IsGood)
-                 {
-                     DisplayToast("Success");
+                if (upload_response.IsGood)
+                {
+                    DisplayToast("Success");
 
-                     clsWhsItem item = new clsWhsItem
-                     {
-                         PalletId = result,
-                         Description = Ultis.Settings.SessionUserId
-                     };
+                    clsWhsItem item = new clsWhsItem
+                    {
+                        PalletId = result,
+                        Description = Ultis.Settings.SessionUserId
+                    };
 
-                     tallyOutItems.Add(item);
-                     dataGrid.ItemsSource = null;
-                     dataGrid.ItemsSource = tallyOutItems;
-                     palletIdEntry.Text = String.Empty;
-                 }
-                 else
-                 {
-                     DisplayToast(palletIdEntry.Text + " " + upload_response.Message);
-                 }
-             });
+                    tallyOutItems.Add(item);
+                    dataGrid.ItemsSource = null;
+                    dataGrid.ItemsSource = tallyOutItems;
+                    palletIdEntry.Text = String.Empty;
+                }
+                else
+                {
+                    DisplayToast(palletIdEntry.Text + " " + upload_response.Message);
+                }
+            });
 
         }
 
@@ -337,7 +338,9 @@ namespace ASolute_Mobile.WMS_Screen
             int rowNo = noOfImages / noOfCols;
             int colNo = noOfImages - (rowNo * noOfCols);
             imageGrid.Children.Add(image, colNo, rowNo);
-        }
+
+			
+		}
 
         void Handle_TextChanged(object sender, Xamarin.Forms.TextChangedEventArgs e)
         {

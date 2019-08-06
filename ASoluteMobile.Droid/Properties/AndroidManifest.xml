@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.ASOLUTEFLEET" android:installLocation="auto" android:versionCode="50" android:versionName="2.5">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="asolute.Mobile.AILSWMS" android:installLocation="auto" android:versionCode="50" android:versionName="2.5">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28" />
 	<uses-feature android:name="android.hardware.location.gps" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -12,10 +12,10 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<!-- Please change the name -->
-	<permission android:name="asolute.Mobile.ASOLUTEFLEET.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<uses-permission android:name="asolute.Mobile.ASOLUTEFLEET.permission.C2D_MESSAGE" />
+	<permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="asolute.Mobile.AILSWMS.permission.C2D_MESSAGE" />
 	<!-- Please change the name-->
-	<application android:name="ASolute Fleet" android:theme="@style/MyTheme" android:label="Asolute Fleet" android:icon="@drawable/appIcon" android:vmSafeMode="true">
+	<application android:name="AILS WMS" android:theme="@style/MyTheme" android:label="AILS WMS" android:icon="@drawable/appIcon" android:vmSafeMode="true">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
@@ -24,7 +24,7 @@
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 				<!-- Please change the name -->
-				<category android:name="asolute.Mobile.ASOLUTEFLEET" />
+				<category android:name="asolute.Mobile.AILSWMS" />
 			</intent-filter>
 		</receiver>
 	</application>

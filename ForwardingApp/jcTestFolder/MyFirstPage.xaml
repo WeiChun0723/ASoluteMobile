@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.jcTestFolder.MyFirstPage">
-        <StackLayout Padding = "20, 100, 20, 0" >
+<ContentPage xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ASolute_Mobile.jcTestFolder.MyFirstPage">
+        <StackLayout Padding = "20, 10, 20, 0" >
+        
+        
+        <buttons:SfButton x:Name="SfButton" Text = "Testing Button" HeightRequest = "100"/>
+        <Entry x:Name = "TbTextBox" Text = "Text Box"/>
         
         <!--LogBook-->
         <DatePicker x:Name="logBookDate" HorizontalOptions="FillAndExpand" DateSelected="DateSelectedEvent" BackgroundColor="LightYellow" />
